@@ -8,8 +8,8 @@ node_modules/
 *.iml
 .vscode/
 # Raw downloads (may contain personal data), scan output and run state
-input/
-work/
+/input/
+/work/
 # The released tda jar (mvn -q initialize puts it here)
 .tda/
 # Local Claude Code settings
