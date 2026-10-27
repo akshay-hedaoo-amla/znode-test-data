@@ -1,0 +1,9 @@
+# Pilot tests that fail for reasons outside the test data agents, excluded from the Phase 4 pilot gate (PilotSuitesIT)
+# by a user decision. The gate still runs and reports them; it fails only on other pilot failures, and it reports an entry
+# here as removable once the test passes again. Each entry needs the evidence that the failure is pre-existing.
+knownFailures:
+  - testId: "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T02_verifyPercentOfBrandPromotionFunctionality"
+    reason: "IndexOutOfBoundsException (Index 0 out of bounds for length 0) inside the framework's PromotionsAndCouponsPage.createBrandPromotion step on atstage"
+    evidence: "Baseline 2026-10-26: run from a clean origin/dev worktree (9633704f) with the original sheet data and no test data agents fails identically; it failed the same way in every TDA run."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-10-26"

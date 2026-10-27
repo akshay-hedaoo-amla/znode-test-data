@@ -1,0 +1,18 @@
+# Framework conventions the discovery scanners rely on. Paths are relative to the framework repository roots
+# set in .env (TDA_SELENIUM_REPO, TDA_PLAYWRIGHT_REPO).
+
+selenium:
+  sourceRoots: [src/main/java, src/test/java]
+  constantsClass: TestDataConstants
+  registryClass: TestData
+  registryMethod: init
+  workbooks:
+    webstore: webstoreTestData.xlsx
+    admin: adminTestData.xlsx
+  pilots:
+    - src/test/java/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest.java
+
+playwright:
+  pilots:
+    - testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts

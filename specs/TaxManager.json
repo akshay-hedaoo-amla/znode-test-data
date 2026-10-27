@@ -1,0 +1,2839 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "v1",
+    "title": "Znode Tax Manager API V1",
+    "description": "Tax Manager APIs for calculating, committing, cancelling, and returning order tax transactions.",
+    "termsOfService": "",
+    "contact": {
+      "name": "Znode Tax Manager API",
+      "url": "https://apidocs.znode.com",
+      "email": "support@znode.com"
+    },
+    "license": {
+      "url": "",
+      "name": "Znode Tax Manager API"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://admin-z10-sandbox.znodestore.com",
+      "description": "Sandbox"
+    }
+  ],
+  "paths": {
+    "/taxmanager/v1/tax-gateway/calculate": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Calculate taxes for cart items",
+        "description": "Calculate taxes for cart items. Supports third-party tax plugins (e.g., AvaTax), built-in Sales Tax, and tax-exempt modes that return zero tax when the order qualifies for tax exemption.\r\n\r\nRequires plugin configurations, tax bag settings, and cart data including items, addresses, and tax flags.\r\n\r\n---\r\n\r\n### Related APIs\r\n\r\n- **`POST`** [Cancel the tax transaction for a previously committed order.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/177913dd38164-cancel-order)\r\n- **`POST`** [Commit tax transaction to the tax provider.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/07eb784bdac1b-commit-tax-to-the-portal)",
+        "operationId": "taxgateway-calculate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK** - Tax calculation completed successfully. The response body contains the calculated tax amounts for each cart item, including line-level and total tax values based on the configured tax plugin.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "taxSummaryList": [
+                        {
+                          "omsOrderTaxSummaryId": 101,
+                          "tax": 8.75,
+                          "rate": 8.25,
+                          "taxName": "Sales Tax",
+                          "taxTypeName": "Sales"
+                        }
+                      ],
+                      "taxMessageList": [],
+                      "taxRuleId": 5,
+                      "importDuty": 0,
+                      "salesTax": 8.75,
+                      "taxCost": 12.5,
+                      "cartItems": [],
+                      "taxRate": 8.25,
+                      "taxOnShipping": 1.25
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**No Content** - The request was successfully executed, but no tax calculation results were returned for the provided cart items.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request** - The request could not be processed due to invalid input, missing required fields, or malformed syntax. Verify the request parameters and body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The request contains invalid data. Verify the pluginGlobalConfigurations, pluginConfigurationSet, and pluginTaxCart fields.",
+                      "errorCode": 400,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "Authorization failed. Invalid or missing credentials.",
+                      "errorCode": 401,
+                      "statusCode": 401
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error** - An unexpected error occurred on the server while processing the request. Please try again later or contact support if the issue persists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "An unexpected error occurred while processing the tax calculation request.",
+                      "errorCode": 500,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://admin-z10-sandbox.znodestore.com",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/taxmanager/v1/tax-gateway/cancelorder": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Cancel order",
+        "description": "Cancel the tax transaction for a previously committed order. Sends a cancellation request to the configured tax provider to void or reverse the tax record.\r\n\r\nRequires the order number, cart items, and plugin configuration to process the cancellation.\r\n\r\n---\r\n\r\n### Related APIs\r\n\r\n- **`POST`** [Calculate taxes for cart items.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/749875ddedead-calculate-taxes-for-cart-items)\n- **`POST`** [Commit tax transaction to the tax provider.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/07eb784bdac1b-commit-tax-to-the-portal)\n- **`POST`** [Process a return for order line items.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/8bf4b90b2dbbf-return-order-line-item)",
+        "operationId": "taxgateway-cancelorder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK** - Tax transaction cancellation completed successfully. The response body confirms the cancellation request was sent to the tax provider and the tax record for the specified order has been voided or reversed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "isSuccess": true,
+                      "taxSummaryList": [],
+                      "taxMessageList": [],
+                      "taxRuleId": 5,
+                      "importDuty": 0,
+                      "salesTax": 0,
+                      "taxCost": 0,
+                      "cartItems": [],
+                      "taxRate": 8.25,
+                      "taxOnShipping": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**No Content** - The request was successfully executed, but no content was returned after processing the order cancellation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request** - The request could not be processed due to invalid input, missing required fields, or malformed syntax. Verify the request parameters and body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The request contains invalid data. Verify the orderNumber, cartItems, and pluginGlobalConfigurations fields.",
+                      "errorCode": 400,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "Authorization failed. Invalid or missing credentials.",
+                      "errorCode": 401,
+                      "statusCode": 401
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "**Not Found** - The requested resource could not be found. Verify the identifiers in the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The order was not found. Verify the order number provided.",
+                      "errorCode": 404,
+                      "statusCode": 404
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error** - An unexpected error occurred on the server while processing the request. Please try again later or contact support if the issue persists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "An unexpected error occurred while cancelling the tax transaction.",
+                      "errorCode": 500,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://admin-z10-sandbox.znodestore.com",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/taxmanager/v1/tax-gateway/submit": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Commit tax to the portal",
+        "description": "Commit (submit) a tax transaction to the tax provider. Finalizes the tax record for the order so the tax provider can include it in reporting and remittance.\r\n\r\nRequires plugin configuration, the tax cart with order and address details, and the plugin URL.\r\n\r\n---\r\n\r\n### Related APIs\r\n\r\n- **`POST`** [Calculate taxes for cart items.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/749875ddedead-calculate-taxes-for-cart-items)\r\n- **`POST`** [Cancel the tax transaction for a previously committed order.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/177913dd38164-cancel-order)\r\n- **`POST`** [Perform pre-submit order process validation.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/30cc06e176fe3-pre-submit-order-process)",
+        "operationId": "taxgateway-submit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK** - Tax transaction committed successfully. The response body confirms the tax record has been finalized with the tax provider and is included in reporting and remittance.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "taxSummaryList": [
+                        {
+                          "omsOrderTaxSummaryId": 101,
+                          "tax": 8.75,
+                          "rate": 8.25,
+                          "taxName": "Sales Tax",
+                          "taxTypeName": "Sales"
+                        }
+                      ],
+                      "taxMessageList": [],
+                      "taxRuleId": 5,
+                      "importDuty": 0,
+                      "salesTax": 8.75,
+                      "cartItems": [],
+                      "taxRate": 8.25,
+                      "taxOnShipping": 1.25,
+                      "isTaxCostUpdated": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**No Content** - The request was successfully executed, but no content was returned after committing the tax to the portal.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request** - The request could not be processed due to invalid input, missing required fields, or malformed syntax. Verify the request parameters and body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The request contains invalid data. Verify the pluginGlobalConfigurations, pluginConfigurationSet, pluginTaxCart, and pluginUrl fields.",
+                      "errorCode": 400,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "Authorization failed. Invalid or missing credentials.",
+                      "errorCode": 401,
+                      "statusCode": 401
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error** - An unexpected error occurred on the server while processing the request. Please try again later or contact support if the issue persists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "An unexpected error occurred while committing the tax transaction.",
+                      "errorCode": 500,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://admin-z10-sandbox.znodestore.com",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/taxmanager/v1/tax-gateway/presubmitorderprocess": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Pre-submit order process",
+        "description": "Perform pre-submit validation before the tax transaction is committed. Validates the billing address and tax rate, and runs any plugin-specific pre-submission checks.\r\n\r\nUse this endpoint to verify order details are correct before calling the submit endpoint.\r\n\r\n---\r\n\r\n### Related APIs\r\n\r\n- **`POST`** [Calculate taxes for cart items.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/749875ddedead-calculate-taxes-for-cart-items)\n- **`POST`** [Commit tax transaction to the tax provider.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/07eb784bdac1b-commit-tax-to-the-portal)",
+        "operationId": "taxgateway-presubmitorderprocess",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK** - Pre-submit order validation completed successfully. The response body contains the validation result, including billing address verification and tax rate checks required before committing the tax transaction.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "isSuccess": true,
+                      "addErrorMessage": "",
+                      "errorMessage": ""
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**No Content** - The request was successfully executed, but no content was returned from the pre-submit order process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request** - The request could not be processed due to invalid input, missing required fields, or malformed syntax. Verify the request parameters and body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The request contains invalid data. Verify the billingAddress and taxRate fields.",
+                      "errorCode": 400,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "Authorization failed. Invalid or missing credentials.",
+                      "errorCode": 401,
+                      "statusCode": 401
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error** - An unexpected error occurred on the server while processing the request. Please try again later or contact support if the issue persists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "An unexpected error occurred while processing the pre-submit order validation.",
+                      "errorCode": 500,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://admin-z10-sandbox.znodestore.com",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/taxmanager/v1/tax-gateway/returnorderlineitem": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Return order line item",
+        "description": "Process a return for order line items. Sends return and refund details to the configured tax provider to adjust the tax transaction for the specified order.\r\n\r\nRequires the order number, items being returned, tax override amounts, and plugin configuration.\r\n\r\n---\r\n\r\n### Related APIs\r\n\r\n- **`POST`** [Calculate taxes for cart items.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/749875ddedead-calculate-taxes-for-cart-items)\r\n- **`POST`** [Cancel the tax transaction for a previously committed order.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/177913dd38164-cancel-order)\r\n- **`POST`** [Commit tax transaction to the tax provider.](https://apidocs.znode.com/docs/tax-manager-api-v1--internal/branches/main/07eb784bdac1b-commit-tax-to-the-portal)",
+        "operationId": "taxgateway-returnorderlineitem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "**OK** - Return order line item processed successfully. The response body confirms the return and refund details were sent to the tax provider and the tax transaction has been adjusted for the specified order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "taxSummaryList": [
+                        {
+                          "omsOrderTaxSummaryId": 101,
+                          "tax": -4.95,
+                          "rate": 8.25,
+                          "taxName": "Sales Tax",
+                          "taxTypeName": "Sales"
+                        }
+                      ],
+                      "taxMessageList": [],
+                      "taxRuleId": 5,
+                      "importDuty": 0,
+                      "salesTax": -4.95,
+                      "taxCost": -4.95,
+                      "cartItems": [],
+                      "taxRate": 8.25,
+                      "taxOnShipping": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**No Content** - The request was successfully executed, but no content was returned for the return order line item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "**Bad Request** - The request could not be processed due to invalid input, missing required fields, or malformed syntax. Verify the request parameters and body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The request contains invalid data. Verify the orderNumber, pluginTaxReturnItemList, and taxOverrideAmountList fields.",
+                      "errorCode": 400,
+                      "statusCode": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "Unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "Authorization failed. Invalid or missing credentials.",
+                      "errorCode": 401,
+                      "statusCode": 401
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "**Not Found** - The requested resource could not be found. Verify the identifiers in the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "The order was not found. Verify the order number provided.",
+                      "errorCode": 404,
+                      "statusCode": 404
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error** - An unexpected error occurred on the server while processing the request. Please try again later or contact support if the issue persists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "hasError": true,
+                      "errorMessage": "An unexpected error occurred while processing the return for order line items.",
+                      "errorCode": 500,
+                      "statusCode": 500
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://admin-z10-sandbox.znodestore.com",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "cookie"
+      }
+    },
+    "schemas": {
+      "Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest": {
+        "type": "object",
+        "title": "TaxManagerCalculateRequest",
+        "description": "Request body for the tax calculation endpoint. Contains plugin configurations, tax bag settings, and the cart data used to calculate taxes.",
+        "additionalProperties": false,
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Global plugin settings. Contains the top-level configuration keys, values, and nested child configurations required by the tax plugin.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. View the configuration fields\r\n\r\n**Knowledgebase:** [Configure The AvaTax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin#AvaTax-Global-Configuration-Details)"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Plugin-specific configuration set. Contains additional key-value pairs for the tax plugin instance.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the fields\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)"
+          },
+          "taxBag": {
+            "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.ZnodeTaxBag",
+            "description": "Tax details bag containing tax class, rates, destination info, and TaxType. Determines which tax calculation path is used.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. The tax bag details are configured here\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "The URL of the tax plugin service used for third-party tax calculations.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin\r\n2. Check the Plugin URL field\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "example": "https://tax-plugin.example.com"
+          },
+          "isValidAddress": {
+            "type": "boolean",
+            "description": "Indicates whether the destination address has been validated for tax calculation.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Check the shipping/destination address validity status\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "example": true
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "description": "The identifier of the configured tax plugin. When set to a non-zero value, third-party tax calculation is used.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin\r\n2. Click Edit on the desired plugin\r\n3. Check the URL in the browser for the plugin ID\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "format": "int32",
+            "example": 1
+          },
+          "pluginTaxCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginCalculateTaxRequestModel",
+            "description": "Tax cart data containing cart items, addresses, shipping cost, tax-exempt flags, and other calculation inputs.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products and order data represent the pluginTaxCart\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)"
+          }
+        },
+        "required": [
+          "pluginGlobalConfigurations",
+          "pluginConfigurationSet",
+          "pluginTaxCart"
+        ]
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel": {
+        "type": "object",
+        "title": "PluginConfigurationModel",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true,
+            "description": "The configuration key name.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. Select or Edit the desired configuration set\r\n3. View the key field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "AccountNumber"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true,
+            "description": "The configuration value.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. Select or Edit the desired configuration set\r\n3. View the Value field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "2000100006"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "description": "The data type of the configuration value.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. Select or Edit the desired configuration set\r\n3. View the Type field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "string"
+          },
+          "childrenFields": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of child configuration set fields within this configuration group.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationSetFieldModel"
+            }
+          },
+          "childrenCategories": {
+            "type": "array",
+            "nullable": true,
+            "description": "Recursive child configuration categories. Allows nested configuration hierarchies.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+            }
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationSetFieldModel": {
+        "type": "object",
+        "title": "PluginConfigurationSetFieldModel",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true,
+            "description": "The configuration field key name.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the key field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "CompanyCode"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true,
+            "description": "The configuration value.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the Value field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "DEFAULT"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "description": "The data type of the configuration value.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the Type field\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "string"
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.ZnodeTaxBag": {
+        "type": "object",
+        "title": "ZnodeTaxBag",
+        "additionalProperties": false,
+        "properties": {
+          "taxClassId": {
+            "type": "integer",
+            "description": "The tax class identifier.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Click Edit on the desired tax\r\n3. Check the URL in the browser\r\n4. Find taxClassId in the query string\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "int32",
+            "example": 3
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "The sales tax rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.25
+          },
+          "gst": {
+            "type": "number",
+            "description": "Goods and Services Tax (GST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "hst": {
+            "type": "number",
+            "description": "Harmonized Sales Tax (HST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > hst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "pst": {
+            "type": "number",
+            "description": "Provincial Sales Tax (PST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > pst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "vat": {
+            "type": "number",
+            "description": "Value Added Tax (VAT) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > vat\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "destinationStateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The destination state code for tax jurisdiction.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > destinationStateCode\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "CA"
+          },
+          "destinationCountryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The destination country code for tax jurisdiction.\r\n\r\n**Admin Sandbox URL:** [Shipping List](https://admin-z10-sandbox.znodestore.com/Shippings/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Shipping > List\r\n2. Edit the desired Shipping Method\r\n3. Locate Destination Country\r\n4. The selected country code > this is destinationCountryCode\r\n\r\n**Knowledgebase:** [Managing Shipping Methods](https://support.znode.com/support/solutions/articles/43000757185-managing-shipping-methods)",
+            "example": "US"
+          },
+          "countyFIPS": {
+            "type": "string",
+            "nullable": true,
+            "description": "The FIPS county code for US-based tax jurisdiction.",
+            "example": "06059"
+          },
+          "shippingTaxInd": {
+            "type": "boolean",
+            "description": "Indicates whether tax is applied to shipping charges.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes.\r\n2. Open the desired Tax Name.\r\n3. Navigate to Manage Tax > Tax Rule List.\r\n4. Edit the required Tax Rule.\r\n5. Click Edit Tax Type.\r\n6. Check the \"Include Shipping in Taxes\" option > this represents `shippingTaxInd`.\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": true
+          },
+          "inclusiveInd": {
+            "type": "boolean",
+            "description": "Indicator for whether taxes are inclusive (included in price).",
+            "example": false
+          },
+          "isDefault": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Whether this is the default tax bag configuration.",
+            "example": true
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 1 for extensibility.",
+            "example": "value1"
+          },
+          "associatedTaxRuleIds": {
+            "type": "string",
+            "nullable": true,
+            "description": "Comma-separated list of associated tax rule identifiers.",
+            "example": "5,12"
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The primary tax rule identifier.",
+            "format": "int32",
+            "example": 5
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "The URL of the tax plugin service used for third-party tax calculations.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin\r\n2. Check the Plugin URL field\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "example": "https://tax-plugin.example.com"
+          },
+          "taxType": {
+            "type": "string",
+            "nullable": true,
+            "description": "Specifies the tax provider type. Supported values include `SalesTax` (built-in) and `custom`.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Check the Tax Type\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "SalesTax"
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "description": "The identifier of the configured tax plugin. When set to a non-zero value, third-party tax calculation is used.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin\r\n2. Click Edit on the desired plugin\r\n3. Check the URL in the browser for the plugin ID\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "format": "int32",
+            "example": 1
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The combined tax rate (sum of Sales Tax, GST, HST, PST, and VAT). Automatically calculated.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "readOnly": true,
+            "example": 8.25
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginCalculateTaxRequestModel": {
+        "type": "object",
+        "title": "PluginCalculateTaxRequestModel",
+        "additionalProperties": false,
+        "properties": {
+          "cartItems": {
+            "type": "array",
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Flag to indicate whether the seller is the importer of record for cross-border transactions.",
+            "example": false
+          },
+          "currentDate": {
+            "type": "string",
+            "description": "The current date and time associated with the request, used to track when the operation was performed in the system.\r\n\r\n**Note:** The date and time format in the response depends on the DateFormat and TimeFormat configured under [General Settings](https://admin-z10-sandbox.znodestore.com/GeneralSetting/List)",
+            "format": "date-time",
+            "example": "2026-04-14T00:00:00Z"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel",
+            "description": "Indicates whether the customer is tax-exempt.\r\n\r\n**Admin Sandbox URL:** [Profiles List](https://admin-z10-sandbox.znodestore.com/Profiles/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Marketing > Profiles in the Admin panel.\r\n2. Select or Edit a profile to view the Tax Exempt setting.\r\n\r\n**Knowledgebase:** [Managing User Profiles](https://support.znode.com/support/solutions/articles/43000757042-managing-user-profiles)"
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "The unique identifier of the storefront (portal) for which tax is being calculated.\r\n\r\n**Admin Sandbox URL:** [Store List](https://admin-z10-sandbox.znodestore.com/Store/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to Stores > Manage Store > URLs in Admin\r\n2. Open any store URL record\r\n3. Check the browser URL\r\n4. Find PortalId in the query string\r\n\r\n**Knowledgebase:** [Managing Stores](https://support.znode.com/support/solutions/articles/43000757163-managing-stores)",
+            "format": "int32",
+            "example": 9
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The ISO currency code (e.g., `USD`, `CAD`) for the transaction.\r\n\r\n**Admin Sandbox URL:** [Price List](https://admin-z10-sandbox.znodestore.com/Price/List)\r\n\r\n**Knowledgebase:** [Znode Pricing Approaches](https://support.znode.com/support/solutions/articles/43000756914-znode-pricing-approaches)",
+            "minLength": 1,
+            "example": "USD"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "isCalculateTaxOnShipping": {
+            "type": "boolean",
+            "description": "Whether to calculate tax on the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > this is isCalculateTaxOnShipping\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": true
+          },
+          "isHandlingChargeTaxable": {
+            "type": "boolean",
+            "description": "Indicates whether handling charges are included in the taxable shipping amount.\r\n\r\n- If `isCalculateTaxOnShipping` and `isHandlingChargeTaxable` are both `true`, the shipping line includes both the shipping cost and handling charge.\r\n- If only `isHandlingChargeTaxable` is `true`, the shipping line includes only the handling charge.\r\n- If only `isCalculateTaxOnShipping` is `true`, the shipping line includes only the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit or Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Handling Charge in Taxes\" > this is isHandlingChargeTaxable\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": false
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "The shipping cost for the order.",
+            "format": "double",
+            "example": 9.99
+          },
+          "handlingCharge": {
+            "type": "number",
+            "description": "The handling charge of the shipping amount.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the Handling Charge field\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 5
+          },
+          "shippingDiscount": {
+            "type": "number",
+            "description": "The shipping discount amount applied to the order.",
+            "format": "double",
+            "example": 0
+          },
+          "taxcost": {
+            "type": "number",
+            "description": "Current tax cost value (input).\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Current sales tax value (input).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "isQuoteOrder": {
+            "type": "boolean",
+            "description": "Whether this is a quote order (as opposed to a regular order).",
+            "example": false
+          },
+          "isPricesInclusiveOfTaxes": {
+            "type": "boolean",
+            "description": "Whether product prices already include taxes (tax-inclusive pricing).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": false
+          },
+          "isCalculateTaxAfterDiscount": {
+            "type": "boolean",
+            "description": "Whether to calculate tax after applying discounts.",
+            "example": false
+          },
+          "userId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The user ID of the customer placing the order.\r\n\r\n**Admin Sandbox URL:** [Customer List](https://admin-z10-sandbox.znodestore.com/Customer/CustomersList)\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 2108
+          },
+          "isTaxExempt": {
+            "type": "boolean",
+            "description": "Whether the order is tax-exempt. When `true`, zero tax is applied.\r\n\r\n**Admin Sandbox URL:** [User Profiles List](https://admin-z10-sandbox.znodestore.com/Profiles/List)\r\n\r\n**Knowledgebase:** [Managing User Profiles](https://support.znode.com/support/solutions/articles/43000757042-managing-user-profiles)",
+            "example": false
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount on shipping (input).",
+            "format": "double",
+            "example": 0
+          },
+          "orderId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The order identifier, if this calculation is for an existing order.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > List / Manage\r\n2. Click View/Edit on the desired order\r\n3. Check the URL\r\n4. Find orderId in the query string\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "int32",
+            "example": 5001
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Use this parameter to pass order number\r\n\r\n**Admin Sandbox URL:** [Manage Order](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders in the Admin panel.\r\n2. The value is visible in the orders list or the order management page URL\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "example": "SO-14042026-0001"
+          },
+          "orderState": {
+            "type": "string",
+            "nullable": true,
+            "description": "The current state of the order (same as Order Status).\r\n\r\n**How to Retrieve:**\r\n1. Navigate to **OMS > Order Status** in the Admin panel.\r\n2. The list of available order statuses is displayed.\r\n3. The field is labeled **\"Order Status\"** on this page.",
+            "example": "Submitted"
+          },
+          "orderDateTime": {
+            "type": "string",
+            "description": "The date and time of the order.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the orderDateTime\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "date-time",
+            "example": "2026-04-14T10:30:00Z"
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 1 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 2 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 3 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 4 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 5 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value5"
+          },
+          "orderLevelDiscountDetails": {
+            "type": "array",
+            "nullable": true,
+            "description": "Order-level and shipping-level promotions or coupons from the current calculation pass. Entries removed from the cart (for example a removed coupon) are not sent.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxOrderDiscountModel"
+            }
+          }
+        },
+        "required": [
+          "cartItems",
+          "currentDate",
+          "taxExempt",
+          "portalId",
+          "currencyCode",
+          "originAddress",
+          "destinationAddress",
+          "isQuoteOrder",
+          "isPricesInclusiveOfTaxes"
+        ]
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem": {
+        "type": "object",
+        "title": "PluginTaxCartItem",
+        "additionalProperties": false,
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "nullable": true,
+            "description": "Collection of order line item attributes (custom attribute codes and values).",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel"
+            }
+          },
+          "itemCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The product item code.",
+            "example": "PROD-001"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the cart item / product.",
+            "example": "Wireless Mouse"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "The quantity of this item in the cart.",
+            "format": "double",
+            "example": 2
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The tax code assigned to this product for tax classification.",
+            "example": "P0000000"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The total amount for this line item (quantity × unit price).",
+            "format": "double",
+            "example": 59.98
+          },
+          "taxIncluded": {
+            "type": "boolean",
+            "description": "Whether tax is already included in the item price.",
+            "example": false
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "Shipping cost allocated to this line item.",
+            "format": "double",
+            "example": 5.99
+          },
+          "orderLineItemStatus": {
+            "type": "string",
+            "nullable": true,
+            "description": "The status of the order line item.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the Status column for the item\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "example": "Pending"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "The configuration set name.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Click Edit on the desired configuration set\r\n3. Check the Name field on the page\r\n4. Copy the value shown\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "example": "Wireless Mouse"
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "The product SKU (Stock Keeping Unit).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "example": "WM-BLK-001"
+          },
+          "reasonForReturn": {
+            "type": "string",
+            "nullable": true,
+            "description": "The reason for returning this line item (applicable for return orders).\r\n\r\n**Admin Sandbox URL:** [Manage Return](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-30032026-0146&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > List / Manage\r\n2. Click View/Edit on the desired return\r\n3. Check the reason for the return option/field\r\n\r\n**Knowledgebase:** [Managing Returns](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "example": "Defective"
+          },
+          "perQuantityShippingDiscount": {
+            "type": "number",
+            "description": "Per-quantity shipping discount applied to this item.",
+            "format": "double",
+            "example": 0
+          },
+          "unitPrice": {
+            "type": "number",
+            "description": "The unit price of the product.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > List\r\n2. Open the order\r\n3. Navigate to Manage > Line Items\r\n4. Check Unit Price > this is unitPrice\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 29.99
+          },
+          "taxClassId": {
+            "type": "integer",
+            "description": "The tax class identifier for this product.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Click Edit on the desired tax\r\n3. Check the URL in the browser\r\n4. Find taxClassId in the query string\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "int32",
+            "example": 3
+          },
+          "discountAmount": {
+            "type": "number",
+            "description": "The discount amount applied to this line item.\r\n\r\n**Admin Sandbox URL:** [Promotions and Coupons](https://admin-z10-sandbox.znodestore.com/Promotion/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to Marketing > Promotions and Coupons > List\r\n2. Edit the promotion\r\n3. Check Discount Value/Amount > this is discountAmountApplied\r\n\r\n**Knowledgebase:** [Managing Promotions And Coupons](https://support.znode.com/support/solutions/articles/43000756989-managing-promotions-and-coupons)",
+            "format": "double",
+            "example": 5
+          },
+          "lineItemDiscount": {
+            "type": "number",
+            "description": "Line item-level discount amount.",
+            "format": "double",
+            "example": 5
+          },
+          "extendedPrice": {
+            "type": "number",
+            "description": "Extended price (quantity × unit price minus discounts).",
+            "format": "double",
+            "example": 54.98
+          },
+          "returnCartItemPrice": {
+            "type": "number",
+            "description": "The return price for this cart item.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > List\r\n2. Open the desired Order\r\n3. Navigate to Products Returned\r\n4. Locate the Returned Item Price field > here is returnCartItemPrice\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 29.99
+          },
+          "promotionalPrice": {
+            "type": "number",
+            "description": "The promotional price applied to this item.",
+            "format": "double",
+            "example": 24.99
+          },
+          "isShippingReturn": {
+            "type": "boolean",
+            "description": "Whether this is a shipping return item.\r\n\r\n**Admin Sandbox URL:** [RMA Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Returns > List / Manage\r\n2. Click View/Edit on the desired return\r\n3. Check the Shipping Return option/field\r\n\r\n**Knowledgebase:** [Managing Returns](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "example": false
+          },
+          "orderProductId": {
+            "type": "string",
+            "description": "The unique GUID identifier for this order product.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > List\r\n2. Open the desired Order\r\n3. Navigate to Manage / Summary\r\n4. Check Total Amount > this is OrderProductId\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "uuid",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          },
+          "isTaxCalculated": {
+            "type": "boolean",
+            "description": "Whether tax has already been calculated for this item.",
+            "example": false
+          },
+          "configurableProductList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of configurable product variants included with this cart item, each with their own tax calculations.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            }
+          },
+          "groupedProductList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of grouped product items included with this cart item, each with their own tax calculations.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            }
+          },
+          "addonsProductList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of add-on products included with this cart item, each with their own tax calculations.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            }
+          },
+          "bundleProductCollection": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of bundle product components included with this cart item, each with their own tax calculations.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            }
+          },
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the importDuty\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 4.95
+          },
+          "hst": {
+            "type": "number",
+            "description": "Harmonized Sales Tax (HST) amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > hst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "gst": {
+            "type": "number",
+            "description": "Goods and Services Tax (GST) amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "pst": {
+            "type": "number",
+            "description": "Provincial Sales Tax (PST) amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > pst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "vat": {
+            "type": "number",
+            "description": "Value Added Tax (VAT) amount for this line item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > vat\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The tax rule ID applied to this line item.",
+            "format": "int32",
+            "example": 5
+          },
+          "taxCost": {
+            "type": "number",
+            "description": "Total tax cost for this line item. Automatically calculated.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "readOnly": true,
+            "example": 4.95
+          },
+          "taxRate": {
+            "type": "array",
+            "nullable": true,
+            "description": "Line-item level tax rate breakdown. Provided in detail when using third-party vendors like AvaTax; null for built-in Znode SalesTax flow.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel"
+            }
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 1 of the cart line, passed unchanged from the cart for use by the tax plugin.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 2 of the cart line, passed unchanged from the cart for use by the tax plugin.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 3 of the cart line, passed unchanged from the cart for use by the tax plugin.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 4 of the cart line, passed unchanged from the cart for use by the tax plugin.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 5 of the cart line, passed unchanged from the cart for use by the tax plugin.",
+            "example": "value5"
+          },
+          "ordersDiscount": {
+            "type": "array",
+            "nullable": true,
+            "description": "Promotions or coupons that discounted this line in the current calculation pass. The line-level amounts add up to lineItemDiscount (within 0.01). Shipping-level discounts never appear here. Null or empty when no promotion applies.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxOrderDiscountModel"
+            }
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel": {
+        "type": "object",
+        "title": "TaxOrderAttributeModel",
+        "additionalProperties": false,
+        "properties": {
+          "omsOrderLineItemsId": {
+            "type": "integer",
+            "description": "The order line item identifier.",
+            "format": "int32",
+            "example": 10001
+          },
+          "attributeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The attribute code (e.g., \\Color\\, \\Size\\).",
+            "example": "Color"
+          },
+          "attributeValue": {
+            "type": "string",
+            "nullable": true,
+            "description": "The attribute value (e.g., \\Red\\, \\Large\\).",
+            "example": "Black"
+          },
+          "attributeValueCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The coded value of the attribute.",
+            "example": "BLK"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails": {
+        "type": "object",
+        "title": "PluginTaxCartItemDetails",
+        "additionalProperties": false,
+        "properties": {
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the importDuty\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 2.5
+          },
+          "hst": {
+            "type": "number",
+            "description": "Harmonized Sales Tax (HST) amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > hst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "gst": {
+            "type": "number",
+            "description": "Goods and Services Tax (GST) amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "pst": {
+            "type": "number",
+            "description": "Provincial Sales Tax (PST) amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > pst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "vat": {
+            "type": "number",
+            "description": "Value Added Tax (VAT) amount for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > vat\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "attributes": {
+            "type": "array",
+            "nullable": true,
+            "description": "Collection of order line item attributes for this sub-item.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel"
+            }
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "The SKU of the sub-item product.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "example": "WM-BLK-001-CFG"
+          },
+          "selectedQuantity": {
+            "type": "number",
+            "description": "The selected quantity of this sub-item.",
+            "format": "double",
+            "example": 1
+          },
+          "taxClassId": {
+            "type": "integer",
+            "description": "The tax class identifier for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Click Edit on the desired tax\r\n3. Check the URL in the browser\r\n4. Find taxClassId in the query string\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "int32",
+            "example": 3
+          },
+          "taxCalculated": {
+            "type": "boolean",
+            "description": "Whether tax has been calculated for this sub-item.",
+            "example": true
+          },
+          "taxRate": {
+            "type": "array",
+            "nullable": true,
+            "description": "Tax rate breakdown for this sub-item.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel"
+            }
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel": {
+        "type": "object",
+        "title": "TaxRateModel",
+        "description": "Line-item level tax rate bifurcation will be provided in JSON format when using third-party vendors like AvaTax. For the Znode Sales Tax flow, this field will be null",
+        "additionalProperties": false,
+        "properties": {
+          "rate": {
+            "type": "number",
+            "nullable": true,
+            "description": "Defines the applicable tax percentage.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the tax (e.g., Avalara Tax, Sales Tax).\r\n\r\n**Admin Sandbox URL:** [Taxes](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes.\r\n2. Locate the Tax Name from the list.\r\n\r**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "Sales Tax"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxOrderDiscountModel": {
+        "type": "object",
+        "title": "PluginTaxOrderDiscountModel",
+        "additionalProperties": false,
+        "properties": {
+          "promotionId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The promotion that produced the discount.",
+            "format": "int32",
+            "example": 12
+          },
+          "promotionTypeId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The promotion type identifier (ZnodePromotionType.PromotionTypeId).",
+            "format": "int32",
+            "example": 3
+          },
+          "promotionClassName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The promotion type class name (ZnodePromotionType.ClassName). Plugins use it to identify the kind of promotion, for example one that discounts only part of a line.",
+            "example": "CartPromotionPercentOffOrder"
+          },
+          "discountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The promo code or coupon code.",
+            "example": "SAVE10"
+          },
+          "discountType": {
+            "type": "string",
+            "nullable": true,
+            "description": "The discount type: PromoCode = 1, CouponCode = 2.",
+            "example": "2"
+          },
+          "discountLevelTypeId": {
+            "type": "integer",
+            "description": "The discount level: LineItemLevel = 1, OrderLevel = 2, ShippingLevel = 3.",
+            "format": "int32",
+            "example": 1
+          },
+          "discountAmount": {
+            "type": "number",
+            "description": "The amount taken off, as a line total (per-unit amount multiplied by quantity). On the order-level list, the total amount of the entry.",
+            "format": "double",
+            "example": 5
+          },
+          "perQuantityDiscount": {
+            "type": "number",
+            "nullable": true,
+            "description": "The per-unit discount amount.",
+            "format": "double",
+            "example": 2.5
+          },
+          "discountAppliedSequence": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The order in which the promotions were applied. Each promotion is priced on what the earlier promotions left.",
+            "format": "int32",
+            "example": 1
+          },
+          "discountMultiplier": {
+            "type": "number",
+            "nullable": true,
+            "description": "The discount multiplier of the promotion.",
+            "format": "double",
+            "example": 1
+          },
+          "promotionName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The promotion name, for logs.",
+            "example": "10 percent off"
+          },
+          "promotionMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "The promotion message, for logs.",
+            "example": "10 percent off your order"
+          },
+          "orderProductId": {
+            "type": "string",
+            "nullable": true,
+            "description": "On the order-level list only: ties the entry to a cart line.",
+            "format": "uuid",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "On the order-level list only: ties the entry to a cart line.",
+            "example": "SKU-1001"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel": {
+        "type": "object",
+        "title": "TaxExemptModel",
+        "additionalProperties": false,
+        "properties": {
+          "customerCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The customer code for tax exemption lookup.",
+            "example": "EXEMPT-001"
+          },
+          "profile": {
+            "type": "boolean",
+            "description": "When set to `true`, the order is treated as tax-exempt and zero tax is applied.",
+            "example": true
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel": {
+        "type": "object",
+        "title": "PluginTaxAddressModel",
+        "additionalProperties": false,
+        "properties": {
+          "line1": {
+            "type": "string",
+            "description": "Primary address line (street address).\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the line1\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "minLength": 1,
+            "example": "123 Main St"
+          },
+          "line2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Secondary address line (apartment, suite, unit, etc.).",
+            "example": "Suite 200"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name.\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the City field.\r\n3. Use the value entered in the City field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "minLength": 1,
+            "example": "Irvine"
+          },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "description": "Region or district name. Used for tax jurisdiction determination in certain tax rules.\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the Region field.\r\n3. Use the value entered in the Region field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "example": "Orange County"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal or ZIP code.\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the Postal Code field.\r\n3. Use the value entered in the Postal Code field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "minLength": 1,
+            "example": "92618"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country name.\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. In Address Details\r\n2. Locate City\r\n3. Copy the value\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "minLength": 1,
+            "example": "United States"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Two-letter ISO country code (e.g., `US`, `CA`).\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the Country Code field.\r\n3. Use the value entered in the Country Code field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "example": "US"
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "State or province code (e.g., `NY`, `ON`).\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the State Code field.\r\n3. Use the value entered in the State Code field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "example": "CA"
+          },
+          "stateName": {
+            "type": "string",
+            "description": "Full state or province name.\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to: Accounts & Users > Manage Account > General Settings > Address Details\r\n2. In the Address Details section, locate the State field.\r\n3. Use the value entered in the State field.\r\n\r\n**Knowledgebase:** [My Account Address Book - Edit or Add Address](https://support.znode.com/support/solutions/articles/43000757232-my-account-address-book-edit-or-add-address)",
+            "minLength": 1,
+            "example": "California"
+          }
+        },
+        "required": [
+          "line1",
+          "city",
+          "postalCode",
+          "country",
+          "stateName"
+        ]
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse": {
+        "type": "object",
+        "title": "TaxManagerCalculateResponse",
+        "description": "Response object containing the calculated tax breakdown for all cart items, including per-item tax amounts and aggregate totals.",
+        "additionalProperties": false,
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax summary records after the return adjustment..\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List.\r\n2. Open the desired Return Order.\r\n3. Navigate to the Products Returned section.\r\n4. Locate the Tax section in the summary area > this represents `taxSummaryList`.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756889-managing-return)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            }
+          },
+          "taxMessageList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax-related messages returned from the tax calculation engine or plugin.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The identifier of the tax rule that was applied during calculation.",
+            "format": "int32",
+            "example": 5
+          },
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount calculated for the order.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the importDuty\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount calculated for the order.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.75
+          },
+          "taxCost": {
+            "type": "number",
+            "description": "Total tax cost across all cart items.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 12.5
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "customTaxCost": {
+            "type": "number",
+            "nullable": true,
+            "description": "Custom tax cost, if any. Used for overriding or extending standard tax calculations.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The applied tax rate percentage.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount applied to the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 1.25
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel": {
+        "type": "object",
+        "title": "PluginTaxSummaryModel",
+        "additionalProperties": false,
+        "properties": {
+          "omsOrderTaxSummaryId": {
+            "type": "integer",
+            "description": "The unique identifier of the order tax summary record.",
+            "format": "int32",
+            "example": 101
+          },
+          "omsOrderDetailsId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The order details identifier associated with this tax summary.",
+            "format": "int32",
+            "example": 5001
+          },
+          "omsQuoteTaxSummaryId": {
+            "type": "integer",
+            "description": "The unique identifier of the quote tax summary record.",
+            "format": "int32",
+            "example": 0
+          },
+          "omsQuoteId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The quote identifier associated with this tax summary.",
+            "format": "int32",
+            "example": 0
+          },
+          "tax": {
+            "type": "number",
+            "nullable": true,
+            "description": "The tax amount for this summary line.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.75
+          },
+          "rate": {
+            "type": "number",
+            "nullable": true,
+            "description": "The tax rate percentage applied.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the tax (e.g., Avalara Tax, Sales Tax).\r\n\r\n**Admin Sandbox URL:** [Taxes](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes.\r\n2. Locate the Tax Name from the list.\r\n\r**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "Sales Tax"
+          },
+          "taxTypeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The tax type name (e.g., Sales, GST, HST).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "Sales"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Models.ZnodeErrorDetail": {
+        "type": "object",
+        "title": "ZnodeErrorDetail",
+        "description": "Error response model providing comprehensive details about API errors encountered during request processing.",
+        "additionalProperties": false,
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "**Error Code** - Numeric error identifier for categorizing and troubleshooting the error condition.",
+            "format": "int32",
+            "example": 400
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "**Error Message** - Human-readable description of the error encountered during the operation.",
+            "example": "The specified custom table field could not be found."
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "**Error Status Flag** - Returns true if an error occurred during request processing; returns false if the request was processed successfully without errors.",
+            "example": true
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        }
+      },
+      "System.Net.HttpStatusCode": {
+        "type": "integer",
+        "title": "HttpStatusCode",
+        "description": "The HTTP status code value associated with the response.",
+        "format": "int32"
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest": {
+        "type": "object",
+        "title": "TaxManagerCancelOrderRequest",
+        "description": "Request body for the cancel order tax transaction endpoint. Contains plugin configurations, the order number, cart items, and tax override amounts.",
+        "additionalProperties": false,
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Global plugin settings. Contains the top-level configuration keys, values, and nested child configurations required by the tax plugin.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. View the configuration fields\r\n\r\n**Knowledgebase:** [Configure The AvaTax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin#AvaTax-Global-Configuration-Details)"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Plugin-specific configuration set. Contains additional key-value pairs for the tax plugin instance.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the fields\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)"
+          },
+          "orderNumber": {
+            "type": "string",
+            "description": "Use this parameter to pass order number\r\n\r\n**Admin Sandbox URL:** [Manage Order](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders in the Admin panel.\r\n2. The value is visible in the orders list or the order management page URL\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "minLength": 1,
+            "example": "SO-14042026-0001"
+          },
+          "cartItems": {
+            "type": "array",
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "taxOverrideAmountList": {
+            "type": "array",
+            "description": "List of tax override amounts for returned order line items.\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List\r\n2. Open the desired Return Order\r\n3. Navigate to the Products Returned section\r\n4. Locate the Tax Amount details for the returned product > this represents `taxOverrideAmountList`\r\n\r\n**Knowledgebase:** [Managing Returns](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Flag to indicate whether the seller is the importer of record for cross-border transactions.",
+            "example": false
+          },
+          "businessIdentificationNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Business identification number used for tax registration/exemption purposes.",
+            "example": "US-EIN-123456789"
+          },
+          "currentDate": {
+            "type": "string",
+            "description": "The current date and time associated with the request, used to track when the operation was performed in the system.\r\n\r\n**Note:** The date and time format in the response depends on the DateFormat and TimeFormat configured under [General Settings](https://admin-z10-sandbox.znodestore.com/GeneralSetting/List)",
+            "format": "date-time",
+            "example": "2026-04-14T00:00:00Z"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user ID of the customer whose order is being cancelled.\r\n\r\n**Admin Sandbox URL:** [Customer List](https://admin-z10-sandbox.znodestore.com/Customer/CustomersList)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Users\r\n2. Click Edit on the desired user\r\n3. Check the URL in the browser\r\n4. Find userId in the query string\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 2108
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ISO currency code for the transaction (e.g., `USD`, `CAD`).\r\n\r\n**Admin Sandbox URL:** [Price List](https://admin-z10-sandbox.znodestore.com/Price/List)\r\n\r\n**Knowledgebase:** [Znode Pricing Approaches](https://support.znode.com/support/solutions/articles/43000756914-znode-pricing-approaches)",
+            "example": "USD"
+          },
+          "taxType": {
+            "type": "string",
+            "description": "Specifies the tax provider type (e.g., `AvaTax`, `SalesTax`).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Check the Tax Type\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "minLength": 1,
+            "example": "AvaTax"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel",
+            "description": "Indicates whether the customer is tax-exempt.\r\n\r\n**Admin Sandbox URL:** [Profiles List](https://admin-z10-sandbox.znodestore.com/Profiles/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Marketing > Profiles in the Admin panel.\r\n2. Select or Edit a profile to view the Tax Exempt setting.\r\n\r\n**Knowledgebase:** [Managing User Profiles](https://support.znode.com/support/solutions/articles/43000757042-managing-user-profiles)"
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 1 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 2 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 3 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 4 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 5 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value5"
+          }
+        },
+        "required": [
+          "pluginGlobalConfigurations",
+          "pluginConfigurationSet",
+          "orderNumber",
+          "cartItems",
+          "taxOverrideAmountList",
+          "taxType"
+        ]
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel": {
+        "type": "object",
+        "title": "TaxAmountOverrideModel",
+        "additionalProperties": false,
+        "properties": {
+          "orderProductId": {
+            "type": "string",
+            "description": "The unique GUID identifier for the order product.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > List\r\n2. Open the desired Order\r\n3. Navigate to Manage / Summary\r\n4. Check Total Amount > this is OrderProductId\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "uuid",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "The product SKU.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes > Associated Products\r\n2. View the product list\r\n3. Check the SKU column\r\n4. Copy the required SKU value\r\n\r\n**Knowledgebase:** [Associate Products To Tax Class](https://support.znode.com/support/solutions/articles/43000757195-associate-products-to-tax-class)",
+            "example": "WM-BLK-001"
+          },
+          "taxOverrideAmount": {
+            "type": "number",
+            "description": "The tax override amount for this product.",
+            "format": "double",
+            "example": 3.5
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse": {
+        "type": "object",
+        "title": "TaxManagerCancelOrderResponse",
+        "description": "Response object returned after a tax cancellation request. Indicates whether the cancellation was successful and includes updated tax summary details.",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "Whether the cancellation was successful.",
+            "example": true
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+          },
+          "taxSummaryList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax summary records after the return adjustment..\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List.\r\n2. Open the desired Return Order.\r\n3. Navigate to the Products Returned section.\r\n4. Locate the Tax section in the summary area > this represents `taxSummaryList`.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756889-managing-return)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            }
+          },
+          "taxMessageList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax-related messages from the cancellation process.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The tax rule ID that was applied.",
+            "format": "int32",
+            "example": 5
+          },
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the importDuty\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.75
+          },
+          "taxCost": {
+            "type": "number",
+            "description": "Total tax cost.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxcost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 12.5
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "customTaxCost": {
+            "type": "number",
+            "nullable": true,
+            "description": "Custom tax cost, if any.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The applied tax rate percentage.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount applied to shipping.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 1.25
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest": {
+        "type": "object",
+        "title": "TaxManagerCommitTaxRequest",
+        "description": "Request body for the commit tax endpoint. Contains plugin configurations, the tax cart with order and address details, plugin URL, and tax type.",
+        "additionalProperties": false,
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Global plugin settings. Contains the top-level configuration keys, values, and nested child configurations required by the tax plugin.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. View the configuration fields\r\n\r\n**Knowledgebase:** [Configure The AvaTax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin#AvaTax-Global-Configuration-Details)"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Plugin-specific configuration set. Contains additional key-value pairs for the tax plugin instance.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the fields\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)"
+          },
+          "pluginTaxCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginCommitTaxRequestModel",
+            "description": "Tax cart data containing cart items, addresses, shipping cost, tax-exempt flags, and other calculation inputs.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products and order data represent the pluginTaxCart\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)"
+          },
+          "isTaxCostUpdated": {
+            "type": "boolean",
+            "description": "Whether the tax cost has been updated since the last calculation. Default is `true`.",
+            "example": true
+          },
+          "pluginUrl": {
+            "type": "string",
+            "description": "The URL of the tax plugin service used for third-party tax calculations.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin\r\n2. Check the Plugin URL field\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)",
+            "minLength": 1,
+            "example": "https://tax-plugin.example.com"
+          },
+          "taxType": {
+            "type": "string",
+            "description": "Specifies the tax provider type (e.g., `AvaTax`, `SalesTax`).\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Check the Tax Type\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "minLength": 1,
+            "example": "AvaTax"
+          }
+        },
+        "required": [
+          "pluginGlobalConfigurations",
+          "pluginConfigurationSet",
+          "pluginTaxCart",
+          "isTaxCostUpdated",
+          "pluginUrl",
+          "taxType"
+        ]
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginCommitTaxRequestModel": {
+        "type": "object",
+        "title": "PluginCommitTaxRequestModel",
+        "additionalProperties": false,
+        "properties": {
+          "cartItems": {
+            "type": "array",
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Flag to indicate whether the seller is the importer of record.",
+            "example": false
+          },
+          "orderId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The order identifier.\r\n\r\n**Admin Sandbox URL:** [Admin Panel](https://admin-z10-sandbox.znodestore.com)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > List / Manage\r\n2. Click View/Edit on the desired order\r\n3. Check the URL\r\n4. Find orderId in the query string\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "int32",
+            "example": 5001
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Use this parameter to pass order number\r\n\r\n**Admin Sandbox URL:** [Manage Order](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders in the Admin panel.\r\n2. The value is visible in the orders list or the order management page URL\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "example": "SO-14042026-0001"
+          },
+          "orderDateTime": {
+            "type": "string",
+            "description": "The date and time of the order.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the orderDateTime\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "date-time",
+            "example": "2026-04-14T10:30:00Z"
+          },
+          "orderState": {
+            "type": "string",
+            "nullable": true,
+            "description": "The current state of the order (same as Order Status).",
+            "example": "Submitted"
+          },
+          "currentDate": {
+            "type": "string",
+            "description": "The current date and time associated with the request, used to track when the operation was performed in the system.\r\n\r\n**Note:** The date and time format in the response depends on the DateFormat and TimeFormat configured under [General Settings](https://admin-z10-sandbox.znodestore.com/GeneralSetting/List)",
+            "format": "date-time",
+            "example": "2026-04-14T00:00:00Z"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel",
+            "description": "Indicates whether the customer is tax-exempt.\r\n\r\n**Admin Sandbox URL:** [Profiles List](https://admin-z10-sandbox.znodestore.com/Profiles/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Marketing > Profiles in the Admin panel.\r\n2. Select or Edit a profile to view the Tax Exempt setting.\r\n\r\n**Knowledgebase:** [Managing User Profiles](https://support.znode.com/support/solutions/articles/43000757042-managing-user-profiles)"
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "The unique identifier of the storefront (portal).\r\n\r\n**Admin Sandbox URL:** [Store List](https://admin-z10-sandbox.znodestore.com/Store/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to Stores > Manage Store > URLs in Admin\r\n2. Open any store URL record\r\n3. Check the browser URL\r\n4. Find PortalId in the query string\r\n\r\n**Knowledgebase:** [Managing Stores](https://support.znode.com/support/solutions/articles/43000757163-managing-stores)",
+            "format": "int32",
+            "example": 9
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The ISO currency code for the transaction.\r\n\r\n**Admin Sandbox URL:** [Price List](https://admin-z10-sandbox.znodestore.com/Price/List)\r\n\r\n**Knowledgebase:** [Store Set Up Guide](https://support.znode.com/support/solutions/articles/43000757222-store-set-up-guide)",
+            "minLength": 1,
+            "example": "USD"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "isCalculateTaxOnShipping": {
+            "type": "boolean",
+            "description": "Whether to calculate tax on the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > this is isCalculateTaxOnShipping\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": true
+          },
+          "isHandlingChargeTaxable": {
+            "type": "boolean",
+            "description": "Indicates whether handling charges are included in the taxable shipping amount.\r\n\r\n- If `isCalculateTaxOnShipping` and `isHandlingChargeTaxable` are both `true`, the shipping line includes both the shipping cost and handling charge.\r\n- If only `isHandlingChargeTaxable` is `true`, the shipping line includes only the handling charge.\r\n- If only `isCalculateTaxOnShipping` is `true`, the shipping line includes only the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit or Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Handling Charge in Taxes\" > this is isHandlingChargeTaxable\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": false
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "The shipping cost for the order.",
+            "format": "double",
+            "example": 9.99
+          },
+          "handlingCharge": {
+            "type": "number",
+            "description": "The handling charge of the shipping amount.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the Handling Charge field\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 5
+          },
+          "shippingDiscount": {
+            "type": "number",
+            "description": "The shipping discount amount.",
+            "format": "double",
+            "example": 0
+          },
+          "isQuoteOrder": {
+            "type": "boolean",
+            "description": "Whether this is a quote order.",
+            "example": false
+          },
+          "isPricesInclusiveOfTaxes": {
+            "type": "boolean",
+            "description": "Whether product prices already include taxes.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": false
+          },
+          "isCalculateTaxAfterDiscount": {
+            "type": "boolean",
+            "description": "Whether to calculate tax after applying discounts.",
+            "example": false
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user ID of the customer.\r\n\r\n**Admin Sandbox URL:** [Customer List](https://admin-z10-sandbox.znodestore.com/Customer/CustomersList)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Users\r\n2. Click Edit on the desired user\r\n3. Check the URL in the browser\r\n4. Find userId in the query string\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 2108
+          },
+          "isTaxExempt": {
+            "type": "boolean",
+            "description": "Whether the order is tax-exempt.\r\n\r\n**Admin Sandbox URL:** [User Profiles List](https://admin-z10-sandbox.znodestore.com/Profiles/List)\r\n\r\n**Knowledgebase:** [Managing User Profiles](https://support.znode.com/support/solutions/articles/43000757042-managing-user-profiles)",
+            "example": false
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount on shipping.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > this is isCalculateTaxOnShipping\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 1 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 2 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 3 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 4 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 5 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value5"
+          },
+          "orderLevelDiscountDetails": {
+            "type": "array",
+            "nullable": true,
+            "description": "Order-level and shipping-level promotions or coupons from the current calculation pass. Entries removed from the cart (for example a removed coupon) are not sent.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxOrderDiscountModel"
+            }
+          }
+        },
+        "required": [
+          "cartItems",
+          "orderDateTime",
+          "currentDate",
+          "portalId",
+          "currencyCode",
+          "originAddress",
+          "destinationAddress",
+          "isQuoteOrder",
+          "isPricesInclusiveOfTaxes"
+        ]
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse": {
+        "type": "object",
+        "title": "TaxManagerCommitTaxResponse",
+        "description": "Response object returned after a tax commit (submit) operation. Contains the finalized tax summary and aggregated tax amounts for the committed order.",
+        "additionalProperties": false,
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax summary records after the return adjustment..\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List.\r\n2. Open the desired Return Order.\r\n3. Navigate to the Products Returned section.\r\n4. Locate the Tax section in the summary area > this represents `taxSummaryList`.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756889-managing-return)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            }
+          },
+          "taxMessageList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax-related messages from the commit process.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The tax rule ID that was applied.",
+            "format": "int32",
+            "example": 5
+          },
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.75
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "customTaxCost": {
+            "type": "number",
+            "nullable": true,
+            "description": "Custom tax cost, if any.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The applied tax rate percentage.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount applied to shipping.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 1.25
+          },
+          "isTaxCostUpdated": {
+            "type": "boolean",
+            "description": "Whether the tax cost was updated during the commit process.",
+            "example": true
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest": {
+        "type": "object",
+        "title": "TaxManagerPreSubmitOrderProcessRequest",
+        "description": "Request body for the pre-submit order process validation endpoint. Contains the billing address and the tax rate to validate before committing a tax transaction.",
+        "additionalProperties": false,
+        "properties": {
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The tax rate applied to the order. Used for validation before committing.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          }
+        },
+        "required": [
+          "billingAddress",
+          "taxRate"
+        ]
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse": {
+        "type": "object",
+        "title": "TaxManagerPreSubmitOrderProcessResponse",
+        "description": "Response object returned after the pre-submit order process validation. Indicates whether the validation passed and provides any accumulated error messages.",
+        "additionalProperties": false,
+        "properties": {
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Accumulated error messages from the pre-submit validation, if any."
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "description": "Whether the pre-submit order process validation passed.",
+            "example": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "The error message text if validation failed."
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest": {
+        "type": "object",
+        "title": "TaxManagerReturnOrderLineItemRequest",
+        "description": "Request body for the return order line item endpoint. Contains plugin configurations, the order number, items being returned, and tax override amounts.",
+        "additionalProperties": false,
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Global plugin settings. Contains the top-level configuration keys, values, and nested child configurations required by the tax plugin.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Global Configuration\r\n2. View the configuration fields\r\n\r\n**Knowledgebase:** [Configure The AvaTax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin#AvaTax-Global-Configuration-Details)"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel",
+            "description": "Plugin-specific configuration set. Contains additional key-value pairs for the tax plugin instance.\r\n\r\n**Admin Sandbox URL:** [Plugin List](https://admin-z10-sandbox.znodestore.com/Plugin/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Plugin > Edit Plugin > Configuration Sets\r\n2. Select or Edit the desired configuration set\r\n3. View the fields\r\n\r\n**Knowledgebase:** [Configure The Avatax Tax Plugin](https://support.znode.com/support/solutions/articles/43000761517-configure-the-avatax-tax-plugin)"
+          },
+          "orderNumber": {
+            "type": "string",
+            "description": "Use this parameter to pass order number\r\n\r\n**Admin Sandbox URL:** [Manage Order](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders in the Admin panel.\r\n2. The value is visible in the orders list or the order management page URL\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "minLength": 1,
+            "example": "SO-14042026-0001"
+          },
+          "pluginTaxReturnItemList": {
+            "type": "array",
+            "description": "Collection of cart items being returned. Each item includes product details, quantities, and pricing for the return.",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "taxOverrideAmountList": {
+            "type": "array",
+            "description": "List of tax override amounts for returned order line items.\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List\r\n2. Open the desired Return Order\r\n3. Navigate to the Products Returned section\r\n4. Locate the Tax Amount details for the returned product > this represents `taxOverrideAmountList`\r\n\r\n**Knowledgebase:** [Managing Returns](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Flag to indicate whether the seller is the importer of record for cross-border transactions.",
+            "example": false
+          },
+          "businessIdentificationNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Business identification number used for tax registration/exemption purposes.",
+            "example": "US-EIN-123456789"
+          },
+          "taxBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxBag",
+            "description": "Tax details bag containing tax class, rates, destination info, and TaxType. Determines which tax calculation path is used.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. The tax bag details are configured here\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)"
+          },
+          "currentDate": {
+            "type": "string",
+            "description": "The current date and time associated with the request, used to track when the operation was performed in the system.\r\n\r\n**Note:** The date and time format in the response depends on the DateFormat and TimeFormat configured under [General Settings](https://admin-z10-sandbox.znodestore.com/GeneralSetting/List)",
+            "format": "date-time",
+            "example": "2026-04-14T00:00:00Z"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user ID of the customer processing the return.\r\n\r\n**Admin Sandbox URL:** [Customer List](https://admin-z10-sandbox.znodestore.com/Customer/CustomersList)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Users\r\n2. Click Edit on the desired user\r\n3. Check the URL in the browser\r\n4. Find userId in the query string\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 2108
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ISO currency code for the transaction (e.g., `USD`, `CAD`).\r\n\r\n**Admin Sandbox URL:** [Price List](https://admin-z10-sandbox.znodestore.com/Price/List)\r\n\r\n**Knowledgebase:** [Znode Pricing Approaches](https://support.znode.com/support/solutions/articles/43000756914-znode-pricing-approaches)",
+            "example": "USD"
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 1 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 2 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 3 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 4 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom value 5 of the order (cart), passed unchanged from the cart for use by the tax plugin.",
+            "example": "value5"
+          }
+        },
+        "required": [
+          "pluginGlobalConfigurations",
+          "pluginConfigurationSet",
+          "orderNumber",
+          "pluginTaxReturnItemList",
+          "taxOverrideAmountList"
+        ]
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxBag": {
+        "type": "object",
+        "title": "PluginTaxBag",
+        "additionalProperties": false,
+        "properties": {
+          "taxClassId": {
+            "type": "integer",
+            "description": "The tax class identifier.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Click Edit on the desired tax\r\n3. Check the URL in the browser\r\n4. Find taxClassId in the query string\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "int32",
+            "example": 3
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "The sales tax rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.25
+          },
+          "gst": {
+            "type": "number",
+            "description": "Goods and Services Tax (GST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > gst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "hst": {
+            "type": "number",
+            "description": "Harmonized Sales Tax (HST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > hst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "pst": {
+            "type": "number",
+            "description": "Provincial Sales Tax (PST) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > pst\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "vat": {
+            "type": "number",
+            "description": "Value Added Tax (VAT) rate or amount.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > vat\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 0
+          },
+          "destinationStateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The destination state code for tax jurisdiction.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Shipping in Taxes\" > destinationStateCode\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": "CA"
+          },
+          "destinationCountryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The destination country code for tax jurisdiction.\r\n\r\n**Admin Sandbox URL:** [Shipping List](https://admin-z10-sandbox.znodestore.com/Shippings/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Shipping > List\r\n2. Edit the desired Shipping Method\r\n3. Locate Destination Country\r\n4. The selected country code > this is destinationCountryCode\r\n\r\n**Knowledgebase:** [Managing Shipping Methods](https://support.znode.com/support/solutions/articles/43000757185-managing-shipping-methods)",
+            "example": "US"
+          },
+          "countyFIPS": {
+            "type": "string",
+            "nullable": true,
+            "description": "The FIPS county code for US-based tax jurisdiction.",
+            "example": "06059"
+          },
+          "shippingTaxInd": {
+            "type": "boolean",
+            "description": "Indicates whether tax is applied to shipping charges.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to System Settings > Taxes.\r\n2. Open the desired Tax Name.\r\n3. Navigate to Manage Tax > Tax Rule List.\r\n4. Edit the required Tax Rule.\r\n5. Click Edit Tax Type.\r\n6. Check the \"Include Shipping in Taxes\" option > this represents `shippingTaxInd`.\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": true
+          },
+          "isHandlingChargeTaxable": {
+            "type": "boolean",
+            "description": "Indicates whether handling charges are included in the taxable shipping amount.\r\n\r\n- If `isCalculateTaxOnShipping` and `isHandlingChargeTaxable` are both `true`, the shipping line includes both the shipping cost and handling charge.\r\n- If only `isHandlingChargeTaxable` is `true`, the shipping line includes only the handling charge.\r\n- If only `isCalculateTaxOnShipping` is `true`, the shipping line includes only the shipping cost.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit or Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check \"Include Handling Charge in Taxes\" > this is isHandlingChargeTaxable\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "example": false
+          },
+          "inclusiveInd": {
+            "type": "boolean",
+            "description": "Indicator for whether taxes are inclusive (included in price).",
+            "example": false
+          },
+          "isDefault": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Whether this is the default tax bag configuration.",
+            "example": true
+          },
+          "associatedTaxRuleIds": {
+            "type": "string",
+            "nullable": true,
+            "description": "Comma-separated list of associated tax rule identifiers.",
+            "example": "5,12"
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The primary tax rule identifier.",
+            "format": "int32",
+            "example": 5
+          },
+          "customModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.CustomModel"
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The combined tax rate (sum of Sales Tax, GST, HST, PST, and VAT). Automatically calculated.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "readOnly": true,
+            "example": 8.25
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.CustomModel": {
+        "type": "object",
+        "title": "CustomModel",
+        "additionalProperties": false,
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 1 for extensibility.",
+            "example": "value1"
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 2 for extensibility.",
+            "example": "value2"
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 3 for extensibility.",
+            "example": "value3"
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 4 for extensibility.",
+            "example": "value4"
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 5 for extensibility.",
+            "example": "value5"
+          }
+        }
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse": {
+        "type": "object",
+        "title": "TaxManagerReturnOrderLineItemResponse",
+        "description": "Response object returned after processing a return for order line items. Contains the adjusted tax summary and amounts reflecting the return adjustment.",
+        "additionalProperties": false,
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax summary records after the return adjustment..\r\n\r\n**Admin Sandbox URL:** [Return List](https://admin-z10-sandbox.znodestore.com/RMAReturn/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Returns > Return List.\r\n2. Open the desired Return Order.\r\n3. Navigate to the Products Returned section.\r\n4. Locate the Tax section in the summary area > this represents `taxSummaryList`.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756889-managing-return)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            }
+          },
+          "taxMessageList": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tax-related messages from the return process.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "description": "The tax rule ID that was applied.",
+            "format": "int32",
+            "example": 5
+          },
+          "importDuty": {
+            "type": "number",
+            "description": "Import duty amount after return adjustment.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the importDuty\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "salesTax": {
+            "type": "number",
+            "description": "Sales tax amount after return adjustment.\r\n\r\n**Admin Sandbox URL:** [Tax Class List](https://admin-z10-sandbox.znodestore.com/TaxClass/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Taxes\r\n2. Edit any Tax Name\r\n3. Open Manage Tax > Tax Rule List\r\n4. Edit a Tax Rule > Edit Tax Type\r\n5. Check sales Tax Rate\r\n\r\n**Knowledgebase:** [Adding A Tax Rule](https://support.znode.com/support/solutions/articles/43000757198-adding-a-tax-rule)",
+            "format": "double",
+            "example": 8.75
+          },
+          "taxCost": {
+            "type": "number",
+            "description": "Total tax cost after return adjustment.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 12.5
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "description": "**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Go to OMS > Orders > Order List\r\n2. Open the desired Order\r\n3. Navigate to the Products Ordered / Cart Items section\r\n4. The listed products under this section represent the cartItems\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "customTaxCost": {
+            "type": "number",
+            "nullable": true,
+            "description": "Custom tax cost, if any, after return adjustment.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxCost\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 0
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "The applied tax rate percentage.\r\n\r\n**Admin Sandbox URL:** [Order List](https://admin-z10-sandbox.znodestore.com/Order/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Orders > Manage\r\n2. Click View/Edit on the desired order\r\n3. Scroll to Order Line Items section\r\n4. Check the taxRate\r\n\r\n**Knowledgebase:** [Managing Orders](https://support.znode.com/support/solutions/articles/43000756889-managing-orders)",
+            "format": "double",
+            "example": 8.25
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "description": "Tax amount applied to shipping after the return.",
+            "format": "double",
+            "example": 1.25
+          },
+          "isReturnAdjustment": {
+            "type": "boolean",
+            "description": "Indicates that this response represents a return/refund tax adjustment.",
+            "default": true,
+            "example": true
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ]
+}

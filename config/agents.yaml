@@ -1,0 +1,12 @@
+# Project facts the generic agents of the tda-agents plugin read (they hold no Znode knowledge of their own).
+# Changes go through review like any other config.
+
+# Where a human exports the OpenAPI JSON that goes into specs/.
+apiDocs: apidocs.znode.com
+
+# collection-builder: which spec and operations to use.
+apiChoices: |
+  Prefer the Core API v2 (specs/znode-core-api-v2.json). Use the legacy v1 (specs/znode-core-api-v1.json) only where
+  v2 cannot create and delete the record. Decided 2026-10-22: promotions (POST /Promotion/Create, POST /Promotion/Delete)
+  and customer users (POST /User/CreateCustomerAccount, POST /User/DeleteUserAccount) use v1. v1 deletes take the IDs in
+  the body (ParameterModel.Ids): teardown.bodyTemplate { "Ids": "{id}" }.

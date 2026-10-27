@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "entity": "promotion",
+  "tables": [
+    "dbo.ZnodePromotion",
+    "dbo.ZnodePromotionCoupon",
+    "dbo.ZnodePromotionType",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePromotion.PromotionId",
+      "to": "dbo.ZnodePromotionCoupon.PromotionId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePromotion.PromotionTypeId",
+      "to": "dbo.ZnodePromotionType.PromotionTypeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePromotion.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "name": "dbo.ZnodePromotion.Name",
+    "promoCode": "dbo.ZnodePromotion.PromoCode",
+    "couponCode": "dbo.ZnodePromotionCoupon.Code",
+    "availableQuantity": "dbo.ZnodePromotionCoupon.AvailableQuantity",
+    "discountType": "dbo.ZnodePromotionType.Name",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "startDate": "dbo.ZnodePromotion.StartDate",
+    "endDate": "dbo.ZnodePromotion.EndDate",
+    "couponActive": "dbo.ZnodePromotionCoupon.IsActive",
+    "discountAmount": "dbo.ZnodePromotion.Discount",
+    "orderMinimum": "dbo.ZnodePromotion.OrderMinimum"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:7a66e032ad48384f7d6c91a2054e647d011d37b0cd5504f29b26a41884a57ca8",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

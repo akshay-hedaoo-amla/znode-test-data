@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_category",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimCategoryProduct",
+    "dbo.ZnodePimCategory",
+    "dbo.ZnodePimCategoryAttributeValue",
+    "dbo.ZnodePimCategoryAttributeValueLocale",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimCategoryHierarchy",
+    "dbo.ZnodePublishCatalog",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimCategoryProduct.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryProduct.PimCategoryId",
+      "to": "dbo.ZnodePimCategory.PimCategoryId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategory.PimCategoryId",
+      "to": "dbo.ZnodePimCategoryAttributeValue.PimCategoryId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryAttributeValue.PimCategoryAttributeValueId",
+      "to": "dbo.ZnodePimCategoryAttributeValueLocale.PimCategoryAttributeValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategory.PimCategoryId",
+      "to": "dbo.ZnodePimCategoryHierarchy.PimCategoryId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryHierarchy.PimCatalogId",
+      "to": "dbo.ZnodePublishCatalog.PimCatalogId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePublishCatalog.PublishCatalogId",
+      "to": "dbo.ZnodePortalCatalog.PublishCatalogId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortalCatalog.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "brand": "dbo.ZnodePimProduct.Brand",
+    "categoryName": "dbo.ZnodePimCategoryAttributeValueLocale.CategoryValue",
+    "categoryActive": "dbo.ZnodePimCategory.IsActive",
+    "categoryProductActive": "dbo.ZnodePimCategoryProduct.Status",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodePimAttribute.AttributeCode": "CategoryName"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:03e7c65eaad7df384ba5b5ec20b713737821d6725fc3f96a3fdb2770e66df24c",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

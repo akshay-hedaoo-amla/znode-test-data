@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_PDP_DETAILS",
+  "entity": "product",
+  "type": "configurable_pdp_details",
+  "constraints": {
+    "type": "configurable",
+    "isActive": "true",
+    "publishState": "production",
+    "activeVariantCount": ">= 1",
+    "variantInventory": ">= {quantityUsed}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Published active configurable product with an active in-stock variant, plus its guest PDP for the first variant by SKU: text attributes, guest price, parent category/brand/links. KB: Product Detail Page; Custom Price Lists (precedence); Frequently Bought; You May Also Like; Managing Inventory.",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets on the PDP; the variant needs at least this inventory and the guest tier price is picked for it"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

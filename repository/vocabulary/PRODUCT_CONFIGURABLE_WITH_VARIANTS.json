@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+  "entity": "product",
+  "type": "configurable",
+  "constraints": {
+    "type": "configurable",
+    "status": "active",
+    "variantCount": ">= 1",
+    "variantInventory": ">= {quantityUsed}",
+    "publishState": "production"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active configurable parent product with buyable, in-stock variants on the store. KB: Product Types (configurable = parent with multiple variations; users buy a variant).",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Minimum variant inventory the test needs (PDP checks In Stock)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-21T14:30:00Z"
+}

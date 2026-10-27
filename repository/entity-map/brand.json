@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "entity": "brand",
+  "tables": [
+    "dbo.ZnodeBrandDetails",
+    "dbo.ZnodeBrandDetailLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeBrandDetails.BrandId",
+      "to": "dbo.ZnodeBrandDetailLocale.BrandId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "name": "dbo.ZnodeBrandDetailLocale.BrandName",
+    "code": "dbo.ZnodeBrandDetails.BrandCode",
+    "isActive": "dbo.ZnodeBrandDetails.IsActive"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:d949b7d0760cad91d93b19b3f3e7fbc855616b7dd9d6a5d93aaa1a2bd6c65a24",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

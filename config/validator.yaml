@@ -1,0 +1,3 @@
+# Query validator settings (security_and_access_doc.md section 4).
+# Highest row limit a generated query may request with TOP n or OFFSET/FETCH.
+maxRows: 100

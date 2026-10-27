@@ -1,0 +1,20 @@
+# How the DB data profiler looks up a scanned value: the first rule whose keyPath regex (case-insensitive)
+# matches the value's key path wins. Entity and property names must exist in repository/entity-map/.
+# The entity-mapper agent proposes changes; humans review them like any other config change.
+# Key paths: JSON "a.b.c"; Selenium Excel "table/Row/Column" (the Row segment names the field).
+
+rules:
+  # A configurable parent is also profiled for its variants (count and stock); any other SKU also for its stock.
+  # Stock lookups are filtered by the test's store param when the requirement gives one. (2026-10-21, review item 1)
+  - { keyPath: "parent_?product_?sku", entity: product, property: sku, also: [ { entity: product_variants, property: sku } ] }
+  - { keyPath: "sku", entity: product, property: sku, also: [ { entity: product_stock, property: sku } ] }
+  - { keyPath: "coupon_?code", entity: promotion, property: couponCode }
+  # PromotionalCode is the promotion's own code (ZnodePromotion.PromoCode), not a coupon code. (2026-10-21, pending review)
+  - { keyPath: "promotional_?code", entity: promotion, property: promoCode }
+  - { keyPath: "promotion_?name", entity: promotion, property: name }
+  # Selenium storeDetails rows are keyed StoreCodeN; the Label column holds the store name. (2026-10-21, pending review)
+  - { keyPath: "store_?code[^/]*/label", entity: store, property: name, also: [ { entity: store_domains, property: name } ] }
+  - { keyPath: "store_?code", entity: store, property: code, also: [ { entity: store_domains, property: code } ] }
+  # Whole "Brand" segment only; a bare "brand" also matched AmountOffBrandCoupon1 and BrandFilterColumn2. (2026-10-21, pending review)
+  - { keyPath: "(^|[/.])(product_?)?brand([/.]|$)", entity: brand, property: name, also: [ { entity: brand_products, property: name } ] }
+  - { keyPath: "(^|[/.])product_?name([/.]|$)", entity: product, property: name }

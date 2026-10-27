@@ -1,0 +1,20 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_NOT_OF_BRAND_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.Brand AS brand FROM dbo.ZnodePimProduct p LEFT JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND p.Brand IS NOT NULL AND p.Brand <> @brand AND po.StoreCode = @store GROUP BY p.SKU, p.ProductName, p.Brand HAVING SUM(i.Quantity) >= @minStock ORDER BY p.SKU",
+  "params" : [ "productType", "isActive", "publishState", "brand", "store", "minStock" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "minStock" : "1"
+  },
+  "outputs" : [ "sku", "name", "brand" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:e4cac0be8c90d63b19450617a946bde3fe8e0567a8838afe212de948a398e791",
+  "status" : "approved",
+  "approvedBy" : "Akshay Hedaoo",
+  "approvedAt" : "2026-10-23T14:30:00Z",
+  "createdAt" : "2026-10-22T00:00:00Z",
+  "lastValidated" : "2026-10-26T14:59:39Z"
+}

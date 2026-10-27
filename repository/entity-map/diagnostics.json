@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "entity": "diagnostics",
+  "tables": [
+    "dbo.ZnodeProceduresErrorLog"
+  ],
+  "joins": [],
+  "properties": {
+    "procedureName": "dbo.ZnodeProceduresErrorLog.ProcedureName",
+    "errorMessage": "dbo.ZnodeProceduresErrorLog.ErrorMessage",
+    "errorLine": "dbo.ZnodeProceduresErrorLog.ErrorLine",
+    "createdDate": "dbo.ZnodeProceduresErrorLog.CreatedDate"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeProceduresErrorLog.ErrorCall",
+    "dbo.ZnodeProceduresErrorLog.CreatedBy"
+  ],
+  "schemaFingerprint": "sha256:b3b8ef900053001ba43ec6a173f9603ddd95877b530a26d9700400266d3b41f5",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

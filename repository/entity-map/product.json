@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entity": "product",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePublishState"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PublishStateId",
+      "to": "dbo.ZnodePublishState.PublishStateId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "name": "dbo.ZnodePimProduct.ProductName",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "status": "dbo.ZnodePimProduct.IsActive",
+    "brand": "dbo.ZnodePimProduct.Brand",
+    "publishState": "dbo.ZnodePublishState.PublishStateCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:ebe41c58dc0a439e30cb2d268bdafab2777b4943dd955139c94ec14a2014509a",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

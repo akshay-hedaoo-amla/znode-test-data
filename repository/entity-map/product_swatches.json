@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_swatches",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimProductTypeAssociation",
+    "dbo.ZnodePimAttributeValue",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimConfigureProductAttribute",
+    "dbo.ZnodePimProductAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValueLocale",
+    "dbo.ZnodeMedia"
+  ],
+  "aliases": {
+    "variant": "dbo.ZnodePimProduct"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimProductTypeAssociation.PimParentProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimProductTypeAssociation.PimProductId",
+      "to": "variant.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "variant.PimProductId",
+      "to": "dbo.ZnodePimAttributeValue.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimConfigureProductAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimConfigureProductAttribute.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeValueId",
+      "to": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValueLocale.PimAttributeDefaultValueId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeDefaultValue.MediaId",
+      "to": "dbo.ZnodeMedia.MediaId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "variantSku": "variant.SKU",
+    "attributeCode": "dbo.ZnodePimAttribute.AttributeCode",
+    "isSwatch": "dbo.ZnodePimAttribute.IsSwatch",
+    "optionCode": "dbo.ZnodePimAttributeDefaultValue.AttributeDefaultValueCode",
+    "optionLabel": "dbo.ZnodePimAttributeDefaultValueLocale.AttributeDefaultValue",
+    "swatchText": "dbo.ZnodePimAttributeDefaultValue.SwatchText",
+    "swatchMediaPath": "dbo.ZnodeMedia.Path",
+    "swatchFileName": "dbo.ZnodeMedia.FileName"
+  },
+  "filters": {
+    "dbo.ZnodePimAttribute.IsConfigurable": "true"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:16dcd649e854024baacb266678502a808860ed506bf94f0501a30f721e058b35",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-26T14:30:00Z"
+}

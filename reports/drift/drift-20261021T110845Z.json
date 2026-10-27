@@ -1,0 +1,180 @@
+{
+  "schemaVersion" : 1,
+  "generatedAt" : "2026-10-21T11:08:45Z",
+  "environment" : "at",
+  "schemaFingerprint" : "sha256:f91e5974c1035869f0757d883520f3b83b43cb2f1cdebbe76d9391d4143a316a",
+  "sourceFiles" : [ "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json", "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json", "adminTestData.xlsx!loginPageData", "webstoreTestData.xlsx!productDisplayPage", "adminTestData.xlsx!stores", "adminTestData.xlsx!promotionsAndCoupons", "webstoreTestData.xlsx!loginAndRegistration", "adminTestData.xlsx!paymentMethods" ],
+  "entries" : [ {
+    "source" : "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:2",
+    "value" : "b-100000",
+    "testIds" : [ "testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts > Webstore - PDP > verify configurable product details on pdp (variant1)" ],
+    "entity" : "product",
+    "lookupProperty" : "sku",
+    "observed" : {
+      "sku" : "B-100000",
+      "name" : "Philips Base B22 9-Watt Bulb",
+      "type" : "ConfigurableProduct",
+      "status" : "true",
+      "brand" : "Philips",
+      "publishState" : "PRODUCTION",
+      "variantCount" : 11,
+      "variantInventory" : 1350.0
+    },
+    "expected" : {
+      "type" : "configurable",
+      "status" : "active",
+      "variantCount" : ">= 1",
+      "variantInventory" : ">= {quantityUsed}",
+      "publishState" : "production"
+    },
+    "status" : "ok"
+  }, {
+    "source" : "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:9",
+    "value" : "15.00",
+    "testIds" : [ "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off order coupon functionality" ],
+    "entity" : "promotion",
+    "lookupProperty" : "discountAmount",
+    "observed" : {
+      "discountAmount" : 15.0
+    },
+    "expected" : {
+      "discountAmount" : "= 15.00"
+    },
+    "status" : "ok"
+  }, {
+    "source" : "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:12",
+    "value" : "z-4567890",
+    "testIds" : [ "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off order coupon functionality" ],
+    "entity" : "product",
+    "lookupProperty" : "sku",
+    "observed" : {
+      "sku" : "z-4567890",
+      "name" : "Auto_DeWalt Led Work Light",
+      "type" : "SimpleProduct",
+      "status" : "true",
+      "brand" : null,
+      "publishState" : "PRODUCTION",
+      "inventory" : 999876.0
+    },
+    "expected" : {
+      "type" : "simple",
+      "status" : "active",
+      "inventory" : ">= {quantityUsed}",
+      "publishState" : "production"
+    },
+    "status" : "ok"
+  }, {
+    "source" : "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:10",
+    "value" : "ORDER15",
+    "testIds" : [ "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off order coupon functionality" ],
+    "entity" : "promotion",
+    "lookupProperty" : "couponCode",
+    "observed" : {
+      "name" : "CouponAmountOffOrder",
+      "promoCode" : "CouponAmountOffOrder",
+      "couponCode" : "ORDER15",
+      "availableQuantity" : 9824,
+      "discountType" : "Amount Off Order",
+      "store" : "MaxwellsHardware",
+      "startDate" : "2025-04-28 10:30:00.0",
+      "endDate" : "2030-06-24 13:20:47.463",
+      "couponActive" : true,
+      "discountAmount" : 15.0,
+      "orderMinimum" : 1.0
+    },
+    "expected" : {
+      "discountType" : "amount_off_order",
+      "startDate" : "<= {now}",
+      "endDate" : ">= {now}",
+      "couponActive" : "true",
+      "availableQuantity" : ">= {redemptionsNeeded}"
+    },
+    "status" : "ok"
+  }, {
+    "source" : "webstoreTestData.xlsx!productDisplayPage!D6",
+    "value" : "Black + Decker",
+    "testIds" : [ "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T01_verifyAmountOfBrandCouponFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T02_verifyPercentOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T03_verifyAmountOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T04_verifyPercentOffBrandWithMultipleCoupons" ],
+    "entity" : "brand",
+    "lookupProperty" : "name",
+    "observed" : {
+      "name" : "Black + Decker",
+      "code" : "BlackAndDecker",
+      "isActive" : true,
+      "productCount" : 14
+    },
+    "expected" : {
+      "isActive" : "true",
+      "productCount" : ">= {minProducts}"
+    },
+    "status" : "ok"
+  }, {
+    "source" : "adminTestData.xlsx!stores!B10",
+    "value" : "Maxwell's Hardware Multistore4",
+    "testIds" : [ "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T01_verifyAmountOfBrandCouponFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T02_verifyPercentOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T03_verifyAmountOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T04_verifyPercentOffBrandWithMultipleCoupons" ],
+    "entity" : "store",
+    "lookupProperty" : "name",
+    "observed" : {
+      "code" : "MaxwellsHardwareMultistore4",
+      "name" : "Maxwell's Hardware Multistore4",
+      "isActive" : false
+    },
+    "expected" : {
+      "isActive" : "true"
+    },
+    "status" : "drifted",
+    "reason" : "isActive is false, needs = true"
+  }, {
+    "source" : "webstoreTestData.xlsx!productDisplayPage!O4",
+    "value" : "z-2300014",
+    "testIds" : [ "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T01_verifyAmountOfBrandCouponFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T02_verifyPercentOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T03_verifyAmountOfBrandPromotionFunctionality" ],
+    "entity" : "product",
+    "lookupProperty" : "sku",
+    "observed" : {
+      "sku" : "z-2300014",
+      "name" : "American Standard Astume Vortax Toilet",
+      "type" : "SimpleProduct",
+      "status" : "true",
+      "brand" : "AmericanStandard",
+      "publishState" : "PRODUCTION",
+      "inventory" : 10.0
+    },
+    "expected" : {
+      "type" : "simple",
+      "status" : "active",
+      "brand" : "!= {brand}",
+      "inventory" : ">= {quantityUsed}",
+      "publishState" : "production"
+    },
+    "status" : "ok",
+    "reason" : "not checked: param quantityUsed not given"
+  }, {
+    "source" : "webstoreTestData.xlsx!productDisplayPage!D4",
+    "value" : "z-2420004",
+    "testIds" : [ "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T01_verifyAmountOfBrandCouponFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T02_verifyPercentOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T03_verifyAmountOfBrandPromotionFunctionality", "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T04_verifyPercentOffBrandWithMultipleCoupons" ],
+    "entity" : "product",
+    "lookupProperty" : "sku",
+    "observed" : {
+      "sku" : "z-2420004",
+      "name" : "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "type" : "SimpleProduct",
+      "status" : "true",
+      "brand" : "BlackAndDecker",
+      "publishState" : "PRODUCTION",
+      "inventory" : 25.0
+    },
+    "expected" : {
+      "type" : "simple",
+      "status" : "active",
+      "brand" : "{brand}",
+      "inventory" : ">= {quantityUsed}",
+      "publishState" : "production"
+    },
+    "status" : "ok"
+  } ],
+  "summary" : {
+    "ok" : 7,
+    "notProfiled" : 0,
+    "notFound" : 0,
+    "drifted" : 1
+  }
+}

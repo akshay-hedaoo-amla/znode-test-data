@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./input/**)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Edit(./input/**)",
+      "Write(./input/**)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "tda": {
+      "source": {
+        "source": "github",
+        "repo": "akshay-hedaoo-amla/automation-testdata-generator"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "tda-agents@tda": true
+  }
+}

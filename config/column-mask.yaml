@@ -1,0 +1,54 @@
+# Customer-data columns that must be masked or dropped before any value leaves the DB layer
+# (security_and_access_doc.md section 6). The DB profiler never selects these, and neither does the `rows` diagnostic.
+#
+# Entries are "schema.table.column" or case-insensitive glob patterns ('*' = any run of characters).
+# Changes go through review. Explicit entries were checked against the live schema on 2026-10-21.
+
+columns:
+  # ZnodeUser
+  - dbo.ZnodeUser.Email
+  - dbo.ZnodeUser.UserName
+  - dbo.ZnodeUser.PhoneNumber
+  - dbo.ZnodeUser.FirstName
+  - dbo.ZnodeUser.LastName
+  - dbo.ZnodeUser.MiddleName
+  - dbo.ZnodeUser.CustomerPaymentGUID
+  - dbo.ZnodeUser.RefreshToken
+
+  # ASP.NET Identity (sign-in names and security stamps); added 2026-10-22 (user entity map review)
+  - dbo.AspNetZnodeUser.UserName
+  - dbo.AspNetUsers.UserName
+  - dbo.AspNetUsers.NormalizedUserName
+  - dbo.AspNetUsers.SecurityStamp
+  - dbo.AspNetUsers.ConcurrencyStamp
+
+  # ZnodeAddress
+  - dbo.ZnodeAddress.FirstName
+  - dbo.ZnodeAddress.LastName
+  - dbo.ZnodeAddress.DisplayName
+  - dbo.ZnodeAddress.CompanyName
+  - dbo.ZnodeAddress.Address1
+  - dbo.ZnodeAddress.Address2
+  - dbo.ZnodeAddress.Address3
+  - dbo.ZnodeAddress.CityName
+  - dbo.ZnodeAddress.PostalCode
+  - dbo.ZnodeAddress.PhoneNumber
+  - dbo.ZnodeAddress.Mobilenumber
+  - dbo.ZnodeAddress.AlternateMobileNumber
+  - dbo.ZnodeAddress.FaxNumber
+  - dbo.ZnodeAddress.EmailAddress
+
+  # Safety net for every table (orders, identity, payments, tables not mapped yet). Masking a harmless column
+  # such as EmailOptIn only hides it from profiling; it never exposes anything.
+  - "dbo.*.*email*"
+  - "dbo.*.*phone*"
+  - "dbo.*.*mobile*"
+  - "dbo.*.*firstname*"
+  - "dbo.*.*lastname*"
+  - "dbo.*.*password*"
+  - "dbo.*.*token*"
+  - "dbo.*.*card*"
+  - "dbo.*.*address1*"
+  - "dbo.*.*postalcode*"
+  - "dbo.*.*apikey*"      # API keys (e.g. ZnodeDomain.ApiKey); added 2026-10-21
+  - "dbo.*.*secret*"

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_attributes",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAttributeValue",
+    "dbo.ZnodePimAttributeValueLocale",
+    "dbo.ZnodePimProductAttributeTextAreaValue",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodeAttributeType",
+    "dbo.ZnodePimAttributeLocale",
+    "dbo.ZnodePimAttributeGroupMapper",
+    "dbo.ZnodePimAttributeGroup",
+    "dbo.ZnodePimAttributeGroupLocale",
+    "dbo.ZnodeLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAttributeValue.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeValueId",
+      "to": "dbo.ZnodePimAttributeValueLocale.PimAttributeValueId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValueLocale.LocaleId",
+      "to": "dbo.ZnodeLocale.LocaleId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeValueId",
+      "to": "dbo.ZnodePimProductAttributeTextAreaValue.PimAttributeValueId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.AttributeTypeId",
+      "to": "dbo.ZnodeAttributeType.AttributeTypeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimAttributeLocale.PimAttributeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimAttributeGroupMapper.PimAttributeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeGroupMapper.PimAttributeGroupId",
+      "to": "dbo.ZnodePimAttributeGroup.PimAttributeGroupId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeGroup.PimAttributeGroupId",
+      "to": "dbo.ZnodePimAttributeGroupLocale.PimAttributeGroupId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "attributeCode": "dbo.ZnodePimAttribute.AttributeCode",
+    "attributeName": "dbo.ZnodePimAttributeLocale.AttributeName",
+    "attributeType": "dbo.ZnodeAttributeType.AttributeTypeName",
+    "isConfigurable": "dbo.ZnodePimAttribute.IsConfigurable",
+    "isHidden": "dbo.ZnodePimAttribute.IsHidden",
+    "attributeGroup": "dbo.ZnodePimAttributeGroup.GroupCode",
+    "attributeGroupName": "dbo.ZnodePimAttributeGroupLocale.AttributeGroupName",
+    "groupDisplayOrder": "dbo.ZnodePimAttributeGroup.DisplayOrder",
+    "attributeDisplayOrder": "dbo.ZnodePimAttributeGroupMapper.AttributeDisplayOrder",
+    "value": "dbo.ZnodePimAttributeValueLocale.AttributeValue",
+    "locale": "dbo.ZnodeLocale.Code",
+    "textAreaValue": "dbo.ZnodePimProductAttributeTextAreaValue.AttributeValue"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:61c68144c8e107a69a7eab830190cf368cc7f3beca72e8b2aae721b347856c0d",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-26T14:30:00Z"
+}

@@ -1,0 +1,29 @@
+{
+  "masked": [
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.RefreshToken",
+    "dbo.ZnodeUser.CustomerPaymentGUID",
+    "dbo.ZnodeAddress.CityName",
+    "dbo.ZnodeAddress.Address2",
+    "dbo.ZnodeOmsOrderDetails.BillingEmailId",
+    "dbo.ZnodeOmsOrderDetails.BillingPhoneNumber",
+    "dbo.ZnodeOmsOrderDetails.CardNumber",
+    "dbo.AspNetUsers.PasswordHash",
+    "dbo.AspNetUsers.Email",
+    "dbo.ZnodeAnyNewTable.ShipToFirstName",
+    "DBO.ZNODEUSER.EMAIL",
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp"
+  ],
+  "notMasked": [
+    "dbo.ZnodePimProduct.SKU",
+    "dbo.ZnodePimProduct.ProductName",
+    "dbo.ZnodePromotion.PromoCode",
+    "dbo.ZnodePromotionCoupon.Code",
+    "dbo.ZnodePortal.StoreCode",
+    "dbo.ZnodeInventory.Quantity"
+  ]
+}

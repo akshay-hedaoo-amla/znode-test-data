@@ -1,0 +1,14 @@
+# Documented exception to the read-only database rule (security_and_access_doc.md section 3, user decision 2026-10-23).
+# These logins hold INSERT/UPDATE/DELETE on the listed tables only. The agents and the resolver must never write to
+# them (or anything else); they are tolerated so the shared environment logins can be used for reads.
+# ReadOnlyDbUserIT fails on any write right not listed here. Changes go through review.
+
+logins:
+  - z10_atrourlw
+  - z10_atstgrourlw
+
+tables:
+  - dbo.ZnodeClient
+  - dbo.ZnodeDomain
+  - dbo.ZnodeGlobalSettingGlobalAttributeValue
+  - dbo.ZnodeGlobalSettingGlobalAttributeValueLocale

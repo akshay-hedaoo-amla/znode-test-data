@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_domains",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodeDomain"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePortal.PortalId",
+      "to": "dbo.ZnodeDomain.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "code": "dbo.ZnodePortal.StoreCode",
+    "name": "dbo.ZnodePortal.StoreName",
+    "webstoreDomains": "COUNT(DISTINCT dbo.ZnodeDomain.DomainId)"
+  },
+  "filters": {
+    "dbo.ZnodeDomain.ApplicationType": "WebStore",
+    "dbo.ZnodeDomain.IsActive": "1"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeDomain.ApiKey"
+  ],
+  "schemaFingerprint": "sha256:3f707012cb1b858446a48eca5815068dec7d380804b35b635d1a2c257b274798",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

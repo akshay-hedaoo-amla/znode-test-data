@@ -1,0 +1,449 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts > Webstore - PDP > verify configurable product details on pdp (variant1)",
+  "scenario": {
+    "summary": "Guest searches the webstore for a configurable parent product by SKU, opens its PDP, selects variant 1 by its Bulb Size/Color/Technology swatches, and validates the variant's details, tiered offers, stock status, info tabs and the Frequently Bought / You May Also Like related products. Read-only; nothing is added to the cart.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search for the parent product SKU and assert 'Showing 1 of 1 Results'.",
+      "Open the first search result (configurable product PDP).",
+      "Assert the attribute groups Bulb Size, Color and Technology, then choose variant 1 by its size, color and technology swatches.",
+      "Assert breadcrumb, product name, SKU, brand, short description, retail price, rating, wishlist heart and image of the selected variant.",
+      "Assert the three tiered special offers (buy quantity, price per item, discount percentage).",
+      "Inventory section is skipped for this data (isInventorySectionDisplayed=false); assert the stock status text.",
+      "Assert Print, See More and Email a Friend buttons and the Details, Specifications, Shipping Info, Reviews and Additional Information tabs and panels.",
+      "Assert the Frequently Bought and You May Also Like sections and their product cards (name, Read Reviews, Add to Cart visible)."
+    ],
+    "entitiesTouched": [
+      "product",
+      "brand",
+      "category",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search for the parent SKU shows exactly one result ('Showing 1 of 1 Results').",
+      "Attribute groups contain the labels Bulb Size, Color and Technology.",
+      "Breadcrumb equals Home/<category>/<variant name>; heading, SKU:<variant SKU>, Brand:<brand>, short description and retail price match the variant.",
+      "Three tiered offers show 'Buy N or more', '$<price>/item' and 'Save <discount>%'.",
+      "Stock status contains 'In Stock'.",
+      "Details, specifications, shipping info and additional information tab panels contain the expected text.",
+      "Frequently Bought and You May Also Like sections list the expected related product names with Read Reviews and Add to Cart."
+    ],
+    "evidence": [
+      "Title 'verify configurable product details on pdp (variant1)' and step labels '1) Open the configurable product PDP' and '2) Select variant 1 + validate all product details' match the flow.",
+      "Spec line 24 searches data.parentProductSKU; line 31 calls validateConfigurableVariant(productDetailPage, data.productVariant) (configurable-pdp.helper.ts:90-193).",
+      "Profile: parent SKU b-100000 FOUND as ConfigurableProduct, active, store MaxwellsHardware (2 rows matched; first row used). Its observed name/brand (Philips Base B22 9-Watt Bulb / Philips) do not match the asserted variant (Ecosmart LED bulb z-2510001).",
+      "Profile: variant SKU z-2510001 FOUND as SimpleProduct, active, inventory 100, store MaxwellsHardware; related products all FOUND as active SimpleProducts on MaxwellsHardware.",
+      "No add-to-cart, checkout or admin action; no linked AIO cases."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_PDP_DETAILS",
+      "alias": "pdp",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "b-100000",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:2",
+      "kind": "json",
+      "keyPath": "parentProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts:25",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Bulb Size",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:5",
+      "kind": "json",
+      "keyPath": "productVariant.sizeLable",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Color",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:6",
+      "kind": "json",
+      "keyPath": "productVariant.colorLable",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Technology",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:7",
+      "kind": "json",
+      "keyPath": "productVariant.techologyLable",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "imgSmall",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:8",
+      "kind": "json",
+      "keyPath": "productVariant.productSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "imgWhite",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:9",
+      "kind": "json",
+      "keyPath": "productVariant.productColor",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "imgLED",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:10",
+      "kind": "json",
+      "keyPath": "productVariant.productTechnology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:11",
+      "kind": "json",
+      "keyPath": "productVariant.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-2510001",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:12",
+      "kind": "json",
+      "keyPath": "productVariant.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:13",
+      "kind": "json",
+      "keyPath": "productVariant.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Ecosmart Water Heaters",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:14",
+      "kind": "json",
+      "keyPath": "productVariant.productBrand",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "The EcoSmart Daylight Dimmable LED Bulb is a flood light bulb compatible with your indoor recessed cans or track light fixtures.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:15",
+      "kind": "json",
+      "keyPath": "productVariant.productShortDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "$46.84",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:16",
+      "kind": "json",
+      "keyPath": "productVariant.productPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "true",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:17",
+      "kind": "json",
+      "keyPath": "productVariant.isSpecialOfferPresent",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "42.16",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "39.81",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "35.13",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:18",
+      "kind": "json",
+      "keyPath": "productVariant.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:19",
+      "kind": "json",
+      "keyPath": "productVariant.inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "false",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:20",
+      "kind": "json",
+      "keyPath": "productVariant.isInventorySectionDisplayed",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "The EcoSmart Daylight Dimmable LED Bulb is a flood light bulb compatible with your indoor recessed cans or track light fixtures.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:21",
+      "kind": "json",
+      "keyPath": "productVariant.productDetails",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Actual Color Temperature (K): 5000",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:22",
+      "kind": "json",
+      "keyPath": "productVariant.productSpecifications",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "All orders are processed within 2-3 business days",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:23",
+      "kind": "json",
+      "keyPath": "productVariant.productShippingInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "CAUTION: Before removing or installing components of a device",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:24",
+      "kind": "json",
+      "keyPath": "productVariant.productAdditionalInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "true",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:25",
+      "kind": "json",
+      "keyPath": "productVariant.isFrequentlyBoughtProductsPresent",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 20 Volt Cordless Reciprocating Saw",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:27",
+      "kind": "json",
+      "keyPath": "productVariant.frequentlyBoughtProducts.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-2410001",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:27",
+      "kind": "json",
+      "keyPath": "productVariant.frequentlyBoughtProducts.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "DeWalt Cordless Propane Radiant Heater",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:28",
+      "kind": "json",
+      "keyPath": "productVariant.frequentlyBoughtProducts.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-1234567",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:28",
+      "kind": "json",
+      "keyPath": "productVariant.frequentlyBoughtProducts.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "true",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:30",
+      "kind": "json",
+      "keyPath": "productVariant.isYouMayAlsoLikePresent",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 6.5 in Corded Angle Grinder",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:32",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-2460001",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:32",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:33",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:33",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Bosch 18-Volt 6-1/2 in Cordless Cicular Saw Kit",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:34",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "z-2470006",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.json:34",
+      "kind": "json",
+      "keyPath": "productVariant.youMayAlsoLike.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-26T14:30:00Z"
+}

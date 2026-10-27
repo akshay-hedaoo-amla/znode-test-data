@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_links",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimLinkProductDetail",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimAttributeLocale"
+  ],
+  "aliases": {
+    "linked": "dbo.ZnodePimProduct"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimLinkProductDetail.PimParentProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimLinkProductDetail.PimProductId",
+      "to": "linked.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimLinkProductDetail.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimAttributeLocale.PimAttributeId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "linkType": "dbo.ZnodePimAttribute.AttributeCode",
+    "linkTypeName": "dbo.ZnodePimAttributeLocale.AttributeName",
+    "linkedSku": "linked.SKU",
+    "linkedName": "linked.ProductName",
+    "linkedStatus": "linked.IsActive",
+    "displayOrder": "dbo.ZnodePimLinkProductDetail.DisplayOrder"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:7b7061b3e385d22e26a58527a59520f1f95b03fdc0cc45291e2e16eb124db67c",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

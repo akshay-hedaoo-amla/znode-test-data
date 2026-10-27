@@ -1,0 +1,4232 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "v1",
+    "title": "Znode Reports API ",
+    "description": "This API is used to get the list of unassociated shipping methods based on plugiun types, plugin scope and externalId.\r\n\r\n**Expand Support:**\r\n**Filter Support:**\r\n**Sort Support:**",
+    "contact": {
+      "name": "Znode Reports API",
+      "url": "https://api-qa-znode.amla.io/",
+      "email": "puja.bhalerao@amla.io"
+    },
+    "license": {
+      "url": "https://api-qa-znode.amla.io",
+      "name": "Znode Reports API"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://apigateways-z10-sandbox.znodestore.com",
+      "description": ""
+    },
+    {
+      "url": "",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/reports/v1/case-request/list": {
+      "get": {
+        "tags": [
+          "CaseRequest"
+        ],
+        "summary": "List of Service Request",
+        "description": "The API allows the retrieval of case requests within a specified date range. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-list-of-service-request",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseRequestSuccessListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseRequestSuccessListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseRequestSuccessListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/quotes": {
+      "get": {
+        "tags": [
+          "Quote"
+        ],
+        "summary": "Retrieve quote records",
+        "description": "Retrieves a paginated list of quote records.\n\nIt supports optional date range filtering, allowing users to narrow the results within a specified time period. \n\nThe endpoint also supports pagination to optimize performance when handling large result sets.\n\n#### Supported Features\n\n* Filter records using an optional date range.\n* Paginate results using `pageIndex` and `pageSize`.\n* Returns pagination metadata including total pages and total record count.\n\n#### Limitations\n\n* Sorting is **not supported**.\n* Field-level filtering is **not supported**.\n* Results are returned using the system-defined default ordering.\n\n---\n\n### Usage Notes\n* Date filters are optional.\n* Date values must follow one of the supported formats:\n\n  * `yyyy-MM-dd`\n  * `yyyy-MM-dd HH:mm:ss`\n* Pagination parameters are optional. If not provided, default values are applied.\n\n---\n\n### Examples\n\n**Example 1**: Retrieve a list of quotes\n\n**Request URL**- `\n  https://{domain}/reports/v1/quotes\n  `\n\n**Description**: Retrieves the first page of quote records using the default pagination settings.\n\n---\n\n**Example 2**: Retrieve a list of quotes within a date range\n\n**Request URL** - \n `\n  https://{domain}/reports/v1/quotes?startDate=2026-01-01 00:00:00&endDate=2026-01-31 23:59:59\n  `\n\n**Description**: \nRetrieves quote records created between January 1, 2026 and January 31, 2026.\n\n---\n\n**Example 3**: Retrieve a specific page of records\n\n**Request URL**- `\n  https://{domain}/reports/v1/quotes?pageIndex=2&pageSize=50\n  `\n \n **Description**: Retrieves the second page containing up to 50 records.\n\n---\n\n### Pagination\n\n The API supports standard pagination parameters.\n\n**PageIndex**: Specifies the page number to retrieve. (default: 1)\n\n**PageSize**: Specifies the number of records per page (default: 10)\n",
+        "operationId": "quoteList",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date for filtering records. Must be in `yyyy-MM-dd` or `yyyy-MM-dd HH:mm:ss` format. \n\n **Example**: `2026-06-01` or `2026-06-01 23:59:59`",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date for filtering records. Must be in `yyyy-MM-dd` or `yyyy-MM-dd HH:mm:ss` format. \n\n **Example**: `2026-06-31` or `2026-06-31 23:59:59`",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Specifies the number of records per page.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10,
+              "example": 20
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "Specifies the page number to retrieve.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1,
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Success</b> - The request was successfully processed and the data is returned.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>No Content</b> - The request was successful but no data was found for the given criteria.</span>"
+          },
+          "400": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Bad Request</b> - Invalid request parameters or malformed query.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\">**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Not Found</b> - The requested resource does not exist.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Internal Server Error</b> - An unexpected error occurred while processing the request.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ],
+        "x-internal": false
+      }
+    },
+    "/reports/v1/returns": {
+      "get": {
+        "tags": [
+          "Return"
+        ],
+        "summary": "Retrieve return records",
+        "description": "Retrieves a paginated list of return records.\n\nIt supports optional date range filtering, allowing users to narrow the results within a specified time period. \n\nThe endpoint also supports pagination to optimize performance when handling large result sets.\n\n#### Supported Features\n\n* Filter records using an optional date range.\n* Paginate results using `pageIndex` and `pageSize`.\n* Returns pagination metadata including total pages and total record count.\n\n#### Limitations\n\n* Sorting is **not supported**.\n* Field-level filtering is **not supported**.\n* Results are returned using the system-defined default ordering.\n\n---\n\n### Usage Notes\n* Date filters are optional.\n* Date values must follow one of the supported formats:\n\n  * `yyyy-MM-dd`\n  * `yyyy-MM-dd HH:mm:ss`\n* Pagination parameters are optional. If not provided, default values are applied.\n\n---\n\n### Examples\n\n**Example 1**: Retrieve a list of Returns\n\n**Request URL**- `\n  https://{domain}/reports/v1/returns\n  `\n\n**Description**: Retrieves the first page of return records using the default pagination settings.\n\n---\n\n**Example 2**: Retrieve a list of Returns within a date range\n\n**Request URL** - \n `\n  https://{domain}/reports/v1/returns?startDate=2026-01-01 00:00:00&endDate=2026-01-31 23:59:59\n  `\n\n**Description**: \nRetrieves return records created between January 1, 2026 and January 31, 2026.\n\n---\n\n**Example 3**: Retrieve a specific page of records\n\n**Request URL**- `\n  https://{domain}/reports/v1/returns?pageIndex=2&pageSize=50\n  `\n \n **Description**: Retrieves the second page containing up to 50 records.\n\n---\n\n### Pagination\n\n The API supports standard pagination parameters.\n\n**PageIndex**: Specifies the page number to retrieve. (default: 1)\n\n**PageSize**: Number of records per page (default: 10)\n",
+        "operationId": "returnList",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date for filtering records. Must be in `yyyy-MM-dd` or `yyyy-MM-dd HH:mm:ss` format. \n\n **Example**: `2026-06-01` or `2026-06-01 23:59:59`",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date for filtering records. Must be in `yyyy-MM-dd` or `yyyy-MM-dd HH:mm:ss` format. \n\n **Example**: `2026-06-31` or `2026-06-31 23:59:59`",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of records per page.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10,
+              "example": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "Specifies the page number to retrieve.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1,
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Success</b> - The request was successfully processed and the data is returned.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>No Content</b> - The request was successful but no data was found for the given criteria.</span>"
+          },
+          "400": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Bad Request</b> - Invalid request parameters or malformed query.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\">**Unauthorized** - The request failed because the Authorization header is missing or the token/API key is invalid or expired.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Not Found</b> - The requested resource does not exist.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "<span style=\"font-family: Inter, sans-serif;\"><b>Internal Server Error</b> - An unexpected error occurred while processing the request.</span>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ],
+        "x-internal": false
+      }
+    },
+    "/reports/v1/coupon/list": {
+      "get": {
+        "tags": [
+          "Coupon"
+        ],
+        "summary": "List of Coupons",
+        "description": "The API allows the retrieval of a list of coupons for reports. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-list-of-coupons",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/customer/email-opt-in-customers": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "List of Customer having Email Options",
+        "description": "This API allows the retrieval of a list of customers having the email options for reports.\r\n\r\nIt uses the parameters, namely 'PageSize' and 'PageIndex' in order to provide the data in chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-email-options-customer-list",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the paginated list of customers with report email options.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/reorder-inventory/list": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "List of Reorder Inventory",
+        "description": "This API is used to get the list of reorder inventory for report purpose. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-reorder-inventory-list",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryReorderListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryReorderListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryReorderListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/customer/frequent-users": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "List of Frequent Users",
+        "description": "The API retrieves frequent list of users. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "frequent-users-list",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the paginated list of frequent users.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/customer/user-details": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "List of User Details",
+        "description": "The API retrieves list of user details. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-list-of-user-details",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the paginated user list.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsSuccessListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsSuccessListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsSuccessListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/user-activity/list": {
+      "get": {
+        "tags": [
+          "UserActivity"
+        ],
+        "summary": "Retrieves paginated user activity logs within a specified date range.",
+        "description": "This endpoint retrieves user activity logs in a paginated format, filtered by the specified date range. It includes all defined user activities recorded during the selected period.",
+        "operationId": "1228588989",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The start date for filtering user activity logs. Must be in a valid DateTime format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The end date for filtering user activity logs. Must be in a valid DateTime format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The index of the page to retrieve. Must be a positive integer.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of records per page. Must be a positive integer.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - The request was successfully processed, and data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityLogListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityLogListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityLogListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content - The request was successful, but no records were found for the given filters."
+          },
+          "400": {
+            "description": "Bad Request - The request parameters are invalid.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - The requested resource does not exist.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/user-activity/filter-options": {
+      "get": {
+        "tags": [
+          "UserActivity"
+        ],
+        "summary": "List of UserActivity filter options",
+        "description": "Retrieves user activity filters in a paginated format. This endpoint returns a list of filters used for user activity reporting.\r\nPagination parameters help manage large result sets efficiently.\r\nThis API returns response which contains details like(EventType,UserName,Role,Account,StoreName).\r\nWhich will be used to fill the dropdown on the PowerBI report.\r\n  ",
+        "operationId": "get-UserActivity",
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The index of the page to retrieve. Must be a positive integer.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of records per page. Must be a positive integer.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. This will return userActivityLogModels.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityFilterListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityFilterListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityFilterListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/discount/types-list": {
+      "get": {
+        "tags": [
+          "Discount"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/order/details-list": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Retrieve order details report",
+        "description": "This endpoint retrieves a paginated order details report based on the specified search criteria. The results can be filtered by date range, modified date, and time zone, with pagination support for efficient data retrieval.",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Start date for the order details report.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "End date for the order details report.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Number of records to return per page.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Index of the page to retrieve.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "modifiedDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filter results based on the last modified date.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Time zone for the order details report."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details report retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**Success with No Content**\r\n\r\nThe request is successfully executed, but the response body does not contain any data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailsListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "**Not Found**\r\n\r\nIndicates that the requested resource could not be found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error**\r\n\r\nIndicates that an error occurred on the server while retrieving the users list.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/keyword-filtered/list": {
+      "get": {
+        "tags": [
+          "KeywordFiltered"
+        ],
+        "summary": "List of Popular Keyword Searched",
+        "description": "This API is used to get the popular keyword that is searched according to the portal id. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-popular-keyword-search",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeywordFilteredSuccessListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeywordFilteredSuccessListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeywordFilteredSuccessListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/pick-order/list": {
+      "get": {
+        "tags": [
+          "PickOrder"
+        ],
+        "summary": "List of Pick Order",
+        "description": "The API allows the retrieval of a list of submitted order for reports. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-list-pick-order",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the paginated pick order list.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickOrderResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickOrderResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickOrderResponseModel"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/sales-tax/list": {
+      "get": {
+        "tags": [
+          "SalesTax"
+        ],
+        "summary": "List of Sales Tax",
+        "description": "The API allows the retrieval of a list of sales tax applied for reports. It uses the parameters like StartDate, EndDate, PageSize and PageIndex to provide data in paginated chunks.\r\n\r\nHere is an example, StartDate = 2025-01-10, EndDate = 2025-04-11, PageSize = 10, PageIndex = 1.",
+        "operationId": "get-list-of-sales-tax",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The beginning date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The ending date of the range used to filter results.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 10
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 2147483647,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesTaxListResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesTaxListResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesTaxListResponseModel"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/payment/paymentTypes-list": {
+      "get": {
+        "tags": [
+          "Payment"
+        ],
+        "summary": "List of Payment Types",
+        "description": "- The List of Payment Types API allows the retrieval of a list of payment types.\r\n- Below is the example\r\n- Request URL: https://{domainname}/Payment/PaymentTypes-List\r\n- In this example, the API returns a response that includes the names of the payment types.",
+        "operationId": "get-payment-types-list",
+        "responses": {
+          "200": {
+            "description": "**OK**\r\n\r\nThe list of payment types has been obtained successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTypeListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTypeListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTypeListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**Success with No Content**\r\n\r\nThe request is successfully executed, but the response body does not contain any data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTypeListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "**Bad Request**\r\n\r\nIndicates that the server could not understand the request due to invalid syntax.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error**\r\n\r\nIndicates that an error occurred on the server while retrieving the users list.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/reports/v1/product/popularProduct-list": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve popular product list",
+        "description": "This endpoint retrieves a paginated list of popular products based on the specified search criteria. The results can be filtered by date range, modified date, and time zone, with pagination support for efficient data retrieval.",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Start date for filtering popular products.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "End date for filtering popular products.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Number of records to return per page.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Index of the page to retrieve.",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "modifiedDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filter results based on the last modified date.",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Time zone for filtering popular products."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the paginated list of popular products.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "**Success with No Content**\r\n\r\nThe request is successfully executed, but the response body does not contain any data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "**Not Found**\r\n\r\nIndicates that the requested resource could not be found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "**Internal Server Error**\r\n\r\nIndicates that an error occurred on the server while retrieving the users list.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.znodestore.com",
+            "description": ""
+          },
+          {
+            "url": "",
+            "description": ""
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "CaseRequestSuccessListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "caseRequestSuccess": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CaseRequestSuccessModel"
+            }
+          }
+        }
+      },
+      "ZnodePaginationDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "PageIndex": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The zero-based index of the current page.",
+            "format": "int32"
+          },
+          "PageSize": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The number of records per page.",
+            "format": "int32"
+          },
+          "TotalPages": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The total number of pages available based on the current page size.",
+            "format": "int32"
+          },
+          "TotalResults": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The total number of records matching the query across all pages.",
+            "format": "int32"
+          }
+        }
+      },
+      "CaseRequestSuccessModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "caseRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ZnodeErrorDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "A numeric identifier for the type of error that occurred, useful for programmatic handling of error responses.",
+            "format": "int32",
+            "example": 404
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "A human-readable message describing the error, intended to help developers or users understand the issue.",
+            "example": "The specified areaCode was not found."
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Indicates whether the request resulted in an error. Defaults to false. When true, additional details are provided in ErrorCode and ErrorMessage.",
+            "default": false,
+            "example": true
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "The HTTP status code associated with the error response.",
+            "example": "404"
+          }
+        }
+      },
+      "QuoteListResponse": {
+        "type": "object",
+        "description": "Represents the response model for retrieving the quotes data. This model includes pagination metadata along with a collection of records.",
+        "additionalProperties": false,
+        "properties": {
+          "PaginationDetail": {
+            "description": "Contains pagination-related metadata such as total record count, page size, and current page index. This helps clients navigate through large datasets efficiently.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ZnodePaginationDetail"
+              }
+            ]
+          },
+          "QuoteModel": {
+            "type": "array",
+            "nullable": true,
+            "description": "A collection of entries containing the quotes data. Each entry contains details such as user, order, and store information.",
+            "items": {
+              "$ref": "#/components/schemas/QuoteModel"
+            }
+          }
+        }
+      },
+      "QuoteModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "UserName": {
+            "type": "string",
+            "nullable": true,
+            "description": "User name associated with the quote record.\r\n\r\n**Admin Sandbox URL:** [Manage Quote](https://admin-z10-sandbox.znodestore.com/Quote/GetQuoteDetails?ClassNumber=QQ-30052026-1438&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Quotes > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Quotes](https://support.znode.com/support/solutions/articles/43000757059-managing-quotes)",
+            "example": "user@example.com"
+          },
+          "UserFullName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The full name of the user associated with this record.",
+            "example": "John Doe"
+          },
+          "UserId": {
+            "type": "integer",
+            "description": "The unique identifier of the user.\r\n\r\n**Admin Sandbox URL:** [Edit User](https://admin-z10-sandbox.znodestore.com/Customer/CustomerEdit?userId=2120&portalId=7)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Users in the Admin panel.\r\n2. Select and edit the desired user.\r\n3. The `UserId` is visible in the browser URL.\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 100
+          },
+          "AccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Accounts > Edit in the Admin panel.\r\n2. Select and edit the desired item.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Accounts](https://support.znode.com/support/solutions/articles/43000756944-managing-accounts)",
+            "example": "C&F Contractors"
+          },
+          "StoreName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Store name where the quote was placed.\r\n\r\n**Admin Sandbox URL:** [Manage Quote](https://admin-z10-sandbox.znodestore.com/Quote/GetQuoteDetails?ClassNumber=QQ-30052026-1438&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Quotes > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Quotes](https://support.znode.com/support/solutions/articles/43000757059-managing-quotes)",
+            "example": "Maxwell's Hardware"
+          },
+          "ClassNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The class number associated with the quote request.\r\n\r\n**Admin Sandbox URL:** [Manage Quote](https://admin-z10-sandbox.znodestore.com/Quote/GetQuoteDetails?ClassNumber=QQ-30052026-1438&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve ClassNumber:**\r\n1. Navigate to OMS > Quotes in the Admin panel.\r\n2. The `ClassNumber` is visible in the quotes list or the quote management page URL.\r\n\r\n**Knowledgebase:** [Managing Quotes](https://support.znode.com/support/solutions/articles/43000757059-managing-quotes)",
+            "example": "Q-07042026-03375"
+          },
+          "Date": {
+            "type": "string",
+            "nullable": true,
+            "description": "The date associated with the quote record.\r\n\r\n**Admin Sandbox URL:** [Manage Quote](https://admin-z10-sandbox.znodestore.com/Quote/GetQuoteDetails?ClassNumber=QQ-30052026-1438&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Quotes > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Quotes](https://support.znode.com/support/solutions/articles/43000757059-managing-quotes)",
+            "format": "date-time",
+            "example": "2026-04-14T10:30:00Z"
+          },
+          "Status": {
+            "type": "string",
+            "description": "The status of the status button.\r\n\r\n**Admin Sandbox URL:** [ChangeStatusButtonList](https://admin-z10-sandbox.znodestore.com/OrderStatus/ChangeStatusButtonList?OmsOrderStateId=240)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to System Settings > Commerce Settings > Order Statuses in the Admin panel.\r\n2. Edit > Quick Status Button.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Manage Order Statuses](https://support.znode.com/support/solutions/articles/43000756908-manage-order-statuses)",
+            "minLength": 1,
+            "example": "SUBMITTED"
+          },
+          "TotalAmount": {
+            "type": "number",
+            "description": "The total record amount calculated.\r\n\r\nExample: `100.00`",
+            "format": "decimal"
+          }
+        }
+      },
+      "ReturnListResponse": {
+        "type": "object",
+        "description": "Represents the response model for retrieving the returns data. This model includes pagination metadata along with a collection of records.",
+        "additionalProperties": false,
+        "properties": {
+          "PaginationDetail": {
+            "description": "Contains pagination-related metadata such as total record count, page size, and current page index. This helps clients navigate through large datasets efficiently.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ZnodePaginationDetail"
+              }
+            ]
+          },
+          "ReturnModel": {
+            "type": "array",
+            "nullable": true,
+            "description": "A collection of entries containing the returns data. Each entry contains details such as user, order, and store information.",
+            "items": {
+              "$ref": "#/components/schemas/ReturnModel"
+            }
+          }
+        }
+      },
+      "ReturnModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "UserName": {
+            "type": "string",
+            "nullable": true,
+            "description": "User name associated with the return record.\r\n\r\n**Admin Sandbox URL:** [Manage Return](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-01062026-0164&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Return > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "example": "user@example.com"
+          },
+          "UserFullName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The full name of the user associated with this record.",
+            "example": "John Doe"
+          },
+          "UserId": {
+            "type": "integer",
+            "description": "The unique identifier of the user.\r\n\r\n**Admin Sandbox URL:** [Edit User](https://admin-z10-sandbox.znodestore.com/Customer/CustomerEdit?userId=2120&portalId=7)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Users in the Admin panel.\r\n2. Select and edit the desired user.\r\n3. The `UserId` is visible in the browser URL.\r\n\r\n**Knowledgebase:** [Managing Users](https://support.znode.com/support/solutions/articles/43000756985-managing-users)",
+            "format": "int32",
+            "example": 100
+          },
+          "AccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "\r\n\r\n**Admin Sandbox URL:** [Account List](https://admin-z10-sandbox.znodestore.com/Account/List)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to Accounts & Users > Accounts > Edit in the Admin panel.\r\n2. Select and edit the desired item.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Accounts](https://support.znode.com/support/solutions/articles/43000756944-managing-accounts)",
+            "example": "C&F Contractors"
+          },
+          "StoreName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Store name where the return was placed.\r\n\r\n**Admin Sandbox URL:** [Manage Return](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-01062026-0164&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Return > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "example": "Maxwell's Hardware"
+          },
+          "ClassNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The class number associated with the return request.\r\n\r\n**Admin Sandbox URL:** [Manage Return](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-01062026-0164&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve ClassNumber:**\r\n1. Navigate to OMS > Return in the Admin panel.\r\n2. The `ClassNumber` is visible in the quotes list or the quote management page URL.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "example": "Q-07042026-03375"
+          },
+          "Date": {
+            "type": "string",
+            "nullable": true,
+            "description": "The date associated with the return record.\r\n\r\n**Admin Sandbox URL:** [Manage Return](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-01062026-0164&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Return > list in the Admin panel.\r\n2. manage.\r\n3. The field is visible in the edit form.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "format": "date-time",
+            "example": "2026-04-14T10:30:00Z"
+          },
+          "Status": {
+            "type": "string",
+            "description": "Current status of the return request (for example: SUBMITTED, APPROVED, or REJECTED).\r\n\r\n**Admin Sandbox URL:** [OMS | Znode®](https://admin-z10-sandbox.znodestore.com/RMAReturn/ManageReturn?ClassNumber=R-11082026-0182&StoreCode=MaxwellsHardware)\r\n\r\n**How to Retrieve:**\r\n1. Navigate to OMS > Return in the Admin panel.\r\n2. Open the required return record from the list.\r\n3. Check the `Status` field on the Manage Return page.\r\n\r\n**Knowledgebase:** [Managing Return](https://support.znode.com/support/solutions/articles/43000756967-managing-returns)",
+            "minLength": 1,
+            "example": "SUBMITTED"
+          },
+          "TotalAmount": {
+            "type": "number",
+            "description": "The total record amount calculated.\r\n\r\nExample: `100.00`",
+            "format": "decimal"
+          }
+        }
+      },
+      "CouponListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "couponList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CouponModel"
+            }
+          }
+        }
+      },
+      "CouponModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "couponCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code associated with the coupon."
+          },
+          "discountType": {
+            "type": "string",
+            "nullable": true,
+            "description": "The type of discount applied by the coupon."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the store associated with the coupon."
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the store associated with the coupon."
+          },
+          "portalId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ID of the portal associated with the coupon."
+          },
+          "totalCount": {
+            "type": "string",
+            "nullable": true,
+            "description": "The total count of coupons available."
+          },
+          "total": {
+            "type": "number",
+            "nullable": true,
+            "description": "The total value of the coupons.",
+            "format": "double"
+          },
+          "discountAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "The amount of discount provided by the coupon.",
+            "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "A brief description of the coupon."
+          },
+          "startDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "The start date of the coupon's validity period.",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "The end date of the coupon's validity period.",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true,
+            "description": "The currency symbol associated with the coupon's value."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the user for whom the coupon is applicable."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the user for whom the coupon is applicable."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the user for whom the coupon is applicable."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the user for whom the coupon is applicable."
+          }
+        }
+      },
+      "CustomerListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "customerList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CustomerModel"
+            }
+          }
+        }
+      },
+      "CustomerModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "The unique identifier of the user.",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The first name of the user."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The last name of the user."
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "The email address of the user."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "The unique identifier of the portal.",
+            "format": "int32"
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the store associated with the user."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the store associated with the user."
+          },
+          "accountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the account associated with the user."
+          },
+          "customerType": {
+            "type": "string",
+            "nullable": true,
+            "description": "The type of customer associated with the user."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the user."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the user."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the user."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the user."
+          },
+          "modifiedDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "The date and time when the user was last modified.",
+            "format": "date-time"
+          }
+        }
+      },
+      "InventoryReorderListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "inventoryReorderList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/InventoryReorderItemModel"
+            }
+          }
+        }
+      },
+      "InventoryReorderItemModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "reOrderLevel": {
+            "type": "number",
+            "format": "double"
+          },
+          "productName": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouseCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "portalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "usersList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserModel"
+            }
+          }
+        }
+      },
+      "UserModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Unique identifier of the user.",
+            "format": "int32"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Username of the user."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the child account associated with the user."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the child account associated with the user."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the parent account associated with the user."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the parent account associated with the user."
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store associated with the user."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the store associated with the user."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "Unique identifier of the portal associated with the user.",
+            "format": "int32"
+          },
+          "orderCount": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total number of orders placed by the user."
+          },
+          "total": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total amount of orders placed by the user."
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency symbol associated with the total amount of orders."
+          },
+          "orderDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the user placed their last order.",
+            "format": "date-time"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the user's information was last modified.",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserDetailsSuccessListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "userDetailsSuccessList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserDetailsSuccessModel"
+            }
+          }
+        }
+      },
+      "UserDetailsSuccessModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "Unique identifier of the user.",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": "First name of the user."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Last name of the user."
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "Email address of the user."
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store associated with the user."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the store associated with the user."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "Identifier of the portal where the user is registered.",
+            "format": "int32"
+          },
+          "profileName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the profile associated with the user."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the child account associated with the user."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the child account associated with the user."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the parent account associated with the user."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the parent account associated with the user."
+          },
+          "createdDate": {
+            "type": "string",
+            "description": "Date and time when the user was created.",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "description": "Date and time when the user was last modified.",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserActivityLogListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "userActivityLogModels": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserActivityLogModel"
+            }
+          }
+        }
+      },
+      "UserActivityLogModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userActivityLogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userActivityEventName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userActivityEventTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int32"
+          },
+          "roleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountName": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "applicationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "activityStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "activityError": {
+            "type": "string",
+            "nullable": true
+          },
+          "action": {
+            "type": "string",
+            "nullable": true
+          },
+          "publishState": {
+            "type": "string",
+            "nullable": true
+          },
+          "referrerURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "browser": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityType": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "previousValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserActivityFilterListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "UserActivityFilterModel": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserActivityFilterModel"
+            }
+          }
+        }
+      },
+      "UserActivityFilterModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "EventType": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Role": {
+            "type": "string",
+            "nullable": true
+          },
+          "Account": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DiscountListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "discounts": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DiscountModel"
+            }
+          }
+        }
+      },
+      "DiscountModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "OrderDetailsListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "description": "ID of the user who created the order.",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "description": "Date and time when the order was created.",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "description": "ID of the user who last modified the order.",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "description": "Date and time when the order was last modified.",
+            "format": "date-time"
+          },
+          "actionMode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Indicates the action mode for the order."
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 1 for additional order information."
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 2 for additional order information."
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 3 for additional order information."
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 4 for additional order information."
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field 5 for additional order information."
+          },
+          "errorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Error code associated with the order.",
+            "format": "int32"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Error message associated with the order."
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Indicates whether the order has an error."
+          },
+          "customModelState": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "errorDetailList": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "pageIndex": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int32"
+          },
+          "totalResults": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int32"
+          },
+          "orderDetailsList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/OrderDetailsModel"
+            }
+          }
+        }
+      },
+      "OrderDetailsModel": {
+        "type": "object",
+        "description": "Represents the details of an order, including customer, account, payment, shipping, pricing, and order status information.",
+        "additionalProperties": false,
+        "properties": {
+          "classNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique identifier of the order.",
+            "format": "uuid"
+          },
+          "portalId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the portal where the order was placed.",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the customer who placed the order.",
+            "format": "int32"
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the customer who placed the order."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the customer who placed the order."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the customer who placed the order."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the customer who placed the order."
+          },
+          "omsOrderStateId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the current order status.",
+            "format": "int32"
+          },
+          "shippingId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the shipping information.",
+            "format": "int32"
+          },
+          "orderPaymentDetailId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique identifier of the payment details for the order.",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Customer's first name."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Customer's last name."
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Company name associated with the customer."
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Primary address line."
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Secondary address line."
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the city."
+          },
+          "stateName": {
+            "type": "string",
+            "nullable": true,
+            "description": "State or province of the billing or shipping address."
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Postal or ZIP code of the address."
+          },
+          "countryName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Country of the billing or shipping address."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Customer's contact phone number."
+          },
+          "emailAddress": {
+            "type": "string",
+            "nullable": true,
+            "description": "Customer's email address."
+          },
+          "taxCost": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total tax cost for the order."
+          },
+          "shippingCost": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total shipping cost for the order."
+          },
+          "subTotal": {
+            "type": "string",
+            "nullable": true,
+            "description": "Subtotal amount of the order before taxes and shipping."
+          },
+          "discountAmount": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total discount amount applied to the order."
+          },
+          "total": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total amount of the order after taxes, shipping, and discounts."
+          },
+          "orderDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the order was placed.",
+            "format": "date-time"
+          },
+          "shippingNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Tracking number for the shipment."
+          },
+          "trackingNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Tracking number for the shipment."
+          },
+          "discountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code used to apply a discount to the order."
+          },
+          "promotionMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Message associated with a promotion applied to the order."
+          },
+          "referralUserId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier of the user who referred the customer."
+          },
+          "purchaseOrderNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Purchase order number associated with the order."
+          },
+          "omsPaymentStateId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the current payment status.",
+            "format": "int32"
+          },
+          "webServiceDownloadDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the order was downloaded via web service."
+          },
+          "paymentSettingID": {
+            "type": "string",
+            "nullable": true,
+            "description": "Identifier of the payment setting used for the order."
+          },
+          "shipDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the order was shipped.",
+            "format": "date-time"
+          },
+          "returnDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the order was returned."
+          },
+          "salesTax": {
+            "type": "number",
+            "nullable": true,
+            "description": "Total sales tax amount for the order.",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "nullable": true,
+            "description": "Total VAT amount for the order.",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "nullable": true,
+            "description": "Total GST amount for the order.",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "nullable": true,
+            "description": "Total PST amount for the order.",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "nullable": true,
+            "description": "Total HST amount for the order.",
+            "format": "double"
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store associated with the order."
+          },
+          "orderStatus": {
+            "type": "string",
+            "nullable": true,
+            "description": "Current status of the order."
+          },
+          "paymentTypeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the payment type used for the order."
+          },
+          "shippingTypeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the shipping type used for the order."
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency symbol associated with the order total."
+          },
+          "paymentType": {
+            "type": "string",
+            "nullable": true,
+            "description": "Type of payment used for the order."
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the order was last modified.",
+            "format": "date-time"
+          }
+        }
+      },
+      "KeywordFilteredSuccessListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "keywordFilteredSuccess": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/KeywordFilteredSuccessModel"
+            }
+          }
+        }
+      },
+      "KeywordFilteredSuccessModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "searchPhrase": {
+            "type": "string",
+            "nullable": true,
+            "description": "The search phrase used by the user."
+          },
+          "timesSearched": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The number of times the search phrase has been searched.",
+            "format": "int32"
+          },
+          "activityCreatedDate": {
+            "type": "string",
+            "description": "The date and time when the search activity was created.",
+            "format": "date-time"
+          },
+          "portalId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Identifier of the portal where the search activity occurred.",
+            "format": "int32"
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the store where the search activity occurred."
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store where the search activity occurred."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the user who searched for the keyword."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the user who searched for the keyword."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the user who searched for the keyword."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the user who searched for the keyword."
+          }
+        }
+      },
+      "PickOrderResponseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "pickOrderModel": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PickOrderModel"
+            }
+          }
+        }
+      },
+      "PickOrderModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the product associated with the order."
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the user associated with the order."
+          },
+          "orderId": {
+            "type": "string",
+            "description": "Unique identifier of the order.",
+            "format": "uuid"
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Order number associated with the order."
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity of the product in the order.",
+            "format": "int32"
+          },
+          "orderDate": {
+            "type": "string",
+            "description": "Date when the order was placed.",
+            "format": "date-time"
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store associated with the order."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code of the store associated with the order."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "Identifier of the portal where the order was placed.",
+            "format": "int32"
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the customer whose order is being picked."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the customer whose order is being picked."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the customer whose order is being picked."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the customer whose order is being picked."
+          }
+        }
+      },
+      "SalesTaxListResponseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/ZnodePaginationDetail"
+          },
+          "salesTaxModel": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SalesTaxModel"
+            }
+          }
+        }
+      },
+      "SalesTaxModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "classNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The tax class number associated with the sales transaction."
+          },
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the store associated with the sales transaction."
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the store associated with the sales transaction."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "The unique identifier of the store (portal).",
+            "format": "int32"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The shipping method code associated with the order."
+          },
+          "total": {
+            "type": "number",
+            "description": "The total order amount, including taxes and other applicable charges.",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "description": "The subtotal amount of the order before taxes and additional charges.",
+            "format": "double"
+          },
+          "taxCost": {
+            "type": "number",
+            "nullable": true,
+            "description": "The total tax amount applied to the order.",
+            "format": "double"
+          },
+          "orderDate": {
+            "type": "string",
+            "description": "The date and time when the order was placed.",
+            "format": "date-time"
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the child account."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the parent account."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account."
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PaymentTypeListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paymentTypeList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PaymentTypeModel"
+            }
+          }
+        }
+      },
+      "PaymentTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paymentType": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ProductListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "productsList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductModel"
+            }
+          }
+        }
+      },
+      "ProductModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the store associated with the product."
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "Stock Keeping Unit of the product."
+          },
+          "productName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the product."
+          },
+          "quantity": {
+            "type": "string",
+            "nullable": true,
+            "description": "Quantity of the product available."
+          },
+          "price": {
+            "type": "string",
+            "nullable": true,
+            "description": "Price of the product."
+          },
+          "totalAmount": {
+            "type": "string",
+            "nullable": true,
+            "description": "Total amount for the product based on quantity and price."
+          },
+          "symbol": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency symbol associated with the product price."
+          },
+          "childAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the child account associated with the customer who purchased the product."
+          },
+          "childAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the child account associated with the customer who purchased the product."
+          },
+          "parentAccountCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The code of the parent account associated with the customer who purchased the product."
+          },
+          "parentAccountName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the parent account associated with the customer who purchased the product."
+          },
+          "orderDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the product was ordered.",
+            "format": "date-time"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date when the product information was last modified.",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Authorization": []
+    }
+  ]
+}

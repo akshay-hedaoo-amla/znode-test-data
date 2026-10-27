@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_OF_BRAND_IN_STOCK",
+  "entity": "product",
+  "type": "simple_of_brand",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "brand": "{brand}",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product associated with a given brand on the store, so brand promotions apply. KB: Adding a Brand (Associate Products to Brand); Associating Brands to a Store.",
+  "declaredParams": {
+    "brand": {
+      "type": "string",
+      "description": "Brand code as stored on the product (ZnodePimProduct.Brand, e.g. the resolved BRAND_WITH_ACTIVE_PRODUCTS record's code)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets in the cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-21T14:30:00Z"
+}

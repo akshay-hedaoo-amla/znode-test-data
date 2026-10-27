@@ -1,0 +1,12 @@
+{
+  "name": "znode-test-data",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Znode test data: runs the released Playwright scanner on this project (TDA_HOME = this repository).",
+  "scripts": {
+    "scan:playwright": "tda-playwright scan"
+  },
+  "devDependencies": {
+    "@akshay-hedaoo-amla/tda-playwright-adapter": "0.6.0"
+  }
+}

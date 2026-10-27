@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "entity": "user",
+  "tables": [
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser",
+    "dbo.ZnodeUserPortal",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeUser.UserId",
+      "to": "dbo.ZnodeUserPortal.UserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeUserPortal.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "userName": "dbo.AspNetZnodeUser.UserName",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "userType": "IFNULL(dbo.ZnodeUser.AspNetUserId, guest, registered)",
+    "isActive": "IFNULL(dbo.AspNetUsers.LockoutEnd, true, false)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeUser.CustomerPaymentGUID",
+    "dbo.ZnodeUser.RefreshToken",
+    "dbo.ZnodeUser.ExternalId",
+    "dbo.ZnodeUser.Custom1",
+    "dbo.ZnodeUser.Custom2",
+    "dbo.ZnodeUser.Custom3",
+    "dbo.ZnodeUser.Custom4",
+    "dbo.ZnodeUser.Custom5"
+  ],
+  "schemaFingerprint": "sha256:a6b9c46fff5656a5bc716ebb3335f151ea20faa4a6a17d3aad87d1168e260087",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

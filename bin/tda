@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# tda: one command for the test data agents. Runs on the test data home (TDA_HOME, else the working directory).
+#   resolver commands (prewarm, resolve, use, release, release-test, teardown, run-id, metrics) -> TdaCli
+#   everything else (snapshot, describe, rows, profile, drift, query-status, query-verify, spec-scan,
+#   collection-status, collection-verify, restamp, maintain, console-data, validate)            -> ProfilerCli
+# The jar is TDA_CLI_JAR, else .tda/tda-cli.jar (the release named by tda.version in pom.xml: mvn -q initialize).
+# TDA_HOME defaults to this repository.
+# The resolver and the profiler are two main classes of one jar: the resolver never loads profiler code.
+set -e
+here=$(cd "$(dirname "$0")" && pwd)
+jar=${TDA_CLI_JAR:-"$here/../.tda/tda-cli.jar"}
+export TDA_HOME=${TDA_HOME:-"$(cd "$here/.." && pwd)"}
+if [ ! -f "$jar" ]; then
+  echo "tda: $jar not found. Fetch it (mvn -q initialize) or set TDA_CLI_JAR." >&2
+  exit 2
+fi
+java_cmd=${JAVA_HOME:+"$JAVA_HOME/bin/"}java
+case "$1" in
+  prewarm|resolve|use|release|release-test|teardown|run-id|metrics)
+    exec "$java_cmd" -jar "$jar" "$@" ;;
+  ""|-h|--help)
+    echo "usage: tda <command> [args]  (see the comments at the top of $0)" >&2
+    exit 2 ;;
+  *)
+    exec "$java_cmd" -cp "$jar" com.amla.testdata.profiler.ProfilerCli "$@" ;;
+esac

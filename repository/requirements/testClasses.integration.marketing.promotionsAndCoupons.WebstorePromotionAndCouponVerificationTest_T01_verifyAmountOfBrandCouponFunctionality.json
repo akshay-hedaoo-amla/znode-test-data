@@ -1,0 +1,690 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.integration.marketing.promotionsAndCoupons.WebstorePromotionAndCouponVerificationTest#T01_verifyAmountOfBrandCouponFunctionality",
+  "scenario": {
+    "summary": "Admin creates two Amount Off Brand coupon promotions and one Percent Off Brand coupon promotion for the brand on store Multistore4 and reads back the generated coupon codes. A registered webstore user checks that the coupons are rejected for a non-brand product and below the minimum quantity, accepted for a brand product at quantity 5 and 6, places an Authorize.Net order, and admin verifies the unique coupon is marked used and the order summary matches.",
+    "steps": [
+      "Admin login; open Promotions and Coupons list",
+      "Create Amount Off Brand coupon 1 (store StoreCode4 label, brand associated, min qty 2, min order 30, 1 coupon) and read the generated first coupon code",
+      "Edit coupon 1: set display order, save, re-open and verify display order",
+      "Create Amount Off Brand coupon 2 and read the generated second coupon code",
+      "Create Percent Off Brand coupon (min qty 5, unique coupon) and read the generated third coupon code",
+      "Open webstore and log in as the registered user",
+      "Add the non-brand product to cart, apply first coupon, verify invalid promo message, remove coupon and empty cart",
+      "Add the brand product (qty 1), apply third coupon, verify invalid promo message",
+      "Set cart quantity to 5 (MinimumQuantity of percent coupon); verify percent coupon success message and order total",
+      "Set quantity back to 1, apply first coupon, verify invalid promo message",
+      "Set quantity to 6; verify first coupon success message; apply second coupon and verify its message",
+      "Verify order summary calculations; checkout; verify coupon messages on checkout",
+      "Select custom flat rate shipping, read order summary amounts, pay with Authorize.Net card, verify and read order receipt; log off",
+      "Admin: verify the percent coupon is flagged as used; open the order and verify the order summary matches the webstore"
+    ],
+    "entitiesTouched": [
+      "store",
+      "brand",
+      "product",
+      "user",
+      "promotion",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Creates promotion 'runTime Amount Off Brand Coupon1' (code runTimeAmountOffBrandCoupon1, Amount Off Brand, 1 generated coupon) on Multistore4",
+      "Creates promotion 'runTime Amount Off Brand Coupon2' (code runTimeAmountOffBrandCoupon2, Amount Off Brand, 1 generated coupon) on Multistore4",
+      "Creates promotion 'runTime Percent Off Brand Coupon' (code runTimePercentOffBrandCoupon, Percent Off Brand, unique coupon) on Multistore4",
+      "Updates display order of coupon 1",
+      "Registered user's cart: products added, removed, quantities changed, coupons applied",
+      "Places an order for the brand product (qty 6) with Authorize.Net payment; consumes the generated coupons (percent coupon marked used)",
+      "No teardown of created promotions or the order is visible in the scanned steps"
+    ],
+    "assertions": [
+      "Record updated success messages after promotion create/edit",
+      "Display order of coupon 1 equals the value set",
+      "Invalid promo code message for the non-brand product and for quantities below the coupon minimums",
+      "Coupon success messages equal the configured promotional messages (percent coupon, coupon 1, coupon 2) in cart and on checkout",
+      "Order total equals subtotal minus the percent discount",
+      "Order summary calculations without voucher are consistent",
+      "Order receipt is shown and order number captured",
+      "Admin: unique percent coupon is flagged as used",
+      "Admin order summary amounts equal the webstore summary amounts"
+    ],
+    "evidence": [
+      "Method name T01_verifyAmountOfBrandCouponFunctionality and the step list in the scan (createBrandCouponCode x3, applyCoupon, setQuantity, Authorize.Net checkout, verifyIsUniqueCouponUsedStatus)",
+      "Profile: z-2420004 is an active SimpleProduct of brand BlackAndDecker, inventory 25 (several rows matched, store MaxwellsHardware on first row)",
+      "Profile: z-2300014 is an active SimpleProduct of brand AmericanStandard, inventory 10; the test uses it to show the brand coupon is rejected, so it must NOT be of the promotion brand",
+      "Profile: brand 'Black + Decker' (code BlackAndDecker) is active; its source cell has no traced usage, it is taken as the brandsToAssociate value used by associateBrandsToDiscounts",
+      "Profile: store 'Maxwell's Hardware Multistore4' (MaxwellsHardwareMultistore4) is found but isActive=false",
+      "Profile: all runTime* promotion codes and names are NOT_FOUND, consistent with the test creating them",
+      "Highest cart quantity of the brand product is the literal 6 (line 265); MinimumQuantity 5 is also set",
+      "The InitialQuantity source for the non-brand product (WithoutAddonAndPersonalizeProduct) is not in the scan, so its quantityUsed is not set",
+      "The admin brand search uses the 'Brand Name' / 'Is' filter options",
+      "AIO preconditions not available: the Jira connector is not authorized and work/aio/ is empty",
+      "testStoreURL target store is not resolved by the scan; store param assumed to be the promotion store MaxwellsHardwareMultistore4"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "store",
+      "params": {
+        "store": "MaxwellsHardwareMultistore4"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardwareMultistore4"
+      },
+      "preferred": {
+        "source": 49,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OF_BRAND_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "brand": "BlackAndDecker",
+        "store": "MaxwellsHardwareMultistore4",
+        "quantityUsed": 6
+      },
+      "preferred": {
+        "source": 52,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_NOT_OF_BRAND_IN_STOCK",
+      "alias": "nonBrandProduct",
+      "params": {
+        "brand": "BlackAndDecker",
+        "store": "MaxwellsHardwareMultistore4"
+      },
+      "preferred": {
+        "source": 51,
+        "required": false
+      }
+    },
+    {
+      "key": "BRAND_WITH_ACTIVE_PRODUCTS",
+      "params": {
+        "brand": "BlackAndDecker",
+        "minProducts": 1,
+        "store": "MaxwellsHardwareMultistore4"
+      },
+      "alias": "brand",
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-6140",
+    "ZPD-TC-6181",
+    "ZPD-TC-6188",
+    "ZPD-TC-6235",
+    "ZPD-TC-6237",
+    "ZPD-TC-6276",
+    "ZPD-TC-6286",
+    "ZPD-TC-6298",
+    "ZPD-TC-6306",
+    "ZPD-TC-6317",
+    "ZPD-TC-6356",
+    "ZPD-TC-6436",
+    "ZPD-TC-6459",
+    "ZPD-TC-6472",
+    "ZPD-TC-6475",
+    "ZPD-TC-6497",
+    "ZPD-TC-6518",
+    "ZPD-TC-6528",
+    "ZPD-TC-6538",
+    "ZPD-TC-6552"
+  ],
+  "sources": [
+    {
+      "value": "<masked:email>",
+      "location": "adminTestData.xlsx!loginPageData!C4",
+      "kind": "excel",
+      "keyPath": "loginData/EmailAddress/Input",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "adminTestData.xlsx!loginPageData!E5",
+      "kind": "excel",
+      "keyPath": "loginData/Password/Input2",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D6",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/Brand/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "brand"
+    },
+    {
+      "value": "Maxwell's Hardware Multistore4",
+      "location": "adminTestData.xlsx!stores!B10",
+      "kind": "excel",
+      "keyPath": "storeDetails/StoreCode4/Label",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "store"
+    },
+    {
+      "value": "runTimeAmountOffBrandCoupon1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R3",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalCode/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "runTime Amount Off Brand Coupon1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R4",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionName/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "$5 off on the subtotal amount",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R6",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/Description/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5",
+      "location": "src/test/java/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest.java:136",
+      "kind": "literal",
+      "keyPath": "displayOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Amount Off Brand",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R8",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountType/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R10",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountAmount/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "2",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R12",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumQuantity/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "30",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R14",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumOrderAmount/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Amount off brand 1 coupon applied successfully.",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R29",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalMessage/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R37",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/InitialQuantity/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Brand Name",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!B66",
+      "kind": "excel",
+      "keyPath": "promotionsAndCouponsFilterColumnOptions/BrandFilterColumn2/Option",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Is",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!B58",
+      "kind": "excel",
+      "keyPath": "promotionsAndCouponsFilterColumnOptions/PromotionCouponFilterOption2/Option",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Promotion Code",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!B56",
+      "kind": "excel",
+      "keyPath": "promotionsAndCouponsFilterColumnOptions/PromotionCouponFilterColumn5/Option",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Contains",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!B57",
+      "kind": "excel",
+      "keyPath": "promotionsAndCouponsFilterColumnOptions/PromotionCouponFilterOption1/Option",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " element selected from drop down list",
+      "location": "src/main/java/utilities/ReportMessages.java:44",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ELEMENT_SELECT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " could not selected from drop down list",
+      "location": "src/main/java/utilities/ReportMessages.java:85",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ELEMENT_SELECT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!R7",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DisplayOrder/AmountOffBrandCoupon1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "runTimeAmountOffBrandCoupon2",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S3",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalCode/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "runTime Amount Off Brand Coupon2",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S4",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionName/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "$5 off on the subtotal amount",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S6",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/Description/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "2",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S7",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DisplayOrder/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Amount Off Brand",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S8",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountType/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S10",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountAmount/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "2",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S12",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumQuantity/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "30",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S14",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumOrderAmount/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Amount off brand 2 coupon applied successfully.",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S29",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalMessage/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!S37",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/InitialQuantity/AmountOffBrandCoupon2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "runTimePercentOffBrandCoupon",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP3",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalCode/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "runTime Percent Off Brand Coupon",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP4",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionName/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": true,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5% off on the product price per quantity",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP6",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/Description/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "3",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP7",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DisplayOrder/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Percent Off Brand",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP8",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountType/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP10",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/DiscountAmount/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "5",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP12",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumQuantity/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "10",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP14",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/MinimumOrderAmount/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Percent off brand coupon applied successfully.",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP29",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/PromotionalMessage/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "1",
+      "location": "adminTestData.xlsx!promotionsAndCoupons!AP37",
+      "kind": "excel",
+      "keyPath": "createNewPromotionsAndCouponData/InitialQuantity/PercentOffBrandCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B110",
+      "kind": "excel",
+      "keyPath": "userCredentials/promotionCouponVerification/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!D110",
+      "kind": "excel",
+      "keyPath": "userCredentials/promotionCouponVerification/NewPassword",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2300014",
+      "location": "webstoreTestData.xlsx!productDisplayPage!O4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/WithoutAddonAndPersonalizeProduct",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "nonBrandProduct"
+    },
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D44",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/InitialQuantity/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "6",
+      "location": "src/test/java/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest.java:265",
+      "kind": "literal",
+      "keyPath": "strQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Input",
+      "location": "src/test/java/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest.java:305",
+      "kind": "literal",
+      "keyPath": "inputText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

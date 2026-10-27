@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "key": "BRAND_WITH_ACTIVE_PRODUCTS",
+  "entity": "brand",
+  "type": "with_active_products",
+  "constraints": { "brand": "{brand}", "isActive": "true", "productCount": ">= {minProducts}" },
+  "scope": { "store": "{store}" },
+  "usage": "read-only",
+  "description": "Active brand associated with the store and with at least N active products, used as the target of brand promotions. KB: Associating Brands to a Store; Adding a Brand; Managing Promotions and Coupons (Amount/Percent Off Brand).",
+  "declaredParams": {
+    "brand": { "type": "string", "description": "Brand code (ZnodeBrandDetails.BrandCode); pass the same value as the brand param of the test's product keys" },
+    "minProducts": { "type": "integer", "description": "Number of distinct brand products the test adds" },
+    "store": { "type": "string", "description": "Store code the brand must be associated with" }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

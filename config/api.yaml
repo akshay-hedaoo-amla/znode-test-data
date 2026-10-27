@@ -1,0 +1,37 @@
+# Znode API settings for the Phase 3 API path. No secrets here: the client ID and secret come from
+# TDA_API_CLIENT_ID / TDA_API_CLIENT_SECRET (environment or the git-ignored .env), the base URL from TDA_API_BASE_URL.
+
+# Writes (create and teardown) are refused unless TDA_ENV_NAME is listed here AND the environment guard passes
+# AND TDA_API_CLIENT_DEDICATED=true (a human confirms the dedicated client for this system is configured;
+# security_and_access_doc.md §10: the shared client 9 must not be used for writes).
+writeEnvironments:
+  - at
+  - local     # local Znode API/gateway against the local copy of the at database (user decision 2026-10-22)
+  - atstage   # staging; writes explicitly approved by the user 2026-10-23 (security_and_access_doc.md section 2)
+
+# Token request, from the gateway source (znode10-api-gateways TokenController/AuthService, read 2026-10-22):
+# POST <gateway>/Token with {"ClientName", "ClientKey"}; response {"Token", "RefreshToken", "HasError", ...}.
+# The response has no expiry field; the gateway's JWTExpirySpan is ~30 minutes, so the 1800 s default applies.
+# TDA_API_BASE_URL must be the API gateway (Issuer apigateway-z10-at...), not an individual API host.
+token:
+  path: /Token
+  body: json            # json or form
+  fields:
+    idFieldName: ClientName
+    secretFieldName: ClientKey
+  response:
+    accessToken: /token    # ASP.NET serializes AuthTokenResponseModel.Token as camelCase "token"
+    expiresIn: /ExpiresIn   # absent in the gateway response; TokenProvider then uses 1800 s
+    errorMessage: [/ErrorMessage, /errorMessage, /message]   # where the gateway puts an error's message
+
+timeoutSeconds: 30
+
+# Local Znode stack only: the ASP.NET development certificate (public part, exported from the Windows certificate
+# store into git-ignored work/). Trusted in addition to the JVM trust store, and only when TDA_API_BASE_URL is
+# localhost / 127.0.0.1 / ::1. Certificates and host names are still verified.
+localTrustedCert: work/certs/localhost-dev.cer
+
+# spec-scan: words that find an entity's create and delete operations in the exported spec (tags, paths, operation IDs).
+entityTerms:
+  promotion: [promotion, coupon]
+  user: [user, customer, account, register]

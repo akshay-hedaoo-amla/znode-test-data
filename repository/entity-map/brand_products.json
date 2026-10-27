@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entity": "brand_products",
+  "tables": [
+    "dbo.ZnodeBrandDetailLocale",
+    "dbo.ZnodeBrandDetails",
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePortalBrand",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeBrandDetailLocale.BrandId",
+      "to": "dbo.ZnodeBrandDetails.BrandId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeBrandDetails.BrandCode",
+      "to": "dbo.ZnodePimProduct.Brand",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeBrandDetails.BrandId",
+      "to": "dbo.ZnodePortalBrand.BrandId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalBrand.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "name": "dbo.ZnodeBrandDetailLocale.BrandName",
+    "productCount": "COUNT(DISTINCT dbo.ZnodePimProduct.PimProductId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodePimProduct.IsActive": "true"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:e369b84303ea792f1da1da2ddc760e92baf8d90808d3611be227fc4a61c7b243",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

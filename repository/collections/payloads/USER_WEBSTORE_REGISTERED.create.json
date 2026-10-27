@@ -1,0 +1,15 @@
+{
+  "UserName": "{runIdTag}{uniqueSuffix}@example.test",
+  "Email": "{runIdTag}{uniqueSuffix}@example.test",
+  "StoreCode": "{store}",
+  "PortalId": "{portalId}",
+  "IsActive": "{isActive}",
+  "IsWebStoreUser": "{isWebStoreUser}",
+  "IsGuestUser": "{isGuestUser}",
+  "IsLock": "{isLock}",
+  "User": {
+    "Username": "{runIdTag}{uniqueSuffix}@example.test",
+    "Email": "{runIdTag}{uniqueSuffix}@example.test",
+    "Password": "{password}"
+  }
+}

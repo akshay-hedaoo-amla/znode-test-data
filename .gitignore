@@ -1,0 +1,16 @@
+target/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+*.iml
+.vscode/
+# Raw downloads (may contain personal data), scan output and run state
+input/
+work/
+# The released tda jar (mvn -q initialize puts it here)
+.tda/
+# Local Claude Code settings
+.claude/settings.local.json

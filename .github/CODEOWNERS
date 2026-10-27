@@ -1,0 +1,6 @@
+# Owners (Phase 6 decision 2026-10-27): every change to the vocabulary, the repositories and the config is reviewed by
+# them, and only they approve entries (status: approved, approvedBy, approvedAt).
+/repository/vocabulary/   @akshay-hedaoo-amla
+/repository/              @akshay-hedaoo-amla
+/config/                  @akshay-hedaoo-amla
+/specs/                   @akshay-hedaoo-amla

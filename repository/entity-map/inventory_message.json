@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "entity": "inventory_message",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodeInventory",
+    "dbo.ZnodePortalWarehouse",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.SKU",
+      "to": "dbo.ZnodeInventory.SKU",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeInventory.WarehouseId",
+      "to": "dbo.ZnodePortalWarehouse.WarehouseId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalWarehouse.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "outOfStockOptions": "dbo.ZnodePimProduct.OutOfStockOptions",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "inStockMessage": "dbo.ZnodePortal.InStockMsg",
+    "outOfStockMessage": "dbo.ZnodePortal.OutOfStockMsg",
+    "backOrderMessage": "dbo.ZnodePortal.BackOrderMsg"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:a2a0106ce6b71d5db6329a334782248d1a1d5e2a7f828c738d196722c7ce881a",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

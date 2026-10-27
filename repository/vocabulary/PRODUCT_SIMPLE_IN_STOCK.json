@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_IN_STOCK",
+  "entity": "product",
+  "type": "simple",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active simple product on the store with enough inventory to add to cart. KB: Product Types (simple = single SKU, can be picked and shipped).",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test adds to cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-21T14:30:00Z"
+}

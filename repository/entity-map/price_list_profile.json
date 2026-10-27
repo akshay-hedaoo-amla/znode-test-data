@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "entity": "price_list_profile",
+  "tables": [
+    "dbo.ZnodePrice",
+    "dbo.ZnodePriceList",
+    "dbo.ZnodePriceListProfile",
+    "dbo.ZnodePortalProfile",
+    "dbo.ZnodeProfile",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePrice.PriceListId",
+      "to": "dbo.ZnodePriceList.PriceListId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePriceList.PriceListId",
+      "to": "dbo.ZnodePriceListProfile.PriceListId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePriceListProfile.PortalProfileId",
+      "to": "dbo.ZnodePortalProfile.PortalProfileID",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalProfile.ProfileId",
+      "to": "dbo.ZnodeProfile.ProfileId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalProfile.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePrice.SKU",
+    "retailPrice": "dbo.ZnodePrice.RetailPrice",
+    "salesPrice": "dbo.ZnodePrice.SalesPrice",
+    "priceListCode": "dbo.ZnodePriceList.ListCode",
+    "profilePrecedence": "dbo.ZnodePriceListProfile.Precedence",
+    "profileName": "dbo.ZnodeProfile.ProfileName",
+    "isDefaultAnonymousProfile": "dbo.ZnodePortalProfile.IsDefaultAnonymousProfile",
+    "isDefaultRegisteredProfile": "dbo.ZnodePortalProfile.IsDefaultRegistedProfile",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:e3afdddfc92c104e01f5d9644284c1f4629ca047f33f7a298f862364fa150852",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion" : 1,
+  "key" : "USER_WEBSTORE_REGISTERED",
+  "sql" : "SELECT TOP 10 az.UserName AS userName, po.StoreCode AS storeCode FROM dbo.ZnodeUser u INNER JOIN dbo.AspNetUsers a ON a.Id = u.AspNetUserId INNER JOIN dbo.AspNetZnodeUser az ON az.AspNetZnodeUserId = a.UserName INNER JOIN dbo.ZnodeUserPortal up ON up.UserId = u.UserId INNER JOIN dbo.ZnodePortal po ON po.PortalId = up.PortalId WHERE u.AspNetUserId IS NOT NULL AND a.LockoutEnd IS NULL AND po.StoreCode = @store AND (@preferred IS NULL OR az.UserName = @preferred) GROUP BY az.UserName, po.StoreCode ORDER BY az.UserName",
+  "params" : [ "store", "preferred" ],
+  "outputs" : [ "userName", "storeCode" ],
+  "candidates" : true,
+  "preferredOnly" : true,
+  "identity" : "userName",
+  "schemaFingerprint" : "sha256:a6b9c46fff5656a5bc716ebb3335f151ea20faa4a6a17d3aad87d1168e260087",
+  "status" : "approved",
+  "approvedBy" : "Akshay Hedaoo",
+  "approvedAt" : "2026-10-23T14:30:00Z",
+  "createdAt" : "2026-10-23T00:00:00Z",
+  "lastValidated" : "2026-10-26T15:00:07Z"
+}

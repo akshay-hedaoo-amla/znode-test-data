@@ -1,0 +1,65 @@
+{
+  "schemaVersion" : 1,
+  "key" : "USER_WEBSTORE_REGISTERED",
+  "spec" : {
+    "file" : "specs/znode-core-api-v1.json",
+    "operations" : [ "POST /User/CreateCustomerAccount", "POST /User/DeleteUserAccount" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/User/CreateCustomerAccount",
+    "payloadTemplate" : "payloads/USER_WEBSTORE_REGISTERED.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "isActive" : true,
+      "isWebStoreUser" : true,
+      "isGuestUser" : false,
+      "isLock" : false
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "password" : {
+        "kind" : "password",
+        "secret" : true
+      }
+    },
+    "runIdTag" : {
+      "field" : "/UserName",
+      "format" : "TDA-{runId}-",
+      "property" : "userName"
+    },
+    "idPointer" : "/User/UserId",
+    "outputs" : {
+      "userName" : {
+        "from" : "payload",
+        "pointer" : "/UserName"
+      },
+      "password" : {
+        "from" : "payload",
+        "pointer" : "/User/Password",
+        "secret" : true
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/User/DeleteUserAccount",
+    "bodyTemplate" : "payloads/USER_WEBSTORE_REGISTERED.teardown.json"
+  },
+  "specFingerprint" : "sha256:c5ba7fdc87826a592fc0526e205581824399c1c79c1d93629a56d470a09fcb92",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-22T14:30:00Z",
+  "createdAt" : "2026-10-22T00:00:00Z",
+  "lastValidated" : "2026-10-22T10:18:18Z"
+}

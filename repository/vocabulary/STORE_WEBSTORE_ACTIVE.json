@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_WEBSTORE_ACTIVE",
+  "entity": "store",
+  "type": "webstore",
+  "constraints": {
+    "webstoreDomains": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store that serves a webstore: at least one active WebStore domain. ZnodePortal.IsActive is not used (it is false for every store in at, including working ones; B-Store flag). Review 2026-10-21. Takes the tests' store code so the resolved store matches the other needs (review 2026-10-22).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-22T14:30:00Z"
+}

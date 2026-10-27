@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "STORE_WEBSTORE_ACTIVE",
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId FROM dbo.ZnodePortal p LEFT JOIN dbo.ZnodeDomain d ON d.PortalId = p.PortalId WHERE d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND p.StoreCode = @store AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode, p.StoreName HAVING COUNT(DISTINCT d.DomainId) >= @minWebstoreDomains ORDER BY p.PortalId",
+  "params" : [ "applicationType", "domainActive", "store", "minWebstoreDomains", "preferred" ],
+  "constants" : {
+    "applicationType" : "WebStore",
+    "domainActive" : "1",
+    "minWebstoreDomains" : "1"
+  },
+  "outputs" : [ "storeCode", "name", "portalId" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:3f707012cb1b858446a48eca5815068dec7d380804b35b635d1a2c257b274798",
+  "status" : "approved",
+  "approvedBy" : "Akshay Hedaoo",
+  "approvedAt" : "2026-10-23T14:30:00Z",
+  "createdAt" : "2026-10-22T00:00:00Z",
+  "lastValidated" : "2026-10-26T15:00:01Z"
+}

@@ -1,0 +1,19 @@
+# Values the discovery scanners must mask before anything is written to work/ or shown to an agent
+# (security_and_access_doc.md section 6). Used by the Java masker (core) and the Playwright adapter.
+#
+# keys:   case-insensitive regex matched against the value's key path (JSON key, Excel row/column names).
+# values: case-insensitive regex matched against the value itself. luhn: true also requires a valid card checksum.
+# A masked value is written as <masked:KIND>.
+
+keys:
+  - { kind: password, pattern: "pass(word)?|pwd|secret|token" }
+  - { kind: email, pattern: "e-?mail" }
+  - { kind: username, pattern: "user_?name|login_?(id|name)|(^|/)user$" }
+  - { kind: card, pattern: "card_?(number|no|num)|cardholder|cvv|cvc|expir|security_?(code|pin)|(^|[/._])pin($|[/._])" }
+  - { kind: phone, pattern: "phone|mobile|fax" }
+  - { kind: address, pattern: "address|street|city|postal|zip_?code" }
+  - { kind: person_name, pattern: "(first|last|full|middle|holder)_?name" }
+
+values:
+  - { kind: email, pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}" }
+  - { kind: card, pattern: "(?<![0-9])(?:[0-9][ -]?){12,18}[0-9](?![0-9])", luhn: true }

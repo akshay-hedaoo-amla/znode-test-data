@@ -1,0 +1,1792 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "v1",
+    "title": "Znode Shipping Manager API V1"
+  },
+  "servers": [
+    {
+      "url": "https://apigateways-z10-sandbox.amla.io",
+      "description": "Sandbox"
+    }
+  ],
+  "paths": {
+    "/shippingmanager/v1/shipping-gateway/estimates": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "The API endpoint is used to get the shipping estimates.",
+        "operationId": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in recommendation address response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.amla.io",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/shippingmanager/v1/shipping-gateway/calculate": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "The API endpoint is used to calculate the shipping estimate rates.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in recommendation address response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.amla.io",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    },
+    "/shippingmanager/v1/shipping-gateway/address/validate": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "Validates and recommend the addresses for the given address",
+        "description": "Validates the given address and returns standardized and recommended address suggestions using multiple carrier validation providers.\r\n\r\nThis endpoint verifies the provided address details and checks deliverability using integrated third-party carrier plugins such as:\r\n\r\nUnited States Postal Service (USPS)\r\n\r\n\r\n### If The Input Address is:\r\n\r\n Valid : Returns a standardized/verified address\r\n\r\n Partially valid or ambiguous : Returns recommended address suggestions\r\n\r\n Invalid : Returns validation errors with details\r\n\r\n### Purpose\r\n\r\nEnsure accurate and deliverable  addresses\r\n\r\n\r\nProvide standardized carrier-formatted addresses\r\n\r\nSupport multiple validation providers via pluggable architecture\r\n\r\n### How It Works\r\n\r\nThe system receives the input address.\r\n\r\nThe request is sent to configured carrier validation plugins (e.g., USPS).\r\n\r\nResponses are aggregated and normalized.\r\n\r\n### The API returns:\r\n\r\nValidation status\r\n\r\nStandardized address (if valid)\r\n\r\nRecommended address suggestions (if applicable)\r\n\r\nError details (if invalid)\r\n\r\n###  Use Cases\r\n\r\nCheckout address validation\r\n\r\nCustomer address correction via providing recommended address if applicable before order fulfillment\r\n",
+        "operationId": "1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in address validation response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://apigateways-z10-sandbox.amla.io",
+            "description": "Sandbox"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Enter your bearer token in the format: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest": {
+        "type": "object",
+        "description": "Represents the request payload used by the Shipping Manager to retrieve available shipping rate estimates. It includes package details, plugin configuration data, cart information, and supports extensibility through inherited custom data properties.",
+        "additionalProperties": false,
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "shippingBagList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingBag"
+            }
+          },
+          "shippingPluginConfigurationList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration"
+            }
+          },
+          "shippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCart"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingBag": {
+        "type": "object",
+        "description": "Represents a shipping package containing shipping method, plugin, and calculation behavior details used during shipping rate estimation and calculation.",
+        "additionalProperties": false,
+        "properties": {
+          "handlingCharge": {
+            "type": "number",
+            "description": "Handling charge applied to the shipment.",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "description": "Subtotal amount of items included in the shipping package.",
+            "format": "double"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Shipping method or service code used for rate calculation."
+          },
+          "handlingBasedOn": {
+            "type": "string",
+            "nullable": true,
+            "description": "Indicates the basis on which handling charges are calculated (e.g., amount,percentage of subtotal)."
+          },
+          "shippingType": {
+            "type": "string",
+            "nullable": true,
+            "description": "Type of shipping."
+          },
+          "shippingId": {
+            "type": "integer",
+            "description": "Shipping identifier.",
+            "format": "int32"
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "description": "Plugin Identifier",
+            "format": "int32"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration": {
+        "type": "object",
+        "description": "Shipping plugin configuration details, including global and configuration-set values.",
+        "additionalProperties": false,
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": " Plugin Url coming from ZnodePluginDetail table"
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "description": "The unique identifier of Plugin",
+            "format": "int32"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel": {
+        "type": "object",
+        "description": "Represents a plugin configuration entry used to store and organize configuration settings, including hierarchical categories and configuration set fields.",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique identifier or name of the configuration setting."
+          },
+          "value": {
+            "type": "string",
+            "nullable": true,
+            "description": "Value assigned to the configuration setting."
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "description": "Data type or classification of the configuration value."
+          },
+          "childrenFields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationSetFieldModel"
+            }
+          },
+          "childrenCategories": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+            }
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationSetFieldModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCart": {
+        "type": "object",
+        "description": "Represents the shopping cart and contextual data required to retrieve shipping rate estimates. It contains shipping addresses, cart items, shipping configuration, user and account details, and response metadata used during the estimate flow.",
+        "additionalProperties": false,
+        "properties": {
+          "responseCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Status code returned during shipping estimate processing."
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Message describing the response status."
+          },
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional error information, if any."
+          },
+          "shippingBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag"
+          },
+          "isValidShippingSetting": {
+            "type": "boolean",
+            "description": "Indicates whether the shipping configuration is valid."
+          },
+          "shippingOriginAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingDestinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "shipTogetherItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "shipSeparatelyItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel"
+          },
+          "portalShippingModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency code used for rate calculation."
+          },
+          "currentDate": {
+            "type": "string",
+            "description": "Current date used during shipping estimation.",
+            "format": "date-time"
+          },
+          "cartNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique identifier of the cart."
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user ID to which this cart belongs.",
+            "format": "int32"
+          },
+          "accountId": {
+            "type": "integer",
+            "description": "The account ID associated with the UserId.",
+            "format": "int32"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag": {
+        "type": "object",
+        "description": "Represents the core shipping package details used during shipping rate estimation and calculation, including subtotal, handling configuration, and shipping behavior.",
+        "additionalProperties": false,
+        "properties": {
+          "handlingCharge": {
+            "type": "number",
+            "description": "Handling charge applied to the shipment.",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "description": "Subtotal amount of items included in the shipping package.",
+            "format": "double"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Shipping method or service code used for rate calculation."
+          },
+          "handlingBasedOn": {
+            "type": "string",
+            "nullable": true,
+            "description": "Indicates the basis on which handling charges are calculated (e.g., amount,percentage of sutotal)."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel": {
+        "type": "object",
+        "description": "Represents a shipping address used for rate estimation and calculation. It includes location, contact, and account details, and supports extensibility through inherited custom data properties.",
+        "additionalProperties": false,
+        "properties": {
+          "accountId": {
+            "type": "integer",
+            "description": "Account associated with the address.",
+            "format": "int32"
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Primary address line."
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Secondary address line."
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": "First name of the contact."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Last name of the contact.",
+            "maxLength": 300
+          },
+          "countryName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Country name of the address."
+          },
+          "stateName": {
+            "type": "string",
+            "nullable": true,
+            "description": "State or province name."
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true,
+            "description": "City name."
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "State or province code."
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Postal or ZIP code.",
+            "maxLength": 50
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "Contact phone number.",
+            "maxLength": 50
+          },
+          "warehouseName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Warehouse associated with the shipping origin, if applicable."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            }
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "width": {
+            "type": "number",
+            "format": "double"
+          },
+          "length": {
+            "type": "number",
+            "format": "double"
+          },
+          "finalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "packagingType": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel": {
+        "type": "object",
+        "description": "Represents the estimated shipping rate details returned for a shipping method, including rate, estimated delivery date, and response information. Supports extensibility through inherited custom data properties.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code representing the shipping method."
+          },
+          "shippingRate": {
+            "type": "number",
+            "nullable": true,
+            "description": "Estimated shipping rate for the method.",
+            "format": "double"
+          },
+          "estimateDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Estimated delivery date or timeline."
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Message describing the estimate result or status."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel": {
+        "type": "object",
+        "description": "Represents portal-level shipping configuration and constraints used during shipping rate estimation and calculation.",
+        "additionalProperties": false,
+        "properties": {
+          "packageWeightLimit": {
+            "type": "number",
+            "nullable": true,
+            "description": "Maximum allowed weight for a shipping package at the portal level.",
+            "format": "double"
+          },
+          "portalUnitModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingPortalUnitModel"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingPortalUnitModel": {
+        "type": "object",
+        "description": "Represents the unit of measurement configuration used for shipping weight and dimensions at the portal level.",
+        "additionalProperties": false,
+        "properties": {
+          "weightUnit": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unit of measure used for shipping weight (e.g., kg, lb)."
+          },
+          "dimensionUnit": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unit of measure used for shipping dimensions (e.g., cm, in)."
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "success"
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail"
+          },
+          "shippingEstimateRate": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel"
+            }
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail": {
+        "type": "object",
+        "description": "Represents detailed error information returned by the API when a request fails or encounters validation issues.",
+        "additionalProperties": false,
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Numeric error code representing the specific error type.",
+            "format": "int32"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the error encountered."
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Indicates whether an error occurred during processing."
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        }
+      },
+      "System.Net.HttpStatusCode": {
+        "type": "integer",
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "description": "HTTP status code associated with the response.",
+        "format": "int32"
+      },
+      "Znode.Libraries.Abstract.Plugin.Common.ErrorDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "nullable": true,
+            "description": "A numeric identifier for the error type. Used for programmatic error handling and distinguishing between different error scenarios. Examples: (e.g., 400, 401, 404, 500).",
+            "example": 400
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Clear and simple message explaining why the request failed. This message can be displayed to end users.",
+            "example": "We couldn’t process your request. Please check the required fields and try again."
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Indicates whether the request failed. This will always be true when an error occurs.",
+            "example": true
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode",
+            "description": "HTTP status code returned by the API (e.g., '400', '401', '404', '500').",
+            "example": "400"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest": {
+        "type": "object",
+        "description": "Represents the request payload used by the Shipping Manager to calculate shipping charges. It includes shipping rules, cart and package details, plugin configuration data, and supports extensibility through inherited custom data properties.",
+        "additionalProperties": false,
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom field for additional contextual data."
+          },
+          "customShippingRules": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingRuleModel"
+            }
+          },
+          "shippingBagList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingBag"
+            }
+          },
+          "shippingPluginConfigurationList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration"
+            }
+          },
+          "shippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartRequestModel"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingRuleModel": {
+        "type": "object",
+        "description": "Represents a shipping rule configuration used to determine shipping charges based on defined limits, rule types, and cost structures.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingRuleId": {
+            "type": "integer",
+            "description": "Unique identifier of the shipping rule.",
+            "format": "int32"
+          },
+          "shippingId": {
+            "type": "integer",
+            "description": "Identifier of the associated shipping method.",
+            "format": "int32"
+          },
+          "shippingRuleTypeId": {
+            "type": "integer",
+            "description": "Identifier of the shipping rule type.",
+            "format": "int32"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true,
+            "description": "Class name associated with the shipping rule implementation."
+          },
+          "lowerLimit": {
+            "type": "number",
+            "nullable": true,
+            "description": "Minimum threshold value for the rule to apply.",
+            "format": "double"
+          },
+          "upperLimit": {
+            "type": "number",
+            "nullable": true,
+            "description": "Maximum threshold value for the rule to apply.",
+            "format": "double"
+          },
+          "baseCost": {
+            "type": "number",
+            "description": "Base shipping cost applied when the rule is triggered.",
+            "format": "double"
+          },
+          "perItemCost": {
+            "type": "number",
+            "description": "Additional cost applied per item under the rule.",
+            "format": "double"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true,
+            "description": "External system identifier for the shipping rule."
+          },
+          "shippingRuleTypeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code representing the shipping rule type."
+          },
+          "shippingRuleTypeCodeLocale": {
+            "type": "string",
+            "nullable": true,
+            "description": "Localized display code for the shipping rule type."
+          },
+          "currencyId": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Currency identifier applicable to the shipping rule.",
+            "format": "int32"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartRequestModel": {
+        "type": "object",
+        "description": "Represents the complete cart and shipping context required to calculate final shipping charges. It includes item-level details, shipping configuration, addresses, cost breakdown, and user/account information used during the shipping calculation process.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag"
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "shipSeparatelyItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "shipTogetherItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "portalShippingModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel"
+          },
+          "isValidShippingSetting": {
+            "type": "boolean",
+            "description": "Indicates whether the shipping configuration is valid."
+          },
+          "shippingOriginAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingDestinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingBillingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "orderLevelShipping": {
+            "type": "number",
+            "description": "Shipping charge applied at the order level.",
+            "format": "double"
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "Calculated shipping cost.",
+            "format": "double"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency code used for rate calculation."
+          },
+          "shippingHandlingCharge": {
+            "type": "number",
+            "description": "Additional handling charge applied to shipping.",
+            "format": "double"
+          },
+          "cartNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique identifier of the cart."
+          },
+          "userId": {
+            "type": "integer",
+            "description": "The user ID to which this cart belongs.",
+            "format": "int32"
+          },
+          "accountId": {
+            "type": "integer",
+            "description": "The account ID associated with the UserId.",
+            "format": "int32"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel": {
+        "type": "object",
+        "description": "Represents an individual cart item and its product hierarchy details used during shipping calculation. It includes dimensional data, pricing, shipping rules, and relationships for grouped, bundled, configurable, and add-on products.",
+        "additionalProperties": false,
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            }
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "Uniuqe identifier of the products in the cart."
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantity of the product in the cart.",
+            "format": "double"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Weight of the item used for shipping calculation.",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "description": "Height dimension of the item.",
+            "format": "double"
+          },
+          "width": {
+            "type": "number",
+            "description": "Width dimension of the item.",
+            "format": "double"
+          },
+          "length": {
+            "type": "number",
+            "description": "Length dimension of the item.",
+            "format": "double"
+          },
+          "finalPrice": {
+            "type": "number",
+            "description": "Final price of the item used for shipping calculation.",
+            "format": "double"
+          },
+          "packagingType": {
+            "type": "string",
+            "nullable": true,
+            "description": "Packaging type applied to the product."
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Product display name."
+          },
+          "isFreeShipping": {
+            "type": "boolean",
+            "description": "Indicates whether the item qualifies for free shipping."
+          },
+          "shippingRuleTypeCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code representing the shipping rule applied to the item."
+          },
+          "shipSeparately": {
+            "type": "boolean",
+            "description": "Indicates whether the item must be shipped separately."
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "Calculated cost applied for shipping.",
+            "format": "double"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse": {
+        "type": "object",
+        "description": "Represents the response returned by the Shipping Manager after processing a shipping calculation request. It contains the list of calculated shipping rates for the provided cart and shipping configurations.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingCalculatedRates": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingCalculatedRate"
+            }
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingCalculatedRate": {
+        "type": "object",
+        "description": "Represents the response returned after shipping calculation. It contains the list of calculated shipping rates available for the request.",
+        "additionalProperties": false,
+        "properties": {
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.Shipping"
+          },
+          "shippingCalculateResponse": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.ShippingCalculateResponse"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.Shipping": {
+        "type": "object",
+        "description": "Represents an individual calculated shipping rate along with its detailed calculation response.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingId": {
+            "type": "integer",
+            "description": "Unique identifier of the shipping method.",
+            "format": "int32"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code representing the shipping method."
+          },
+          "shippingCountryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Country code applicable to the shipping method."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.ShippingCalculateResponse": {
+        "type": "object",
+        "description": "Represents the detailed shipping calculation result.",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "Indicates whether the shipping operation was successful."
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail"
+          },
+          "pluginCalculateShippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartResponseModel"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartResponseModel": {
+        "type": "object",
+        "description": "epresents the calculated shipping results for the cart, including item-level details and cost breakdown.",
+        "additionalProperties": false,
+        "properties": {
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingDetailModel"
+          },
+          "cartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            }
+          },
+          "isValidShippingSetting": {
+            "type": "boolean",
+            "description": "Indicates whether the shipping configuration is valid."
+          },
+          "responseCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Status code of the shipping calculation."
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Message describing the calculation result."
+          },
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional error information, if applicable."
+          },
+          "orderLevelShipping": {
+            "type": "number",
+            "description": "Shipping amount applied at the order level.",
+            "format": "double"
+          },
+          "approximateArrival": {
+            "type": "string",
+            "nullable": true,
+            "description": "Estimated delivery date or timeline."
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "Total calculated shipping cost.",
+            "format": "double"
+          },
+          "shippingHandlingCharge": {
+            "type": "number",
+            "description": "Handling charge applied to shipping.",
+            "format": "double"
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingDetailModel": {
+        "type": "object",
+        "description": "Represents shipping detail information returned from the plugin, including handling charges and response messaging. Supports extensibility through inherited custom data properties.",
+        "additionalProperties": false,
+        "properties": {
+          "shippingHandlingCharge": {
+            "type": "number",
+            "description": "Handling charge applied to the shipment.",
+            "format": "double"
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Message returned from the shipping plugin describing the result or status."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel": {
+        "type": "object",
+        "description": "Represents the shipping calculation result for an individual cart item, including product hierarchy relationships and calculated shipping details.",
+        "additionalProperties": false,
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            }
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            }
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            }
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            }
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true,
+            "description": "Stock keeping unit of the product."
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantity of the product included in the shipping calculation.",
+            "format": "double"
+          },
+          "shippingCost": {
+            "type": "number",
+            "description": "Calculated shipping charge.",
+            "format": "double"
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "portalId": {
+            "type": "integer",
+            "description": "Unique identifier of the portal used to retrieve address validation configurations.",
+            "format": "int32"
+          },
+          "originalAddresses": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.Address"
+            }
+          },
+          "includeRecommendedAddress": {
+            "type": "boolean",
+            "description": " Flag to indicate if recommended addresses should be fetched."
+          }
+        }
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.Address": {
+        "type": "object",
+        "title": "Znode.Libraries.Abstract.Plugin.Shipping",
+        "description": "List of validated addresses.\n",
+        "additionalProperties": false,
+        "properties": {
+          "addressId": {
+            "type": "integer",
+            "description": "The unique identifier for the address",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": " The first name associated with the address.",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The last name associated with the address.",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "address1": {
+            "type": "string",
+            "description": " The first line of the address.",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "The second line of the address.",
+            "maxLength": 100
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "The unique code of the country.",
+            "minLength": 2,
+            "maxLength": 4
+          },
+          "stateCode": {
+            "type": "string",
+            "description": "The unique code of the state or region.",
+            "minLength": 2,
+            "maxLength": 4
+          },
+          "cityName": {
+            "type": "string",
+            "description": "The name of the city.",
+            "minLength": 2,
+            "maxLength": 100
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "The postal code or ZIP code.",
+            "minLength": 3,
+            "maxLength": 12
+          }
+        },
+        "required": [
+          "address1",
+          "cityName",
+          "postalCode"
+        ]
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true,
+            "description": "Custom data passed to shipping plugins for additional processing or configuration. This can be used to provide plugin-specific data required by custom shipping implementations."
+          },
+          "addressValidationResult": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.AddressValidation"
+            }
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.AddressValidation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "addressId": {
+            "type": "integer",
+            "description": "The unique identifier for the address",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": " The first name associated with the address."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The last name associated with the address."
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true,
+            "description": "The first line of the address."
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "The second line of the address."
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the country."
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the state or region."
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the city."
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The postal code or ZIP code."
+          },
+          "recommendedAddresses": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.Address"
+            }
+          },
+          "isAddressValid": {
+            "type": "boolean",
+            "description": "This flag is used to verify whether an address is valid."
+          }
+        }
+      },
+      "Znode.Shipping.Manager.Api.Models.Address": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "addressId": {
+            "type": "integer",
+            "description": "The unique identifier for the address",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true,
+            "description": " The first name associated with the address."
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The last name associated with the address."
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true,
+            "description": "The first line of the address."
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "The second line of the address."
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the country."
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The unique code of the state or region."
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true,
+            "description": "The name of the city."
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "The postal code or ZIP code."
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ]
+}

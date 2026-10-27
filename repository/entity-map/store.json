@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "entity": "store",
+  "tables": [
+    "dbo.ZnodePortal"
+  ],
+  "joins": [],
+  "properties": {
+    "code": "dbo.ZnodePortal.StoreCode",
+    "name": "dbo.ZnodePortal.StoreName"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:87dddcd3d79d8ec245ad8b48efb2709c57c18d05e092eb84ba750d8998e3f1c6",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

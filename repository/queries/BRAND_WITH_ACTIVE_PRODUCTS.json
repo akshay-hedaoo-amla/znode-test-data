@@ -1,0 +1,18 @@
+{
+  "schemaVersion" : 1,
+  "key" : "BRAND_WITH_ACTIVE_PRODUCTS",
+  "sql" : "SELECT TOP 10 MIN(bl.BrandName) AS brand, b.BrandCode AS code FROM dbo.ZnodeBrandDetails b INNER JOIN dbo.ZnodeBrandDetailLocale bl ON bl.BrandId = b.BrandId INNER JOIN dbo.ZnodePortalBrand pb ON pb.BrandId = b.BrandId INNER JOIN dbo.ZnodePortal p ON p.PortalId = pb.PortalId INNER JOIN dbo.ZnodePimProduct pp ON pp.Brand = b.BrandCode WHERE p.StoreCode = @store AND b.BrandCode = @brand AND b.IsActive = @brandActive AND pp.IsActive = @productActive AND (@preferred IS NULL OR bl.BrandName = @preferred) GROUP BY b.BrandId, b.BrandCode HAVING COUNT(DISTINCT pp.PimProductId) >= @minProducts ORDER BY b.BrandCode",
+  "params" : [ "store", "brand", "brandActive", "productActive", "minProducts", "preferred" ],
+  "constants" : {
+    "brandActive" : "1",
+    "productActive" : "true"
+  },
+  "outputs" : [ "brand", "code" ],
+  "identity" : "brand",
+  "schemaFingerprint" : "sha256:e369b84303ea792f1da1da2ddc760e92baf8d90808d3611be227fc4a61c7b243",
+  "status" : "approved",
+  "approvedBy" : "Akshay Hedaoo",
+  "approvedAt" : "2026-10-23T14:30:00Z",
+  "createdAt" : "2026-10-22T00:00:00Z",
+  "lastValidated" : "2026-10-26T14:59:02Z"
+}

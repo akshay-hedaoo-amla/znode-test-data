@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "COUPON_AMOUNT_OFF_ORDER",
+  "entity": "promotion",
+  "type": "amount_off_order_coupon",
+  "constraints": {
+    "discountType": "amount_off_order",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "couponActive": "true",
+    "availableQuantity": ">= {redemptionsNeeded}",
+    "discountAmount": "{discountAmount}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Active Amount Off Order promotion with a normal coupon code on the store and coupons left to apply, taking a flat discountAmount off the order. KB: Managing Promotions and Coupons (Amount Off Order; Coupon Code; Available Quantity); Configuring a Promotion.",
+  "declaredParams": {
+    "redemptionsNeeded": {
+      "type": "integer",
+      "description": "Orders the test places with the coupon (minimum 1: the coupon must have a use left to apply)"
+    },
+    "discountAmount": {
+      "type": "number",
+      "description": "Flat amount the coupon takes off the order total"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the promotion applies to"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-22T14:30:00Z"
+}

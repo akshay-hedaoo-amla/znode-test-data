@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.amla.testdata.znode</groupId>
+		<artifactId>znode-test-data</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>checks</artifactId>
+	<name>Test Data Agents - Phase exit checks</name>
+	<description>Exit-criteria checks that depend on human-owned items (pilot choice, access checklist,
+		production hosts, read-only DB user). Built only with -P phase0-exit; they stay red until those items are done.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.amla.testdata</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<!-- Phase-specific checks live in sub-packages (phase1, ...). A later phase's checks run only with its
+		     profile; earlier phases' checks always run, because their exit criteria must keep passing. -->
+		<checks.exclude>**/phase1/**</checks.exclude>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>${checks.exclude}</exclude>
+					</excludes>
+					<systemPropertyVariables>
+						<tda.repoRoot>${project.basedir}/..</tda.repoRoot>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>phase1-exit</id>
+			<properties>
+				<checks.exclude>**/phase2/**</checks.exclude>
+			</properties>
+		</profile>
+		<profile>
+			<id>phase2-exit</id>
+			<properties>
+				<checks.exclude>**/phase3/**</checks.exclude>
+			</properties>
+		</profile>
+		<profile>
+			<id>phase3-exit</id>
+			<properties>
+				<checks.exclude>**/phase4/**</checks.exclude>
+			</properties>
+		</profile>
+		<profile>
+			<id>phase5-exit</id>
+			<properties>
+				<checks.exclude>**/phase6/**</checks.exclude>
+			</properties>
+		</profile>
+		<profile>
+			<id>phase4-exit</id>
+			<properties>
+				<checks.exclude>**/phase5/**</checks.exclude>
+			</properties>
+		</profile>
+		<!-- Live check against a QA SQL Server with the read-only user. Credentials from env vars only. -->
+		<profile>
+			<id>test-env</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>${checks.exclude}</exclude>
+							</excludes>
+							<systemPropertyVariables>
+								<tda.repoRoot>${project.basedir}/..</tda.repoRoot>
+							</systemPropertyVariables>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

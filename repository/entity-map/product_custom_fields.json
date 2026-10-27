@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_custom_fields",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimCustomField",
+    "dbo.ZnodePimCustomFieldLocale",
+    "dbo.ZnodeLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimCustomField.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCustomField.PimCustomFieldId",
+      "to": "dbo.ZnodePimCustomFieldLocale.PimCustomFieldId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimCustomFieldLocale.LocaleId",
+      "to": "dbo.ZnodeLocale.LocaleId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "productId": "dbo.ZnodePimProduct.PimProductId",
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "customCode": "dbo.ZnodePimCustomField.CustomCode",
+    "displayOrder": "dbo.ZnodePimCustomField.DisplayOrder",
+    "customKey": "dbo.ZnodePimCustomFieldLocale.CustomKey",
+    "customValue": "dbo.ZnodePimCustomFieldLocale.CustomKeyValue",
+    "locale": "dbo.ZnodeLocale.Code"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:b0fd6245c80fbf315242d9ff52ccf4c17ab3391b7a7e41c92103061f39c3ea3e",
+  "scannedAt": "2026-10-26T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-26T14:30:00Z"
+}

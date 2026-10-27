@@ -1,0 +1,8 @@
+# Lease time-to-live for consumable records (Phase 4). A lease is released at test end; the TTL only bounds how long a
+# crashed run can block a record. An expired lease may be taken over by another test.
+defaultTtlMinutes: 30
+# How long a test waits at its start for a record it names (an existing user) while another test holds it;
+# then it is skipped with LEASE_TIMEOUT.
+leaseWaitMinutes: 10
+perKey:
+  # COUPON_AMOUNT_OFF_ORDER: 30

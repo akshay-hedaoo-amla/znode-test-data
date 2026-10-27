@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off order coupon functionality",
+  "scenario": {
+    "summary": "A guest empties the cart, adds one simple product, applies an Amount Off Order coupon and checks the flat discount and order total. A registered user then signs in, re-applies the coupon on the merged cart, checks the discount again, and cleans up. No order is placed.",
+    "steps": [
+      "Parse the expected flat discount from test data (discountAmount)",
+      "Guest: empty the cart",
+      "Guest: add sku1 with quantity 1 and open the cart (1 line item)",
+      "Guest: apply couponCode",
+      "Read subtotal, discount and order total; check discount equals the flat amount and order total equals subtotal minus discount",
+      "Sign in as the registered user and open the cart (1 line item)",
+      "Remove the coupon and apply couponCode again",
+      "Check the success message, coupon row and discount again",
+      "Remove the coupon, empty the cart and log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: emptied, product added, coupon applied (removed at cleanup)",
+      "Registered user's cart: coupon removed and re-applied, then cart emptied at cleanup",
+      "No order is placed, so no coupon redemption is consumed"
+    ],
+    "assertions": [
+      "Coupon success message equals '- ' + promoAppliedSuccesssMessage (guest and signed-in)",
+      "Promo coupon row contains couponCode (guest and signed-in)",
+      "Discount label is visible (guest and signed-in)",
+      "Discount is close to the flat discountAmount, precision 2 (guest and signed-in)",
+      "Order total is close to subtotal minus discount, precision 2",
+      "Empty cart message is visible after cleanup",
+      "Sign-in link is visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify amount off order coupon functionality'",
+      "Step labels: '1) Guest: add the product and apply the order coupon', '2) Verify the flat discount and order-total math', '3) The order coupon also applies after signing in (user29)', '4) Clean up the cart and log out'",
+      "Profile: sku1 z-4567890 is an active SimpleProduct with inventory 999876 (2 rows matched, store null)",
+      "Profile: couponCode ORDER15 is an Amount Off Order promotion on store MaxwellsHardware, availableQuantity 9824",
+      "No checkout or place-order call in the step list",
+      "The test asserts discount against data.discountAmount (15.00), passed as the COUPON_AMOUNT_OFF_ORDER param discountAmount"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "redemptionsNeeded": 1,
+        "store": "MaxwellsHardware",
+        "discountAmount": 15.0
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "15.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:9",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:12",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ORDER15",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:10",
+      "kind": "json",
+      "keyPath": "couponCode",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:6",
+      "kind": "json",
+      "keyPath": "promoAppliedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts:87",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-coupon.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

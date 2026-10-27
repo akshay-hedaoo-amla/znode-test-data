@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "key": "USER_WEBSTORE_REGISTERED",
+  "entity": "user",
+  "type": "registered",
+  "constraints": { "userType": "registered", "isActive": "true" },
+  "scope": { "store": "{store}" },
+  "usage": "consumable",
+  "description": "Active registered webstore customer of the store who can sign in, build a cart and place orders. KB: Managing Users; Managing Store Profiles (default registered profile).",
+  "declaredParams": {
+    "store": { "type": "string", "description": "Store code the user belongs to" }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-21T14:30:00Z"
+}

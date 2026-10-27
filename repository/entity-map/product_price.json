@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_price",
+  "tables": [
+    "dbo.ZnodePrice",
+    "dbo.ZnodePriceList",
+    "dbo.ZnodePriceListPortal",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePrice.PriceListId",
+      "to": "dbo.ZnodePriceList.PriceListId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePriceList.PriceListId",
+      "to": "dbo.ZnodePriceListPortal.PriceListId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePriceListPortal.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePrice.SKU",
+    "retailPrice": "dbo.ZnodePrice.RetailPrice",
+    "salesPrice": "dbo.ZnodePrice.SalesPrice",
+    "activationDate": "dbo.ZnodePrice.ActivationDate",
+    "expirationDate": "dbo.ZnodePrice.ExpirationDate",
+    "priceListCode": "dbo.ZnodePriceList.ListCode",
+    "priceListName": "dbo.ZnodePriceList.ListName",
+    "priceListActivationDate": "dbo.ZnodePriceList.ActivationDate",
+    "priceListExpirationDate": "dbo.ZnodePriceList.ExpirationDate",
+    "storePrecedence": "dbo.ZnodePriceListPortal.Precedence",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:82bc1b8128a07aca8224b59327426a83dbaadc6ae6892cc48a1f0fd472dd4d1e",
+  "scannedAt": "2026-10-23T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-23T14:30:00Z"
+}

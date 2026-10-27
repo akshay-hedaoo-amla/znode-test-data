@@ -1,0 +1,24 @@
+# Production deny-list. REQUIRED (security_and_access_doc.md section 2).
+#
+# The core refuses to start when the configured environment name, DB host or API host
+# matches any pattern below. Patterns are case-insensitive globs: '*' matches any run of characters.
+#
+# FAIL-CLOSED: if 'envNames' or 'hosts' is empty the deny-list does not load, so nothing that
+# uses the environment guard can start. List production hosts only (no credentials, no ports
+# needed) and change this file through a reviewed pull request.
+
+envNames:
+  - prod
+  - production
+  - prd
+  - live
+  - "prod-*"
+  - "*-prod"
+  - "prd-*"
+  - "*-prd"
+
+# Treated as production for now (decision 2026-10-21); to be replaced per project with that
+# project's real production DB and API hosts.
+hosts:
+  - "sandbox.znodestore.com"
+  - "grow-np.znodecorp.com"
