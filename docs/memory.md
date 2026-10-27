@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | User: copy .env into D:/znode-test-data and set up a read:packages token (Maven settings.xml server github, NODE_AUTH_TOKEN). Then switch both frameworks to the 0.6.0 packages and run the Phase 0-5 gates in this repo |
+| Next step | Commit the frameworks' switch to the 0.6.0 packages (user decides); then Phase 6 part C (CI workflows) |
 
 ## Project summary
 
@@ -498,3 +498,11 @@ Add one entry per session, newest first.
 - Tag v0.6.0 pushed; release.yml green: Maven com.amla.testdata:core 0.6.0 (+ core-0.6.0-cli.jar), adapter-selenium-testng 0.6.0, parent test-data-agents 0.6.0; npm @akshay-hedaoo-amla/tda-playwright-adapter@0.6.0 (bundles the jar). Listing packages needs read:packages, which the gh token lacks; confirmed from the release log.
 - Data repo pushed to akshay-hedaoo-amla/znode-test-data main (138a7bd initial, bed08af ignore fix).
 - Not done yet: frameworks still consume the adapters the old way (Selenium 0.1.0-SNAPSHOT from ~/.m2 under the new groupId; Playwright file: path); data repo live gates not run (needs .env here). The plugin marketplace/enablement in .claude/settings.json is untested until a Claude Code session opens the data repo.
+
+### 2026-10-27: Split verified - frameworks on the 0.6.0 packages, data repo gates green
+- User set GITHUB_PACKAGES_TOKEN and NODE_AUTH_TOKEN (read:packages) as Windows user variables, Maven server `github` in ~/.m2/settings.xml (password ${env.GITHUB_PACKAGES_TOKEN}), and copied .env here. The running app predated the variables, so commands loaded them from the user environment (never displayed); a restarted app inherits them.
+- Registry check: local com/amla/testdata deleted from ~/.m2, then `mvn -q initialize` downloaded core-0.6.0-cli.jar from GitHub Packages; `bin/tda validate` OK.
+- Selenium framework (tda/phase4-pilots, uncommitted): adapter-selenium-testng 0.6.0 + repository `github` in Integration/pom.xml; tdaPilot.xml comment points TDA_HOME at the data repo. test-compile green with the downloaded adapter.
+- Playwright framework (tda/phase4-pilots, uncommitted): @akshay-hedaoo-amla/tda-playwright-adapter 0.6.0 (lockfile resolves from npm.pkg.github.com; bundled lib/tda-cli.jar present), imports renamed in both configs, the webstore fixture and the PDP spec; new .npmrc reading NODE_AUTH_TOKEN. Pilot spec lists.
+- Data repo gate `mvn -P phase5-exit,test-env verify` (PilotRun with TDA_HOME = this repo, frameworks on the packages): BUILD SUCCESS, offline 30/30, IT 8/8, pilot run 1236 s, T02 the only failure (known), T04 passed.
+- Phase 6 Part A (split) done apart from committing the framework switch. Next: Part C CI workflows, then Part B Playwright modules.
