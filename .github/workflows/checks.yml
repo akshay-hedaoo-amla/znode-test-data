@@ -35,10 +35,10 @@ jobs:
         run: mvn -B -q initialize
       - name: Repository entries are valid
         run: bin/tda validate
-      # NoHardcodedPilotDataTest reads the framework repositories; it runs in the exit gates, and the Playwright
-      # repository runs the keys check on its own pull requests.
+      # Checks that need local discovery output or the framework repositories are listed in checks/ci-excludes.txt;
+      # the exit gates run them.
       - name: Offline exit checks and secret scan
-        run: mvn -B -P phase5-exit -pl checks verify "-Dchecks.exclude=**/NoHardcodedPilotDataTest.java"
+        run: mvn -B -P phase5-exit -pl checks verify "-Dsurefire.excludesFile=ci-excludes.txt"
       - name: Approvals come from a code owner
         if: github.event_name == 'pull_request'
         env:

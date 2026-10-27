@@ -1,0 +1,8 @@
+# Checks the pull-request CI (.github/workflows/checks.yml) does not run: they read local discovery output (work/,
+# git-ignored) or the framework repositories, which a CI checkout does not have. The exit gates run them all.
+# work/scans, reports/drift coverage, human review of scanned pilots
+**/phase1/**
+# work/db/schema-snapshot.json
+**/ApprovedQueriesTest.java
+# the framework repositories (TDA_SELENIUM_REPO, TDA_PLAYWRIGHT_REPO)
+**/NoHardcodedPilotDataTest.java
