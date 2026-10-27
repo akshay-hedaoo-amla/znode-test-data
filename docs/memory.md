@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | User adds the TDA_PACKAGES_TOKEN secret (read:packages) to akshay-hedaoo-amla/znode-test-data and MRRSoft/znode10-playwright-automation-integration; then re-run the data repo Checks run and raise the framework PRs. Then Phase 6 Part B (Playwright modules) |
+| Next step | Phase 6 Part B: Playwright modules one by one (keys check run locally until MRRSoft can hold a package-read secret) |
 
 ## Project summary
 
@@ -524,3 +524,9 @@ Add one entry per session, newest first.
 - Code repo 213c901 pushed, CI green; tag v0.7.0 -> release green: core 0.7.0 (+cli jar), adapter-selenium-testng 0.7.0, npm @akshay-hedaoo-amla/tda-playwright-adapter@0.7.0.
 - Data repo pushed (d35995d Part C, 4a61fe8 memory). Its first Checks run (40513264545) failed at 'Release jar for bin/tda' as expected: the TDA_PACKAGES_TOKEN secret is not set yet. Re-run after the user adds it.
 - Selenium framework 63866f56 (adapter 0.7.0, test-compile green); Playwright framework 56bf0ec (adapter 0.7.0 from npm.pkg.github.com, tda-keys-check.yml, scripts/tda-specs-to-scan.js). The workflow's steps ran locally with the released package: spec picker, npx tda-playwright scan, check-hardcoded from the bundled jar -> no hardcoded test data. Both on tda/phase4-pilots, not pushed (the user raises PRs); excluded files untouched.
+
+### 2026-10-27: Data repo CI green; keys check stays local (user decision)
+- User added TDA_PACKAGES_TOKEN to znode-test-data. First green Checks run after one fix: checks that read local discovery output (phase1: work/scans, drift coverage, pilot review; ApprovedQueriesTest: work/db snapshot) or the framework repos (NoHardcodedPilotDataTest) are listed with reasons in checks/ci-excludes.txt (surefire excludesFile, path relative to the checks module); the exit gates still run them. CI runs 22 checks (7 classes) plus validate.
+- MRRSoft admins cannot add a secret to the Playwright repo yet. User decision: no CI for the keys check for now; it runs locally (data repo CLAUDE.md row 'Keys check (local; no CI yet)': tda-specs-to-scan.js, npx tda-playwright scan, bin/tda check-hardcoded; verified as documented). tda-keys-check.yml dropped from the Playwright branch (34c4e23; the picker script stays).
+- Framework branches tda/phase4-pilots stay unmerged and unpushed: they now pull the adapter from GitHub Packages, which always needs a token, so merging them would break the frameworks' existing CI (Playwright npm ci in daily-smoke/growstore-smoke; Selenium Maven in integration-suite-run) until MRRSoft provides a package-read secret. Selenium head 63866f56, Playwright head 34c4e23.
+- Options recorded for later: run the keys check from the data repo CI with a user token that can read the MRRSoft repo (nightly/on demand; cannot block PRs); or public packages (would publish the code).

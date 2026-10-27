@@ -65,6 +65,7 @@ Java 17, Maven 3.9. Reading the released packages needs a GitHub token with `rea
 | Validate the repository | `bin/tda validate` |
 | Fetch Selenium workbooks / scan Selenium tests | `mvn -q -pl tools exec:java -Dexec.args="fetch"` / `"scan"` (add `--since <ref>` / `--force`) |
 | Scan Playwright tests | `npm ci` once, then `npm run scan:playwright` (add `-- --since <ref>`) |
+| Keys check (local; no CI yet) | In the Playwright repo (Git Bash): `export TDA_HOME=D:/znode-test-data`, then `node scripts/tda-specs-to-scan.js origin/dev > /tmp/specs.txt` (changed + migrated specs) and `npx tda-playwright scan --force $(cat /tmp/specs.txt)`; then here `bin/tda check-hardcoded`. Migrated files: `config/scanners.yaml` `migrated`. Fails on hardcoded test data in a migrated file |
 | Discovery chain / regenerate stale entries | `/discover`, `/regenerate` in Claude Code |
 | Exit gate (phase N, includes earlier phases) | `mvn -q -P phaseN-exit,test-env verify -Dtda.mvn=<maven>/bin/mvn.cmd` (offline checks only: drop `test-env`) |
 
