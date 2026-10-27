@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | User go-ahead to push the code repo and tag v0.7.0, then push this repo; user adds the TDA_PACKAGES_TOKEN secret here and in MRRSoft/znode10-playwright-automation-integration; then frameworks to 0.7.0 + the Playwright keys-check workflow |
+| Next step | User adds the TDA_PACKAGES_TOKEN secret (read:packages) to akshay-hedaoo-amla/znode-test-data and MRRSoft/znode10-playwright-automation-integration; then re-run the data repo Checks run and raise the framework PRs. Then Phase 6 Part B (Playwright modules) |
 
 ## Project summary
 
@@ -519,3 +519,8 @@ Add one entry per session, newest first.
 - Data repo d35995d: tda.version 0.7.0; config/scanners.yaml migrated (2 Playwright pilot specs; selenium empty until wave 2); .github/workflows/checks.yml (validate, offline checks via -Dchecks.exclude=**/NoHardcodedPilotDataTest.java - it needs the framework repos - , approval guard: added "status":"approved" lines need a CODEOWNERS author or approving reviewer); PilotRequirementsTest now matches by file+value (the rescan had moved lines); secret-scan allow entry for the workflow's env-var name. Offline checks 29/29 locally.
 - Playwright repo (uncommitted until 0.7.0 is published): .github/workflows/tda-keys-check.yml (PRs and pushes to dev touching specs or test data: npm ci, scan changed + migrated specs with npx tda-playwright, check-hardcoded from the bundled jar, upload tda-scans artifact) and scripts/tda-specs-to-scan.js (picker tried locally).
 - Not covered (hosted runners cannot reach the DB): nightly maintain; live gates.
+
+### 2026-10-27: 0.7.0 released; frameworks on 0.7.0; keys-check workflow committed
+- Code repo 213c901 pushed, CI green; tag v0.7.0 -> release green: core 0.7.0 (+cli jar), adapter-selenium-testng 0.7.0, npm @akshay-hedaoo-amla/tda-playwright-adapter@0.7.0.
+- Data repo pushed (d35995d Part C, 4a61fe8 memory). Its first Checks run (40513264545) failed at 'Release jar for bin/tda' as expected: the TDA_PACKAGES_TOKEN secret is not set yet. Re-run after the user adds it.
+- Selenium framework 63866f56 (adapter 0.7.0, test-compile green); Playwright framework 56bf0ec (adapter 0.7.0 from npm.pkg.github.com, tda-keys-check.yml, scripts/tda-specs-to-scan.js). The workflow's steps ran locally with the released package: spec picker, npx tda-playwright scan, check-hardcoded from the bundled jar -> no hardcoded test data. Both on tda/phase4-pilots, not pushed (the user raises PRs); excluded files untouched.
