@@ -16,3 +16,12 @@ playwright:
   pilots:
     - testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts
+
+# Files whose tests run on keys (globs relative to each framework repository). The keys check
+# (`bin/tda check-hardcoded`, and the Playwright repo's tda-keys-check workflow on every PR) fails if a test in them
+# reads a value its approved requirement does not allow (credential, config, expected-output, created-by-test).
+migrated:
+  playwright:
+    - testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts
+  selenium: []   # Phase 6 wave 2

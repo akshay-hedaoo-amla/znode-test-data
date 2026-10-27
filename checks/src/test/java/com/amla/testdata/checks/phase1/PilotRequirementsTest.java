@@ -58,7 +58,9 @@ class PilotRequirementsTest {
 				for (ScanResult.Value v : t.values()) {
 					boolean found = false;
 					for (JsonNode s : req.path("sources")) {
-						if (s.path("location").asText().equals(v.location()) && s.path("value").asText().equals(v.value())) {
+						// Same value in the same file: a later edit that only moves its line does not unmap it (the keys
+						// check, HardcodedDataCheck, matches the same way).
+						if (file(s.path("location").asText()).equals(file(v.location())) && s.path("value").asText().equals(v.value())) {
 							found = true;
 							break;
 						}
@@ -70,6 +72,11 @@ class PilotRequirementsTest {
 			}
 		}
 		assertTrue(unmapped.isEmpty(), "scanned values missing from requirements sources:\n" + String.join("\n", unmapped));
+	}
+
+	/** "path:line" without the line; Excel cell addresses ("book!sheet!C4") stay as they are. */
+	private static String file(String location) {
+		return location.replaceFirst(":\\d+$", "");
 	}
 
 	@Test

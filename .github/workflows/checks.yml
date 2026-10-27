@@ -1,0 +1,69 @@
+name: Checks
+
+# Offline checks on every pull request and push (no database, API or model; GitHub-hosted runner):
+#   - every repository/ entry is valid (`bin/tda validate`)
+#   - the offline exit checks, including the secret scan (checks module, no test-env profile)
+#   - approvals come from a code owner (pull requests only)
+# The released code is read from GitHub Packages with the TDA_PACKAGES_TOKEN secret (a token with read:packages).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    env:
+      TDA_PACKAGES_TOKEN: ${{ secrets.TDA_PACKAGES_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          server-id: github
+          server-username: GITHUB_ACTOR
+          server-password: TDA_PACKAGES_TOKEN
+      - name: Release jar for bin/tda
+        run: mvn -B -q initialize
+      - name: Repository entries are valid
+        run: bin/tda validate
+      # NoHardcodedPilotDataTest reads the framework repositories; it runs in the exit gates, and the Playwright
+      # repository runs the keys check on its own pull requests.
+      - name: Offline exit checks and secret scan
+        run: mvn -B -P phase5-exit -pl checks verify "-Dchecks.exclude=**/NoHardcodedPilotDataTest.java"
+      - name: Approvals come from a code owner
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          # Entries this pull request sets to approved (an added "status" : "approved" line in repository/).
+          approved=$(git diff "$BASE"...HEAD -U0 -- 'repository/**.json' | grep -E '^\+.*"status"\s*:\s*"approved"' || true)
+          if [ -z "$approved" ]; then
+            echo "no approvals in this pull request"
+            exit 0
+          fi
+          owners=$(grep -v '^#' .github/CODEOWNERS | grep -oE '@[A-Za-z0-9-]+' | tr -d '@' | sort -u)
+          if echo "$owners" | grep -qx "$AUTHOR"; then
+            echo "approvals by code owner $AUTHOR"
+            exit 0
+          fi
+          reviewers=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/reviews" --jq '.[] | select(.state == "APPROVED") | .user.login' | sort -u)
+          for r in $reviewers; do
+            if echo "$owners" | grep -qx "$r"; then
+              echo "approvals reviewed and approved by code owner $r"
+              exit 0
+            fi
+          done
+          echo "::error::This pull request marks entries approved; only a code owner ($(echo $owners | tr '\n' ' ')) may approve. Get a code owner's approving review."
+          exit 1
