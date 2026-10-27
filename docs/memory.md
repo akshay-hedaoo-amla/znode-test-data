@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | Push the code repo and tag v0.6.0 (release workflow publishes); then switch both frameworks to the released packages and run the Phase 0-5 gates here |
+| Next step | User: copy .env into D:/znode-test-data and set up a read:packages token (Maven settings.xml server github, NODE_AUTH_TOKEN). Then switch both frameworks to the 0.6.0 packages and run the Phase 0-5 gates in this repo |
 
 ## Project summary
 
@@ -492,3 +492,9 @@ Add one entry per session, newest first.
 - Known Znode-shaped rule left in core: ConstraintEvaluator matches a constraint value plus a 'product' suffix (SimpleProduct for simple); harmless elsewhere, comment made neutral.
 - Checks: code repo mvn install green (331 tests incl. NoProjectDataInCoreTest), Playwright adapter 33, console 6, npm pack dry-run (30 files, 7.8 MB with the jar). Data repo against the locally installed 0.6.0: `mvn -q initialize` + `bin/tda validate` OK; offline checks 29/30 - NoHardcodedPilotDataTest needs TDA_SELENIUM_REPO from .env, which the data repo does not have yet (the user copies .env; Claude never reads or copies it).
 - User actions still needed: copy .env into D:\znode-test-data; a GitHub token with read:packages for local builds (Maven server `github` in ~/.m2/settings.xml, NODE_AUTH_TOKEN for npm) - the gh CLI token has no packages scope.
+
+### 2026-10-27: 0.6.0 released, data repo pushed (user asked to publish)
+- Code repo pushed to akshay-hedaoo-amla/automation-testdata-generator master (ad2e4db split, 7e211a7 .gitattributes, then the fixture fix below). CI (ci.yml) green on ubuntu after one fix: the root .gitignore's unanchored `work/` had hidden core/src/test/resources/console/home/work/ since Phase 5, so ConsoleDataTest failed on a clean checkout; rules anchored to /work/ and /input/ (both repos) and the two fixture files committed.
+- Tag v0.6.0 pushed; release.yml green: Maven com.amla.testdata:core 0.6.0 (+ core-0.6.0-cli.jar), adapter-selenium-testng 0.6.0, parent test-data-agents 0.6.0; npm @akshay-hedaoo-amla/tda-playwright-adapter@0.6.0 (bundles the jar). Listing packages needs read:packages, which the gh token lacks; confirmed from the release log.
+- Data repo pushed to akshay-hedaoo-amla/znode-test-data main (138a7bd initial, bed08af ignore fix).
+- Not done yet: frameworks still consume the adapters the old way (Selenium 0.1.0-SNAPSHOT from ~/.m2 under the new groupId; Playwright file: path); data repo live gates not run (needs .env here). The plugin marketplace/enablement in .claude/settings.json is untested until a Claude Code session opens the data repo.
