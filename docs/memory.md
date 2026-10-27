@@ -506,3 +506,7 @@ Add one entry per session, newest first.
 - Playwright framework (tda/phase4-pilots, uncommitted): @akshay-hedaoo-amla/tda-playwright-adapter 0.6.0 (lockfile resolves from npm.pkg.github.com; bundled lib/tda-cli.jar present), imports renamed in both configs, the webstore fixture and the PDP spec; new .npmrc reading NODE_AUTH_TOKEN. Pilot spec lists.
 - Data repo gate `mvn -P phase5-exit,test-env verify` (PilotRun with TDA_HOME = this repo, frameworks on the packages): BUILD SUCCESS, offline 30/30, IT 8/8, pilot run 1236 s, T02 the only failure (known), T04 passed.
 - Phase 6 Part A (split) done apart from committing the framework switch. Next: Part C CI workflows, then Part B Playwright modules.
+
+### 2026-10-27: CI stays on GitHub-hosted runners for now (user decision)
+- Code repo ci.yml and release.yml keep `runs-on: ubuntu-latest` (pushed, green). A Windows self-hosted version for the shared VM (`runs-on: [self-hosted, azure-vm-204.4]`, PowerShell steps, Maven from PATH or downloaded, release credentials in a temp settings.xml) is parked on the local, unpushed branch `ci-self-hosted` (493b5a3) in the code repo; the user will register runners and make that change later.
+- Impact on Part C: jobs that need the test database (nightly `maintain`, live gates) cannot run on hosted runners (the DB is only reachable over the VPN / from the VM); until runners exist, Part C covers only the offline checks (validate, secret scan, no-hardcoded-data, keys check, incremental scan).
