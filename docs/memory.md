@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | Commit the frameworks' switch to the 0.6.0 packages (user decides); then Phase 6 part C (CI workflows) |
+| Next step | User go-ahead to push the code repo and tag v0.7.0, then push this repo; user adds the TDA_PACKAGES_TOKEN secret here and in MRRSoft/znode10-playwright-automation-integration; then frameworks to 0.7.0 + the Playwright keys-check workflow |
 
 ## Project summary
 
@@ -510,3 +510,12 @@ Add one entry per session, newest first.
 ### 2026-10-27: CI stays on GitHub-hosted runners for now (user decision)
 - Code repo ci.yml and release.yml keep `runs-on: ubuntu-latest` (pushed, green). A Windows self-hosted version for the shared VM (`runs-on: [self-hosted, azure-vm-204.4]`, PowerShell steps, Maven from PATH or downloaded, release credentials in a temp settings.xml) is parked on the local, unpushed branch `ci-self-hosted` (493b5a3) in the code repo; the user will register runners and make that change later.
 - Impact on Part C: jobs that need the test database (nightly `maintain`, live gates) cannot run on hosted runners (the DB is only reachable over the VPN / from the VM); until runners exist, Part C covers only the offline checks (validate, secret scan, no-hardcoded-data, keys check, incremental scan).
+
+### 2026-10-27: Phase 6 Part C (offline CI) built, committed locally
+- Framework switches to 0.6.0 committed (not pushed): Selenium 9e1789f9, Playwright 046e586 on tda/phase4-pilots. Data repo memory commits pushed.
+- Keys check (exit criterion 2): core HardcodedDataCheck + `tda check-hardcoded` (code repo 213c901, version 0.7.0). In files listed under config/scanners.yaml `migrated.<framework>` (globs), every value a scanned test reads must be in its approved requirement with role credential, config, expected-output or created-by-test; a `data` value, an unlisted value, or values without an approved requirement fail. Matches kind+keyPath+value+file (not line); never prints values. Unit test HardcodedDataCheckTest (fixture keys-check/cases.json).
+- Scanner fix found on real code: the Playwright scanner recorded the testData fixture's arguments (alias/property names) as literals; now skipped (TDA_FIXTURE). Fixture test extended.
+- Real run: pilots rescanned (work/scans), check passes ('no hardcoded test data'); a planted literal SKU in the PDP spec fails it (value not printed); spec restored. Scanner and check also run with no .env (copy without it).
+- Data repo d35995d: tda.version 0.7.0; config/scanners.yaml migrated (2 Playwright pilot specs; selenium empty until wave 2); .github/workflows/checks.yml (validate, offline checks via -Dchecks.exclude=**/NoHardcodedPilotDataTest.java - it needs the framework repos - , approval guard: added "status":"approved" lines need a CODEOWNERS author or approving reviewer); PilotRequirementsTest now matches by file+value (the rescan had moved lines); secret-scan allow entry for the workflow's env-var name. Offline checks 29/29 locally.
+- Playwright repo (uncommitted until 0.7.0 is published): .github/workflows/tda-keys-check.yml (PRs and pushes to dev touching specs or test data: npm ci, scan changed + migrated specs with npx tda-playwright, check-hardcoded from the bundled jar, upload tda-scans artifact) and scripts/tda-specs-to-scan.js (picker tried locally).
+- Not covered (hosted runners cannot reach the DB): nightly maintain; live gates.
