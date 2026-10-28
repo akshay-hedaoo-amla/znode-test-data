@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "entity": "shipping",
+  "tables": [
+    "dbo.ZnodeShipping",
+    "dbo.ZnodeShippingTypes",
+    "dbo.ZnodeShippingRule",
+    "dbo.ZnodePortalShipping",
+    "dbo.ZnodePublishState",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeShipping.ShippingTypeId",
+      "to": "dbo.ZnodeShippingTypes.ShippingTypeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeShipping.ShippingId",
+      "to": "dbo.ZnodeShippingRule.ShippingId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeShipping.ShippingId",
+      "to": "dbo.ZnodePortalShipping.ShippingId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalShipping.PublishStateId",
+      "to": "dbo.ZnodePublishState.PublishStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortalShipping.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "code": "dbo.ZnodeShipping.ShippingCode",
+    "name": "dbo.ZnodeShipping.ShippingName",
+    "description": "dbo.ZnodeShipping.Description",
+    "isActive": "dbo.ZnodeShipping.IsActive",
+    "country": "dbo.ZnodeShipping.DestinationCountryCode",
+    "handlingCharge": "dbo.ZnodeShipping.HandlingCharge",
+    "shippingType": "dbo.ZnodeShippingTypes.Name",
+    "shippingTypeClass": "dbo.ZnodeShippingTypes.ClassName",
+    "shippingTypeIsActive": "dbo.ZnodeShippingTypes.IsActive",
+    "ruleType": "dbo.ZnodeShippingRule.ShippingRuleTypeCode",
+    "baseCost": "dbo.ZnodeShippingRule.BaseCost",
+    "perItemCost": "dbo.ZnodeShippingRule.PerItemCost",
+    "lowerLimit": "dbo.ZnodeShippingRule.LowerLimit",
+    "upperLimit": "dbo.ZnodeShippingRule.UpperLimit",
+    "displayOrder": "dbo.ZnodePortalShipping.DisplayOrder",
+    "publishState": "dbo.ZnodePublishState.PublishStateCode",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:ad5286f89d4d1d1e2ac2d4ca24a80047d8a53dae0a88423a14673ba5860c574f",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "pending_approval"
+}

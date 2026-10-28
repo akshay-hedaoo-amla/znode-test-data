@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_personalization",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAttributeValue",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimAttributeLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAttributeValue.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimAttributeLocale.PimAttributeId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "attributeCode": "dbo.ZnodePimAttribute.AttributeCode",
+    "attributeName": "dbo.ZnodePimAttributeLocale.AttributeName",
+    "personalizableAttributeCount": "COUNT(DISTINCT dbo.ZnodePimAttribute.PimAttributeId)"
+  },
+  "filters": {
+    "dbo.ZnodePimAttribute.IsPersonalizable": "1"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:86153e58cd9b6a45c25a3cc4e88fd0b26b4c7a51171fcec45f90f91429b3b64f",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "pending_approval"
+}

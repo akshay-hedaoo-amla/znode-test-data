@@ -40,16 +40,25 @@
   ],
   "properties": {
     "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "childSku": "variant.SKU",
+    "childName": "variant.ProductName",
+    "childType": "variant.ProductType",
+    "bundleQuantity": "dbo.ZnodePimProductTypeAssociation.BundleQuantity",
     "variantCount": "COUNT(DISTINCT variant.PimProductId)",
-    "variantInventory": "SUM(dbo.ZnodeInventory.Quantity)"
+    "activeVariantCount": "COUNT(DISTINCT variant.PimProductId)",
+    "activeChildCount": "COUNT(DISTINCT variant.PimProductId)",
+    "variantInventory": "SUM(dbo.ZnodeInventory.Quantity)",
+    "childInventory": "MIN(dbo.ZnodeInventory.Quantity)"
   },
   "scope": {
     "store": "dbo.ZnodePortal.StoreCode"
   },
+  "filters": {
+    "variant.IsActive": "true"
+  },
   "maskedColumns": [],
   "schemaFingerprint": "sha256:fd0bfb48e4d6d57bd50056986f870b4ecb67ad27c34d07d7b88f3787dee4912d",
-  "scannedAt": "2026-10-23T00:00:00Z",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-23T14:30:00Z"
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "pending_approval"
 }

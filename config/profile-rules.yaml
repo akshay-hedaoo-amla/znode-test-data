@@ -7,6 +7,13 @@ rules:
   # A configurable parent is also profiled for its variants (count and stock); any other SKU also for its stock.
   # Stock lookups are filtered by the test's store param when the requirement gives one. (2026-10-21, review item 1)
   - { keyPath: "parent_?product_?sku", entity: product, property: sku, also: [ { entity: product_variants, property: sku } ] }
+  # Shopping-cart (2026-10-28, entity-mapper, pending review): children/variants, add-ons and the shipping option.
+  # Before the generic sku rule, which would otherwise match every key path containing "sku".
+  - { keyPath: "(^|[/.])(child|variant\\d*)_?sku", entity: product_variants, property: childSku, also: [ { entity: product_stock, property: sku } ] }
+  - { keyPath: "child_?name[/.]sku", entity: product_variants, property: childSku }
+  - { keyPath: "add_?on_?checkbox_?id", entity: product_addons, property: addOnProductId }
+  - { keyPath: "add_?on_?(description|checkbox|radio|dropdown)$|(^|[/.])addon\\d+$|add_?ons[/.]\\d+", entity: product_addons, property: addOnName }
+  - { keyPath: "expected_?shipping_?option_?name", entity: shipping, property: description }
   - { keyPath: "sku", entity: product, property: sku, also: [ { entity: product_stock, property: sku } ] }
   - { keyPath: "coupon_?code", entity: promotion, property: couponCode }
   # PromotionalCode is the promotion's own code (ZnodePromotion.PromoCode), not a coupon code. (2026-10-21, pending review)

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_addons",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAddOnProduct",
+    "dbo.ZnodePimAddonGroup",
+    "dbo.ZnodePimAddonGroupLocale",
+    "dbo.ZnodePimAddOnProductDetail",
+    "dbo.ZnodeInventory",
+    "dbo.ZnodePortalWarehouse",
+    "dbo.ZnodePortal"
+  ],
+  "aliases": {
+    "addon": "dbo.ZnodePimProduct"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAddOnProduct.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProduct.PimAddonGroupId",
+      "to": "dbo.ZnodePimAddonGroup.PimAddonGroupId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddonGroup.PimAddonGroupId",
+      "to": "dbo.ZnodePimAddonGroupLocale.PimAddonGroupId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProduct.PimAddOnProductId",
+      "to": "dbo.ZnodePimAddOnProductDetail.PimAddOnProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProductDetail.PimChildProductId",
+      "to": "addon.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "addon.SKU",
+      "to": "dbo.ZnodeInventory.SKU",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeInventory.WarehouseId",
+      "to": "dbo.ZnodePortalWarehouse.WarehouseId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalWarehouse.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "addOnId": "dbo.ZnodePimAddOnProduct.PimAddOnProductId",
+    "addOnGroupId": "dbo.ZnodePimAddonGroup.PimAddonGroupId",
+    "addOnGroupName": "dbo.ZnodePimAddonGroupLocale.AddonGroupName",
+    "addOnDisplayType": "dbo.ZnodePimAddonGroup.DisplayType",
+    "addOnRequiredType": "dbo.ZnodePimAddOnProduct.RequiredType",
+    "addOnDetailId": "dbo.ZnodePimAddOnProductDetail.PimAddOnProductDetailId",
+    "addOnIsDefault": "dbo.ZnodePimAddOnProductDetail.IsDefault",
+    "addOnProductId": "addon.PimProductId",
+    "addOnSku": "addon.SKU",
+    "addOnName": "addon.ProductName",
+    "addOnType": "addon.ProductType",
+    "addOnCount": "COUNT(DISTINCT dbo.ZnodePimAddOnProduct.PimAddOnProductId)",
+    "addOnInventory": "MAX(dbo.ZnodeInventory.Quantity)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "addon.IsActive": "true"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:5c27c685d0a4830b2a0b3e2ea6825ac8202bb0d45c5c98be60f93d14085ef6bb",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "pending_approval"
+}
