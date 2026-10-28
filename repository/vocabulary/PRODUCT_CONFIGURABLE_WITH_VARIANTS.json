@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+  "entity": "product",
+  "type": "configurable_with_variants",
+  "constraints": {
+    "type": "configurable",
+    "status": "active",
+    "publishState": "production",
+    "activeVariantCount": ">= {minVariants}",
+    "variantInventory": ">= {quantityUsed}",
+    "price": "> 0",
+    "addOnCount": ">= {minAddOns}",
+    "personalizableAttributeCount": ">= {minPersonalizableAttributes}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active published configurable product on the store with at least N active in-stock variants (each picked by its attribute values), plus the add-on groups and personalizable attributes the test fills in. KB: Product Types (Configurable); Configuring Product Add-ons.",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets for this product in the cart"
+    },
+    "minAddOns": {
+      "type": "integer",
+      "description": "Add-on groups the test selects on this product (0 when it selects none)"
+    },
+    "minPersonalizableAttributes": {
+      "type": "integer",
+      "description": "Personalizable text attributes the test fills in (0 when none)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minVariants": {
+      "type": "integer",
+      "description": "Distinct variants the test adds to the cart"
+    }
+  },
+  "status": "pending_approval"
+}

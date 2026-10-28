@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_NOT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+  "entity": "product",
+  "type": "simple_not_discounted_by_promotion",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "publishState": "production",
+    "promotion": "!= {promotion}",
+    "inventory": ">= {quantityUsed}",
+    "price": "> 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product on the store that a given product or category promotion does NOT discount, to prove the discount stays off other products. KB: Configuring a Promotion (Find Product, Find Category).",
+  "declaredParams": {
+    "promotion": {
+      "type": "string",
+      "description": "Promotion code (ZnodePromotion.PromoCode) of the resolved promotion or coupon key in the same test"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets for this product in the cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "pending_approval"
+}

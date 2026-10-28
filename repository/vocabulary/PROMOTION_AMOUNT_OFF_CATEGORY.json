@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "key": "PROMOTION_AMOUNT_OFF_CATEGORY",
+  "entity": "promotion",
+  "type": "amount_off_category_promotion",
+  "constraints": {
+    "discountType": "amount_off_category",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "requiresCoupon": "false",
+    "discountAmount": "{discountAmount}",
+    "allProfiles": "{allProfiles}",
+    "minimumQuantity": "<= {quantityUsed}"
+  },
+  "scope": {
+    "store": "{store}",
+    "profile": "{profile}"
+  },
+  "usage": "read-only",
+  "description": "Active automatic (no coupon) Amount Off Category promotion on the store and profile, flat amount off products of its category once the minimum quantity is met. KB: Configuring a Promotion (Find Category, Minimum Quantity, Profile).",
+  "declaredParams": {
+    "discountAmount": {
+      "type": "number",
+      "description": "Amount or percent the promotion takes off, as the test asserts it"
+    },
+    "allProfiles": {
+      "type": "boolean",
+      "description": "false when the test also checks that another profile gets NO discount; true when it must apply to every profile"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test raises the eligible line to; the minimum quantity must be reached at it but not at the starting quantity of 1"
+    }
+  },
+  "status": "pending_approval"
+}

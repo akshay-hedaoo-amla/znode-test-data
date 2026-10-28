@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK",
+  "entity": "product",
+  "type": "simple_with_addon",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "publishState": "production",
+    "inventory": ">= {quantityUsed}",
+    "price": "> 0",
+    "addOnCount": ">= 1",
+    "addOnDisplayType": "{addOnDisplayType}",
+    "addOnInventory": ">= {quantityUsed}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product on the store with at least one associated add-on group of the given display type whose add-on product is active and in stock. KB: Configuring Product Add-ons (add-on groups, only simple products as add-ons); Product Types.",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets for this product in the cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "addOnDisplayType": {
+      "type": "string",
+      "description": "How the test selects the add-on: checkbox, radio or dropdown"
+    }
+  },
+  "status": "pending_approval"
+}

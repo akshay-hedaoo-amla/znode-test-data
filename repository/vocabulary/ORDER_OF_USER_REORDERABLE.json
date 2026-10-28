@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_OF_USER_REORDERABLE",
+  "entity": "order",
+  "type": "of_user_reorderable",
+  "constraints": {
+    "owner": "{user}",
+    "lineProductType": "{productType}",
+    "lineProductStatus": "active",
+    "lineInventory": ">= {quantityUsed}",
+    "lineAddOnCount": ">= {minAddOns}",
+    "linePersonalizedCount": ">= {minPersonalizableAttributes}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Existing order in the declared user's Order History with a line of the given product type (with add-ons and personalization) whose product is still active and in stock, so Reorder copies it to the cart. KB: Create an Order from the Storefront (Option C: Reorder); My Account Dashboard.",
+  "declaredParams": {
+    "user": {
+      "type": "string",
+      "description": "Alias of the declared USER_WEBSTORE_REGISTERED need in the same requirement; bound to that account at run time, never a username in the repository"
+    },
+    "productType": {
+      "type": "string",
+      "description": "Product type the test adds: simple, configurable, bundle or grouped"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets for this product in the cart"
+    },
+    "minAddOns": {
+      "type": "integer",
+      "description": "Add-on groups the test selects on this product (0 when it selects none)"
+    },
+    "minPersonalizableAttributes": {
+      "type": "integer",
+      "description": "Personalizable text attributes the test fills in (0 when none)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "pending_approval"
+}

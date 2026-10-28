@@ -7,13 +7,14 @@
     "type": "simple",
     "status": "active",
     "inventory": ">= {quantityUsed}",
-    "publishState": "production"
+    "publishState": "production",
+    "price": "> 0"
   },
   "scope": {
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Active simple product on the store with enough inventory to add to cart. KB: Product Types (simple = single SKU, can be picked and shipped).",
+  "description": "Active simple product on the store with a price above zero and enough inventory to add to cart. KB: Product Types (simple = single SKU, can be picked and shipped); products without indexed prices show no price.",
   "declaredParams": {
     "quantityUsed": {
       "type": "integer",
@@ -24,7 +25,5 @@
       "description": "Store code"
     }
   },
-  "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-21T14:30:00Z"
+  "status": "pending_approval"
 }

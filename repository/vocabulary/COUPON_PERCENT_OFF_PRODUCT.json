@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "key": "COUPON_PERCENT_OFF_PRODUCT",
+  "entity": "promotion",
+  "type": "percent_off_product_coupon",
+  "constraints": {
+    "discountType": "percent_off_product",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "requiresCoupon": "true",
+    "discountAmount": "{discountAmount}",
+    "allProfiles": "{allProfiles}",
+    "minimumQuantity": "<= {quantityUsed}",
+    "couponActive": "true",
+    "availableQuantity": ">= {redemptionsNeeded}",
+    "allowedWithOtherCoupons": "{allowedWithOtherCoupons}"
+  },
+  "scope": {
+    "store": "{store}",
+    "profile": "{profile}"
+  },
+  "usage": "consumable",
+  "description": "Active Percent Off Product coupon on the store and profile, percent off its products once the minimum quantity is met. KB: Configuring a Promotion (Minimum Quantity, Profile, Is Allowed With Other Coupon); Managing Promotions and Coupons.",
+  "declaredParams": {
+    "discountAmount": {
+      "type": "number",
+      "description": "Amount or percent the promotion takes off, as the test asserts it"
+    },
+    "allProfiles": {
+      "type": "boolean",
+      "description": "false when the test also checks that another profile gets NO discount; true when it must apply to every profile"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test raises the eligible line to; the minimum quantity must be reached at it but not at the starting quantity of 1"
+    },
+    "redemptionsNeeded": {
+      "type": "integer",
+      "description": "Orders the test places with the coupon (minimum 1: the coupon must have a use left to apply)"
+    },
+    "allowedWithOtherCoupons": {
+      "type": "boolean",
+      "description": "Is Allowed With Other Coupon: true when the test stacks a second coupon on it; false otherwise (Znode default)"
+    }
+  },
+  "status": "pending_approval"
+}

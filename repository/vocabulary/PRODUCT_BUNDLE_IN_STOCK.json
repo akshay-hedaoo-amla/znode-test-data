@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_BUNDLE_IN_STOCK",
+  "entity": "product",
+  "type": "bundle",
+  "constraints": {
+    "type": "bundle",
+    "status": "active",
+    "publishState": "production",
+    "activeChildCount": ">= 1",
+    "childInventory": ">= {quantityUsed}",
+    "price": "> 0",
+    "addOnCount": ">= {minAddOns}",
+    "personalizableAttributeCount": ">= {minPersonalizableAttributes}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active published bundle product on the store whose child products are active and in stock, with as many add-on groups and personalizable attributes as the test fills in. KB: Product Types (Bundled); Configuring Product Add-ons; Adding Personalization Options to a Product.",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test sets for this product in the cart"
+    },
+    "minAddOns": {
+      "type": "integer",
+      "description": "Add-on groups the test selects on this product (0 when it selects none)"
+    },
+    "minPersonalizableAttributes": {
+      "type": "integer",
+      "description": "Personalizable text attributes the test fills in (0 when none)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "pending_approval"
+}

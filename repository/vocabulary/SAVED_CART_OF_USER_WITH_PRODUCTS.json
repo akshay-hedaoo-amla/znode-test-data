@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+  "entity": "saved_cart",
+  "type": "of_user_with_products",
+  "constraints": {
+    "owner": "{user}",
+    "productCount": ">= 1",
+    "productStatus": "active",
+    "ownerSavedCartCount": ">= {minSavedCarts}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Existing saved cart of the declared registered user with at least one active product, the user owning at least N saved carts. Moving it to the cart copies it; the saved cart stays. KB: Create an Order from the Storefront (Option G: Saved Cart); Shopping Cart.",
+  "declaredParams": {
+    "user": {
+      "type": "string",
+      "description": "Alias of the declared USER_WEBSTORE_REGISTERED need in the same requirement; bound to that account at run time, never a username in the repository"
+    },
+    "minSavedCarts": {
+      "type": "integer",
+      "description": "Saved carts the user must own (2 or more for the Saved Carts scroller)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "pending_approval"
+}
