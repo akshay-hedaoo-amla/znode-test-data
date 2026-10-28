@@ -51,5 +51,7 @@
       "description": "Is Allowed With Other Coupon: true when the test stacks a second coupon on it; false otherwise (Znode default)"
     }
   },
-  "status": "pending_approval"
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
 }

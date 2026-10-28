@@ -82,5 +82,7 @@
   "maskedColumns": [],
   "schemaFingerprint": "sha256:5c27c685d0a4830b2a0b3e2ea6825ac8202bb0d45c5c98be60f93d14085ef6bb",
   "scannedAt": "2026-10-28T00:00:00Z",
-  "status": "pending_approval"
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
 }

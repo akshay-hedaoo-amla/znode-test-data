@@ -32,5 +32,7 @@
       "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects: CheckBox, RadioButton or DropDown"
     }
   },
-  "status": "pending_approval"
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
 }
