@@ -13,7 +13,9 @@
   "identity" : "sku",
   "schemaFingerprint" : "sha256:841eb91fda114adb42d95f6da80b21a9502c83abc498bbe4bf7bc0cfe6b6ec2a",
   "vocabularyFingerprint" : "sha256:03ea2fe7dd32b48c33e1fb021a96e74eff4b4c4d1f1dc4c22360e1ce6eb45c1b",
-  "status" : "pending_approval",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z",
   "createdAt" : "2026-10-28T10:36:00Z",
   "lastValidated" : "2026-10-28T11:18:52Z"
 }
