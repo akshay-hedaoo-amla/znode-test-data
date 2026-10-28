@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | Phase 6 Part B: Playwright modules one by one (keys check run locally until MRRSoft can hold a package-read secret) |
+| Next step | Shopping-cart discovery (agents) after the user confirms scope and token budget; user decides on leftover user 16670 |
 
 ## Project summary
 
@@ -530,3 +530,9 @@ Add one entry per session, newest first.
 - MRRSoft admins cannot add a secret to the Playwright repo yet. User decision: no CI for the keys check for now; it runs locally (data repo CLAUDE.md row 'Keys check (local; no CI yet)': tda-specs-to-scan.js, npx tda-playwright scan, bin/tda check-hardcoded; verified as documented). tda-keys-check.yml dropped from the Playwright branch (34c4e23; the picker script stays).
 - Framework branches tda/phase4-pilots stay unmerged and unpushed: they now pull the adapter from GitHub Packages, which always needs a token, so merging them would break the frameworks' existing CI (Playwright npm ci in daily-smoke/growstore-smoke; Selenium Maven in integration-suite-run) until MRRSoft provides a package-read secret. Selenium head 63866f56, Playwright head 34c4e23.
 - Options recorded for later: run the keys check from the data repo CI with a user token that can read the MRRSoft repo (nightly/on demand; cannot block PRs); or public packages (would publish the code).
+
+### 2026-10-28: Cleanups, Playwright prewarm selection, shopping-cart scanned (user go-ahead for module 1)
+- PRODUCT_CONFIGURABLE_WITH_VARIANTS query and vocabulary key removed (user decision; no requirement used them) - 697c04b, local.
+- Old tagged users (user decision: remove): `bin/tda teardown --run-id tda-selenium-1792754696658` deleted 16674. 16670 (run tda-selenium-1792753535979) is still refused by Znode: HTTP 500 'Failed to delete some record.' (records from T04's failed checkout reference it). Not investigated further: the order tables are outside the approved entity maps and the rows validator correctly refuses them. Options for the user: delete it in Znode admin (with its orders/carts), approve a deactivate-user operation, or leave it (tagged TDA-, unused).
+- Playwright prewarm selection (code repo ce357d4, ships in the next release): global setup reads the run's command line (file filters, file:line, --grep, --grep-invert) and prewarms only the approved tests it selects; all approved tests when it cannot tell (no filters, --last-failed, --only-changed, bad regex). The testData fixture resolves a test the selection left out when it starts (skips with DATA_UNAVAILABLE if that fails). Tests: selection cases fixture (12) + fixture fallback; adapter 46 green. Live (new build copied into the framework's node_modules, then restored to the released 0.7.0): one PDP spec -> 'prewarmed 1 test(s)', passed, teardown clean. Playwright 1.48 runs globalSetup BEFORE reporter.onBegin, so a reporter cannot feed the selection.
+- Shopping-cart scan (released 0.7.0 scanner): 42 spec files, 43 tests, 664 values (425 json, 148 literals, 91 sensitive/masked), 39 data files, 6 linked AIO cases, all guest storage state; values per test 1-37 (median 16). Most common: username/password (32 tests -> declared accounts), sku1/sku2/products[].sku/name/quantity/price, updatedQuantity, emptyShoppingCartMessage (expected output), discountAmount/couponCode, product1.addOn* (add-on products), childDetails (configurable products).
