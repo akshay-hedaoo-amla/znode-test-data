@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-functionality-validations.spec.ts > Webstore - Shopping Cart > verify save cart functionality validations",
+  "scenario": {
+    "summary": "A registered user signs in, adds one simple product, checks the Save Cart panel labels, saves the cart under a unique generated name, moves it back to the cart, checks the empty, non-alphanumeric and duplicate cart-name validations, checks the saved cart is listed, and deletes the saved cart it created.",
+    "steps": [
+      "Generate a unique cart name from cartNameBase plus a timestamp",
+      "Sign in as the registered user, empty the cart, add sku1 with quantity 1 and open the cart",
+      "Check the Save Cart button and panel labels (Saved Cart, Saved Carts, Save New Cart, Save Cart Name, Save, Cancel); cancel",
+      "Save the cart with the unique name; check the success message, the Saved Cart heading and the 'Home / Saved Cart' breadcrumb",
+      "On the saved carts list, search by name and move the saved cart back to the active cart",
+      "Submit an empty name and check the required-name validation",
+      "Submit invalidCartName '@@!!' and check the alphanumeric validation",
+      "Submit the name in upper case and exactly; check the duplicate-name validation both times",
+      "Open the Saved Carts tab and check the created cart is listed",
+      "Clean up: delete the created saved cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "saved_cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart emptied, then product added",
+      "Saved cart created by the test (name cartNameBase + timestamp), moved back to the cart, then deleted at cleanup",
+      "The active cart keeps the product at the end (not emptied)"
+    ],
+    "assertions": [
+      "Save Cart button visible with text 'Save Cart'",
+      "Panel heading 'Saved Cart', tabs 'Saved Carts' and 'Save New Cart', label 'Save Cart Name', buttons 'Save' and 'Cancel' visible",
+      "Alert contains 'Cart saved successfully'; Saved Cart heading and 'Home / Saved Cart' breadcrumb visible",
+      "Empty name: 'Cart name is required.'",
+      "Name '@@!!': 'Only alphanumeric characters are allowed.'",
+      "Upper-case and exact duplicate name: 'Name already in use, enter another cart name.'",
+      "Created saved cart is listed by name in the Saved Carts tab"
+    ],
+    "evidence": [
+      "Title: 'verify save cart functionality validations'; step labels 1) to 9) match the flow",
+      "Spec line 38: cartName = cartNameBase + last 7 digits of Date.now(); the test creates and deletes only that saved cart, so no saved-cart need (SAVED_CART_OF_USER_WITH_PRODUCTS not required)",
+      "Profile: sku1 z-2420004 is an active SimpleProduct, publishState PRODUCTION, inventory 235",
+      "Spec comment (lines 106-109) notes recorded checkbox-id steps were dropped and tracked in SKIPPED-STEPS-TRACKER.md; evidence only",
+      "Store MaxwellsHardware assumed: the webstore the shopping-cart suite runs against (as in the approved amount-off-order coupon requirement)"
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "AutoSaveCart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:19",
+      "kind": "json",
+      "keyPath": "cartNameBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:22",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-functionality-validations.spec.ts:45",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Save Cart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:12",
+      "kind": "json",
+      "keyPath": "btnSaveCart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Cart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:13",
+      "kind": "json",
+      "keyPath": "hdgSavedCart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Carts",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:14",
+      "kind": "json",
+      "keyPath": "hdgSavedCarts",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Save New Cart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:15",
+      "kind": "json",
+      "keyPath": "hdgSaveNewCart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Save Cart Name",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:16",
+      "kind": "json",
+      "keyPath": "hdgSaveCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Save",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:17",
+      "kind": "json",
+      "keyPath": "btnSave",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cancel",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:18",
+      "kind": "json",
+      "keyPath": "btnCancel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart saved successfully",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:5",
+      "kind": "json",
+      "keyPath": "cartSavedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Home / Saved Cart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:10",
+      "kind": "json",
+      "keyPath": "myAccount_SavedCartBC",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart name is required.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:6",
+      "kind": "json",
+      "keyPath": "emptyCartValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "@@!!",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:20",
+      "kind": "json",
+      "keyPath": "invalidCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Only alphanumeric characters are allowed.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:9",
+      "kind": "json",
+      "keyPath": "onlyAlphanumericAllowedValidationMsg",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Name already in use, enter another cart name.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-functionality-validations.json:8",
+      "kind": "json",
+      "keyPath": "duplicateCartCreationValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

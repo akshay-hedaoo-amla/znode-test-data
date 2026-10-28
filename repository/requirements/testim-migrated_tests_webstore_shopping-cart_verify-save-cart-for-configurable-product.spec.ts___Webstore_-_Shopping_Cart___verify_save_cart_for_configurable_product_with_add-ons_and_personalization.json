@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-configurable-product.spec.ts > Webstore - Shopping Cart > verify save cart for configurable product with add-ons and personalization",
+  "scenario": {
+    "summary": "A registered user signs in, adds two variants of one configurable product (radio add-on; one with personalization text) to the cart, saves it under a new name, adds a third variant and saves it into the existing saved cart, moves the saved cart back and checks the third variant line. Cleans up.",
+    "steps": [
+      "Sign in with the test account; empty the cart; delete leftover saved carts whose name starts with cartNameBase",
+      "On productSKU PDP add variant cart1Variant (bulb size, color, technology) with radio add-on addOnRadioId",
+      "On the same PDP select cart1ThirdVariant with displayText personalization, quantity 1 and the add-on, add to cart; cart shows 2 line items",
+      "Save the cart as cartNameBase + timestamp; check success message and heading; find the saved cart id by name",
+      "Add verifiedVariant with the add-on; cart shows 1 line item; save into the existing saved cart; check success message and heading",
+      "Move the saved cart back (3 line items) and check the verifiedVariant line: name, attributes, add-on, unit price, quantity, row total",
+      "Delete the saved cart, empty the cart, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: emptied, variants added, emptied at cleanup",
+      "Saved cart created by the test (cartNameBase + timestamp), updated with the third variant, deleted at cleanup; leftover saved carts with the same prefix deleted at start",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains cartSavedSuccesssMessage after saving a new cart and after saving into the existing cart; Saved Cart heading visible",
+      "Saved cart is listed by name (row id truthy)",
+      "verifiedVariant line present by name; attributes (divConfigurableProductAttributes<variantSku>) contain \"Bulb Size : \", \"Color : \", \"Technology : \" values",
+      "Line description contains \"Radio : \" + addon1; unit cost contains price; quantity input equals quantity; row total close to price x quantity",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save cart for configurable product with add-ons and personalization'; step labels 1) to 5) match the flow",
+      "Spec lines 80-94 and 119: addConfigurableVariant/selectVariant select variants by bulbSize, color and technology; three distinct variants (Small/White/LED, Medium/White/Halogen, Medium/Yellow/Halogen)",
+      "Spec line 149 asserts the add-on as \"Radio : <addon1>\" (radio add-on); PRODUCT_CONFIGURABLE_WITH_VARIANTS has no add-on display type param",
+      "Profile: B-100003 active ConfigurableProduct, PRODUCTION (parent inventory null); variant z-2510012 found (activeVariantCount 1) with variantInventory null; add-on Hillman Deck Screws found (addOnCount 2, addOnInventory 50)",
+      "The test hardcodes the variant attribute names Bulb Size, Color and Technology, so any other configurable product must use the same attributes",
+      "Store MaxwellsHardware as in the approved shopping-cart and PDP requirements; no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 3,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "SCConfig",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:8",
+      "kind": "json",
+      "keyPath": "cartNameBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "B-100003",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:10",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Small",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:15",
+      "kind": "json",
+      "keyPath": "cart1Variant.bulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "White",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:16",
+      "kind": "json",
+      "keyPath": "cart1Variant.color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "LED",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:17",
+      "kind": "json",
+      "keyPath": "cart1Variant.technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "397-z-2100019",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:11",
+      "kind": "json",
+      "keyPath": "addOnRadioId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Medium",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:21",
+      "kind": "json",
+      "keyPath": "cart1ThirdVariant.bulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Halogen",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:23",
+      "kind": "json",
+      "keyPath": "cart1ThirdVariant.technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "White",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:22",
+      "kind": "json",
+      "keyPath": "cart1ThirdVariant.color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "hh",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:24",
+      "kind": "json",
+      "keyPath": "cart1ThirdVariant.displayText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Cart saved successfully",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:5",
+      "kind": "json",
+      "keyPath": "cartSavedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Medium",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:28",
+      "kind": "json",
+      "keyPath": "verifiedVariant.bulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Yellow",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:29",
+      "kind": "json",
+      "keyPath": "verifiedVariant.color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Halogen",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:30",
+      "kind": "json",
+      "keyPath": "verifiedVariant.technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-2510012",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:31",
+      "kind": "json",
+      "keyPath": "verifiedVariant.variantSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "EcoSmart 100-Watt A19 Halogen Light Bulb",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:32",
+      "kind": "json",
+      "keyPath": "verifiedVariant.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$55.29",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:33",
+      "kind": "json",
+      "keyPath": "verifiedVariant.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:34",
+      "kind": "json",
+      "keyPath": "verifiedVariant.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hillman Phillips Bugle Head Galvanized Steel Deck Screws 100 Pack",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-configurable-product.json:12",
+      "kind": "json",
+      "keyPath": "addon1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "status": "pending_approval"
+}

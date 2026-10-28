@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-unsupported-for-guest-user.spec.ts > Webstore - Shopping Cart > verify save cart functionality is unsupported for guest user",
+  "scenario": {
+    "summary": "A guest adds one simple product to the cart, opens the cart and checks that the Save Cart control is not offered to guests, then removes all items and checks the empty-cart message.",
+    "steps": [
+      "Run as a guest (empty storageState)",
+      "Add sku1 with quantity 1 from the PDP and open the cart",
+      "Check Save Cart button has count 0",
+      "Check the Remove All Items link is visible and click it",
+      "Check the empty cart message is visible and equals emptyShoppingCartMessage"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added, then all items removed"
+    ],
+    "assertions": [
+      "Save Cart button has count 0 (not available to a guest)",
+      "Remove All Items link is visible",
+      "Empty cart message is visible and equals 'Hi! Your shopping cart is empty.'"
+    ],
+    "evidence": [
+      "Title: 'verify save cart functionality is unsupported for guest user'",
+      "Spec: test.use storageState empty; no login step (verify-save-cart-unsupported-for-guest-user.spec.ts:15)",
+      "Profile: sku1 z-2420004 is an active SimpleProduct 'Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander', publishState PRODUCTION, inventory 235 (not filtered by store)",
+      "Store MaxwellsHardware assumed: the webstore the shopping-cart suite runs against (as in the approved amount-off-order coupon requirement); the profile did not filter by store"
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-unsupported-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-unsupported-for-guest-user.spec.ts:23",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-unsupported-for-guest-user.spec.ts:30",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-unsupported-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

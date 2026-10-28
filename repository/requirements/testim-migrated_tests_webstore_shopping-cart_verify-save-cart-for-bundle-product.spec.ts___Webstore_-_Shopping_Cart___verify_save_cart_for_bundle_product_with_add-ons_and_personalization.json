@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-bundle-product.spec.ts > Webstore - Shopping Cart > verify save cart for bundle product with add-ons and personalization",
+  "scenario": {
+    "summary": "A registered user signs in, adds a bundle product with personalization text and a checkbox add-on, saves the cart under a new name, adds a second bundle product and saves it into the existing saved cart, then checks both bundles on the saved-cart edit page. Moves the saved cart to the cart and cleans up.",
+    "steps": [
+      "Sign in with the test account; empty the cart; delete leftover saved carts whose name starts with cartNameBase",
+      "Add product1 (bundle, quantity 1) with personalizationText in the AdditionalInformation field and add-on addOnCheckboxId; cart shows 1 line item",
+      "Save the cart as cartNameBase + timestamp; check success message and heading; find the saved cart id by name",
+      "Add product2 (bundle, quantity 1); save into the existing saved cart; check success message and heading",
+      "Open the saved cart edit page; check product1 name, bundle child lines, SKU, unit price, quantity, total, personalization and add-on",
+      "Check product2 name, bundle child line, SKU, unit price, quantity and total",
+      "Move the saved cart to the cart; delete the saved cart; empty the cart; log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: emptied, bundles added, emptied at cleanup",
+      "Saved cart created by the test (cartNameBase + timestamp), updated with product2, deleted at cleanup; leftover saved carts with the same prefix deleted at start",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains cartSavedSuccesssMessage after saving a new cart and after saving into the existing cart; Saved Cart heading visible",
+      "Saved cart is listed by name (row id truthy)",
+      "Edit page, product1 (line id product1.id): name, each childDetails line, \"SKU: \" + sku, unit price, quantity, total close to price x quantity, \"AdditionalInformation : \" + personalizationText, \"Checkbox : \" + addOnDescription",
+      "Edit page, product2 (line id product2.id): name, bundle child line description, \"SKU: \" + sku, unit price, quantity, total",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save cart for bundle product with add-ons and personalization'; step labels 1) to 6) match the flow",
+      "Spec line 69: addProductWithAdditionalInfo(product1.sku, quantity, personalizationText, [addOnCheckboxId]); line 93: addProductOfAnyType(product2.sku)",
+      "product1.id and product2.id (142, 903) locate the lines on the saved-cart edit page; bundleChildSku equals the bundle SKU and builds the divBundleProductChild<sku> test-id",
+      "Profile: z-1234579 active BundleProduct, PRODUCTION, inventory 28362, add-on 120 found (addOnCount 4, addOnInventory 3000)",
+      "Profile: z-12345886 active BundleProduct but publishState DRAFT, inventory 100: the preferred record fails publishState production, so the resolver will fall back for product2",
+      "Profile: prices, ids and child details are not profiled (NO_RULE)",
+      "Store MaxwellsHardware as in the approved shopping-cart and PDP requirements; no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "SCBundle",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:8",
+      "kind": "json",
+      "keyPath": "cartNameBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:12",
+      "kind": "json",
+      "keyPath": "product1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:24",
+      "kind": "json",
+      "keyPath": "product1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Bundle Product 1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:9",
+      "kind": "json",
+      "keyPath": "personalizationText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "120",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:15",
+      "kind": "json",
+      "keyPath": "product1.addOnCheckboxId",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Cart saved successfully",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:5",
+      "kind": "json",
+      "keyPath": "cartSavedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:27",
+      "kind": "json",
+      "keyPath": "product2.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:33",
+      "kind": "json",
+      "keyPath": "product2.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "142",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:13",
+      "kind": "json",
+      "keyPath": "product1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:14",
+      "kind": "json",
+      "keyPath": "product1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:16",
+      "kind": "json",
+      "keyPath": "product1.addOnDescription",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:17",
+      "kind": "json",
+      "keyPath": "product1.bundleChildSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234582 - DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:19",
+      "kind": "json",
+      "keyPath": "product1.childDetails.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234607 - DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:20",
+      "kind": "json",
+      "keyPath": "product1.childDetails.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234580 - DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:21",
+      "kind": "json",
+      "keyPath": "product1.childDetails.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$523.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:23",
+      "kind": "json",
+      "keyPath": "product1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "903",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:28",
+      "kind": "json",
+      "keyPath": "product2.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Sonic Tools Screwdriver Set, 10-PCS",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:29",
+      "kind": "json",
+      "keyPath": "product2.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:30",
+      "kind": "json",
+      "keyPath": "product2.bundleChildSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Qty: 1 | z-12345993 - Sonic Tools Plastic Tool Box with Organizer",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:31",
+      "kind": "json",
+      "keyPath": "product2.description",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$20.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-bundle-product.json:32",
+      "kind": "json",
+      "keyPath": "product2.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    }
+  ],
+  "status": "pending_approval"
+}

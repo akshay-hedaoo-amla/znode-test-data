@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts > Webstore - Shopping Cart > verify request quote access for guest and retail",
+  "scenario": {
+    "summary": "A guest adds one simple product and checks that the cart has no Request Quote button. The registered user then signs in, opens the merged cart and checks that Request Quote is visible. The cart is emptied and the user logs out. No quote or order is created.",
+    "steps": [
+      "Guest (empty storage state): add sku with quantity 1 and open the cart",
+      "Check the Request Quote button is absent (count 0)",
+      "Sign in with username/password and open the cart (guest cart merges into the account)",
+      "Check the Request Quote button is visible",
+      "Remove all items and check the empty cart message",
+      "Log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added; merged into the registered user's cart on sign-in; all items removed at the end",
+      "No quote or order is created"
+    ],
+    "assertions": [
+      "Guest: Request Quote button count is 0",
+      "Signed in: Request Quote button is visible",
+      "Empty cart message equals emptyShoppingCartMessage",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify request quote access for guest and retail'",
+      "Profile: sku z-240008 is an active published SimpleProduct 'RegUi_SimpleProd', inventory 999 (not filtered by store)",
+      "The signed-in assertion depends on the user (or its profile or store) being allowed to request quotes; USER_WEBSTORE_REGISTERED does not constrain this and no vocabulary key covers quote access",
+      "Literal '0' at spec line 40 is the toHaveCount expectation (config)"
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-240008",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.json:5",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts:33",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts:40",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

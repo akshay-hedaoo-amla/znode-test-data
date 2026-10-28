@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts > Webstore - Shopping Cart > verify cart merges with add-ons when guest logs in",
+  "scenario": {
+    "summary": "A guest adds two simple products to the cart, checks the first line item, signs in as a registered user and checks the guest cart merged into the account cart (both products, item count, subtotal and order total math), then removes all items and logs out. Despite the title, no add-on is selected.",
+    "steps": [
+      "Guest: add product1 (products[0]) and product2 (products[1]) with quantity 1 each",
+      "Open the cart, wait for 2 line items, check product1 name, SKU, unit price, quantity and row total",
+      "Sign in as the registered user, open the cart and wait for 2 line items",
+      "Check the product1 line item again (merge preserved)",
+      "Check line count equals totalItemCount, header count and product-name count match, both names present, subtotal equals the sum of row totals",
+      "Check order total equals subtotal minus discount and header total equals order total",
+      "Remove all items and check the empty-cart message",
+      "Log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: two products added, then merged into the registered user's cart on sign-in",
+      "Registered user's cart: all items removed at the end (including any items the account cart held before)",
+      "No order is placed"
+    ],
+    "assertions": [
+      "product1 line item shows its name, 'SKU: ' + sku, unit price, quantity and row total = price x quantity (guest and signed in)",
+      "Line item count equals totalItemCount (2); header item count and product-name count equal it",
+      "Both product names are present after the merge",
+      "Subtotal > 0 and close to the sum of row totals",
+      "Order total > 0 and close to subtotal - discount; header total close to order total",
+      "Empty cart message equals emptyShoppingCartMessage",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify cart merges with add-ons when guest logs in'",
+      "Products are added with productDetailPage.addProductOfAnyType(sku, quantity), which selects no add-on; the test data has no add-on id",
+      "Profile: z-2420004 and z-1234567 are active SimpleProducts in PRODUCTION (inventory 235 and 999931, store not filtered)",
+      "The account cart is not emptied before the guest items merge, so an item already in the account cart would break the count of 2",
+      "Spec comment: the Testim export re-opened the same SKU twice; the migrated test adds two distinct SKUs"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:9",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "499",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:10",
+      "kind": "json",
+      "keyPath": "products.0.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:11",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$29.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:12",
+      "kind": "json",
+      "keyPath": "products.0.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:13",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234567",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:16",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "155",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:17",
+      "kind": "json",
+      "keyPath": "products.1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "DeWalt Cordless Propane Radiant Heater",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:18",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$175.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:19",
+      "kind": "json",
+      "keyPath": "products.1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:20",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:5",
+      "kind": "json",
+      "keyPath": "totalItemCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts:104",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts:105",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-bundle-products.spec.ts > Webstore - Shopping Cart > verify save for later for bundle products",
+  "scenario": {
+    "summary": "A registered user signs in, clears cart and saved items, adds two bundle products (the first with one add-on), saves both for later, verifies name, SKU, price, quantity, included children and add-on of the saved items, moves both back, checks the saved list is empty, removes all and logs out.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and clear saved items",
+      "Add product1 (quantity 1, one add-on selected) and product2 (quantity 1) from their PDPs; open the cart (2 line items)",
+      "Save each for later; check the toast each time and heading 'Saved Item(s) (2)'",
+      "Verify product1 saved item: name, SKU, price, quantity, bundle children (Qty | SKU - name) and add-on description",
+      "Verify product2 saved item: name, SKU, price, quantity and bundle description (included product)",
+      "Move each saved item back to the cart (toast each)",
+      "Check the Saved Items count is 0",
+      "Remove all items from the cart; check the empty-cart message; log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_item"
+    ],
+    "stateChanges": [
+      "User's cart emptied and saved-for-later list cleared at start",
+      "Two bundle products (one with add-on) added, saved for later, moved back, then cart emptied",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains movedToSavedItemsMessage after each save",
+      "Saved Items heading contains 'Saved Item(s) (2)'",
+      "Saved item name, price, SKU and quantity 1 for both products",
+      "product1 bundle child container contains each childDetails line; add-on description contains addOnDescription",
+      "product2 bundle description contains bundleDescription",
+      "Alert contains movedToCartMessage after each Move To Cart; saved item count reaches 0",
+      "Empty cart message; sign-in link after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save for later for bundle products'; step labels 1) to 7) match the flow",
+      "Profile: z-1234579 FOUND as active BundleProduct, PRODUCTION, inventory 28362",
+      "Profile: z-12345886 FOUND as active BundleProduct but publishState DRAFT, inventory 100: the recorded product2 does not meet PRODUCT_BUNDLE_IN_STOCK (publishState production), so the resolver will fall back to another bundle",
+      "Profile: add-on value 120 (products.0.addOns.0) and addOnDescription profiled as product_addons with addOnCount 0 (looked up by the add-on id, not by the bundle)",
+      "Add-on description 'Checkbox : ...' implies a checkbox add-on group; PRODUCT_BUNDLE_IN_STOCK has no addOnDisplayType param",
+      "products.0.bundleChildSku equals the bundle's own SKU (the child container is addressed by the parent SKU)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:13",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:14",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$523.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:15",
+      "kind": "json",
+      "keyPath": "products.0.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "120",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:17",
+      "kind": "json",
+      "keyPath": "products.0.addOns.0",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:18",
+      "kind": "json",
+      "keyPath": "products.0.bundleChildSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234582 - DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:20",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234607 - DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:21",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234580 - DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:22",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Checkbox : GE Pro 8-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:24",
+      "kind": "json",
+      "keyPath": "products.0.addOnDescription",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:27",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Sonic Tools Screwdriver Set, 10-PCS",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:28",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$20.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:29",
+      "kind": "json",
+      "keyPath": "products.1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:30",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:32",
+      "kind": "json",
+      "keyPath": "products.1.bundleDescriptionSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Qty: 1 | z-12345993 - Sonic Tools Plastic Tool Box with Organizer",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:33",
+      "kind": "json",
+      "keyPath": "products.1.bundleDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Item moved to saved items successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:5",
+      "kind": "json",
+      "keyPath": "movedToSavedItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Item(s)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:8",
+      "kind": "json",
+      "keyPath": "hdgSavedItemsBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:9",
+      "kind": "json",
+      "keyPath": "savedItemsCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item moved back to the cart.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:6",
+      "kind": "json",
+      "keyPath": "movedToCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-bundle-products.json:7",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

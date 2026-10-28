@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-guest-user.spec.ts > Webstore - Shopping Cart > verify estimate shipping cost section functionality for guest user",
+  "scenario": {
+    "summary": "A guest adds one simple product to the cart and checks the Estimate Shipping Costs section: headings and button, blank and invalid zip code validation, then a US zip and a Canadian postal code each return a selectable flat-rate shipping option with a currency rate. The cart is emptied at the end. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): add sku1 with quantity 1 and open the cart",
+      "Check the Estimate Shipping Costs heading, zip code label and Estimate button",
+      "Click Estimate with no zip code and check the blank zip code message",
+      "Estimate for invalidZipCode and check the invalid zip code message",
+      "Estimate for zipCode_US: loading message (best effort), first shipping option name equals expectedShippingOptionName, rate shows a $ amount; select the flat option (#Flat-1); shipping and handling amounts are read and logged only",
+      "Estimate for zipCode_Canada1: first shipping option visible with a $ rate; select the flat option; amounts logged only",
+      "Remove all items and check the empty cart message"
+    ],
+    "entitiesTouched": [
+      "product",
+      "shipping",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added, shipping estimate selected, then all items removed",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Estimate Shipping Costs heading, zip code label and Estimate button texts equal the test data",
+      "Blank zip code shows emptyZipCodeMsg; invalid zip code shows invalidZipCodeValidationMsg",
+      "Loading message equals shippingLoadingMessage (soft, tolerated if already cleared)",
+      "US: first shipping option is visible, its name equals expectedShippingOptionName and its rate matches /\\$\\d/",
+      "Canada: first shipping option is visible and its rate matches /\\$\\d/",
+      "Empty cart message is visible and equals emptyShoppingCartMessage"
+    ],
+    "evidence": [
+      "Title: 'verify estimate shipping cost section functionality for guest user'",
+      "Spec sets storageState empty: guest flow, no sign-in",
+      "Profile: sku1 z-2420004 is an active published SimpleProduct (BlackAndDecker), inventory 235 (not filtered by store)",
+      "Profile: expectedShippingOptionName 'Custom Flat Rate' is the description of active custom shipping method FLAT (rule FixedRatePerItem, country US, handling 7.00); 2 rows matched, first on store MaxwellsHardwareMultistore (not filtered by store)",
+      "cartPage.selectFlatShipping clicks the fixed locator #Flat-1 and shippingOptionName reads spnShippingName1: the resolved shipping method must be code Flat and listed first",
+      "The test estimates for two destinations (US and Canada); SHIPPING_FLAT_RATE_ON_STORE takes one country, so the need is written for 'us' and the Canadian estimate is not covered by a key",
+      "Zip codes and the zip code label and messages are masked by the scanner (key matches address)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "country": "us",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:15",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-guest-user.spec.ts:33",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Estimate Shipping Costs",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "hdgEstimateShippingCost",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "hdgZipCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Estimate",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "btnEstimate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "emptyZipCodeMsg",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "invalidZipCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "invalidZipCodeValidationMsg",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "zipCode_US",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please Wait",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "shippingLoadingMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Custom Flat Rate",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "expectedShippingOptionName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "shipping"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "zipCode_Canada1",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-cost-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

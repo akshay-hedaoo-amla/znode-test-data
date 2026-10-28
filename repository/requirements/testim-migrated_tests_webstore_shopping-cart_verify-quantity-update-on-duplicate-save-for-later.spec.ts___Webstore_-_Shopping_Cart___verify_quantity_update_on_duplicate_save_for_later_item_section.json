@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-quantity-update-on-duplicate-save-for-later.spec.ts > Webstore - Shopping Cart > verify quantity update on duplicate save for later item section",
+  "scenario": {
+    "summary": "A registered user signs in, empties the cart and saved items, adds one simple product and saves it for later, adds the same product again and saves it for later, and checks the duplicate merges into one saved item with quantity 2. Cleans up saved items and logs out.",
+    "steps": [
+      "Sign in as the registered user; empty the cart and clear saved items",
+      "Add sku1 with quantity1 (1), open the cart, find the line item by name1, save it for later; check the moved-to-saved-items message",
+      "Add sku1 with quantity1 again, open the cart, find the line item by name1, save it for later; check the message again",
+      "Check the Saved Item(s) heading shows (1), the saved item count is 1 and the saved item quantity is updatedQuantity (2)",
+      "Remove all saved items, check the empty cart message, log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart emptied and saved-for-later items cleared at start",
+      "Product saved for later twice (merged to quantity 2), then all saved items removed at cleanup"
+    ],
+    "assertions": [
+      "Line item for name1 is present (both adds)",
+      "Alert contains 'Item moved to saved items successfully.' (both saves)",
+      "Saved items heading contains 'Saved Item(s) (1)'; saved item count equals 1",
+      "Saved item quantity input has value '2' (updatedQuantity)",
+      "Empty cart message equals 'Hi! Your shopping cart is empty.' after removing saved items",
+      "Sign-in link is visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify quantity update on duplicate save for later item section'; step '3) Duplicate merges: still one saved item, quantity updated to 2'",
+      "Profile: sku1 z-2420004 is an active SimpleProduct named 'Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander' (matches name1), inventory 235",
+      "quantityUsed 2: the same product is added twice with quantity1 = 1 and merges to quantity 2",
+      "name1 is read back from the product record (cart line lookup by name), so it is an output of the product need",
+      "price1 is declared in the data schema but not used by the test (not in the scan)",
+      "Store MaxwellsHardware assumed: the webstore the shopping-cart suite runs against (as in the approved amount-off-order coupon requirement)"
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:11",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:14",
+      "kind": "json",
+      "keyPath": "quantity1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:12",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Item moved to saved items successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:5",
+      "kind": "json",
+      "keyPath": "movedToSavedItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Item(s)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:7",
+      "kind": "json",
+      "keyPath": "hdgSavedItemsBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:8",
+      "kind": "json",
+      "keyPath": "savedItemCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:9",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/quantity-update-on-duplicate-save-for-later.json:6",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

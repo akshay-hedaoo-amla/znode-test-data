@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-configurable-products.spec.ts > Webstore - Shopping Cart > verify save for later for configurable products",
+  "scenario": {
+    "summary": "A registered user signs in, clears cart and saved items, adds three variants of one configurable product (picked by Bulb Size, Color and Technology swatches) as separate lines, saves each for later, verifies name, attributes, positive price and quantity, moves all back, checks the saved list is empty, removes all and logs out.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and clear saved items",
+      "Open the configurable product (productSKU) and add three variants in sequence, selected by Bulb Size / Color / Technology swatches (retry up to 3 times)",
+      "Open the cart; expect 3 distinct line items found by variant name",
+      "Save each for later (toast each); check heading 'Saved Item(s) (3)'",
+      "Verify each saved variant: name, an attribute block with its three labels, unit price > 0 (warn on drift from the recorded price), quantity 1",
+      "Move each saved item back to the cart (toast each)",
+      "Check the Saved Items count is 0",
+      "Remove all items from the cart; check the empty-cart message; log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_item"
+    ],
+    "stateChanges": [
+      "User's cart emptied and saved-for-later list cleared at start",
+      "Three variants added, saved for later, moved back, then cart emptied",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Line count equals 3 and each variant's line item exists",
+      "Alert contains movedToSavedItemsMessage after each save; heading contains 'Saved Item(s) (3)'",
+      "Saved item name contains the variant name; an attribute block contains its Bulb Size, Color and Technology labels",
+      "Saved unit price > 0 (the recorded price is only logged on drift)",
+      "Saved quantity equals 1",
+      "Alert contains movedToCartMessage after each Move To Cart; saved item count reaches 0",
+      "Empty cart message; sign-in link after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save for later for configurable products'; step labels 1) to 6) match the flow",
+      "Profile: B-100000 FOUND as active ConfigurableProduct, PRODUCTION (name 'Philips Base B22 9-Watt Bulb'); product_stock NOT_FOUND",
+      "Profile: variant z-2510001 active, inventory 1000; variants z-2510012 and z-2510014 active but inventory null",
+      "Spec comment says the master is z-2420004, which the profile shows is a SimpleProduct; the test itself searches data.productSKU (B-100000)",
+      "The data shape fixes three attribute dimensions (Bulb Size, Color, Technology); PRODUCT_CONFIGURABLE_WITH_VARIANTS does not constrain the attribute set, so a substituted product must expose the same three attributes",
+      "Recorded prices are not asserted (only > 0); the spec comment notes catalog price drift on AT"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 3,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 23,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 21,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2510001",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:22",
+      "kind": "json",
+      "keyPath": "variant2Sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:21",
+      "kind": "json",
+      "keyPath": "name2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Bulb Size : Small",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:23",
+      "kind": "json",
+      "keyPath": "varient2BulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Color : White",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:24",
+      "kind": "json",
+      "keyPath": "varient2Color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Technology : LED",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:25",
+      "kind": "json",
+      "keyPath": "varient2Technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$46.84",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:26",
+      "kind": "json",
+      "keyPath": "price2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:27",
+      "kind": "json",
+      "keyPath": "quantity2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510012",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:14",
+      "kind": "json",
+      "keyPath": "variant1Sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "EcoSmart 100-Watt A19 Halogen Light Bulb",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:13",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Bulb Size : Medium",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:15",
+      "kind": "json",
+      "keyPath": "varient1BulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Color : Yellow",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:16",
+      "kind": "json",
+      "keyPath": "varient1Color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Technology : Halogen",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:17",
+      "kind": "json",
+      "keyPath": "varient1Technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$50.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:18",
+      "kind": "json",
+      "keyPath": "price1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:19",
+      "kind": "json",
+      "keyPath": "quantity1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510014",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:30",
+      "kind": "json",
+      "keyPath": "variant3Sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Philips 65-Watt BR30 Incandescent DuraMax Indoor Flood Light Bulb (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:29",
+      "kind": "json",
+      "keyPath": "name3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Bulb Size : Medium",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:31",
+      "kind": "json",
+      "keyPath": "varient3BulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Color : Red",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:32",
+      "kind": "json",
+      "keyPath": "varient3Color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Technology : Incandescent",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:33",
+      "kind": "json",
+      "keyPath": "varient3Technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$50.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:34",
+      "kind": "json",
+      "keyPath": "price3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:35",
+      "kind": "json",
+      "keyPath": "quantity3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:10",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Item moved to saved items successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:5",
+      "kind": "json",
+      "keyPath": "movedToSavedItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:11",
+      "kind": "json",
+      "keyPath": "savedItemsCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-configurable-products.spec.ts:143",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Item moved back to the cart.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:7",
+      "kind": "json",
+      "keyPath": "movedToCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-configurable-products.json:8",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

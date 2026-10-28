@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-simple-products.spec.ts > Webstore - Shopping Cart > verify save for later for simple products",
+  "scenario": {
+    "summary": "A registered user signs in, clears cart and saved items, adds one simple product, saves it for later, checks the saved item and the Saved Items headers, moves it back, then saves and removes it again. Then adds three simple products, saves each for later, verifies all three, removes all saved items and logs out.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and clear saved items",
+      "Add product1 (quantity 1) and open the cart",
+      "Save product1 for later; check the moved-to-saved-items toast",
+      "Check saved item name, SKU, price, quantity and heading 'Saved Item(s) (1)'",
+      "Check Saved Items headers: heading, Item price, Quantity, Move To Cart, Remove all items",
+      "Move the saved item back to the cart; check the moved-back toast",
+      "Save product1 for later again, remove all saved items; check the empty-cart message",
+      "Empty cart and saved items; add product1, product2, product3 (quantity 1 each); open the cart (3 line items)",
+      "Save each for later (toast each); verify name, SKU, price, quantity of each and heading 'Saved Item(s) (3)'",
+      "Remove all saved items; check the empty-cart message",
+      "Log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_item"
+    ],
+    "stateChanges": [
+      "User's cart emptied and saved-for-later list cleared at start",
+      "Products added to cart, moved to saved items and back; saved items removed at the end",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains movedToSavedItemsMessage after each save for later",
+      "Alert contains movedToCartMessage after Move To Cart",
+      "Saved item name and price contain the product's name and price; SKU visible; quantity input equals 1",
+      "Saved Items heading contains 'Saved Item(s) (N)' for N = 1 and 3",
+      "Saved Items headers: Item price, Quantity, Move To Cart, Remove all items",
+      "Empty cart message after removing all saved items (twice)",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save for later for simple products'; step labels '0) Sign in' to '4) Log out' match the flow",
+      "Profile: z-2420004, z-2460001, z-1234567 FOUND as active SimpleProduct, PRODUCTION, inventory 235/250/999931 (not filtered by store)",
+      "Product name, price and SKU are asserted on the saved item, so they are outputs of each product need",
+      "Store: the testim-migrated webstore suite runs against MaxwellsHardware (as in the approved shopping-cart example)"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 14,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product3",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 18,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$29.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Item moved to saved items successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:5",
+      "kind": "json",
+      "keyPath": "movedToSavedItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Item(s)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:9",
+      "kind": "json",
+      "keyPath": "hdgSavedItemsBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item price",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:10",
+      "kind": "json",
+      "keyPath": "hdgPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:11",
+      "kind": "json",
+      "keyPath": "hdgQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Move To Cart",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:12",
+      "kind": "json",
+      "keyPath": "btnMoveToCart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Remove all items",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:13",
+      "kind": "json",
+      "keyPath": "btnRemoveAllItems",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item moved back to the cart.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:6",
+      "kind": "json",
+      "keyPath": "movedToCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:7",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2460001",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:17",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Black + Decker 6.5 in Corded Angle Grinder",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:17",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$31.99",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:17",
+      "kind": "json",
+      "keyPath": "products.1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:17",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234567",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:18",
+      "kind": "json",
+      "keyPath": "products.2.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product3"
+    },
+    {
+      "value": "DeWalt Cordless Propane Radiant Heater",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:18",
+      "kind": "json",
+      "keyPath": "products.2.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product3"
+    },
+    {
+      "value": "$175.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:18",
+      "kind": "json",
+      "keyPath": "products.2.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product3"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-simple-products.json:18",
+      "kind": "json",
+      "keyPath": "products.2.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "pending_approval"
+}

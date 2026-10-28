@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.spec.ts > Webstore - Shopping Cart > verify navigation to home page after continue shopping",
+  "scenario": {
+    "summary": "A guest adds one simple product, opens the cart and checks that Continue Shopping returns to the home page; the user then signs in (the guest cart merges), checks Continue Shopping again, removes all items and logs out.",
+    "steps": [
+      "Guest: add sku with quantity 1 and open the cart",
+      "Check the Continue Shopping button label, click it, check the URL path is \"/\" on the same origin",
+      "Sign in as the registered user and open the cart",
+      "Check the Continue Shopping button label, click it, check the URL path is \"/\" on the same origin",
+      "Open the cart, remove all items if any, check the empty cart message",
+      "Log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added, merged into the registered user's cart at sign-in",
+      "Registered user's cart: all items removed at cleanup",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Continue Shopping button is visible and its text equals continueShoppingLabel (guest and signed-in)",
+      "After clicking Continue Shopping the URL path is \"/\" and the origin is unchanged (guest and signed-in)",
+      "Empty cart message is visible and equals emptyShoppingCartMessage after cleanup",
+      "Sign-in link is visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify navigation to home page after continue shopping'",
+      "Step labels: '1) (Guest) add a product and open the cart' ... '6) Log out'",
+      "Profile: sku z-240008 is an active SimpleProduct (RegUi_SimpleProd), PRODUCTION, inventory 999 (not store-filtered)",
+      "_recordedExpectedUrl is only logged, not asserted (the spec asserts the current host origin instead), so it is config",
+      "Store: MaxwellsHardware (Playwright webstore pilot store; the spec names none)"
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-240008",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:5",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.spec.ts:33",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Continue Shopping",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:7",
+      "kind": "json",
+      "keyPath": "continueShoppingLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "https://webstore-z10-atstage.amla.io/",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:6",
+      "kind": "json",
+      "keyPath": "_recordedExpectedUrl",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

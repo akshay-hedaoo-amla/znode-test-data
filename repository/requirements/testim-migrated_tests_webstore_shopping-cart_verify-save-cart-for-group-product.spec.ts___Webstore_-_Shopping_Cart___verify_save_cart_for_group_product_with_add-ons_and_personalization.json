@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-group-product.spec.ts > Webstore - Shopping Cart > verify save cart for group product with add-ons and personalization",
+  "scenario": {
+    "summary": "A registered user signs in, adds a grouped product with DisplayText personalization and a checkbox add-on, saves the cart under a new name, adds a second grouped product with an add-on and saves it into the existing saved cart, moves the saved cart back and checks both group lines. Cleans up.",
+    "steps": [
+      "Sign in with the test account; empty the cart; delete leftover saved carts whose name starts with cartNameBase",
+      "Add product1 (grouped, quantity 1) with personalizationText and add-on addOnCheckboxId; cart shows 1 line item",
+      "Save the cart as cartNameBase + timestamp; check success message and heading; find the saved cart id by name",
+      "Add product2 (grouped, quantity 1) with add-on addOnCheckboxId; save into the existing saved cart; check success message and heading",
+      "Move the saved cart back; cart shows 2 line items",
+      "Check product2: name, child name, unit price, quantity, row total",
+      "Check product1: name, child name, \"DisplayText : \" personalization, add-on, unit price, quantity, row total",
+      "Delete the saved cart, empty the cart, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: emptied, grouped products added, emptied at cleanup",
+      "Saved cart created by the test (cartNameBase + timestamp), updated with product2, deleted at cleanup; leftover saved carts with the same prefix deleted at start",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains cartSavedSuccesssMessage after saving a new cart and after saving into the existing cart; Saved Cart heading visible",
+      "Saved cart is listed by name (row id truthy)",
+      "product2 line: name, group child (childSku) contains childName, unit cost equals price, quantity, row total close to price x quantity",
+      "product1 line: name, child name, \"DisplayText : \" + personalizationText, \"Checkbox : \" + addOnDescription, unit cost, quantity, row total",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save cart for group product with add-ons and personalization'; step labels 1) to 7) match the flow",
+      "Spec line 72: addProductWithPersonalization(product1.sku, quantity, personalizationText, [addOnCheckboxId]); line 98: addProductWithAddOns(product2.sku, quantity, [addOnCheckboxId])",
+      "Profile: z-2200003 active GroupedProduct, PRODUCTION, inventory 250, child z-2200004 found (childInventory 100), add-on 512 found (addOnCount 5, addOnInventory 200)",
+      "Profile: z-2200006 active GroupedProduct, PRODUCTION, inventory 500, child z-2200007 found (childInventory 100), add-on 124 found (addOnCount 3, addOnInventory 3000)",
+      "product1.id and product2.id (408, 411) are in the test data but the spec does not use them",
+      "Store MaxwellsHardware as in the approved shopping-cart and PDP requirements; no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "SCGroup",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:8",
+      "kind": "json",
+      "keyPath": "cartNameBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:12",
+      "kind": "json",
+      "keyPath": "product1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:20",
+      "kind": "json",
+      "keyPath": "product1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GroupProduct",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:9",
+      "kind": "json",
+      "keyPath": "personalizationText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:17",
+      "kind": "json",
+      "keyPath": "product1.addOnCheckboxId",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Cart saved successfully",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:5",
+      "kind": "json",
+      "keyPath": "cartSavedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2200006",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:23",
+      "kind": "json",
+      "keyPath": "product2.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:30",
+      "kind": "json",
+      "keyPath": "product2.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "124",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:28",
+      "kind": "json",
+      "keyPath": "product2.addOnCheckboxId",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "411",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:24",
+      "kind": "json",
+      "keyPath": "product2.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Speedair Industrial Duty Air Chipping Hammer",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:25",
+      "kind": "json",
+      "keyPath": "product2.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "z-2200007",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:26",
+      "kind": "json",
+      "keyPath": "product2.childSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Mobil Rock Drilling Air Tool Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:27",
+      "kind": "json",
+      "keyPath": "product2.childName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$26.43",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:29",
+      "kind": "json",
+      "keyPath": "product2.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "408",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:13",
+      "kind": "json",
+      "keyPath": "product1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:14",
+      "kind": "json",
+      "keyPath": "product1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:15",
+      "kind": "json",
+      "keyPath": "product1.childSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:16",
+      "kind": "json",
+      "keyPath": "product1.childName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Leviton Decora 2 Gang Wall Plate",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:18",
+      "kind": "json",
+      "keyPath": "product1.addOnDescription",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$23.86",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-cart-for-group-product.json:19",
+      "kind": "json",
+      "keyPath": "product1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    }
+  ],
+  "status": "pending_approval"
+}

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-selected-shipping-deselected-by-removing-postal-code.spec.ts > Webstore - Shopping Cart > verify selected shipping can be deselected by removing postal code",
+  "scenario": {
+    "summary": "A guest adds one simple product, estimates US shipping (the flat-rate option appears) and cancels the estimate, which removes the options and clears the zip code. The registered user then signs in and repeats the estimate and cancel on the merged cart. The cart is emptied and the user logs out. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): add sku1 with quantity 1 and open the cart",
+      "Estimate for zipCode_US: loading message (best effort), first shipping option name equals expectedShippingOptionName, rate visible, exactly one #Flat-1 radio",
+      "Cancel the estimate: no shipping options, no #Flat-1 radio, zip code input empty",
+      "Sign in with username/password and open the cart",
+      "Repeat the US estimate and cancel as the signed-in user",
+      "Remove all items, check the empty cart message, log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "shipping",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added; merged into the registered user's cart on sign-in; all items removed at the end",
+      "Shipping estimate shown and cancelled (not applied)",
+      "No order is placed"
+    ],
+    "assertions": [
+      "After estimating (guest and signed in): first shipping option visible, name equals expectedShippingOptionName, rate visible, one #Flat-1 radio",
+      "After cancelling: no shipping option names, no #Flat-1 radio, zip code input empty",
+      "Loading message equals shippingLoadingMessage (soft, tolerated if already cleared)",
+      "Empty cart message equals emptyShoppingCartMessage; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify selected shipping can be deselected by removing postal code'",
+      "Helper estimateThenDeselect is called with label 'guest' and then 'retail' (its assertions sit inside the helper, so the scan lists only the cleanup assertions)",
+      "Profile: sku1 z-2420004 is an active published SimpleProduct (BlackAndDecker), inventory 235 (not filtered by store)",
+      "Profile: expectedShippingOptionName 'Custom Flat Rate' is the description of active custom shipping method FLAT (rule FixedRatePerItem, country US, handling 7.00); 2 rows matched, first on store MaxwellsHardwareMultistore (not filtered by store)",
+      "cartPage.selectFlatShipping clicks the fixed locator #Flat-1 and shippingOptionName reads spnShippingName1: the resolved shipping method must be code Flat and listed first"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "country": "us",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:8",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-selected-shipping-deselected-by-removing-postal-code.spec.ts:61",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Please Wait",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:4",
+      "kind": "json",
+      "keyPath": "shippingLoadingMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:5",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:6",
+      "kind": "json",
+      "keyPath": "zipCode_US",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Custom Flat Rate",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/estimate-shipping-deselect-by-removing-postal-code.json:7",
+      "kind": "json",
+      "keyPath": "expectedShippingOptionName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "shipping"
+    }
+  ],
+  "status": "pending_approval"
+}

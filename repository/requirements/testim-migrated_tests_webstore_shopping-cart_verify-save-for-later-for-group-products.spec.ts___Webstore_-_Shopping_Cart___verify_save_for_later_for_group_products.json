@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-group-products.spec.ts > Webstore - Shopping Cart > verify save for later for group products",
+  "scenario": {
+    "summary": "A registered user signs in, clears cart and saved items, adds two grouped products (the second with one add-on), saves both for later, verifies name, price, quantity, group child and add-on of the saved items, moves both back, checks the saved list is empty, removes all and logs out.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and clear saved items",
+      "Add product1 (quantity 1) and product2 (quantity 1, one add-on selected) from their PDPs; open the cart (2 line items)",
+      "Save each for later; check the toast each time",
+      "Verify each saved item: name, price, quantity, group child name by child SKU, add-on description (product2)",
+      "Check heading 'Saved Item(s) (2)'",
+      "Move each saved item back to the cart (toast each)",
+      "Check the Saved Items count is 0",
+      "Remove all items from the cart; check the empty-cart message; log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart",
+      "saved_item"
+    ],
+    "stateChanges": [
+      "User's cart emptied and saved-for-later list cleared at start",
+      "Two grouped products (one with add-on) added, saved for later, moved back, then cart emptied",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Alert contains movedToSavedItemsMessage after each save",
+      "Saved item name, price and quantity 1 for both products",
+      "Group child name (by childSku) contains childName for both products",
+      "product2 add-on description contains addOnDescription",
+      "Saved Items heading contains 'Saved Item(s) (2)'",
+      "Alert contains movedToCartMessage after each Move To Cart; saved item count reaches 0",
+      "Empty cart message; sign-in link after logout"
+    ],
+    "evidence": [
+      "Title: 'verify save for later for group products'; step labels 1) to 6) match the flow",
+      "Profile: z-2200003 and z-2200006 FOUND as active GroupedProduct, PRODUCTION, inventory 250/500",
+      "Profile: child SKUs z-2200004 and z-2200007 FOUND with an active child, inventory 1000",
+      "Profile: add-on value 124 (products.1.addOns.0) profiled as product_addons with addOnCount 0 (looked up by the add-on id, not by the product)",
+      "Add-on description 'Checkbox : ...' implies a checkbox add-on group; PRODUCT_GROUPED_IN_STOCK has no addOnDisplayType param",
+      "Spec carries a MAINTENANCE NOTE: last AT Stage run failed waiting for the empty-cart message (not triaged); recorded as evidence only"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:13",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:14",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$22.48",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:15",
+      "kind": "json",
+      "keyPath": "products.0.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:16",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:18",
+      "kind": "json",
+      "keyPath": "products.0.childSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:19",
+      "kind": "json",
+      "keyPath": "products.0.childName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-2200006",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:22",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Speedair Industrial Duty Air Chipping Hammer",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:23",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$26.43",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:24",
+      "kind": "json",
+      "keyPath": "products.1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:25",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "124",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:26",
+      "kind": "json",
+      "keyPath": "products.1.addOns.0",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "z-2200007",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:27",
+      "kind": "json",
+      "keyPath": "products.1.childSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Mobil Rock Drilling Air Tool Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:28",
+      "kind": "json",
+      "keyPath": "products.1.childName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Checkbox : Sonic Tools Flat file 8 in.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:29",
+      "kind": "json",
+      "keyPath": "products.1.addOnDescription",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Item moved to saved items successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:5",
+      "kind": "json",
+      "keyPath": "movedToSavedItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Item(s)",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:8",
+      "kind": "json",
+      "keyPath": "hdgSavedItemsBase",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:9",
+      "kind": "json",
+      "keyPath": "savedItemsCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item moved back to the cart.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:6",
+      "kind": "json",
+      "keyPath": "movedToCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/save-for-later-for-group-products.json:7",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

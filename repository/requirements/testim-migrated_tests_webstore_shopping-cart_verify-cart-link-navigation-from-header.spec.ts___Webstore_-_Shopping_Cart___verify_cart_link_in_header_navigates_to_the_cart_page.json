@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-cart-link-navigation-from-header.spec.ts > Webstore - Shopping Cart > verify cart link in header navigates to the cart page",
+  "scenario": {
+    "summary": "A guest opens the home page, checks the desktop header cart link is visible, clicks it and checks the cart page opens (cart heading or empty-cart message). The test needs no records from the environment.",
+    "steps": [
+      "Guest (empty storage state): open the home page '/'",
+      "Check the header cart link is visible",
+      "Click the header cart link",
+      "Check the URL is the cart page and the cart heading or empty-cart message is visible"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "None: the test only navigates; the guest cart is not changed"
+    ],
+    "assertions": [
+      "Header cart link is visible",
+      "URL matches /cart (case-insensitive)",
+      "Cart heading or empty-cart message is visible"
+    ],
+    "evidence": [
+      "Title: 'verify cart link in header navigates to the cart page'",
+      "The only scanned value is the goto path '/' (config)",
+      "No product, user or coupon is used; runs as guest with an empty storage state"
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-link-navigation-from-header.spec.ts:16",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "pending_approval"
+}

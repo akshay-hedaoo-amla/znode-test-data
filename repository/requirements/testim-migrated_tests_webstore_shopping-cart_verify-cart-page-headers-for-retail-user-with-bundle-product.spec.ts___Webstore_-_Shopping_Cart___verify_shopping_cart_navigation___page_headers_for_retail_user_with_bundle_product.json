@@ -1,0 +1,332 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts > Webstore - Shopping Cart > verify shopping cart navigation / page headers for retail user with bundle product",
+  "scenario": {
+    "summary": "A registered retail user signs in, empties the cart, adds a bundle product and a second product, raises the bundle line to quantity 2, checks the line, sub total, order total and header total math, checks the bundle line (name, SKU, unit cost, included child products), removes all items and logs out.",
+    "steps": [
+      "Sign in as the registered user and empty the cart",
+      "Add products[0] (bundle, quantity 1) and products[1] (quantity 1); open the cart and wait for 2 line items",
+      "Find the bundle line item by products[0].name",
+      "Set the bundle line quantity to updatedQuantity (2); row total equals lineCost * 2",
+      "Check every line (unit > 0, row total = unit * qty), sub total, order total (sub total minus discount) and header total",
+      "Check the bundle line: name, \"SKU: <sku>\", unit cost = lineCost, and each childDetails entry inside the bundle child container (childContainerSku)",
+      "Remove all items, check the empty cart message, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: emptied, 2 products added, bundle quantity set to 2, then all items removed",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Cart has data.products.length (2) line items and the bundle line is found by name",
+      "Bundle row total is close to parsePrice(lineCost) * updatedQuantity, precision 2",
+      "Each line's unit cost is > 0 and its row total is close to unit * quantity, precision 2",
+      "Sub total is > 0 and close to the sum of the line totals, precision 2",
+      "Order total is > 0 and close to sub total minus discount, precision 2",
+      "Header cart total is close to the order total, precision 2",
+      "Bundle line name contains products[0].name; SKU text equals \"SKU: \" + products[0].sku; unit cost text equals products[0].lineCost ($500.00)",
+      "Bundle child container contains each of the 3 childDetails strings (\"Qty: 1 | <child sku> - <child name>\")",
+      "Remove All Items link is visible; after removing, the empty cart message is visible and equals emptyShoppingCartMessage",
+      "Sign-in link is visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify shopping cart navigation / page headers for retail user with bundle product'",
+      "Step labels: '1) Sign in and add the bundle + the second product' ... '6) Log out'",
+      "Profile: products[0].sku z-1234579 is an active BundleProduct, publishState PRODUCTION, inventory 28362 (not store-filtered)",
+      "Profile: products[1].sku z-12345886 is an active BundleProduct but publishState DRAFT, inventory 100; PRODUCT_BUNDLE_IN_STOCK requires production, so the preferred record will likely be rejected and the resolver falls back",
+      "childContainerSku equals the bundle SKU (z-1234579); childDetails name three child SKUs (z-1234582, z-1234607, z-1234580)",
+      "Store: the Playwright webstore pilot runs on MaxwellsHardware (as in the approved coupon example); the spec names no store"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 14,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:10",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "142",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:11",
+      "kind": "json",
+      "keyPath": "products.0.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:12",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:13",
+      "kind": "json",
+      "keyPath": "products.0.lineCost",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:14",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:15",
+      "kind": "json",
+      "keyPath": "products.0.childContainerSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234582 - DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:17",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234607 - DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:18",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Qty: 1 | z-1234580 - DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:19",
+      "kind": "json",
+      "keyPath": "products.0.childDetails.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:23",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "903",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:24",
+      "kind": "json",
+      "keyPath": "products.1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Sonic Tools Screwdriver Set, 10-PCS",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:25",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$20.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:26",
+      "kind": "json",
+      "keyPath": "products.1.lineCost",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:27",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:6",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:78",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-bundle-product.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}

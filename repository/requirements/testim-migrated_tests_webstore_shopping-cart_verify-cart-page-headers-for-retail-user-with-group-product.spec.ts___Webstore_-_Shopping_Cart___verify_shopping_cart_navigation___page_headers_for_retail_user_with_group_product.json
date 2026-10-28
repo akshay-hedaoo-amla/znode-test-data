@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts > Webstore - Shopping Cart > verify shopping cart navigation / page headers for retail user with group product",
+  "scenario": {
+    "summary": "A registered retail user signs in, empties the cart, adds two grouped products (the second with an add-on checkbox), raises the first grouped line to quantity 2, checks the line, sub total, order total and header total math, checks the grouped line (name, unit cost, quantity, child product name), removes all items and logs out.",
+    "steps": [
+      "Sign in as the registered user and empty the cart",
+      "Add products[0] (grouped, quantity 1, no add-ons) and products[1] (grouped, quantity 1, add-on 120); open the cart and wait for 2 line items",
+      "Find the grouped line item by products[0].name",
+      "Set that line quantity to updatedQuantity (2); row total equals lineCost * 2",
+      "Check every line (unit > 0, row total = unit * qty), sub total, order total (sub total minus discount) and header total",
+      "Check the grouped line: name, unit cost = lineCost, quantity input = updatedQuantity, child name of childName.sku = childName.text",
+      "Remove all items, check the empty cart message, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: emptied, 2 grouped products added (one with an add-on), first line quantity set to 2, then all items removed",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Cart has data.products.length (2) line items and the grouped line is found by name",
+      "Grouped row total is close to parsePrice(lineCost) * updatedQuantity, precision 2",
+      "Each line's unit cost is > 0 and its row total is close to unit * quantity, precision 2",
+      "Sub total is > 0 and close to the sum of the line totals, precision 2",
+      "Order total is > 0 and close to sub total minus discount, precision 2",
+      "Header cart total is close to the order total, precision 2",
+      "Grouped line name contains products[0].name; unit cost text equals products[0].lineCost ($22.48); quantity input has value updatedQuantity",
+      "Grouped child name for childName.sku (z-2200004) equals childName.text",
+      "Remove All Items link is visible; after removing, the empty cart message is visible and equals emptyShoppingCartMessage",
+      "Sign-in link is visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify shopping cart navigation / page headers for retail user with group product'",
+      "Step label: '1) Sign in and add the two group products (2nd needs an add-on selection)'",
+      "Profile: products[0].sku z-2200003 is an active GroupedProduct, PRODUCTION, inventory 250; its child z-2200004 has variantInventory 1000",
+      "Profile: products[1].sku z-2200006 is an active GroupedProduct, PRODUCTION, inventory 500",
+      "Profile: products[1].addOns[0] \"120\" lookup gives addOnCount 0 (the lookup may be by a different id than the PDP checkbox id); product2 asks minAddOns 1 because the spec selects one add-on",
+      "Store: MaxwellsHardware (Playwright webstore pilot store; the spec names none)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 13,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:10",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "408",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:11",
+      "kind": "json",
+      "keyPath": "products.0.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:12",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$22.48",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:13",
+      "kind": "json",
+      "keyPath": "products.0.lineCost",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:14",
+      "kind": "json",
+      "keyPath": "products.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:17",
+      "kind": "json",
+      "keyPath": "products.0.childName.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:18",
+      "kind": "json",
+      "keyPath": "products.0.childName.text",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "z-2200006",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:22",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "411",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:23",
+      "kind": "json",
+      "keyPath": "products.1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Speedair Industrial Duty Air Chipping Hammer",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:24",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "$32.43",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:25",
+      "kind": "json",
+      "keyPath": "products.1.lineCost",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:26",
+      "kind": "json",
+      "keyPath": "products.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "120",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:27",
+      "kind": "json",
+      "keyPath": "products.1.addOns.0",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:6",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:94",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts:98",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/cart-page-headers-retail-user-group-product.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "pending_approval"
+}
