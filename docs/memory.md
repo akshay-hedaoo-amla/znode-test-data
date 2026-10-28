@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-28 |
-| Next step | Release 0.8.0 (the data repo now needs it: nested requirements) and pin it here; user reviews and approves the stage-1 vocabulary, entity maps, profile rules and requirements (approval PR); then query-builder per key (query-verify needs approved requirements), queries approval, migrate 23 specs, run vs baseline |
+| Next step | User reviews and approves the stage-1 vocabulary, entity maps, profile rules and requirements (approval PR); then query-builder per key (query-verify needs approved requirements), queries approval, migrate 23 specs, run vs baseline |
 
 ## Project summary
 
@@ -558,3 +558,8 @@ Add one entry per session, newest first.
 - Code repo f2049c2: RequirementPaths (the rule), validator path check, recursive readers (RepositoryData, ConsoleData, Playwright approvedTestIds), `tda requirement-path <testId>`, requirements-mapper writes at that path. Core and adapter (48) tests green.
 - Data repo: the 30 entries moved with git mv (4 Selenium coupon tests under selenium/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest/; 26 Playwright under playwright/testim-migrated/tests/webstore/...); PilotInputs reads at any depth. Checked with a local install of the unreleased code: tda validate "repository valid", console-data OK, phase5-exit all 30 checks green (CI subset 22). The released 0.7.0 was then restored in ~/.m2.
 - Released 0.7.0 reads requirements flat only, so this data repo needs 0.8.0 (tda.version) before its CI or the frameworks use it; do not push the data repo until then.
+
+### 2026-10-28: Release 0.8.0 (user go-ahead)
+- Code repo baf12f3 tagged v0.8.0; Release and CI runs green; Maven core/cli/adapter-selenium-testng and npm tda-playwright-adapter 0.8.0 published. Contents: prewarm selection, distinct records per entity, scanner type assertions, nested requirements.
+- Data repo pins 0.8.0 (pom tda.version, package.json); phase5-exit 30 checks green against the published packages; bin/tda validate "repository valid". (Maven had cached a "not found" for core 0.8.0 from before the publish: -U cleared it.)
+- Framework branches still on 0.7.0 (not switched).
