@@ -8,7 +8,7 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
 | Last updated | 2026-10-27 |
-| Next step | Shopping-cart stage 1 (24 specs): entity maps (running), profile, requirements, queries/collections, approval PR, migrate, run vs baseline |
+| Next step | User reviews and approves the stage-1 vocabulary, entity maps, profile rules and requirements (approval PR); then query-builder per key (query-verify needs approved requirements), queries approval, migrate 23 specs, run vs baseline |
 
 ## Project summary
 
@@ -544,3 +544,11 @@ Add one entry per session, newest first.
 - Resolver distinct rule (code repo 6faa289): DbResolver caches all rows per key+params for the run and serves the first row whose identity the test does not have yet; ChainResolver tracks identities per test and key (preferred falls back, candidates skip); too few distinct records -> that alias ZERO_ROWS with the reason. Tests: DbResolverTest.aliasesOfOneKeyInATestGetDifferentRecords, ChainResolverTest.aliasesOfOneKeyInATestNeverShareARecord; full build green.
 - Playwright scanner (code repo 097fa5d): follows `const data = rawData as T` (and satisfies/<T>/()/!) like loadData; the two specs now scan 14 and 29 values. Adapter 47 tests.
 - Code repo unreleased since 0.7.0: ce357d4 (prewarm selection), 6faa289 (distinct), 097fa5d (scanner). Release 0.8.0 before stage 1 runs on the frameworks.
+
+### 2026-10-28: Shopping-cart stage 1 discovery done (pending approval)
+- entity-mapper (~156k tokens), data repo 4e9aef5: product_price +price (RetailPrice) and product_variants +bundle/grouped children, active-only counts (both reopened to pending); new product_addons, product_personalization, shipping maps; 5 profile rules before the generic sku rule. Profile: 976 values, 232 found, 27 not found, 116 sensitive, 601 no rule. Open from the mapper: child inventory rule differs per type (bundle all children, grouped one), ZnodeProfileShipping not mapped, locale filters needed in queries.
+- requirements-mapper, 6 parallel groups (~813k tokens), 65a3e2e: 24 requirements, all pending; confidence high 9 / medium 14 / low 1 (request quote). Store MaxwellsHardware throughout (as the approved coupon pilot; to confirm). Process slip: two agents opened raw framework test-data JSON (a test account's username/password passed through their working output; nothing written). Later briefs restrict agents to masked scans + spec code.
+- User decisions: product shape params on the keys; distinct per entity across keys; shipping pins method code + country list; request-quote test to stage 2.
+- Code repo 53f0883: distinct grouping by vocabulary entity (RepositoryData.entityOf); test recordsOfOneEntityDifferAcrossKeys. Unreleased code since 0.7.0: ce357d4, 6faa289, 097fa5d, 53f0883.
+- Params agent (~156k tokens) + read-only lookup (variant attribute codes: Bulb Size -> BulbSize, Color, Technology; all IsConfigurable), 107cc1e: addOnDisplayType/personalizationAttribute on bundle/grouped/configurable, variantAttributes on configurable, shippingCode + countries (comma-separated; no list type in the schema) on SHIPPING_FLAT_RATE_ON_STORE; 12 requirements updated. Open: the FLAT method's DestinationCountryCode is US, so the Canada estimate needs a per-country rule in the query.
+- query-verify needs approved requirements (by design), so the next step is the human approval of the stage-1 definitions. Module tokens so far ~1.4M.
