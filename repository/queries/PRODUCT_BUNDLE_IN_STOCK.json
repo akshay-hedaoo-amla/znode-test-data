@@ -1,41 +1,21 @@
 {
-  "schemaVersion": 1,
-  "key": "PRODUCT_BUNDLE_IN_STOCK",
-  "sql": "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, pp.price AS price, ad.addOnProductId AS addOnProductId, ad.addOnName AS addOnName FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store CROSS APPLY (SELECT TOP 1 COALESCE(pr.SalesPrice, pr.RetailPrice) AS price FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plp ON plp.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plp.PortalId = po.PortalId AND pr.RetailPrice > @minPrice AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plp.Precedence, pl.PriceListId) pp OUTER APPLY (SELECT TOP 1 ao.PimProductId AS addOnProductId, ao.ProductName AS addOnName FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddonGroup g ON g.PimAddonGroupId = ap.PimAddonGroupId INNER JOIN dbo.ZnodePimAddOnProductDetail apd ON apd.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct ao ON ao.PimProductId = apd.PimChildProductId INNER JOIN dbo.ZnodeInventory ai ON ai.SKU = ao.SKU INNER JOIN dbo.ZnodePortalWarehouse apw ON apw.WarehouseId = ai.WarehouseId WHERE ap.PimProductId = p.PimProductId AND ao.IsActive = @isActive AND apw.PortalId = po.PortalId AND g.DisplayType = @addOnDisplayType GROUP BY ao.PimProductId, ao.ProductName, ap.DisplayOrder, apd.DisplayOrder ORDER BY ap.DisplayOrder, apd.DisplayOrder, ao.PimProductId) ad WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND (@preferred IS NULL OR p.SKU = @preferred) AND EXISTS (SELECT c.PimProductId FROM dbo.ZnodePimProductTypeAssociation a INNER JOIN dbo.ZnodePimProduct c ON c.PimProductId = a.PimProductId INNER JOIN dbo.ZnodeInventory i ON i.SKU = c.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE a.PimParentProductId = p.PimProductId AND c.IsActive = @isActive AND pw.PortalId = po.PortalId GROUP BY c.PimProductId HAVING SUM(i.Quantity) >= @quantityUsed) AND NOT EXISTS (SELECT a.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation a WHERE a.PimParentProductId = p.PimProductId AND NOT EXISTS (SELECT c.PimProductId FROM dbo.ZnodePimProduct c INNER JOIN dbo.ZnodeInventory i ON i.SKU = c.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE c.PimProductId = a.PimProductId AND c.IsActive = @isActive AND pw.PortalId = po.PortalId GROUP BY c.PimProductId HAVING SUM(i.Quantity) >= @quantityUsed)) AND (SELECT COUNT(DISTINCT ap.PimAddOnProductId) FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddOnProductDetail apd ON apd.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct ao ON ao.PimProductId = apd.PimChildProductId INNER JOIN dbo.ZnodeInventory ai ON ai.SKU = ao.SKU INNER JOIN dbo.ZnodePortalWarehouse apw ON apw.WarehouseId = ai.WarehouseId WHERE ap.PimProductId = p.PimProductId AND ao.IsActive = @isActive AND apw.PortalId = po.PortalId) >= @minAddOns AND (@minAddOns = @none OR ad.addOnProductId IS NOT NULL) AND (SELECT COUNT(DISTINCT pa.PimAttributeId) FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId WHERE av.PimProductId = p.PimProductId AND pa.IsPersonalizable = @personalizable) >= @minPersonalizableAttributes AND (@minPersonalizableAttributes = @none OR EXISTS (SELECT pa.PimAttributeId FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId WHERE av.PimProductId = p.PimProductId AND pa.IsPersonalizable = @personalizable AND pa.AttributeCode = @personalizationAttribute)) ORDER BY p.SKU",
-  "params": [
-    "store",
-    "quantityUsed",
-    "minAddOns",
-    "minPersonalizableAttributes",
-    "addOnDisplayType",
-    "personalizationAttribute",
-    "preferred",
-    "now",
-    "productType",
-    "isActive",
-    "publishState",
-    "minPrice",
-    "none",
-    "personalizable"
-  ],
-  "constants": {
-    "productType": "BundleProduct",
-    "isActive": "true",
-    "publishState": "PRODUCTION",
-    "minPrice": "0",
-    "none": "0",
-    "personalizable": "1"
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_BUNDLE_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, pp.price AS price, ad.addOnProductId AS addOnProductId, ad.addOnName AS addOnName FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store CROSS APPLY (SELECT TOP 1 COALESCE(pr.SalesPrice, pr.RetailPrice) AS price FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plp ON plp.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plp.PortalId = po.PortalId AND pr.RetailPrice > @minPrice AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plp.Precedence, pl.PriceListId) pp OUTER APPLY (SELECT TOP 1 ao.PimProductId AS addOnProductId, ao.ProductName AS addOnName FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddonGroup g ON g.PimAddonGroupId = ap.PimAddonGroupId INNER JOIN dbo.ZnodePimAddOnProductDetail apd ON apd.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct ao ON ao.PimProductId = apd.PimChildProductId INNER JOIN dbo.ZnodeInventory ai ON ai.SKU = ao.SKU INNER JOIN dbo.ZnodePortalWarehouse apw ON apw.WarehouseId = ai.WarehouseId WHERE ap.PimProductId = p.PimProductId AND ao.IsActive = @isActive AND apw.PortalId = po.PortalId AND (@addOnDisplayType IS NULL OR g.DisplayType = @addOnDisplayType) GROUP BY ao.PimProductId, ao.ProductName, ap.DisplayOrder, apd.DisplayOrder ORDER BY ap.DisplayOrder, apd.DisplayOrder, ao.PimProductId) ad WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND (@preferred IS NULL OR p.SKU = @preferred) AND EXISTS (SELECT c.PimProductId FROM dbo.ZnodePimProductTypeAssociation a INNER JOIN dbo.ZnodePimProduct c ON c.PimProductId = a.PimProductId INNER JOIN dbo.ZnodeInventory i ON i.SKU = c.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE a.PimParentProductId = p.PimProductId AND c.IsActive = @isActive AND pw.PortalId = po.PortalId GROUP BY c.PimProductId HAVING SUM(i.Quantity) >= @quantityUsed) AND NOT EXISTS (SELECT a.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation a WHERE a.PimParentProductId = p.PimProductId AND NOT EXISTS (SELECT c.PimProductId FROM dbo.ZnodePimProduct c INNER JOIN dbo.ZnodeInventory i ON i.SKU = c.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE c.PimProductId = a.PimProductId AND c.IsActive = @isActive AND pw.PortalId = po.PortalId GROUP BY c.PimProductId HAVING SUM(i.Quantity) >= @quantityUsed)) AND (SELECT COUNT(DISTINCT ap.PimAddOnProductId) FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddOnProductDetail apd ON apd.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct ao ON ao.PimProductId = apd.PimChildProductId INNER JOIN dbo.ZnodeInventory ai ON ai.SKU = ao.SKU INNER JOIN dbo.ZnodePortalWarehouse apw ON apw.WarehouseId = ai.WarehouseId WHERE ap.PimProductId = p.PimProductId AND ao.IsActive = @isActive AND apw.PortalId = po.PortalId) >= @minAddOns AND (@minAddOns = @none OR ad.addOnProductId IS NOT NULL) AND (SELECT COUNT(DISTINCT pa.PimAttributeId) FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId WHERE av.PimProductId = p.PimProductId AND pa.IsPersonalizable = @personalizable) >= @minPersonalizableAttributes AND (@personalizationAttribute IS NULL OR EXISTS (SELECT pa.PimAttributeId FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId WHERE av.PimProductId = p.PimProductId AND pa.IsPersonalizable = @personalizable AND pa.AttributeCode = @personalizationAttribute)) ORDER BY p.SKU",
+  "params" : [ "store", "quantityUsed", "minAddOns", "minPersonalizableAttributes", "addOnDisplayType", "personalizationAttribute", "preferred", "now", "productType", "isActive", "publishState", "minPrice", "none", "personalizable" ],
+  "constants" : {
+    "productType" : "BundleProduct",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0",
+    "none" : "0",
+    "personalizable" : "1"
   },
-  "outputs": [
-    "sku",
-    "name",
-    "productId",
-    "price",
-    "addOnProductId",
-    "addOnName"
-  ],
-  "identity": "sku",
-  "schemaFingerprint": "sha256:ac737035105e17bafb33479e1c9cbd198bf90c2e5b8a4fbcadff6ca1e4962127",
-  "status": "pending_approval",
-  "createdAt": "2026-10-28T00:00:00Z"
+  "outputs" : [ "sku", "name", "productId", "price", "addOnProductId", "addOnName" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:ac737035105e17bafb33479e1c9cbd198bf90c2e5b8a4fbcadff6ca1e4962127",
+  "vocabularyFingerprint" : "sha256:978797692dbf7c1dc6f969b0d2b68fedce1d031410d001b6301b344b6d47a293",
+  "status" : "pending_approval",
+  "createdAt" : "2026-10-28T00:00:00Z",
+  "lastValidated" : "2026-10-28T11:19:11Z"
 }

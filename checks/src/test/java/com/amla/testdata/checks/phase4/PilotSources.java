@@ -3,6 +3,8 @@ package com.amla.testdata.checks.phase4;
 import com.amla.testdata.config.Env;
 import com.amla.testdata.queries.RepositoryData;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,19 +32,45 @@ public final class PilotSources {
 				.toAbsolutePath().normalize();
 	}
 
-	/** Every approved requirement with its test source file. */
+	/**
+	 * The test's source file relative to its framework repository: a Selenium class under src/test/java, or the
+	 * Playwright spec named before the first " > ".
+	 */
+	public static String testFile(String framework, String testId) {
+		return "selenium".equals(framework)
+				? "src/test/java/" + testId.substring(0, testId.indexOf('#')).replace('.', '/') + ".java"
+				: testId.substring(0, testId.indexOf(" > "));
+	}
+
+	/**
+	 * The test is in a pilot file of config/scanners.yaml. Phase 6 adds approved requirements module by module; the
+	 * Phase 2-5 pilot checks keep covering the pilots only.
+	 */
+	public static boolean isPilot(String framework, String testId) {
+		try {
+			JsonNode config = new ObjectMapper(new YAMLFactory()).readTree(root().resolve("config/scanners.yaml").toFile());
+			for (JsonNode f : config.path(framework).path("pilots")) {
+				if (f.asText().equals(testFile(framework, testId))) {
+					return true;
+				}
+			}
+			return false;
+		} catch (java.io.IOException e) {
+			throw new java.io.UncheckedIOException(e);
+		}
+	}
+
+	/** Every approved pilot requirement with its test source file. */
 	public static List<Pilot> pilots() {
 		RepositoryData data = RepositoryData.load(root().resolve("repository"));
 		List<Pilot> out = new ArrayList<>();
 		for (JsonNode req : data.requirements()) {
-			if (!data.isApproved(req)) {
+			if (!data.isApproved(req) || !isPilot(req.path("framework").asText(), req.path("testId").asText())) {
 				continue;
 			}
 			String fw = req.path("framework").asText();
 			String testId = req.path("testId").asText();
-			Path file = "selenium".equals(fw)
-					? repo(fw).resolve("src/test/java").resolve(testId.substring(0, testId.indexOf('#')).replace('.', '/') + ".java")
-					: repo(fw).resolve(testId.substring(0, testId.indexOf(" > ")));
+			Path file = repo(fw).resolve(testFile(fw, testId));
 			out.add(new Pilot(fw, testId, file, req));
 		}
 		return out;

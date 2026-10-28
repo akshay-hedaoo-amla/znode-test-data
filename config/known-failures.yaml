@@ -1,0 +1,19 @@
+# Phase 6 rollout: tests of a module being migrated that fail for reasons outside the test data agents (Part B step 5:
+# "failures that also happen without the agents go into config/known-failures.yaml with evidence"). The module run
+# reports them and fails only on other failures; an entry is removable once the test passes again. Every entry needs
+# evidence that the failure is pre-existing. (The Phase 4 pilots keep config/pilot-known-failures.yaml.)
+knownFailures:
+  - module: webstore/shopping-cart
+    testId: "testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-guest-user.spec.ts > Webstore - Shopping Cart > verify estimate shipping cost section functionality for guest user"
+    reason: "atstage returns no shipping option for the test's US zip ('No Shipping options found for this zip code'), so step 5 finds no option and #Flat-1 never appears; step 6 (Canadian postal code) needs the FLAT method too (#Flat-1 comes from its name 'Flat'), and FLAT's destination country is US only"
+    evidence: "2026-10-28: the unmigrated spec (identical to origin/dev, as is cart.page.ts) run once on atstage with its own data and no test data agents: failed at step 5 (spnShippingName1 not visible, #Flat-1 click timeout; screenshot showed the message). Read-only DB: ZnodeShipping FLAT is active, DestinationCountryCode US, no StateCode or ZipCode restriction. Suspected cause, not confirmed: FLAT not assigned to the profile (ZnodeProfileShipping is outside the approved entity maps, so it was not read)."
+    action: "Environment owner: check FLAT's profile assignment and countries on MaxwellsHardware. To confirm from data: add ZnodeProfileShipping to the shipping entity map (needs approval)."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-10-28"
+  - module: webstore/shopping-cart
+    testId: "testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-retail-user.spec.ts > Webstore - Shopping Cart > verify estimate shipping cost section functionality for retail user"
+    reason: "Same as the guest test: no shipping option is returned on atstage, so spnShippingName1 never appears and #Flat-1 cannot be clicked"
+    evidence: "2026-10-28: the unmigrated spec (identical to origin/dev) run once on atstage with its own data and no test data agents: failed at line 133 (spnShippingName1 not visible), line 134 (no rate) and the #Flat-1 click timeout."
+    action: "As for the guest test."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-10-28"

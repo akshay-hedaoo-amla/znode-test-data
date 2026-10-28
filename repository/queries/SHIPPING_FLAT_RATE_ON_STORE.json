@@ -24,6 +24,7 @@
   ],
   "identity": "expectedShippingOptionName",
   "schemaFingerprint": "sha256:ad5286f89d4d1d1e2ac2d4ca24a80047d8a53dae0a88423a14673ba5860c574f",
+  "vocabularyFingerprint": "sha256:b51452f5d9f81ea6ccb52f440840682a976a58257f06356191513979fbe76bf6",
   "status": "pending_approval",
   "createdAt": "2026-10-28T00:00:00Z"
 }

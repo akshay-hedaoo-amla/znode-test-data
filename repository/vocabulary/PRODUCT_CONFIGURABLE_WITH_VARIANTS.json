@@ -44,18 +44,18 @@
     },
     "addOnDisplayType": {
       "type": "string",
-      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects (CheckBox, RadioButton or DropDown). Pass only when minAddOns >= 1"
+      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects (CheckBox, RadioButton or DropDown). Pass only when minAddOns >= 1",
+      "optional": true
     },
     "personalizationAttribute": {
       "type": "string",
-      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode, e.g. AdditionalInformation, DisplayText). Pass only when minPersonalizableAttributes >= 1"
+      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode, e.g. AdditionalInformation, DisplayText). Pass only when minPersonalizableAttributes >= 1",
+      "optional": true
     },
     "variantAttributes": {
       "type": "string",
       "description": "Comma-separated list (no list type in the schema) of the configurable attribute codes (ZnodePimAttribute.AttributeCode) the test picks the variant by; the product must vary by all of them"
     }
   },
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "status": "pending_approval"
 }

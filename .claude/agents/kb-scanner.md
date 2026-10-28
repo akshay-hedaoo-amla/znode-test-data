@@ -25,6 +25,9 @@ base for domain rules: product types, promotion and coupon behaviour, user types
    - Write constraints for what the test needs, not a snapshot: `"inventory": ">= {quantityUsed}"`,
      `"status": "active"`. Never write `= 10` because that's today's value.
    - Declare every `{param}` in `declaredParams`.
+   - Mark a param `"optional": true` only when some tests have no value for it and "any" is then the right meaning
+     (e.g. the add-on display type when a test selects no add-on). A requirement may leave it out, and the query then
+     matches any value. Every other param is required.
    - Set `usage` to `consumable` when the test changes or uses up the record (coupon redemption, order placement,
      cart). Otherwise use `read-only`.
    - Back each constraint with KB evidence. Cite article titles in `description` where it fits in 300 characters.

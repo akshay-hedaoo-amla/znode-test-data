@@ -3,6 +3,7 @@ package com.amla.testdata.checks.phase2;
 import com.amla.testdata.profiler.SchemaSnapshot;
 import com.amla.testdata.queries.SchemaFreshness;
 import com.amla.testdata.profiler.SnapshotService;
+import com.amla.testdata.checks.phase4.PilotSources;
 import com.amla.testdata.queries.RepositoryData;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,13 @@ class ApprovedQueriesTest {
 		RepositoryData data = RepositoryData.load(root.resolve("repository"));
 		SchemaFreshness freshness = SnapshotService.load(root.resolve("work/db/schema-snapshot.json")).map(SchemaSnapshot::freshness)
 				.orElseThrow(() -> new AssertionError("no schema snapshot in work/db (run: snapshot)"));
+		// Keys the approved pilot requirements need (config/scanners.yaml pilots; Phase 6 modules have their own checks).
+		java.util.Set<String> pilotKeys = new java.util.TreeSet<>();
+		data.requirements().stream()
+				.filter(r -> data.isApproved(r) && PilotSources.isPilot(r.path("framework").asText(), r.path("testId").asText()))
+				.forEach(r -> r.path("requires").forEach(n -> pilotKeys.add(n.path("key").asText())));
 		List<String> keys = new ArrayList<>(data.readOnlyNeeds().keySet());
+		keys.retainAll(pilotKeys);
 		assertFalse(keys.isEmpty(), "approved pilot requirements need no read-only keys?");
 
 		List<String> problems = new ArrayList<>();
