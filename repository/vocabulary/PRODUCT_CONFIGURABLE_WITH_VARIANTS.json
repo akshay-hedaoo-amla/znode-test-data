@@ -11,7 +11,10 @@
     "variantInventory": ">= {quantityUsed}",
     "price": "> 0",
     "addOnCount": ">= {minAddOns}",
-    "personalizableAttributeCount": ">= {minPersonalizableAttributes}"
+    "personalizableAttributeCount": ">= {minPersonalizableAttributes}",
+    "addOnDisplayType": "{addOnDisplayType}",
+    "personalizableAttributeCode": "{personalizationAttribute}",
+    "variantAttributeCodes": "{variantAttributes}"
   },
   "scope": {
     "store": "{store}"
@@ -38,6 +41,18 @@
     "minVariants": {
       "type": "integer",
       "description": "Distinct variants the test adds to the cart"
+    },
+    "addOnDisplayType": {
+      "type": "string",
+      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects (CheckBox, RadioButton or DropDown). Pass only when minAddOns >= 1"
+    },
+    "personalizationAttribute": {
+      "type": "string",
+      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode, e.g. AdditionalInformation, DisplayText). Pass only when minPersonalizableAttributes >= 1"
+    },
+    "variantAttributes": {
+      "type": "string",
+      "description": "Comma-separated list (no list type in the schema) of the configurable attribute codes (ZnodePimAttribute.AttributeCode) the test picks the variant by; the product must vary by all of them"
     }
   },
   "status": "pending_approval"

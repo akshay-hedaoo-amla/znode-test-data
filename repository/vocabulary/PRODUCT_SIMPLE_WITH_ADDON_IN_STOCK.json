@@ -29,7 +29,7 @@
     },
     "addOnDisplayType": {
       "type": "string",
-      "description": "How the test selects the add-on: checkbox, radio or dropdown"
+      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects: CheckBox, RadioButton or DropDown"
     }
   },
   "status": "pending_approval"

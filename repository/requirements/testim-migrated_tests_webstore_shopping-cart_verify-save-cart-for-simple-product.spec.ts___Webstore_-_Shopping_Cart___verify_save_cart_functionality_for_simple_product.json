@@ -52,7 +52,7 @@
       "params": {
         "quantityUsed": 1,
         "store": "MaxwellsHardware",
-        "addOnDisplayType": "checkbox"
+        "addOnDisplayType": "CheckBox"
       },
       "preferred": {
         "source": 3,

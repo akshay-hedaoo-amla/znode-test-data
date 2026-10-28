@@ -11,7 +11,9 @@
     "childInventory": ">= {quantityUsed}",
     "price": "> 0",
     "addOnCount": ">= {minAddOns}",
-    "personalizableAttributeCount": ">= {minPersonalizableAttributes}"
+    "personalizableAttributeCount": ">= {minPersonalizableAttributes}",
+    "addOnDisplayType": "{addOnDisplayType}",
+    "personalizableAttributeCode": "{personalizationAttribute}"
   },
   "scope": {
     "store": "{store}"
@@ -34,6 +36,14 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "addOnDisplayType": {
+      "type": "string",
+      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects (CheckBox, RadioButton or DropDown). Pass only when minAddOns >= 1"
+    },
+    "personalizationAttribute": {
+      "type": "string",
+      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode, e.g. AdditionalInformation, DisplayText). Pass only when minPersonalizableAttributes >= 1"
     }
   },
   "status": "pending_approval"

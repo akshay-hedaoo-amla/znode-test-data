@@ -59,7 +59,8 @@
       "key": "SHIPPING_FLAT_RATE_ON_STORE",
       "alias": "shipping",
       "params": {
-        "country": "us",
+        "shippingCode": "FLAT",
+        "countries": "us,ca",
         "store": "MaxwellsHardware"
       },
       "preferred": {

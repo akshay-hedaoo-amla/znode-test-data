@@ -57,7 +57,9 @@
         "minVariants": 1,
         "minAddOns": 1,
         "minPersonalizableAttributes": 0,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "RadioButton",
+        "variantAttributes": "BulbSize,Color,Technology"
       },
       "preferred": {
         "source": 2,

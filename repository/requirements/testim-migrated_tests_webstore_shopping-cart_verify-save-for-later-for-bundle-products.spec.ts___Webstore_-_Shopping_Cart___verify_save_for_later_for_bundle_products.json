@@ -53,7 +53,8 @@
         "quantityUsed": 1,
         "minAddOns": 1,
         "minPersonalizableAttributes": 0,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "CheckBox"
       },
       "preferred": {
         "source": 2,

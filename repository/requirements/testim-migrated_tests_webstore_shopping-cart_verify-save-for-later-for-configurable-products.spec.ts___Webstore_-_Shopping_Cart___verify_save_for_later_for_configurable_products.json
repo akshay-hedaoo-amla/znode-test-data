@@ -54,7 +54,8 @@
         "minVariants": 3,
         "minAddOns": 0,
         "minPersonalizableAttributes": 0,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
       },
       "preferred": {
         "source": 23,
