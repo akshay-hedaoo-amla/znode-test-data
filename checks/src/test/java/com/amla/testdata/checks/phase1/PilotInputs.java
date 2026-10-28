@@ -73,11 +73,23 @@ final class PilotInputs {
 	/** testId → requirements entry. */
 	static Map<String, JsonNode> requirements() {
 		Map<String, JsonNode> out = new LinkedHashMap<>();
-		for (Path f : jsonFiles(root().resolve("repository/requirements"))) {
+		// Entries sit in folders that mirror their test's path, so read them at any depth.
+		for (Path f : jsonFilesAtAnyDepth(root().resolve("repository/requirements"))) {
 			JsonNode n = read(f);
 			out.put(n.path("testId").asText(), n);
 		}
 		return out;
+	}
+
+	static List<Path> jsonFilesAtAnyDepth(Path dir) {
+		if (!Files.isDirectory(dir)) {
+			return List.of();
+		}
+		try (Stream<Path> files = Files.walk(dir)) {
+			return files.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".json")).sorted().toList();
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	static List<Path> jsonFiles(Path dir) {

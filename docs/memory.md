@@ -7,8 +7,8 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | Field | Value |
 | --- | --- |
 | Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
-| Last updated | 2026-10-27 |
-| Next step | User reviews and approves the stage-1 vocabulary, entity maps, profile rules and requirements (approval PR); then query-builder per key (query-verify needs approved requirements), queries approval, migrate 23 specs, run vs baseline |
+| Last updated | 2026-10-28 |
+| Next step | Release 0.8.0 (the data repo now needs it: nested requirements) and pin it here; user reviews and approves the stage-1 vocabulary, entity maps, profile rules and requirements (approval PR); then query-builder per key (query-verify needs approved requirements), queries approval, migrate 23 specs, run vs baseline |
 
 ## Project summary
 
@@ -62,6 +62,7 @@ Agentic system that removes hardcoded and manually created prerequisite test dat
 | 2026-10-22 | `COUPON_AMOUNT_OFF_ORDER` gains a `discountAmount` param (number); the cart requirement passes 15.00. Both reset to pending_approval | User decision |
 | 2026-10-22 | Collections: `spec{file,operations}`, `create.inputsFromDb` = `{name: {key, output, params}}` from approved read-only keys (resolved by DbResolver at run time), `constants`, `generated` (uniqueSuffix, password secret, dateTime offset), `runIdTag{field (JSON pointer), format TDA-{runId}-, property (entity-map property for the DB tag count)}`, `idPointer`, `outputs{from payload/response, pointer, secret}`; teardown path has `{id}`. One create call per key | Plan approved 2026-10-22 |
 | 2026-10-22 | `ApiResolver` (library) composes `DbResolver`: consumable keys are created fresh per request from approved, spec-current collections only; ledger `work/runs/<runId>/created.json` (IDs/tags, no secrets); teardown deletes newest first, 404 counts as deleted, failures kept in the ledger and `teardown-failed.json`. Writes only via `ZnodeApiClient` behind `WriteGate` (guard + `config/api.yaml` writeEnvironments + dedicated client + approved operation) | Security doc §1, §5, §7 |
+| 2026-10-28 | `repository/requirements/` mirrors the framework repos: `playwright/<spec path without .spec.ts>/<test title>.json`, `selenium/<package>/<Class>/<method>.json` (title/method: characters other than letters, digits, `.`, `_`, `-` become `_`). `tda validate` rejects an entry elsewhere; `tda requirement-path <testId>` prints the path | User request: find a test's or spec's entries by path |
 | 2026-10-19 | Secret scanning is a core JUnit test (`SecretScanTest`) with patterns in a fixture file, instead of gitleaks | gitleaks is not installed and the folder is not a git repo yet |
 
 ## Assumptions (confirm or correct)
@@ -552,3 +553,8 @@ Add one entry per session, newest first.
 - Code repo 53f0883: distinct grouping by vocabulary entity (RepositoryData.entityOf); test recordsOfOneEntityDifferAcrossKeys. Unreleased code since 0.7.0: ce357d4, 6faa289, 097fa5d, 53f0883.
 - Params agent (~156k tokens) + read-only lookup (variant attribute codes: Bulb Size -> BulbSize, Color, Technology; all IsConfigurable), 107cc1e: addOnDisplayType/personalizationAttribute on bundle/grouped/configurable, variantAttributes on configurable, shippingCode + countries (comma-separated; no list type in the schema) on SHIPPING_FLAT_RATE_ON_STORE; 12 requirements updated. Open: the FLAT method's DestinationCountryCode is US, so the Canada estimate needs a per-country rule in the query.
 - query-verify needs approved requirements (by design), so the next step is the human approval of the stage-1 definitions. Module tokens so far ~1.4M.
+
+### 2026-10-28: Requirements folders mirror the framework repos (user request)
+- Code repo f2049c2: RequirementPaths (the rule), validator path check, recursive readers (RepositoryData, ConsoleData, Playwright approvedTestIds), `tda requirement-path <testId>`, requirements-mapper writes at that path. Core and adapter (48) tests green.
+- Data repo: the 30 entries moved with git mv (4 Selenium coupon tests under selenium/testClasses/integration/marketing/promotionsAndCoupons/WebstorePromotionAndCouponVerificationTest/; 26 Playwright under playwright/testim-migrated/tests/webstore/...); PilotInputs reads at any depth. Checked with a local install of the unreleased code: tda validate "repository valid", console-data OK, phase5-exit all 30 checks green (CI subset 22). The released 0.7.0 was then restored in ~/.m2.
+- Released 0.7.0 reads requirements flat only, so this data repo needs 0.8.0 (tda.version) before its CI or the frameworks use it; do not push the data repo until then.
