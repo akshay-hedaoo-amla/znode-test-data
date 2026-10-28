@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "SHIPPING_FLAT_RATE_ON_STORE",
+  "sql": "SELECT TOP 10 s.ShippingCode AS shippingCode, s.ShippingName AS shippingName, s.Description AS expectedShippingOptionName FROM dbo.ZnodeShipping s INNER JOIN dbo.ZnodeShippingTypes st ON st.ShippingTypeId = s.ShippingTypeId INNER JOIN dbo.ZnodePortalShipping pship ON pship.ShippingId = s.ShippingId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pship.PortalId LEFT JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = pship.PublishStateId WHERE po.StoreCode = @store AND s.ShippingCode = @shippingCode AND s.IsActive = @isActive AND st.Name = @shippingType AND st.IsActive = @isActive AND ps.PublishStateCode = @publishState AND (s.DestinationCountryCode IS NULL OR s.DestinationCountryCode = @countries) AND EXISTS (SELECT r.ShippingRuleId FROM dbo.ZnodeShippingRule r WHERE r.ShippingId = s.ShippingId AND r.ShippingRuleTypeCode = @ruleType) ORDER BY s.ShippingId",
+  "params": [
+    "store",
+    "shippingCode",
+    "countries",
+    "isActive",
+    "shippingType",
+    "publishState",
+    "ruleType"
+  ],
+  "constants": {
+    "isActive": "true",
+    "shippingType": "Custom",
+    "publishState": "PRODUCTION",
+    "ruleType": "FlatRatePerItem"
+  },
+  "outputs": [
+    "shippingCode",
+    "shippingName",
+    "expectedShippingOptionName"
+  ],
+  "identity": "expectedShippingOptionName",
+  "schemaFingerprint": "sha256:ad5286f89d4d1d1e2ac2d4ca24a80047d8a53dae0a88423a14673ba5860c574f",
+  "status": "pending_approval",
+  "createdAt": "2026-10-28T00:00:00Z"
+}

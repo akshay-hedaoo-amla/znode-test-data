@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+  "sql": "SELECT TOP 10 p.SKU AS parentProductSku, p.ProductName AS name, ev.firstSku AS variantSku FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store LEFT JOIN dbo.ZnodePortalProfile anon ON anon.PortalId = po.PortalId AND anon.IsDefaultAnonymousProfile = @anonymousProfile CROSS APPLY (SELECT COUNT(s.SKU) AS cnt, MIN(s.SKU) AS firstSku FROM (SELECT v.SKU FROM dbo.ZnodePimProductTypeAssociation a INNER JOIN dbo.ZnodePimProduct v ON v.PimProductId = a.PimProductId INNER JOIN dbo.ZnodeInventory i ON i.SKU = v.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId CROSS APPLY (SELECT TOP 1 COALESCE(pr.SalesPrice, pr.RetailPrice) AS price FROM dbo.ZnodePriceList pl INNER JOIN dbo.ZnodePrice pr ON pr.PriceListId = pl.PriceListId LEFT JOIN dbo.ZnodePriceListProfile plf ON plf.PriceListId = pl.PriceListId AND plf.PortalProfileId = anon.PortalProfileID LEFT JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId AND plo.PortalId = po.PortalId WHERE pr.SKU = v.SKU AND (plf.PriceListProfileId IS NOT NULL OR plo.PriceListPortalId IS NOT NULL) AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY CASE WHEN plf.PriceListProfileId IS NOT NULL THEN @profileListRank ELSE @storeListRank END, plf.Precedence, plo.Precedence, pl.PriceListId) gp WHERE a.PimParentProductId = p.PimProductId AND v.IsActive = @isActive AND pw.PortalId = po.PortalId AND gp.price > @zero GROUP BY v.PimProductId, v.SKU HAVING SUM(i.Quantity) >= @quantityUsed) s) ev WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND ev.cnt >= @minVariants AND (SELECT SUM(LEN(x.code) + LEN(@listSeparator)) FROM (SELECT DISTINCT ca.AttributeCode AS code FROM dbo.ZnodePimConfigureProductAttribute cpa INNER JOIN dbo.ZnodePimAttribute ca ON ca.PimAttributeId = cpa.PimAttributeId WHERE cpa.PimProductId = p.PimProductId AND CHARINDEX(@listSeparator + ca.AttributeCode + @listSeparator, @listSeparator + @variantAttributes + @listSeparator) > @zero) x) = LEN(@variantAttributes) + LEN(@listSeparator) AND (SELECT COUNT(DISTINCT ap.PimAddOnProductId) FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddonGroup g ON g.PimAddonGroupId = ap.PimAddonGroupId WHERE ap.PimProductId = p.PimProductId AND (@addOnDisplayType IS NULL OR g.DisplayType = @addOnDisplayType) AND EXISTS (SELECT d.PimAddOnProductDetailId FROM dbo.ZnodePimAddOnProductDetail d INNER JOIN dbo.ZnodePimProduct ac ON ac.PimProductId = d.PimChildProductId WHERE d.PimAddOnProductId = ap.PimAddOnProductId AND ac.IsActive = @isActive)) >= @minAddOns AND (SELECT COUNT(DISTINCT pa.PimAttributeId) FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId WHERE av.PimProductId = p.PimProductId AND pa.IsPersonalizable = @isPersonalizable AND (@personalizationAttribute IS NULL OR pa.AttributeCode = @personalizationAttribute)) >= @minPersonalizableAttributes AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params": [
+    "store",
+    "quantityUsed",
+    "minVariants",
+    "minAddOns",
+    "minPersonalizableAttributes",
+    "addOnDisplayType",
+    "personalizationAttribute",
+    "variantAttributes",
+    "preferred",
+    "now",
+    "productType",
+    "isActive",
+    "publishState",
+    "anonymousProfile",
+    "isPersonalizable",
+    "listSeparator",
+    "zero",
+    "profileListRank",
+    "storeListRank"
+  ],
+  "constants": {
+    "productType": "ConfigurableProduct",
+    "isActive": "true",
+    "publishState": "PRODUCTION",
+    "anonymousProfile": "true",
+    "isPersonalizable": "true",
+    "listSeparator": ",",
+    "zero": "0",
+    "profileListRank": "1",
+    "storeListRank": "2"
+  },
+  "outputs": [
+    "parentProductSku",
+    "name",
+    "variantSku"
+  ],
+  "identity": "parentProductSku",
+  "schemaFingerprint": "sha256:6bbd6c11c62fe5f334ffd295b5134aae3c1b39d1ac82cf02a7875a7288eed481",
+  "status": "pending_approval",
+  "createdAt": "2026-10-28T00:00:00Z"
+}

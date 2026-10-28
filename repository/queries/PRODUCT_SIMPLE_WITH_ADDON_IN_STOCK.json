@@ -1,0 +1,18 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, ad.AddOnProductId AS addOnProductId, ad.AddOnName AS addOnName, gp.RetailPrice AS price FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId CROSS APPLY (SELECT TOP 1 pr.RetailPrice FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plo.PortalId = po.PortalId AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plo.Precedence, pl.PriceListId, pr.PriceId) gp CROSS APPLY (SELECT TOP 1 a.PimProductId AS AddOnProductId, a.ProductName AS AddOnName FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddonGroup g ON g.PimAddonGroupId = ap.PimAddonGroupId INNER JOIN dbo.ZnodePimAddOnProductDetail apd ON apd.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct a ON a.PimProductId = apd.PimChildProductId INNER JOIN dbo.ZnodeInventory ai ON ai.SKU = a.SKU INNER JOIN dbo.ZnodePortalWarehouse apw ON apw.WarehouseId = ai.WarehouseId WHERE ap.PimProductId = p.PimProductId AND g.DisplayType = @addOnDisplayType AND a.IsActive = @isActive AND apw.PortalId = po.PortalId GROUP BY ap.DisplayOrder, apd.DisplayOrder, a.PimProductId, a.ProductName HAVING MAX(ai.Quantity) >= @quantityUsed ORDER BY ap.DisplayOrder, apd.DisplayOrder, a.PimProductId) ad WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND gp.RetailPrice > @minPrice AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName, ad.AddOnProductId, ad.AddOnName, gp.RetailPrice HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
+  "params" : [ "productType", "isActive", "publishState", "store", "quantityUsed", "addOnDisplayType", "minPrice", "now", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0"
+  },
+  "outputs" : [ "sku", "name", "addOnProductId", "addOnName", "price" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:841eb91fda114adb42d95f6da80b21a9502c83abc498bbe4bf7bc0cfe6b6ec2a",
+  "status" : "pending_approval",
+  "createdAt" : "2026-10-28T10:36:00Z",
+  "lastValidated" : "2026-10-28T10:36:01Z"
+}

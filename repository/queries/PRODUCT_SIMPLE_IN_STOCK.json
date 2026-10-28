@@ -1,19 +1,23 @@
 {
   "schemaVersion" : 1,
   "key" : "PRODUCT_SIMPLE_IN_STOCK",
-  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
-  "params" : [ "productType", "isActive", "publishState", "store", "quantityUsed", "preferred" ],
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId CROSS APPLY (SELECT TOP 1 pr.RetailPrice FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plo.PortalId = po.PortalId AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plo.Precedence, pl.PriceListId, pr.PriceId) gp WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND gp.RetailPrice > @minPrice AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
+  "params" : [ "productType", "isActive", "publishState", "store", "quantityUsed", "minPrice", "now", "preferred" ],
   "constants" : {
     "productType" : "SimpleProduct",
     "isActive" : "true",
-    "publishState" : "PRODUCTION"
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0"
   },
   "outputs" : [ "sku", "name" ],
   "identity" : "sku",
-  "schemaFingerprint" : "sha256:e4cac0be8c90d63b19450617a946bde3fe8e0567a8838afe212de948a398e791",
-  "status" : "approved",
-  "approvedBy" : "Akshay Hedaoo",
-  "approvedAt" : "2026-10-23T14:30:00Z",
-  "createdAt" : "2026-10-22T00:00:00Z",
-  "lastValidated" : "2026-10-26T14:59:29Z"
+  "schemaFingerprint" : "sha256:0088b7189b935d3837d136e9c4ed9e6a026e0f72a7132e9f840db9a6396321ae",
+  "status" : "pending_approval",
+  "createdAt" : "2026-10-28T10:34:47Z",
+  "regeneratedFrom" : {
+    "reason" : "VERIFY_FAILED",
+    "staleSince" : "2026-10-28T00:00:00Z",
+    "regeneratedAt" : "2026-10-28T10:34:47Z"
+  },
+  "lastValidated" : "2026-10-28T10:35:19Z"
 }
