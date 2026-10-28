@@ -18,7 +18,9 @@
   "identity" : "parentProductSku",
   "schemaFingerprint" : "sha256:6bbd6c11c62fe5f334ffd295b5134aae3c1b39d1ac82cf02a7875a7288eed481",
   "vocabularyFingerprint" : "sha256:a3f94ebfded41c578642f12b2c929d19eb72c7c8add76759b73352526dcd2827",
-  "status" : "pending_approval",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z",
   "createdAt" : "2026-10-28T00:00:00Z",
   "lastValidated" : "2026-10-28T11:19:32Z"
 }
