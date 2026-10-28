@@ -562,4 +562,4 @@ Add one entry per session, newest first.
 ### 2026-10-28: Release 0.8.0 (user go-ahead)
 - Code repo baf12f3 tagged v0.8.0; Release and CI runs green; Maven core/cli/adapter-selenium-testng and npm tda-playwright-adapter 0.8.0 published. Contents: prewarm selection, distinct records per entity, scanner type assertions, nested requirements.
 - Data repo pins 0.8.0 (pom tda.version, package.json); phase5-exit 30 checks green against the published packages; bin/tda validate "repository valid". (Maven had cached a "not found" for core 0.8.0 from before the publish: -U cleared it.)
-- Framework branches still on 0.7.0 (not switched).
+- Framework branches switched to 0.8.0 (user go-ahead), local commits, not pushed: Selenium 8cdff89a (test-compile green), Playwright 8d6eb69 (adapter 0.8.0 installed; shopping-cart lists 44 tests in 43 files).
