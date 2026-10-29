@@ -15,6 +15,7 @@
   "candidates" : true,
   "identity" : "couponCode",
   "schemaFingerprint" : "sha256:7a66e032ad48384f7d6c91a2054e647d011d37b0cd5504f29b26a41884a57ca8",
+  "vocabularyFingerprint" : "sha256:626b4314d8ce842a894f392fce015c3be5f3fd462cdb9197fd467692f7f93e3f",
   "status" : "approved",
   "approvedBy" : "Akshay Hedaoo",
   "approvedAt" : "2026-10-23T14:30:00Z",

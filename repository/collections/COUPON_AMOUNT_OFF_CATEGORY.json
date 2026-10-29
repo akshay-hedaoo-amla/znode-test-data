@@ -1,90 +1,88 @@
 {
-  "schemaVersion": 1,
-  "key": "COUPON_AMOUNT_OFF_CATEGORY",
-  "spec": {
-    "file": "specs/znode-core-api-v1.json",
-    "operations": [
-      "POST /Promotion/Create",
-      "POST /Promotion/Delete"
-    ]
+  "schemaVersion" : 1,
+  "key" : "COUPON_AMOUNT_OFF_CATEGORY",
+  "spec" : {
+    "file" : "specs/znode-core-api-v1.json",
+    "operations" : [ "POST /Promotion/Create", "POST /Promotion/Delete" ]
   },
-  "create": {
-    "method": "POST",
-    "path": "/Promotion/Create",
-    "payloadTemplate": "payloads/COUPON_AMOUNT_OFF_CATEGORY.create.json",
-    "inputsFromDb": {
-      "portalId": {
-        "key": "STORE_WEBSTORE_ACTIVE",
-        "output": "portalId",
-        "params": {
-          "store": "{store}"
+  "create" : {
+    "method" : "POST",
+    "path" : "/Promotion/Create",
+    "payloadTemplate" : "payloads/COUPON_AMOUNT_OFF_CATEGORY.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
         }
       },
-      "profileId": {
-        "key": "PROFILE_OF_STORE",
-        "output": "profileId",
-        "params": {
-          "store": "{store}",
-          "profile": "{profile}"
+      "profileId" : {
+        "key" : "PROFILE_OF_STORE",
+        "output" : "profileId",
+        "params" : {
+          "store" : "{store}",
+          "profile" : "{profile}"
         },
-        "when": {
-          "param": "allProfiles",
-          "equals": "false"
+        "when" : {
+          "param" : "allProfiles",
+          "equals" : "false"
         }
       }
     },
-    "constants": {
-      "promotionTypeId": 15,
-      "classType": "CART",
-      "className": "ZnodeCartPromotionAmountOffCategory",
-      "displayOrder": 99,
-      "couponRequired": true,
-      "uniqueCoupon": false,
-      "couponActive": true,
-      "customCoupon": false,
-      "promotionMessage": "Coupon Applied Successfully"
+    "constants" : {
+      "promotionTypeId" : 15,
+      "classType" : "CART",
+      "className" : "ZnodeCartPromotionAmountOffCategory",
+      "displayOrder" : 99,
+      "couponRequired" : true,
+      "uniqueCoupon" : false,
+      "couponActive" : true,
+      "customCoupon" : false,
+      "promotionMessage" : "Coupon Applied Successfully"
     },
-    "generated": {
-      "uniqueSuffix": {
-        "kind": "uniqueSuffix"
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
       },
-      "startDate": {
-        "kind": "dateTime",
-        "format": "yyyy-MM-dd'T'00:00:00"
+      "startDate" : {
+        "kind" : "dateTime",
+        "format" : "yyyy-MM-dd'T'00:00:00"
       },
-      "endDate": {
-        "kind": "dateTime",
-        "offset": "P30D",
-        "format": "yyyy-MM-dd'T'00:00:00"
+      "endDate" : {
+        "kind" : "dateTime",
+        "offset" : "P30D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
       }
     },
-    "runIdTag": {
-      "field": "/PromoCode",
-      "format": "TDA-{runId}-",
-      "property": "promoCode"
+    "runIdTag" : {
+      "field" : "/PromoCode",
+      "format" : "TDA-{runId}-",
+      "property" : "promoCode"
     },
-    "idPointer": "/Promotion/PromotionId",
-    "outputs": {
-      "couponCode": {
-        "from": "payload",
-        "pointer": "/CouponList/CouponList/0/Code"
+    "idPointer" : "/Promotion/PromotionId",
+    "outputs" : {
+      "couponCode" : {
+        "from" : "payload",
+        "pointer" : "/CouponList/CouponList/0/Code"
       },
-      "discountAmount": {
-        "from": "payload",
-        "pointer": "/Discount"
+      "discountAmount" : {
+        "from" : "payload",
+        "pointer" : "/Discount"
       },
-      "promoCode": {
-        "from": "payload",
-        "pointer": "/PromoCode"
+      "promoCode" : {
+        "from" : "payload",
+        "pointer" : "/PromoCode"
       }
     }
   },
-  "teardown": {
-    "method": "POST",
-    "path": "/Promotion/Delete",
-    "bodyTemplate": "payloads/COUPON_AMOUNT_OFF_CATEGORY.teardown.json"
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/Promotion/Delete",
+    "bodyTemplate" : "payloads/COUPON_AMOUNT_OFF_CATEGORY.teardown.json"
   },
-  "specFingerprint": "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status": "pending_approval",
-  "createdAt": "2026-10-29T00:00:00Z"
+  "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
+  "status" : "pending_approval",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T10:48:52Z"
 }

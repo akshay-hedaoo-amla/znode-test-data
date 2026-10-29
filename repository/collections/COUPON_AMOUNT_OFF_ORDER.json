@@ -82,12 +82,14 @@
     "bodyTemplate" : "payloads/COUPON_AMOUNT_OFF_ORDER.teardown.json"
   },
   "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status" : "pending_approval",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-22T14:30:00Z",
   "regeneratedFrom" : {
     "reason" : "VERIFY_FAILED",
     "staleSince" : "2026-10-29T14:30:00Z",
     "regeneratedAt" : "2026-10-29T15:30:00Z"
   },
-  "createdAt" : "2026-10-22T00:00:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
   "lastValidated" : "2026-10-29T09:22:55Z"
 }
