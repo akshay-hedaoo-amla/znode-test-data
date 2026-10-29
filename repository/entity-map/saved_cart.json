@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "entity": "saved_cart",
+  "tables": [
+    "dbo.ZnodeOrder",
+    "dbo.ZnodeCPOrderClass",
+    "dbo.ZnodeOrderAdditionalDetail",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser",
+    "dbo.ZnodeOrderProduct",
+    "dbo.ZnodePimProduct"
+  ],
+  "aliases": {
+    "ownerCart": "dbo.ZnodeOrder"
+  },
+  "joins": [
+    { "from": "dbo.ZnodeOrder.ClassId", "to": "dbo.ZnodeCPOrderClass.CPOrderClassId", "kind": "inner" },
+    { "from": "dbo.ZnodeOrder.OrderId", "to": "dbo.ZnodeOrderAdditionalDetail.OrderId", "kind": "left" },
+    { "from": "dbo.ZnodeOrder.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodeOrder.UserId", "to": "dbo.ZnodeUser.UserId", "kind": "inner" },
+    { "from": "dbo.ZnodeUser.AspNetUserId", "to": "dbo.AspNetUsers.Id", "kind": "left" },
+    { "from": "dbo.AspNetUsers.UserName", "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId", "kind": "left" },
+    { "from": "dbo.ZnodeOrder.OrderId", "to": "dbo.ZnodeOrderProduct.OrderId", "kind": "inner" },
+    { "from": "dbo.ZnodeOrderProduct.ZnodeProductId", "to": "dbo.ZnodePimProduct.PimProductId", "kind": "inner" },
+    { "from": "dbo.ZnodeOrder.UserId", "to": "ownerCart.UserId", "kind": "inner" }
+  ],
+  "properties": {
+    "savedCartId": "dbo.ZnodeOrder.OrderId",
+    "savedCartNumber": "dbo.ZnodeOrder.ClassNumber",
+    "name": "dbo.ZnodeOrderAdditionalDetail.Name",
+    "orderClass": "dbo.ZnodeCPOrderClass.ClassCode",
+    "revisionType": "dbo.ZnodeOrder.RevisionType",
+    "createdDate": "dbo.ZnodeOrder.OrderDate",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "ownerUserId": "dbo.ZnodeOrder.UserId",
+    "owner": "dbo.AspNetZnodeUser.UserName",
+    "lineSku": "dbo.ZnodeOrderProduct.SKU",
+    "lineIsAddOn": "dbo.ZnodeOrderProduct.IsAddOn",
+    "lineQuantity": "dbo.ZnodeOrderProduct.Quantity",
+    "lineProductType": "dbo.ZnodeOrderProduct.ProductType",
+    "productStatus": "dbo.ZnodePimProduct.IsActive",
+    "productType": "dbo.ZnodePimProduct.ProductType",
+    "productCount": "COUNT(DISTINCT dbo.ZnodeOrderProduct.ZnodeProductId)",
+    "ownerSavedCartCount": "COUNT(DISTINCT ownerCart.OrderId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeCPOrderClass.ClassCode": "SavedCarts",
+    "ownerCart.ClassId": "4"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeOrder.PurchaseOrderNumber",
+    "dbo.ZnodeOrder.OrderDetail",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByFullName",
+    "dbo.ZnodeOrderAdditionalDetail.UserFullName",
+    "dbo.ZnodeOrderAdditionalDetail.AssignToFullName",
+    "dbo.ZnodeOrderAdditionalDetail.LastModifiedFullName",
+    "dbo.ZnodeOrderAdditionalDetail.Email",
+    "dbo.ZnodeOrderAdditionalDetail.UserPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.AccountName",
+    "dbo.ZnodeOrderAdditionalDetail.AccountPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.UserName",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByEmailId",
+    "dbo.ZnodeOrderProduct.Customization",
+    "dbo.ZnodeOrderProduct.ParentDetail"
+  ],
+  "schemaFingerprint": "sha256:db9854e74b80901d995f0e3caf62fe6b4968466f790e41e53b3ec70f91003124",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

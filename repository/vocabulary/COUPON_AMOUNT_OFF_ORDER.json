@@ -7,34 +7,56 @@
     "discountType": "amount_off_order",
     "startDate": "<= {now}",
     "endDate": ">= {now}",
+    "requiresCoupon": "true",
+    "discountAmount": "{discountAmount}",
+    "allProfiles": "{allProfiles}",
     "couponActive": "true",
     "availableQuantity": ">= {redemptionsNeeded}",
-    "discountAmount": "{discountAmount}"
+    "allowedWithOtherCoupons": "{allowedWithOtherCoupons}",
+    "orderMinimum": "{orderMinimum}"
   },
   "scope": {
-    "store": "{store}"
+    "store": "{store}",
+    "profile": "{profile}"
   },
   "usage": "consumable",
-  "description": "Active Amount Off Order promotion with a normal coupon code on the store and coupons left to apply, taking a flat discountAmount off the order. KB: Managing Promotions and Coupons (Amount Off Order; Coupon Code; Available Quantity); Configuring a Promotion.",
+  "description": "Active Amount Off Order coupon on the store and profile with coupons left to apply, flat discountAmount off the order; Is Allowed With Other Coupon decides if it stacks. KB: Managing Promotions and Coupons; Configuring a Promotion (Profile, Is Allowed With Other Coupon).",
   "declaredParams": {
-    "redemptionsNeeded": {
-      "type": "integer",
-      "description": "Orders the test places with the coupon (minimum 1: the coupon must have a use left to apply)"
-    },
     "discountAmount": {
       "type": "number",
       "description": "Flat amount the coupon takes off the order total"
     },
+    "allProfiles": {
+      "type": "boolean",
+      "description": "false when the test also checks that another profile gets NO discount; true when it must apply to every profile"
+    },
     "store": {
       "type": "string",
-      "description": "Store code the promotion applies to"
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps"
     },
     "now": {
       "type": "string",
       "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    },
+    "redemptionsNeeded": {
+      "type": "integer",
+      "description": "Orders the test places with the coupon (minimum 1: the coupon must have a use left to apply)"
+    },
+    "allowedWithOtherCoupons": {
+      "type": "boolean",
+      "description": "Is Allowed With Other Coupon: true when the test stacks a second coupon on it; false otherwise (Znode default)"
+    },
+    "orderMinimum": {
+      "type": "number",
+      "description": "Optional Minimum Order Amount the coupon is created with (KB: Configuring a Promotion); left out = the collection default / any",
+      "optional": true
     }
   },
   "status": "approved",
   "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-22T14:30:00Z"
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

@@ -16,21 +16,29 @@
         "params" : {
           "store" : "{store}"
         }
+      },
+      "profileId" : {
+        "key" : "PROFILE_OF_STORE",
+        "output" : "profileId",
+        "params" : {
+          "store" : "{store}",
+          "profile" : "{profile}"
+        },
+        "when" : {
+          "param" : "allProfiles",
+          "equals" : "false"
+        }
       }
     },
     "constants" : {
       "promotionTypeId" : 5,
       "classType" : "CART",
       "className" : "ZnodeCartPromotionAmountOffOrder",
-      "orderMinimum" : 0,
       "displayOrder" : 99,
       "couponRequired" : true,
       "uniqueCoupon" : false,
-      "allowedWithOtherCoupons" : true,
       "couponActive" : true,
       "customCoupon" : false,
-      "anonymousProfileId" : 1,
-      "retailCustomerProfileId" : 2,
       "promotionMessage" : "Coupon Applied Successfully"
     },
     "generated" : {
@@ -74,9 +82,12 @@
     "bodyTemplate" : "payloads/COUPON_AMOUNT_OFF_ORDER.teardown.json"
   },
   "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-23T14:30:00Z",
+  "status" : "pending_approval",
+  "regeneratedFrom" : {
+    "reason" : "VERIFY_FAILED",
+    "staleSince" : "2026-10-29T14:30:00Z",
+    "regeneratedAt" : "2026-10-29T15:30:00Z"
+  },
   "createdAt" : "2026-10-22T00:00:00Z",
-  "lastValidated" : "2026-10-23T10:55:59Z"
+  "lastValidated" : "2026-10-29T09:22:55Z"
 }

@@ -18,7 +18,7 @@
 
 	<properties>
 		<!-- The test data agents release this project uses (Maven artifacts, bin/tda jar, Playwright adapter in package.json). -->
-		<tda.version>0.8.2</tda.version>
+		<tda.version>0.10.1</tda.version>
 
 		<java.version>17</java.version>
 		<maven.compiler.release>${java.version}</maven.compiler.release>

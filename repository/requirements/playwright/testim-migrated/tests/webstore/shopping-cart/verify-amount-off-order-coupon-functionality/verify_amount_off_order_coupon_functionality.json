@@ -41,7 +41,8 @@
       "Profile: sku1 z-4567890 is an active SimpleProduct with inventory 999876 (2 rows matched, store null)",
       "Profile: couponCode ORDER15 is an Amount Off Order promotion on store MaxwellsHardware, availableQuantity 9824",
       "No checkout or place-order call in the step list",
-      "The test asserts discount against data.discountAmount (15.00), passed as the COUPON_AMOUNT_OFF_ORDER param discountAmount"
+      "The test asserts discount against data.discountAmount (15.00), passed as the COUPON_AMOUNT_OFF_ORDER param discountAmount",
+      "COUPON_AMOUNT_OFF_ORDER reopened with allowedWithOtherCoupons/allProfiles/profile params (user decision): one coupon only (allowedWithOtherCoupons false); it applies to the guest and the signed-in user (allProfiles true, so no profile param)"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -65,7 +66,9 @@
       "params": {
         "redemptionsNeeded": 1,
         "store": "MaxwellsHardware",
-        "discountAmount": 15.0
+        "discountAmount": 15.0,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": true
       },
       "preferred": {
         "source": 3,
@@ -183,6 +186,6 @@
     }
   ],
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-23T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

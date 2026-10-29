@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_ids",
+  "tables": [
+    "dbo.ZnodePimProduct"
+  ],
+  "joins": [],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "productId": "dbo.ZnodePimProduct.PimProductId",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "status": "dbo.ZnodePimProduct.IsActive"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:0c67d915fa0e80cb080974dc0371d37897b68dad70219d1da875641e71f51ac9",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

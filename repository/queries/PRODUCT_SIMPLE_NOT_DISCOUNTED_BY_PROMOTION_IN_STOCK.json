@@ -1,0 +1,31 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_NOT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, cat.PimCategoryHierarchyId AS categoryId FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId CROSS APPLY (SELECT TOP 1 pr.RetailPrice FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plo.PortalId = po.PortalId AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plo.Precedence, pl.PriceListId, pr.PriceId) gp CROSS APPLY (SELECT TOP 1 ch.PimCategoryHierarchyId FROM dbo.ZnodePimCategoryProduct cc INNER JOIN dbo.ZnodePimCategoryHierarchy ch ON ch.PimCategoryId = cc.PimCategoryId INNER JOIN dbo.ZnodePublishCatalog pbc ON pbc.PimCatalogId = ch.PimCatalogId INNER JOIN dbo.ZnodePortalCatalog pcc ON pcc.PublishCatalogId = pbc.PublishCatalogId WHERE cc.PimProductId = p.PimProductId AND pcc.PortalId = po.PortalId AND cc.Status = @isActive ORDER BY ch.PimCategoryHierarchyId) cat WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND gp.RetailPrice > @minPrice AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND CHARINDEX(@space, p.SKU) = @zero AND NOT EXISTS (SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND NOT EXISTS (SELECT op.PromotionId FROM dbo.ZnodePromotion op WHERE (op.PromoCode = @promotion OR ((op.PortalId IS NULL OR op.PortalId = po.PortalId) AND (op.IsCouponRequired IS NULL OR op.IsCouponRequired = @couponNotRequired) AND (op.StartDate IS NULL OR op.StartDate <= @now) AND (op.EndDate IS NULL OR op.EndDate >= @now))) AND (EXISTS (SELECT pp.PromotionProductId FROM dbo.ZnodePromotionProduct pp WHERE pp.PromotionId = op.PromotionId AND pp.PublishProductId = p.PimProductId) OR EXISTS (SELECT ce.PublishCategoryEntityId FROM dbo.ZnodePromotionCategory pcat INNER JOIN dbo.ZnodePublishCategoryEntity ce ON ce.ZnodeCategoryId = pcat.PublishCategoryId WHERE pcat.PromotionId = op.PromotionId AND CHARINDEX(CONCAT(@comma, p.PimProductId, @comma), REPLACE(REPLACE(REPLACE(ce.ProductIds, @openBracket, @comma), @closeBracket, @comma), @space, @comma)) > @zero))) AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName, p.PimProductId, cat.PimCategoryHierarchyId HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
+  "params" : [ "productType", "isActive", "notObsolete", "publishState", "store", "quantityUsed", "minPrice", "minProductIndex", "requiredType", "space", "zero", "configurableType", "now", "promotion", "couponNotRequired", "comma", "openBracket", "closeBracket", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0",
+    "minProductIndex" : "1",
+    "requiredType" : "Required",
+    "space" : " ",
+    "zero" : "0",
+    "configurableType" : "ConfigurableProduct",
+    "couponNotRequired" : "0",
+    "comma" : ",",
+    "openBracket" : "[",
+    "closeBracket" : "]"
+  },
+  "outputs" : [ "sku", "name", "productId", "categoryId" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:1b9051572bb9d2db55748d7f2e5455470783c08f869ba8d8690b5511b9bcffbf",
+  "vocabularyFingerprint" : "sha256:02169ead69c7779ea726b4ac1649503cf6e1fa36296075de1ed2560adb696018",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T08:10:45Z",
+  "lastValidated" : "2026-10-29T08:44:45Z"
+}

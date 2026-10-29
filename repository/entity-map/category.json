@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "entity": "category",
+  "tables": [
+    "dbo.ZnodePublishCategoryEntity",
+    "dbo.ZnodePublishVersionEntity",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePublishCategoryEntity.VersionId", "to": "dbo.ZnodePublishVersionEntity.VersionId", "kind": "inner" },
+    { "from": "dbo.ZnodePublishCategoryEntity.ZnodeCatalogId", "to": "dbo.ZnodePortalCatalog.PublishCatalogId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalCatalog.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" }
+  ],
+  "properties": {
+    "categoryId": "dbo.ZnodePublishCategoryEntity.ZnodeCategoryId",
+    "categoryCode": "dbo.ZnodePublishCategoryEntity.CategoryCode",
+    "categoryName": "dbo.ZnodePublishCategoryEntity.Name",
+    "categoryActive": "dbo.ZnodePublishCategoryEntity.IsActive",
+    "catalogName": "dbo.ZnodePublishCategoryEntity.CatalogName",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodePublishVersionEntity.RevisionType": "PRODUCTION",
+    "dbo.ZnodePublishVersionEntity.IsPublishSuccess": "1"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:02badca8e728ccc2dabe4657fb60ff862462948e3029ded5d26d5f0ed559304f",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

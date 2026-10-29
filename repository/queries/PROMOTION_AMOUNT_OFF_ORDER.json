@@ -1,0 +1,22 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROMOTION_AMOUNT_OFF_ORDER",
+  "sql" : "SELECT TOP 10 p.PromoCode AS promoCode, p.Name AS name, p.Discount AS discountAmount, p.OrderMinimum AS orderMinimum, p.QuantityMinimum AS minimumQuantity FROM dbo.ZnodePromotion p INNER JOIN dbo.ZnodePromotionType t ON t.PromotionTypeId = p.PromotionTypeId INNER JOIN dbo.ZnodePortal s ON s.PortalId = p.PortalId WHERE t.Name = @promotionTypeName AND s.StoreCode = @store AND p.StartDate <= @now AND p.EndDate >= @now AND p.IsCouponRequired = @couponRequired AND p.Discount = @discountAmount AND p.OrderMinimum > @zeroAmount AND EXISTS (SELECT m.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper m LEFT JOIN dbo.ZnodeProfile pr ON pr.ProfileId = m.ProfileId WHERE m.PromotionId = p.PromotionId AND (m.ProfileId IS NULL OR pr.ProfileName = @profile)) AND (CASE WHEN EXISTS (SELECT a.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper a WHERE a.PromotionId = p.PromotionId AND a.ProfileId IS NULL) THEN @flagTrue ELSE @flagFalse END) = @allProfiles AND (@preferred IS NULL OR p.PromoCode = @preferred) ORDER BY p.PromotionId",
+  "params" : [ "promotionTypeName", "store", "now", "couponRequired", "discountAmount", "zeroAmount", "profile", "flagTrue", "flagFalse", "allProfiles", "preferred" ],
+  "constants" : {
+    "promotionTypeName" : "Amount Off Order",
+    "couponRequired" : "0",
+    "flagTrue" : "1",
+    "flagFalse" : "0",
+    "zeroAmount" : "0"
+  },
+  "outputs" : [ "promoCode", "name", "discountAmount", "orderMinimum", "minimumQuantity" ],
+  "identity" : "promoCode",
+  "schemaFingerprint" : "sha256:f836447c17ce6853767ebf3f20f5440e8f7eb1bc1a34ad04dd02c82613341871",
+  "vocabularyFingerprint" : "sha256:168eb8b9c7763825f7fa683e27bd896ddb798743ec8aeedf21d4ea71246dc269",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T08:58:03Z"
+}

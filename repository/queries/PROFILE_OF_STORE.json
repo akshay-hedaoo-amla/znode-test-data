@@ -1,0 +1,15 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROFILE_OF_STORE",
+  "sql" : "SELECT TOP 10 pr.ProfileId AS profileId, pr.ProfileName AS profileName FROM dbo.ZnodePortal p INNER JOIN dbo.ZnodePortalProfile pp ON pp.PortalId = p.PortalId INNER JOIN dbo.ZnodeProfile pr ON pr.ProfileId = pp.ProfileId WHERE p.StoreCode = @store AND pr.ProfileName = @profile ORDER BY pr.ProfileId",
+  "params" : [ "store", "profile" ],
+  "outputs" : [ "profileId", "profileName" ],
+  "identity" : "profileId",
+  "schemaFingerprint" : "sha256:b73e102f8430c06f6ba87446474f06971eb6fbf3ce9de105c81ff1d5e3b3d8e9",
+  "vocabularyFingerprint" : "sha256:9bd68fc45adfbd30394d619c689575cc7f4f37fea0833fb089354142124927ae",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T09:31:40Z"
+}

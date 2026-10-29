@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts > Webstore - Shopping Cart > verify amount off order promotion functionality",
+  "scenario": {
+    "summary": "A guest adds two products at quantity 1 and checks that an automatic Amount Off Order promotion gives no discount below the order minimum, then raises both lines until the subtotal crosses the minimum and checks the discount label, a flat discount of at least the promotion's amount, and order total = subtotal - discount. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): empty the cart, add sku1 and sku2 at quantity 1, open the cart (2 lines)",
+      "Check there is no discount (below the minimum)",
+      "Find both lines by name (name1, name2) and raise each to updatedQuantity, reloading the cart after each change",
+      "Check both quantities and the 'Discount (On Sub Total)' label",
+      "Read subtotal, discount, order total: order total = subtotal - discount; discount >= the recorded flat amount (warn when it differs: tiered promotion)",
+      "Empty the cart and check the empty-cart message"
+    ],
+    "entitiesTouched": [
+      "promotion",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: two products added, quantities raised, emptied at cleanup",
+      "The promotion is only read; no order is placed"
+    ],
+    "assertions": [
+      "No discount with both products at quantity 1",
+      "Both line quantities equal updatedQuantity",
+      "Discount label visible with text 'Discount (On Sub Total)'",
+      "Order total close to subtotal - discount (precision 2)",
+      "Discount >= discountAmount - 0.01",
+      "Empty cart message visible"
+    ],
+    "evidence": [
+      "Title: 'verify amount off order promotion functionality'; spec note: AUTO amount-off-ORDER promotion, guest flow, no code entered",
+      "Spec note (superseded): the promotion looked tiered on atstage (~$797 -> $45, >~$814 -> $95)",
+      "User decision 2026-10-29: the automatic Amount Off Order promotion on MaxwellsHardware is PromoAmountOffOrder (Discount 50, OrderMinimum 800, profile Anonymous; query PROMOTION_AMOUNT_OFF_ORDER, pending). The recorded $45 was the sum of two automatic $15 Amount Off Category promotions (OrderMinimum 400), not this promotion",
+      "Other automatic promotions on the store (the $15 Amount Off Category ones at $400) also discount this cart, so the migrated test must check the order-promotion discount line / the resolved promotion's discountAmount, not the cart's total discount; the quantity crossing the minimum is computed from the resolved orderMinimum",
+      "Recorded discountAmount 45.0 and updatedQuantity 3 are role data of the promotion (discountAmount; quantity computed from orderMinimum); the param discountAmount is 50.0 (PromoAmountOffOrder)",
+      "Profile: sku1 z-1234574 (MovinCool, $260 in the category spec's data) and sku2 z-2100018 (Hillman) are active simple products",
+      "User decision: the test computes quantities from the resolved promotion's orderMinimum and the cart's unit prices; products use PRODUCT_SIMPLE_IN_STOCK with maxPrice so the quantity-1 cart stays below the minimum",
+      "maxPrice 100 per product (cart at quantity 1 < $200, below the $800 minimum of PromoAmountOffOrder and the $400 minimum of the category promotions); sku1 at $260 cannot qualify, so it has no preferred source",
+      "quantityUsed 100: upper bound for the computed quantity (inventory headroom); the test must stay within it",
+      "ensureNoDiscountForNonSelectedProfiles is manual in the export and not migrated, so no user is needed; promotion scoped to the guest's Anonymous profile"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PROMOTION_AMOUNT_OFF_ORDER",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 50.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Anonymous"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 100,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 100,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "45.0",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:7",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "z-1234574",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:9",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100018",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:13",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:56",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "MovinCool CM12",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:10",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Hillman Plastic Pan Head",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-order-promotion.json:14",
+      "kind": "json",
+      "keyPath": "name2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Discount (On Sub Total)",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off product coupon functionality",
+  "scenario": {
+    "summary": "As a guest, an Amount Off Product coupon is rejected for a product it does not cover, then applies to the eligible product added at quantity 5 (flat amount per unit). The guest signs in and the coupon must persist on the merged cart. Cart is cleaned up; no order. The spec is test.fixme today.",
+    "steps": [
+      "Guest: empty the cart and remove any coupon",
+      "Add the other product (sku1) at qty 1, apply couponCode: Invalid coupon code, no discount; remove coupon, empty cart",
+      "Add the eligible product (sku2) at quantity, apply couponCode: one line, discount label, success message, coupon row",
+      "Check discount = discountAmount x row quantity and order total = subtotal - discount",
+      "Sign in from the header as the registered user, reopen the cart: discount label, success message and coupon row still shown",
+      "Remove coupon, empty cart, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Coupon is created per run through the API (consumable COUPON_* key); the test only applies and removes it, no order is placed, so one redemption is enough",
+      "Guest cart merged into the registered user's cart on sign-in; emptied at cleanup"
+    ],
+    "assertions": [
+      "Other product: invalid message \"- \" + invalidCouponMessage, coupon row shows couponCode, no discount",
+      "Eligible product: one line item, discount label visible, success message \"- \" + promoAppliedSuccesssMessage, coupon row shows couponCode",
+      "Discount close to discountAmount x quantity (precision 2); order total close to subtotal - discount",
+      "After sign-in: discount label, success message and coupon row still present",
+      "Empty cart message equals emptyShoppingCartMessage; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify amount off product coupon functionality'",
+      "The test is declared with test.fixme: step 4 (coupon persists after sign-in) did not reproduce on atstage with AMTOFFPROD4; the spec comment suspects a profile restriction",
+      "The created coupon applies to guest and registered profiles (allProfiles true), so step 4 can pass with it",
+      "Profile: AMTOFFPROD4 is an Amount Off Product coupon on MaxwellsHardware, discount 10.0, orderMinimum 10.0; sku2 z-2100023 (eligible) and sku1 z-4567890 (other) are active in-stock simple products",
+      "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 10.00",
+      "Link: the coupon is created for product (productId @product.productId); otherProduct is a different record by the distinct rule, so the coupon does not cover it",
+      "allProfiles true (applies before and after sign-in), so no profile"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_PRODUCT",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "quantityUsed": 5,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": true,
+        "productId": "@product.productId"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 11,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "10.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:9",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:12",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AMTOFFPROD4",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:10",
+      "kind": "json",
+      "keyPath": "couponCode",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:7",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2100023",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:16",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:19",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:6",
+      "kind": "json",
+      "keyPath": "promoAppliedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts:137",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts:139",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-coupon.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

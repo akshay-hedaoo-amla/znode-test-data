@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "entity": "promotion_categories",
+  "tables": [
+    "dbo.ZnodePromotion",
+    "dbo.ZnodePromotionCategory",
+    "dbo.ZnodePimCategoryHierarchy",
+    "dbo.ZnodePimCategory",
+    "dbo.ZnodePimCategoryProduct",
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePromotion.PromotionId", "to": "dbo.ZnodePromotionCategory.PromotionId", "kind": "inner" },
+    { "from": "dbo.ZnodePromotionCategory.PublishCategoryId", "to": "dbo.ZnodePimCategoryHierarchy.PimCategoryHierarchyId", "kind": "inner" },
+    { "from": "dbo.ZnodePimCategoryHierarchy.PimCategoryId", "to": "dbo.ZnodePimCategory.PimCategoryId", "kind": "inner" },
+    { "from": "dbo.ZnodePimCategory.PimCategoryId", "to": "dbo.ZnodePimCategoryProduct.PimCategoryId", "kind": "left" },
+    { "from": "dbo.ZnodePimCategoryProduct.PimProductId", "to": "dbo.ZnodePimProduct.PimProductId", "kind": "left" },
+    { "from": "dbo.ZnodePromotion.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "left" }
+  ],
+  "properties": {
+    "promotion": "dbo.ZnodePromotion.PromoCode",
+    "categoryId": "dbo.ZnodePromotionCategory.PublishCategoryId",
+    "isGetsDiscounted": "dbo.ZnodePromotionCategory.IsGetsDiscounted",
+    "isWhenBuying": "dbo.ZnodePromotionCategory.IsWhenBuying",
+    "categoryActive": "dbo.ZnodePimCategory.IsActive",
+    "categoryProductActive": "dbo.ZnodePimCategoryProduct.Status",
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "status": "dbo.ZnodePimProduct.IsActive",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "categoryProductCount": "COUNT(DISTINCT dbo.ZnodePimCategoryProduct.PimProductId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:0d25ed4690b9e79afbab803e6c33830bd80ff231145dc3748c769efd10d6bb50",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

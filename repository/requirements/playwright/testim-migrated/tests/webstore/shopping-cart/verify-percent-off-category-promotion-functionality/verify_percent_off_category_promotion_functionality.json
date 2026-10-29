@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts > Webstore - Shopping Cart > verify percent off category promotion functionality",
+  "scenario": {
+    "summary": "A registered user (the promotion's profile) signs in and checks that an automatic Percent Off Category promotion gives no discount on a product outside the category or on the eligible product at quantity 1, then applies once the eligible line is raised: discount = percent x subtotal, order total = subtotal - discount. No order is placed.",
+    "steps": [
+      "Sign in with username/password (empty storage state) and empty the cart",
+      "Add the other-category product (sku2) at quantity 1, open the cart, check there is no discount; empty the cart",
+      "Add the eligible product (sku1) at quantity 1, open the cart, check there is no discount",
+      "Raise the eligible line (name1) to updatedQuantity, reload; check the quantity and the 'Discount (On Sub Total)' label",
+      "Read unit cost (> 0), subtotal, discount, order total: discount = discountAmount% x subtotal; order total = subtotal - discount",
+      "Empty the cart, check the empty-cart message, log out"
+    ],
+    "entitiesTouched": [
+      "user",
+      "promotion",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart: products added, quantity raised, emptied at cleanup",
+      "The promotion is only read; no order is placed"
+    ],
+    "assertions": [
+      "No discount with only the other-category product",
+      "No discount with the eligible product at quantity 1",
+      "Eligible line quantity equals updatedQuantity; discount label 'Discount (On Sub Total)' visible",
+      "Unit cost > 0",
+      "Discount close to discountAmount% of subtotal (precision 2)",
+      "Order total close to subtotal - discount (precision 2)",
+      "Empty cart message visible; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify percent off category promotion functionality'; spec note: AUTO 20% category promotion, signed-in user = the selected profile",
+      "Profile: sku1 z-2100012 (Schlage) and sku2 z-2100018 (Hillman) are active simple products",
+      "Promotion profile 'Retail Customer' = MaxwellsHardware's default registered profile (atstage rows), assumed to be the declared user's profile (USER_WEBSTORE_REGISTERED does not constrain profile)",
+      "allProfiles false: the export's non-selected-profile check is manual (not migrated); false keeps the promotion mapped to the named profile",
+      "Recorded discountAmount 20.00 and updatedQuantity 2 are role data of the promotion (discountAmount, minimumQuantity)",
+      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "PROMOTION_PERCENT_OFF_CATEGORY",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 20.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Retail Customer",
+        "quantityUsed": 2
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_NOT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "productType": "simple",
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "20.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:7",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2100018",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:13",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100012",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:9",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Schlage Satin Nickel",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-category-promotion.json:10",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Discount (On Sub Total)",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:99",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

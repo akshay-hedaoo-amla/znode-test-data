@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts > Webstore - Shopping Cart > verify percent off order promotion functionality",
+  "scenario": {
+    "summary": "A registered user (the promotion's profile) adds two products at quantity 1 and checks that an automatic Percent Off Order promotion gives no discount below the order minimum, then raises one line past the minimum and checks a discount of at least the percent of the subtotal with order total = subtotal - discount. After logout a guest adds the same products and gets no discount. No order is placed.",
+    "steps": [
+      "Sign in with username/password (empty storage state) and empty the cart",
+      "Add sku1 and sku2 at quantity 1, open the cart (2 lines), check there is no discount",
+      "Raise the sku1 line (name1) to updatedQuantity, reload; check the quantity and the 'Discount (On Sub Total)' label",
+      "Read subtotal, discount, order total: order total = subtotal - discount; discount >= discountAmount% of subtotal (stacking with other promotions is only warned)",
+      "Empty the cart, check the empty-cart message, log out",
+      "As guest: add sku1 and sku2 at quantity 1, open the cart, check there is no discount, empty the cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "promotion",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart and a guest cart: products added, quantity raised, emptied",
+      "The promotion is only read; no order is placed"
+    ],
+    "assertions": [
+      "No discount with both products at quantity 1",
+      "Raised line quantity equals updatedQuantity; discount label 'Discount (On Sub Total)' visible",
+      "Order total close to subtotal - discount (precision 2)",
+      "Discount >= discountAmount% of subtotal - 0.05",
+      "Empty cart message visible; sign-in link visible after logout",
+      "Guest: no discount with both products at quantity 1"
+    ],
+    "evidence": [
+      "Title: 'verify percent off order promotion functionality'; spec note: AUTO 10% order promotion, signed-in user = the selected profile; guest check in step 6",
+      "Spec note: on atstage Schlage (z-2100012) also carries a ~20% category promotion that stacks; the test asserts discount >= 10% only",
+      "atstage (read-only rows): PromoPercentOffOrder on MaxwellsHardware is 10% automatic with OrderMinimum 650",
+      "User decision: quantities computed from the resolved promotion's orderMinimum and unit prices; products PRODUCT_SIMPLE_IN_STOCK with maxPrice 100 each (quantity-1 cart < $200, below every observed order minimum); sku1 (~$120 on atstage) cannot qualify, so no preferred source",
+      "quantityUsed 100 for the raised line (upper bound of the computed quantity), 1 for the other",
+      "Promotion profile 'Retail Customer' (default registered profile, assumed to be the declared user's), allProfiles false (guest check in step 6)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "PROMOTION_PERCENT_OFF_ORDER",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 10.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Retail Customer"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 100,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "10.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:7",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2100012",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:9",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:63",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100018",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:13",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:64",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Schlage Satin Nickel",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-order-promotion.json:10",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Discount (On Sub Total)",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:86",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:99",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:127",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:128",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

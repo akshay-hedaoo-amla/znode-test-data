@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PAYMENT_COD_ON_STORE",
+  "sql" : "SELECT TOP 10 ps.PaymentCode AS paymentCode, ps.PaymentName AS paymentName, COALESCE(pps.PaymentDisplayName, ps.PaymentDisplayName) AS displayName FROM dbo.ZnodePaymentSetting ps INNER JOIN dbo.ZnodePaymentType pt ON pt.PaymentTypeId = ps.PaymentTypeId INNER JOIN dbo.ZnodePortalPaymentSetting pps ON pps.PaymentSettingId = ps.PaymentSettingId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pps.PortalId LEFT JOIN dbo.ZnodePublishState pub ON pub.PublishStateId = pps.PublishStateId WHERE po.StoreCode = @store AND pt.Name = @gatewayType AND pt.Code = @paymentTypeCode AND pt.IsActive = @isActive AND ps.IsActive = @isActive AND pps.IsUsedForWebStorePayment = @isActive AND pub.PublishStateCode = @publishState AND (@preferred IS NULL OR ps.PaymentCode = @preferred) ORDER BY ps.PaymentSettingId",
+  "params" : [ "store", "gatewayType", "paymentTypeCode", "isActive", "publishState", "preferred" ],
+  "constants" : {
+    "gatewayType" : "COD",
+    "paymentTypeCode" : "CHARGEONDELIVERY",
+    "isActive" : "1",
+    "publishState" : "PRODUCTION"
+  },
+  "outputs" : [ "paymentCode", "paymentName", "displayName" ],
+  "identity" : "paymentCode",
+  "schemaFingerprint" : "sha256:e13ef654b48ab1c6474016649ffe2b84227147a8a6e892ec0a7fd3af6b622c95",
+  "vocabularyFingerprint" : "sha256:6f6a6395361cb1e17d83fda08250ae05759cb5b9831aff281e7dc8eb66c5f250",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T07:55:52Z"
+}

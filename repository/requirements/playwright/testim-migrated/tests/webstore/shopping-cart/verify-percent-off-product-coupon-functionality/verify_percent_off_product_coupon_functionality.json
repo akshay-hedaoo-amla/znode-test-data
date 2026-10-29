@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify percent off product coupon functionality",
+  "scenario": {
+    "summary": "A registered user (the selected profile) checks a Percent Off Product coupon: rejected for a product it does not cover and below the minimum, applied when two eligible products are raised to quantity 5 (percent of subtotal). As a guest (non-selected profile) the coupon is rejected. No order.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and remove any coupon",
+      "Add the other product (sku1) at qty 1, apply couponCode: Invalid coupon code, no discount; remove coupon, empty cart",
+      "Add the two eligible products (sku2, sku3) at qty 1, apply couponCode: Invalid coupon code, no discount",
+      "Raise both lines (found by name2, name3) to updatedQuantity: success message, coupon row, discount label",
+      "Check unit costs > 0, discount = discountAmount% x subtotal, order total = subtotal - discount",
+      "Empty the cart, log out; as guest add both eligible products at updatedQuantity and apply couponCode: not applied, Invalid coupon code",
+      "Remove coupon, empty cart"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Coupon is created per run through the API (consumable COUPON_* key); the test only applies and removes it, no order is placed, so one redemption is enough",
+      "Registered user's cart and guest cart: products added, coupon applied/removed, emptied at cleanup"
+    ],
+    "assertions": [
+      "Other product: invalid message \"- \" + invalidCouponMessage, coupon row shows couponCode, no discount",
+      "Below minimum: invalid message, coupon row shows couponCode, no discount",
+      "Both lines at updatedQuantity; success message \"- \" + promoAppliedSuccesssMessage; coupon row shows couponCode; discount label visible",
+      "Unit costs > 0; discount close to subtotal x discountAmount/100; order total close to subtotal - discount",
+      "Guest: no success message, invalid message and coupon row shown",
+      "Empty cart message visible after cleanup"
+    ],
+    "evidence": [
+      "Title: 'verify percent off product coupon functionality'",
+      "Spec note: PRODUCT10 is 10% off two eligible products, profile-restricted to the signed-in user; the non-selected-profile check runs as guest",
+      "Profile: PRODUCT10 is a Percent Off Product coupon on MaxwellsHardware, discount 10.0, orderMinimum 400; today the minimum is an order amount, the key models it as minimumQuantity <= quantityUsed (5)",
+      "Profile: sku1 z-4567890, sku2 z-2100007, sku3 z-2100005 are active in-stock simple products",
+      "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 10.00",
+      "allProfiles false, profile Retail Customer (the signed-in user's profile); the guest (Anonymous) must not get it",
+      "Links: the coupon is created for both products (productId @product1.productId, secondProductId @product2.productId), so the discount is asserted over both lines as the original spec does (User decision)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_PERCENT_OFF_PRODUCT",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "quantityUsed": 5,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": false,
+        "productId": "@product1.productId",
+        "profile": "Retail Customer",
+        "secondProductId": "@product2.productId"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "10.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:10",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:13",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:69",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PRODUCT10",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:11",
+      "kind": "json",
+      "keyPath": "couponCode",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:8",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2100007",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:17",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100005",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:21",
+      "kind": "json",
+      "keyPath": "sku3",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "WORKSKIN",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:18",
+      "kind": "json",
+      "keyPath": "name2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "NO DAYS OFF",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:22",
+      "kind": "json",
+      "keyPath": "name3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/percent-off-product-coupon.json:7",
+      "kind": "json",
+      "keyPath": "promoAppliedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:130",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:131",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:139",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts:141",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

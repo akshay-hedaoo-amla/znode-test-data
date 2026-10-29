@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "entity": "promotion_products",
+  "tables": [
+    "dbo.ZnodePromotion",
+    "dbo.ZnodePromotionProduct",
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePromotion.PromotionId", "to": "dbo.ZnodePromotionProduct.PromotionId", "kind": "inner" },
+    { "from": "dbo.ZnodePromotionProduct.PublishProductId", "to": "dbo.ZnodePimProduct.PimProductId", "kind": "inner" },
+    { "from": "dbo.ZnodePromotion.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "left" }
+  ],
+  "properties": {
+    "promotion": "dbo.ZnodePromotion.PromoCode",
+    "promotionProductId": "dbo.ZnodePromotionProduct.PublishProductId",
+    "isGetsDiscounted": "dbo.ZnodePromotionProduct.IsGetsDiscounted",
+    "isWhenBuying": "dbo.ZnodePromotionProduct.IsWhenBuying",
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "status": "dbo.ZnodePimProduct.IsActive",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "promotionProductCount": "COUNT(DISTINCT dbo.ZnodePromotionProduct.PublishProductId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:fa86dfd296e4354ced19a633031dd6b3ecbc06195662ac51097ca00a6a55757c",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

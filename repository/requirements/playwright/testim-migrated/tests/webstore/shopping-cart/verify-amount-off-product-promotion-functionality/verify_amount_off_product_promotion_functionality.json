@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts > Webstore - Shopping Cart > verify amount off product promotion functionality",
+  "scenario": {
+    "summary": "A guest checks that an automatic Amount Off Product promotion is not applied to another product even at the raised quantity, gives no discount on the eligible product at quantity 1, and applies once the eligible line is raised: discount = amount x quantity, order total = subtotal - discount. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): empty the cart, add the other product (sku3) at quantity 1, raise its line (name3) to updatedQuantity, reload",
+      "Check the discount is below amount x quantity (the product promotion is not applied; an incidental order promotion may show); empty the cart",
+      "Add the eligible product (sku1) at quantity 1, open the cart, check there is no discount",
+      "Raise the eligible line (name1) to updatedQuantity, reload; check the quantity and the 'Discount (On Sub Total)' label",
+      "Read subtotal, discount, order total: discount = discountAmount x quantity; order total = subtotal - discount",
+      "Empty the cart and check the empty-cart message"
+    ],
+    "entitiesTouched": [
+      "promotion",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: products added, quantities raised, emptied",
+      "The promotion is only read; no order is placed"
+    ],
+    "assertions": [
+      "Other product at updatedQuantity: discount < discountAmount x quantity - 1",
+      "No discount with the eligible product at quantity 1",
+      "Eligible line quantity equals updatedQuantity; discount label 'Discount (On Sub Total)' visible",
+      "Discount close to discountAmount x quantity (precision 2)",
+      "Order total close to subtotal - discount (precision 2)",
+      "Empty cart message visible"
+    ],
+    "evidence": [
+      "Title: 'verify amount off product promotion functionality'; spec note: AUTO amount-off-PRODUCT promotion ($ off per unit), guest flow",
+      "Profile: sku1 z-2200004 (Speedaire, volume-priced) and sku3 z-2100025 (Campbell, requiredAddOnCount 1) are active simple products",
+      "Spec note: the other product at qty 40 triggers a small incidental automatic ORDER discount; the test only asserts the product promotion is absent",
+      "Recorded discountAmount 15.00 and updatedQuantity 40 are role data of the promotion (discountAmount, minimumQuantity); quantityUsed 40 is the upper bound",
+      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)",
+      "ensureNoDiscountForNonSelectedProfiles is hard-disabled in the export: no user needed; promotion scoped to the guest's Anonymous profile"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PROMOTION_AMOUNT_OFF_PRODUCT",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 15.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Anonymous",
+        "quantityUsed": 40
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_NOT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 40,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "productType": "simple",
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 40,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "15.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:7",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "40",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "z-2100025",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:13",
+      "kind": "json",
+      "keyPath": "sku3",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts:58",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Campbell Chain Electro-Polish",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:14",
+      "kind": "json",
+      "keyPath": "name3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:9",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-product-promotion.json:10",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Discount (On Sub Total)",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

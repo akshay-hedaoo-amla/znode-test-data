@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED",
+  "entity": "store",
+  "type": "webstore_quote_requests",
+  "constraints": {
+    "webstoreDomains": ">= 1",
+    "quoteRequestsFromWebstore": "true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store that serves a webstore (at least one active WebStore domain, as STORE_WEBSTORE_ACTIVE) with Enable Quote Requests From Web Store = Yes, so signed-in shoppers get Request Quote on the cart. KB: Configuring Additional Store Attributes (Quote Settings).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "key": "PROFILE_OF_STORE",
+  "entity": "profile",
+  "type": "of_store",
+  "constraints": {
+    "profileName": "{profile}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Customer profile with the given name that is associated with the store, so a coupon created with All Profiles off can be attached to it (outputs its profile id). KB: Managing Store Profiles (associated, default anonymous and registered profiles); Configuring a Promotion (Profile).",
+  "declaredParams": {
+    "profile": {
+      "type": "string",
+      "description": "Profile name as Znode stores it (ZnodeProfile.ProfileName), e.g. the store's anonymous or retail customer profile; usually the same value as the coupon key's profile param"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); the profile must be associated with this store"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_features",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodePortalFeatureMapper",
+    "dbo.ZnodePortalFeature"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalFeatureMapper.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalFeatureMapper.PortalFeatureId", "to": "dbo.ZnodePortalFeature.PortalFeatureId", "kind": "inner" }
+  ],
+  "properties": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "featureName": "dbo.ZnodePortalFeature.PortalFeatureName",
+    "featureEnabled": "dbo.ZnodePortalFeatureMapper.PortalFeatureMapperValue"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:d879dac1886d5484a85f302de04f79e603232dac9028cbe066684028847c740c",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

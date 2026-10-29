@@ -13,14 +13,17 @@
     "minimumQuantity": "<= {quantityUsed}",
     "couponActive": "true",
     "availableQuantity": ">= {redemptionsNeeded}",
-    "allowedWithOtherCoupons": "{allowedWithOtherCoupons}"
+    "allowedWithOtherCoupons": "{allowedWithOtherCoupons}",
+    "productId": "= {productId}",
+    "orderMinimum": "{orderMinimum}",
+    "secondProductId": "= {secondProductId}"
   },
   "scope": {
     "store": "{store}",
     "profile": "{profile}"
   },
   "usage": "consumable",
-  "description": "Active Amount Off Product coupon on the store and profile, flat amount off each unit of its products once the minimum quantity is met. KB: Configuring a Promotion (Minimum Quantity, Profile, Is Allowed With Other Coupon); Managing Promotions and Coupons.",
+  "description": "Active Amount Off Product coupon on the store and profile, flat amount off each unit of its products once the minimum quantity is met, attached to productId and, when given, also secondProductId. KB: Configuring a Promotion (Find Product, Minimum Quantity, Is Allowed With Other Coupon).",
   "declaredParams": {
     "discountAmount": {
       "type": "number",
@@ -53,9 +56,23 @@
     "allowedWithOtherCoupons": {
       "type": "boolean",
       "description": "Is Allowed With Other Coupon: true when the test stacks a second coupon on it; false otherwise (Znode default)"
+    },
+    "productId": {
+      "type": "integer",
+      "description": "Product the coupon discounts (Find Product); link it to the product need, e.g. @product.productId. Id as promotion_products.promotionProductId"
+    },
+    "orderMinimum": {
+      "type": "number",
+      "description": "Optional Minimum Order Amount the coupon is created with (KB: Configuring a Promotion); left out = the collection default / any",
+      "optional": true
+    },
+    "secondProductId": {
+      "type": "integer",
+      "description": "Optional second product the coupon also discounts (Find Product lists several), e.g. @product2.productId. Id as promotion_products.promotionProductId",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

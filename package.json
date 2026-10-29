@@ -7,6 +7,6 @@
     "scan:playwright": "tda-playwright scan"
   },
   "devDependencies": {
-    "@akshay-hedaoo-amla/tda-playwright-adapter": "0.8.1"
+    "@akshay-hedaoo-amla/tda-playwright-adapter": "0.10.1"
   }
 }

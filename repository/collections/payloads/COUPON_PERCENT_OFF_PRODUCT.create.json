@@ -1,0 +1,62 @@
+{
+  "PromotionId": 0,
+  "PromoCode": "{runIdTag}{uniqueSuffix}",
+  "Name": "{runIdTag}{uniqueSuffix}",
+  "Description": "{runIdTag}{uniqueSuffix} percent off product coupon",
+  "PromotionTypeId": "{promotionTypeId}",
+  "ClassType": "{classType}",
+  "ClassName": "{className}",
+  "Discount": "{discountAmount}",
+  "MinimumWeight": 0,
+  "StartDate": "{startDate}",
+  "EndDate": "{endDate}",
+  "OrderMinimum": "{orderMinimum:0}",
+  "QuantityMinimum": "{quantityUsed}",
+  "IsCouponRequired": "{couponRequired}",
+  "DisplayOrder": "{displayOrder}",
+  "IsUnique": "{uniqueCoupon}",
+  "PortalId": "{portalId}",
+  "ProfileIds": [
+    "{profileId:0}"
+  ],
+  "PromotionProductQuantity": 0,
+  "ReferralPublishProductId": 0,
+  "PortalAllowsMultipleCoupon": false,
+  "IsAllowedWithOtherCoupons": "{allowedWithOtherCoupons}",
+  "PromotionMessage": "{promotionMessage}",
+  "AssociatedCatelogIds": "",
+  "AssociatedCategoryIds": "",
+  "AssociatedProductIds": "{productId},{secondProductId?}",
+  "AssociatedBrandIds": "",
+  "AssociatedShippingIds": "",
+  "IsAllowWithOtherPromotionsAndCoupons": false,
+  "IsActive": true,
+  "IsUsedInOrder": false,
+  "BuyingQuantity": 0,
+  "DiscountedQuantity": 0,
+  "MaxQtyToDiscount": 0,
+  "AssociatedDiscountedProductIds": "",
+  "AssociatedDiscountedBrandIds": "",
+  "AssociatedDiscountedCategoryIds": "",
+  "CouponList": {
+    "PageIndex": 0,
+    "PageSize": 0,
+    "TotalResults": 0,
+    "CouponList": [
+      {
+        "PromotionCouponId": 0,
+        "PromotionId": 0,
+        "Code": "{runIdTag}{uniqueSuffix}",
+        "InitialQuantity": "{redemptionsNeeded}",
+        "AvailableQuantity": "{redemptionsNeeded}",
+        "IsEnableUrl": false,
+        "IsActive": "{couponActive}",
+        "CouponApplied": false,
+        "CouponValid": false,
+        "CustomCouponCode": "0",
+        "IsCustomCoupon": "{customCoupon}",
+        "IsExistInOrder": false
+      }
+    ]
+  }
+}

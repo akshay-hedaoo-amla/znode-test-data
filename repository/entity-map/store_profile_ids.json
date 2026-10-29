@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_profile_ids",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodePortalProfile",
+    "dbo.ZnodeProfile"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalProfile.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalProfile.ProfileId", "to": "dbo.ZnodeProfile.ProfileId", "kind": "inner" }
+  ],
+  "properties": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "portalId": "dbo.ZnodePortal.PortalId",
+    "profileId": "dbo.ZnodeProfile.ProfileId",
+    "profileName": "dbo.ZnodeProfile.ProfileName",
+    "portalProfileId": "dbo.ZnodePortalProfile.PortalProfileID",
+    "isDefaultAnonymousProfile": "dbo.ZnodePortalProfile.IsDefaultAnonymousProfile",
+    "isDefaultRegisteredProfile": "dbo.ZnodePortalProfile.IsDefaultRegistedProfile"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:b73e102f8430c06f6ba87446474f06971eb6fbf3ce9de105c81ff1d5e3b3d8e9",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

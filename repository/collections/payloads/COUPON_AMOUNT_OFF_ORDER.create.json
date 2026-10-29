@@ -2,7 +2,7 @@
   "PromotionId": 0,
   "PromoCode": "{runIdTag}{uniqueSuffix}",
   "Name": "{runIdTag}{uniqueSuffix}",
-  "Description": "{runIdTag}{uniqueSuffix} order coupon",
+  "Description": "{runIdTag}{uniqueSuffix} amount off order coupon",
   "PromotionTypeId": "{promotionTypeId}",
   "ClassType": "{classType}",
   "ClassName": "{className}",
@@ -10,15 +10,14 @@
   "MinimumWeight": 0,
   "StartDate": "{startDate}",
   "EndDate": "{endDate}",
-  "OrderMinimum": "{orderMinimum}",
+  "OrderMinimum": "{orderMinimum:0}",
   "QuantityMinimum": 1,
   "IsCouponRequired": "{couponRequired}",
   "DisplayOrder": "{displayOrder}",
   "IsUnique": "{uniqueCoupon}",
   "PortalId": "{portalId}",
   "ProfileIds": [
-    "{anonymousProfileId}",
-    "{retailCustomerProfileId}"
+    "{profileId:0}"
   ],
   "PromotionProductQuantity": 0,
   "ReferralPublishProductId": 0,

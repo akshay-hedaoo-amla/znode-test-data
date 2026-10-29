@@ -10,7 +10,7 @@
     "requiresCoupon": "true",
     "discountAmount": "{discountAmount}",
     "allProfiles": "{allProfiles}",
-    "orderMinimum": "> 0",
+    "orderMinimum": "{orderMinimum}",
     "couponActive": "true",
     "availableQuantity": ">= {redemptionsNeeded}",
     "allowedWithOtherCoupons": "{allowedWithOtherCoupons}"
@@ -20,7 +20,7 @@
     "profile": "{profile}"
   },
   "usage": "consumable",
-  "description": "Active Percent Off Order coupon on the store and profile with a minimum order amount, percent off the order subtotal. KB: Configuring a Promotion (Minimum Order Amount, Profile, Is Allowed With Other Coupon); Managing Promotions and Coupons.",
+  "description": "Active Percent Off Order coupon on the store and profile with an optional minimum order amount, percent off the order subtotal. KB: Configuring a Promotion (Minimum Order Amount, Profile, Is Allowed With Other Coupon); Managing Promotions and Coupons.",
   "declaredParams": {
     "discountAmount": {
       "type": "number",
@@ -49,9 +49,14 @@
     "allowedWithOtherCoupons": {
       "type": "boolean",
       "description": "Is Allowed With Other Coupon: true when the test stacks a second coupon on it; false otherwise (Znode default)"
+    },
+    "orderMinimum": {
+      "type": "number",
+      "description": "Optional Minimum Order Amount the coupon is created with (KB: Configuring a Promotion); left out = the collection default / any",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }
