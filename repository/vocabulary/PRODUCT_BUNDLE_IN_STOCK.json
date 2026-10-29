@@ -13,7 +13,12 @@
     "addOnCount": ">= {minAddOns}",
     "personalizableAttributeCount": ">= {minPersonalizableAttributes}",
     "addOnDisplayType": "{addOnDisplayType}",
-    "personalizableAttributeCode": "{personalizationAttribute}"
+    "personalizableAttributeCode": "{personalizationAttribute}",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "addOnPrice": "> 0",
+    "requiredAddOnCount": "<= {minAddOns}"
   },
   "scope": {
     "store": "{store}"

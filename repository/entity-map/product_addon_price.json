@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_addon_price",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAddOnProduct",
+    "dbo.ZnodePimAddonGroup",
+    "dbo.ZnodePimAddOnProductDetail",
+    "dbo.ZnodePrice",
+    "dbo.ZnodePriceList",
+    "dbo.ZnodePriceListPortal",
+    "dbo.ZnodePortal"
+  ],
+  "aliases": {
+    "addon": "dbo.ZnodePimProduct"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAddOnProduct.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProduct.PimAddonGroupId",
+      "to": "dbo.ZnodePimAddonGroup.PimAddonGroupId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProduct.PimAddOnProductId",
+      "to": "dbo.ZnodePimAddOnProductDetail.PimAddOnProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAddOnProductDetail.PimChildProductId",
+      "to": "addon.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "addon.SKU",
+      "to": "dbo.ZnodePrice.SKU",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePrice.PriceListId",
+      "to": "dbo.ZnodePriceList.PriceListId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePriceList.PriceListId",
+      "to": "dbo.ZnodePriceListPortal.PriceListId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePriceListPortal.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "addOnProductId": "addon.PimProductId",
+    "addOnSku": "addon.SKU",
+    "addOnDisplayType": "dbo.ZnodePimAddonGroup.DisplayType",
+    "addOnPrice": "dbo.ZnodePrice.RetailPrice",
+    "addOnSalesPrice": "dbo.ZnodePrice.SalesPrice",
+    "addOnPriceActivationDate": "dbo.ZnodePrice.ActivationDate",
+    "addOnPriceExpirationDate": "dbo.ZnodePrice.ExpirationDate",
+    "addOnPriceListActivationDate": "dbo.ZnodePriceList.ActivationDate",
+    "addOnPriceListExpirationDate": "dbo.ZnodePriceList.ExpirationDate",
+    "addOnStorePrecedence": "dbo.ZnodePriceListPortal.Precedence"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "addon.IsActive": "true"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:113f344c71e281de832e78fa8f43b21e08e0b292c948b08466be020747c0bde7",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
+}

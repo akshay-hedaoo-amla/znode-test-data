@@ -175,7 +175,7 @@
       "keyPath": "price1",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {
@@ -268,7 +268,7 @@
       "keyPath": "addon1",
       "sensitive": false,
       "profiled": true,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {

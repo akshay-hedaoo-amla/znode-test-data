@@ -231,7 +231,7 @@
       "keyPath": "product2.childName",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {
@@ -241,7 +241,7 @@
       "keyPath": "product2.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {
@@ -281,7 +281,7 @@
       "keyPath": "product1.childName",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -301,7 +301,7 @@
       "keyPath": "product1.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     }
   ],

@@ -126,7 +126,7 @@
       "keyPath": "products.0.lineCost",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -155,7 +155,7 @@
       "keyPath": "products.0.childName.text",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -195,7 +195,7 @@
       "keyPath": "products.1.lineCost",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {

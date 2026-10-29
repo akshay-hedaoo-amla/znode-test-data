@@ -259,7 +259,7 @@
       "keyPath": "verifiedVariant.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {
@@ -278,8 +278,17 @@
       "keyPath": "addon1",
       "sensitive": false,
       "profiled": true,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-configurable-product.spec.ts:155",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
     }
   ],
   "status": "approved",

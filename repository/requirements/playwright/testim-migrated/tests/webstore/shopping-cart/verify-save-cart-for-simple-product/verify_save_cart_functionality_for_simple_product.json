@@ -219,7 +219,7 @@
       "keyPath": "product1.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -258,8 +258,17 @@
       "keyPath": "product3.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product3"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-simple-product.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
     }
   ],
   "status": "approved",

@@ -133,7 +133,7 @@
       "keyPath": "price2",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {
@@ -202,7 +202,7 @@
       "keyPath": "price1",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {
@@ -271,7 +271,7 @@
       "keyPath": "price3",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product"
     },
     {

@@ -125,7 +125,7 @@
       "keyPath": "products.0.lineCost",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -154,7 +154,7 @@
       "keyPath": "products.0.childDetails.0",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -164,7 +164,7 @@
       "keyPath": "products.0.childDetails.1",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -174,7 +174,7 @@
       "keyPath": "products.0.childDetails.2",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -214,7 +214,7 @@
       "keyPath": "products.1.lineCost",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {
@@ -326,6 +326,15 @@
       "sensitive": false,
       "profiled": false,
       "role": "expected-output"
+    },
+    {
+      "value": "[data-test-selector^='rowBundleProduct']",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
     }
   ],
   "status": "approved",

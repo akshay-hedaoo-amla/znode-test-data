@@ -136,7 +136,7 @@
       "keyPath": "products.0.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -175,7 +175,7 @@
       "keyPath": "products.0.childDetails.0",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -185,7 +185,7 @@
       "keyPath": "products.0.childDetails.1",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -195,7 +195,7 @@
       "keyPath": "products.0.childDetails.2",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product1"
     },
     {
@@ -235,7 +235,7 @@
       "keyPath": "products.1.price",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {
@@ -264,7 +264,7 @@
       "keyPath": "products.1.bundleDescription",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
+      "role": "expected-output",
       "alias": "product2"
     },
     {
@@ -311,6 +311,24 @@
       "sensitive": false,
       "profiled": false,
       "role": "expected-output"
+    },
+    {
+      "value": "[data-test-selector^='rowBundleProduct']",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-bundle-products.spec.ts:77",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-bundle-products.spec.ts:138",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
     }
   ],
   "status": "approved",

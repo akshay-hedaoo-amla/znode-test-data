@@ -1,0 +1,19 @@
+# Records the resolver never serves, although they qualify by every rule the database shows: for example fixtures
+# another suite changes on a shared environment. The resolver skips them in query results and candidates, and a test's
+# own record that is listed counts as not qualifying (the test falls back to another record).
+#
+# entity:   the vocabulary key's entity (e.g. product), so every key of that entity skips the record
+# identity: the value of the query's identity output (e.g. the SKU)
+# reason:   why it cannot be used, with evidence
+# Only humans approve: an entry applies once approvedBy and approvedAt are filled in.
+excluded:
+  - entity: product
+    identity: GroupProduct_RegUI_testAutomation
+    reason: >-
+      Grouped product created and changed by another automation suite (RegUI); on atstage store MaxwellsHardware its
+      Add to Cart stays disabled although it qualifies by every rule the DB shows (published in catalog 5, active,
+      child PinkApple in stock and priced, no add-ons). Fallback runs 2026-10-28: headers-group and save-for-later-group
+      failed on it (no enabled Add to Cart / product page not opened). Evidence: docs/memory.md 2026-10-28.
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"

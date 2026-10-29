@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_required_addons",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAddOnProduct"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAddOnProduct.PimProductId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "requiredAddOnCount": "COUNT(DISTINCT dbo.ZnodePimAddOnProduct.PimAddOnProductId)"
+  },
+  "filters": {
+    "dbo.ZnodePimAddOnProduct.RequiredType": "Required"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:3a0b2a4cf01c29f903a3f5448ea5fd2d8b7c10e50080abfaede4cbb3ccd9ca30",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
+}

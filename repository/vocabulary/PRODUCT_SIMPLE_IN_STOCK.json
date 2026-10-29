@@ -8,13 +8,17 @@
     "status": "active",
     "inventory": ">= {quantityUsed}",
     "publishState": "production",
-    "price": "> 0"
+    "price": "> 0",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "requiredAddOnCount": "= 0"
   },
   "scope": {
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Active simple product on the store with a price above zero and enough inventory to add to cart. KB: Product Types (simple = single SKU, can be picked and shipped); products without indexed prices show no price.",
+  "description": "Active simple product on the store with a price above zero and enough inventory to add to cart. KB: Product Types (simple = single SKU, can be picked and shipped); products without indexed prices show no price. Variant children of configurable products are excluded (they are not sold on their own).",
   "declaredParams": {
     "quantityUsed": {
       "type": "integer",
@@ -27,5 +31,5 @@
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

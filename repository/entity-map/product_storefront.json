@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_storefront",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePublishProductEntity",
+    "dbo.ZnodePublishVersionEntity",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePublishProductEntity.ZnodeProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishProductEntity.VersionId",
+      "to": "dbo.ZnodePublishVersionEntity.VersionId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishProductEntity.ZnodeCatalogId",
+      "to": "dbo.ZnodePortalCatalog.PublishCatalogId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalCatalog.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "storefrontActive": "dbo.ZnodePublishProductEntity.IsActive",
+    "storefrontObsolete": "dbo.ZnodePublishProductEntity.IsObsolete",
+    "storefrontProductIndex": "MIN(dbo.ZnodePublishProductEntity.ProductIndex)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodePublishVersionEntity.RevisionType": "PRODUCTION",
+    "dbo.ZnodePublishVersionEntity.IsPublishSuccess": "1"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:6c684531e917a8853ba5e65be967dc7f1dd41ae7becfbf7b37d936934f5e5df0",
+  "scannedAt": "2026-10-28T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-10-28T14:30:00Z"
+}

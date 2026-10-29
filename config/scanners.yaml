@@ -24,4 +24,25 @@ migrated:
   playwright:
     - testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant1.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-coupon-functionality.spec.ts
+    # Phase 6 module webstore/shopping-cart, stage 1 (full migration 2026-10-28; 3 shipping specs wait for SHIPPING_FLAT_RATE_ON_STORE)
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-link-navigation-from-header.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-merges-with-add-ons-when-guest-logs-in.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-bundle-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-configurable-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-group-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-cart-page-headers-for-retail-user-with-simple-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-navigation-to-home-after-continue-shopping.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-quantity-update-on-duplicate-save-for-later.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-bundle-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-configurable-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-group-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-for-simple-product.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-functionality-validations.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-cart-unsupported-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-bundle-products.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-configurable-products.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-group-products.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-simple-products.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-unsupported-for-guest-user.spec.ts
   selenium: []   # Phase 6 wave 2
