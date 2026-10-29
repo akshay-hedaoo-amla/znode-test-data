@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts > Webstore - Shopping Cart > verify amount off category coupon functionality",
+  "scenario": {
+    "summary": "As a guest, an Amount Off Category coupon is rejected for a product outside its category and below its minimum, then applies when the eligible product is raised to quantity 5 (flat amount x quantity). A registered user of a non-selected profile then gets no discount. Cart is cleaned up; no order.",
+    "steps": [
+      "Parse the flat amount (categoryCouponAmtOff) and quantity (updatedQuantity)",
+      "Guest: add the other-category product (sku2) at qty 1, apply couponCode: no success, no discount; remove coupon and items",
+      "Guest: add the eligible product (sku1) at qty 1, apply couponCode: Invalid coupon code, no discount",
+      "Raise the eligible line (found by name1) to updatedQuantity and reload: coupon applied successfully, discount label visible",
+      "Check discount = amount x qty, order total = subtotal - discount, subtotal = price1 x qty",
+      "Sign in as the registered user (non-selected profile), remove the coupon and reload: no success message and no amount x qty discount",
+      "Empty the cart and log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Coupon is created per run through the API (consumable COUPON_* key); the test only applies and removes it, no order is placed, so one redemption is enough",
+      "Guest cart and the registered user's cart: products added, coupon applied/removed, emptied at cleanup"
+    ],
+    "assertions": [
+      "No coupon success message and no discount for the other-category product (rejection row shows couponCode and invalidCouponMessage when rendered)",
+      "Below minimum: invalid message \"- \" + invalidCouponMessage, coupon row shows couponCode, no discount",
+      "Line quantity equals updatedQuantity; success message \"- \" + promoAppliedSuccesssMessage; coupon row shows couponCode; discount label visible",
+      "Discount close to discountAmount x quantity (precision 2); order total close to subtotal - discount; subtotal close to price1 x quantity",
+      "Signed-in non-selected profile: no success message and discount not close to discountAmount x quantity",
+      "Empty cart message equals emptyShoppingCartMessage; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify amount off category coupon functionality'",
+      "Step labels: '1) Coupon is NOT applied to an other-category product', '2) Coupon is invalid below the minimum', '3) Coupon applies above the minimum (raise eligible product to qty 5)', '5) The same coupon yields NO discount for a non-selected profile (user35)'",
+      "Profile: CATEGORY10 is an Amount Off Category coupon on MaxwellsHardware, discount 10.0, orderMinimum 300 (cart $69 at qty 1, $345 at qty 5): today the minimum is an order amount, the key models it as minimumQuantity <= quantityUsed (5)",
+      "Profile: sku1 z-4567890 and sku2 z-2300011 are active in-stock simple products",
+      "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 10.00",
+      "The coupon applies to the guest and NOT to the registered user: allProfiles false, profile Anonymous (MaxwellsHardware's default guest profile); the user is in Retail Customer",
+      "Links: the coupon is created on product's category (categoryId @product.categoryId); otherProduct is outside it (notInCategoryId @product.categoryId)",
+      "orderMinimum left out: the minimum the test crosses is modelled as minimumQuantity <= quantityUsed (5), so qty 1 is below it and qty 5 meets it"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "notInCategoryId": "@product.categoryId"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_CATEGORY",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "quantityUsed": 5,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": false,
+        "categoryId": "@product.categoryId",
+        "profile": "Anonymous"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 13,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "10.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:11",
+      "kind": "json",
+      "keyPath": "categoryCouponAmtOff",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2300011",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:18",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "CATEGORY10",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:12",
+      "kind": "json",
+      "keyPath": "couponCode",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts:73",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:7",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:14",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts:98",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:15",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:6",
+      "kind": "json",
+      "keyPath": "promoAppliedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts:138",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$69.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:16",
+      "kind": "json",
+      "keyPath": "price1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-coupon.json:8",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

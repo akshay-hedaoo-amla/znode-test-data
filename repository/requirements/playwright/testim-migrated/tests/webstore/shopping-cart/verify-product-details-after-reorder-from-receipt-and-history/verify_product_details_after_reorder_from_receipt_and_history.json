@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-receipt-and-history.spec.ts > Webstore - Shopping Cart > verify product details after reorder from receipt and history",
+  "scenario": {
+    "summary": "A registered user signs in, adds a simple product with a checkbox add-on and a second product to the cart, checks the first line, places a COD order with flat-rate shipping, reorders the first product from the receipt and checks it in the cart, empties the cart, then reorders the just-placed order from Order History and checks the first product again. Cart emptied, logout.",
+    "steps": [
+      "Empty storage state: sign in with the declared account, empty the cart",
+      "Add product1 (quantity 1) with its checkbox add-on, add product2 (quantity 1, no add-on), open the cart, wait for 2 lines",
+      "Check product1's line: name, 'Checkbox : <add-on>' description, SKU, unit cost, quantity, row total",
+      "Proceed to checkout, select Ship Complete and the custom flat-rate method (FLAT), select COD, place the order; check the thank-you banner",
+      "On the receipt click Reorder for product1's SKU, open the cart, wait for 1 line, check product1's line",
+      "Remove all items, check the empty-cart message",
+      "Open Order History, click Reorder on the first (most recent) row = the order just placed, open the cart, check product1's line",
+      "Empty the cart, log out, check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "shipping",
+      "payment",
+      "order"
+    ],
+    "stateChanges": [
+      "Places one COD order with flat-rate shipping on the declared account (created by the test, not a need; never deleted)",
+      "The signed-in user's cart: emptied, filled, ordered, refilled by two reorders, emptied at the end",
+      "Products, add-on, shipping method and COD payment method are only read"
+    ],
+    "assertions": [
+      "product1 line present with name, 'Checkbox : <addOnDescription>', 'SKU: <sku>', unit cost = price, quantity = quantity, row total close to price x quantity (in the first cart, after the receipt reorder and after the history reorder)",
+      "Thank-you banner equals thankYouMessage after placing the order",
+      "Empty cart message after removing the receipt-reordered item",
+      "Order History has at least one row",
+      "Sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify product details after reorder from receipt and history'",
+      "User decision: the order is created by the test (stateChanges); needs are the two products, SHIPPING_FLAT_RATE_ON_STORE, PAYMENT_COD_ON_STORE and the declared user",
+      "Profile: product1 z-2420004 is an active published SimpleProduct (BlackAndDecker), inventory 235, requiredAddOnCount 0; add-on 580 (z-2661001) is in a CheckBox add-on group, add-on price 3.37, add-on inventory 200 -> PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK with addOnDisplayType CheckBox",
+      "Profile: product2 z-12345886 is an active published BundleProduct (inventory 100) added with no add-on -> PRODUCT_BUNDLE_IN_STOCK with minAddOns 0, minPersonalizableAttributes 0; profile shows storefrontProductIndex 0 (not filtered by store), so the recorded SKU may not meet the key and the resolver falls back",
+      "price $32.37 = product price 29.00 + add-on 3.37: expected-output, computed from the resolved product and add-on",
+      "checkoutPage.selectShippingMethod clicks Ship Complete then lblShippingMethodFLAT -> shippingCode FLAT; the destination is the declared account's default address (masked, not in the test data); countries 'us' is an assumption",
+      "checkoutPage.selectCOD clicks txtCOD -> PAYMENT_COD_ON_STORE",
+      "The history reorder clicks rows[0] (most recent row), which is the order the test just placed: no existing order is needed. waitForLineItemCount(1) after a reorder of a two-product order is an existing spec quirk, recorded as evidence only",
+      "The order is placed on the declared account, so another test that reorders that account's most recent order (verify-product-details-after-reorder-from-existing-order-via-history) must name its resolved order, not rows[0]",
+      "product1.id 499 is the PDP product id of product1 (not profiled): role data",
+      "Fact from the user: this spec PASSES on atstage unmigrated"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "CheckBox"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:8",
+      "kind": "json",
+      "keyPath": "product1.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "499",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:9",
+      "kind": "json",
+      "keyPath": "product1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:10",
+      "kind": "json",
+      "keyPath": "product1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "580",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:11",
+      "kind": "json",
+      "keyPath": "product1.addOnCheckboxId",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "DeWalt FLEXVOLT 6 in. x 0.045 in. x 7/8 in. Cutting Wheel Type 1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:12",
+      "kind": "json",
+      "keyPath": "product1.addOnDescription",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "$32.37",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:13",
+      "kind": "json",
+      "keyPath": "product1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:14",
+      "kind": "json",
+      "keyPath": "product1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-12345886",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:17",
+      "kind": "json",
+      "keyPath": "product2.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:21",
+      "kind": "json",
+      "keyPath": "product2.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:5",
+      "kind": "json",
+      "keyPath": "thankYouMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-receipt-and-history.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-receipt-and-history.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

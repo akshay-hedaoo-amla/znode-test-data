@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts > Webstore - Shopping Cart > past the threshold the discount applies and carries to checkout @ZPD-TC-9788 @ZPD-TC-9789 @ZPD-TC-9790",
+  "scenario": {
+    "summary": "A guest builds the same two-product cart, raises one line past an automatic Amount Off Order promotion's minimum, checks the cart discount equals the promotion amount, then proceeds to guest checkout (guest address, flat-rate shipping) and checks the same discount carries over and the order summary reconciles. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): open '/', empty the cart",
+      "Add sku1 and sku2 at belowThresholdQuantity (1), open the cart (2 lines)",
+      "Raise the sku1 line (name1) to aboveThresholdQuantity, wait for the debounce and network idle",
+      "Poll until the cart shows a discount; check it is close to expectedDiscount",
+      "Proceed as guest, fill the guest address, select the flat-rate shipping method; wait for the checkout subtotal",
+      "Check the checkout discount is close to expectedDiscount and order total = subtotal + tax + shipping + handling - discount - shipping discount",
+      "Empty the cart"
+    ],
+    "entitiesTouched": [
+      "promotion",
+      "product",
+      "cart",
+      "shipping"
+    ],
+    "stateChanges": [
+      "Guest cart with two products, one quantity raised; guest checkout address entered; cart emptied; no order placed",
+      "The promotion is only read"
+    ],
+    "assertions": [
+      "Cart line for name1 present",
+      "Cart shows a discount (polled)",
+      "Cart discount close to expectedDiscount (precision 1)",
+      "Checkout subtotal > 0 (polled)",
+      "Checkout discount close to expectedDiscount (precision 1)",
+      "Checkout order total close to subtotal + tax + shipping + handling - discount - shipping discount (precision 1)"
+    ],
+    "evidence": [
+      "Title: 'past the threshold the discount applies and carries to checkout'; tags @ZPD-TC-9788 @ZPD-TC-9789 @ZPD-TC-9790",
+      "aboveThresholdQuantity 3 and expectedDiscount 45 are role data of the promotion: the quantity is computed from orderMinimum, the expected discount is the resolved discountAmount (50 on atstage, not the recorded 45)",
+      "quantityUsed 100 for the raised line: upper bound of the computed quantity",
+      "Spec header: coverage gap fill ported from the Selenium order-promotion suite (ZPD-TC-9786..9790), guest flow, no account touched, no order placed",
+      "Spec header (atstage 2026-09-25): below subtotal $276.99 -> no discount on cart or checkout; above $796.99 -> discount 45 on cart and checkout",
+      "User decision 2026-10-29: the automatic Amount Off Order promotion on MaxwellsHardware is PromoAmountOffOrder (Discount 50, OrderMinimum 800, profile Anonymous; query PROMOTION_AMOUNT_OFF_ORDER, pending). The recorded $45 was the sum of two automatic $15 Amount Off Category promotions (OrderMinimum 400), not this promotion; at $796.99 only the category promotions applied",
+      "Other automatic promotions on the store (the $15 Amount Off Category ones at $400) also discount this cart, so the migrated test must check the order-promotion discount line / the resolved promotion's discountAmount, not the cart's total discount; the quantity crossing the minimum is computed from the resolved orderMinimum",
+      "Profile: sku1 z-1234574 (MovinCool, ~$260) and sku2 z-2100018 (Hillman) are active simple products",
+      "User decision: quantities computed from the resolved PROMOTION_AMOUNT_OFF_ORDER's orderMinimum and the cart's unit prices; products PRODUCT_SIMPLE_IN_STOCK with maxPrice 100 each (quantity-1 cart < $200, below the $800 order minimum and the $400 category-promotion minimum); sku1 cannot qualify, so no preferred source",
+      "Checkout: proceedAsGuest, fillGuestAddress (no country given: storefront default), selectFlatRateAnyLayout clicks #FLAT-1 -> SHIPPING_FLAT_RATE_ON_STORE (FLAT, us); that key's query was never verified (FLAT not offered for the guest profile on atstage, see memory)",
+      "Guest address values (masked) are typed by the test: role config, never customer data; the migrated test should use project-supplied test address values",
+      "Promotion profile 'Anonymous' (MaxwellsHardware default anonymous profile); discountAmount param 50.0 (PromoAmountOffOrder) in both tests of the serial pair so they resolve the same promotion"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PROMOTION_AMOUNT_OFF_ORDER",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 50.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Anonymous"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 100,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "maxPrice": 100
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9779",
+    "ZPD-TC-9786",
+    "ZPD-TC-9787",
+    "ZPD-TC-9788",
+    "ZPD-TC-9789",
+    "ZPD-TC-9790"
+  ],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234574",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:2",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:6",
+      "kind": "json",
+      "keyPath": "belowThresholdQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100018",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:4",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "MovinCool CM12",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:3",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:7",
+      "kind": "json",
+      "keyPath": "aboveThresholdQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "45",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:8",
+      "kind": "json",
+      "keyPath": "expectedDiscount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts:136",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:10",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:11",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:12",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:13",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:14",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:15",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.json:16",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts:151",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts:161",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

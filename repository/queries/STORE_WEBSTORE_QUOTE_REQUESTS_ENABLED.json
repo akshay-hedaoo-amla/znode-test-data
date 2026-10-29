@@ -1,0 +1,24 @@
+{
+  "schemaVersion" : 1,
+  "key" : "STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED",
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId FROM dbo.ZnodePortal p INNER JOIN dbo.ZnodeDomain d ON d.PortalId = p.PortalId INNER JOIN dbo.ZnodePortalGlobalAttributeValue gav ON gav.PortalId = p.PortalId INNER JOIN dbo.ZnodeGlobalAttribute ga ON ga.GlobalAttributeId = gav.GlobalAttributeId INNER JOIN dbo.ZnodeGlobalEntity ge ON ge.GlobalEntityId = ga.GlobalEntityId INNER JOIN dbo.ZnodePortalGlobalAttributeValueLocale gavl ON gavl.PortalGlobalAttributeValueId = gav.PortalGlobalAttributeValueId WHERE d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND ge.EntityName = @globalEntity AND ga.AttributeCode = @attributeCode AND gavl.LocaleId = @localeId AND gavl.AttributeValue = @quoteRequestsEnabled AND p.StoreCode = @store AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode, p.StoreName HAVING COUNT(DISTINCT d.DomainId) >= @minWebstoreDomains ORDER BY p.PortalId",
+  "params" : [ "applicationType", "domainActive", "globalEntity", "attributeCode", "localeId", "quoteRequestsEnabled", "store", "preferred", "minWebstoreDomains" ],
+  "constants" : {
+    "applicationType" : "WebStore",
+    "domainActive" : "1",
+    "globalEntity" : "Store",
+    "attributeCode" : "EnableQuoteRequest",
+    "localeId" : "1",
+    "quoteRequestsEnabled" : "true",
+    "minWebstoreDomains" : "1"
+  },
+  "outputs" : [ "storeCode", "name", "portalId" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:c3a452bdd4e672b7fac2e1314b30908b476bd389b232960a411c061b3dbab926",
+  "vocabularyFingerprint" : "sha256:d67aabbe050dcf81fda934ba1645bdeadd140a23f34272fe93a261895b5b828c",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T08:59:49Z"
+}

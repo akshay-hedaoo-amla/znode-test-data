@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-existing-order-via-history.spec.ts > Webstore - Shopping Cart > verify product details after reorder from existing order via history",
+  "scenario": {
+    "summary": "A registered user signs in, empties the cart, opens Order History and reorders an existing order whose line is a configurable product with three add-ons (checkbox, drop-down, radio) and a personalization; the cart shows that product with its name, add-ons, personalization, SKU, unit price, quantity and row total. The cart is emptied and the user logs out; the order is only read.",
+    "steps": [
+      "Empty storage state: open the login page, sign in with the declared account, empty the cart",
+      "Open Order History, read the rows (at least one), click Reorder on the first (most recent) row",
+      "Open the cart and wait for 1 line item",
+      "Find the line by product name; check name, add-ons block (Checkbox, Select Add-on, Radio), personalization block (Anniversary Gift), SKU, unit cost, quantity and row total = price x quantity",
+      "Remove all items, check the empty-cart message, log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "The signed-in user's cart: emptied, filled by the reorder, emptied again",
+      "The existing order is only read (reorder copies it to the cart); no order is placed"
+    ],
+    "assertions": [
+      "Order History has at least one row",
+      "Cart line for the product name is present and shows the name",
+      "Add-ons block of the line SKU contains 'Checkbox : <addOnCheckBox>', 'Select Add-on : <addOnDropDown>', 'Radio : <addOnRadio>'",
+      "Personalization block of the line SKU contains 'Anniversary Gift : <personalizableText>'",
+      "SKU text is 'SKU: <sku>'; unit cost contains price; quantity input equals quantity; row total close to price x quantity",
+      "Empty cart message after removal; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify product details after reorder from existing order via history'; step 3 title says 'the reordered configurable product'",
+      "Spec comment: relies on a seeded order in the dedicated account's history (AT Stage backup DB); user decision: the order is FOUND read-only on the declared account, never created",
+      "OWNERSHIP: the order must belong to the signed-in (declared) account. ORDER_OF_USER_REORDERABLE expresses this with constraint owner = {user}, whose param 'user' is documented as the alias of the declared USER_WEBSTORE_REGISTERED need bound at run time. Core 0.9.0 cannot bind it: a declared account (preferred required) cannot be linked to ('@user.username' is rejected) and the username must never be written here. The 'user' param is therefore left out; ownership is NOT enforced by this entry until the core/query binds the owner from the declared account at test start (gap reported)",
+      "The test reorders rows[0] (the most recent order of the account), not a named order: the migrated test must click Reorder for the resolved order's orderNumber (order history row id = order number), or another order of the same account (e.g. one placed by the receipt-and-history test) is reordered instead",
+      "Profile: PinkApple is an active published product (inventory 4999836, storefrontProductIndex 1, requiredAddOnCount 1) stored as SimpleProduct: it is the variant SKU of a configurable parent (cart test-ids divConfigurableProductAddons<sku> / divConfigurableProductPersonalization<sku> are keyed by the variant SKU), so productType 'configurable' is the ordered type; the query must match it on the parent product (lineParentProductType), not on the line's own PIM type",
+      "minAddOns 3: three add-on groups asserted (checkbox, drop-down, radio); profile finds all three add-on products (RegUi_SimpleProd, the Lutron switch, the DeWalt sander kit) active with inventory",
+      "minPersonalizableAttributes 1: one personalization asserted ('Anniversary Gift'); the personalization text lives in ZnodeOrderProduct.Customization, a masked column in the order entity map",
+      "Add-on group labels 'Checkbox', 'Select Add-on', 'Radio' and the personalization label 'Anniversary Gift' are literals inside the spec's template strings (not scanned values): they are the resolved order's add-on group and personalization attribute names and must come from the resolved record in the migrated test",
+      "quantity 1 is the ordered line quantity (reorder copies it): role data of the order; quantityUsed 1",
+      "price $509.25 is the current unit price incl. add-ons shown in the cart: expected-output, computed from the resolved line, not the order total",
+      "Fact from the user: this spec PASSES on atstage unmigrated"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_OF_USER_REORDERABLE",
+      "alias": "order",
+      "params": {
+        "productType": "configurable",
+        "quantityUsed": 1,
+        "minAddOns": 3,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "PinkApple",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:7",
+      "kind": "json",
+      "keyPath": "product.sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "Apple iPhone 15 128 GB - Pink",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:8",
+      "kind": "json",
+      "keyPath": "product.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "Pink Apple",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:9",
+      "kind": "json",
+      "keyPath": "product.personalizableText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "RegUi_SimpleProd",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:10",
+      "kind": "json",
+      "keyPath": "product.addOnCheckBox",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "Lutron Claro 15 Amp Single-Pole Paddle Switch",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:11",
+      "kind": "json",
+      "keyPath": "product.addOnRadio",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "DeWalt 3 Amp 5 in. Variable Speed Orbital Sander Kit",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:12",
+      "kind": "json",
+      "keyPath": "product.addOnDropDown",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "$509.25",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:13",
+      "kind": "json",
+      "keyPath": "product.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "order"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:14",
+      "kind": "json",
+      "keyPath": "product.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-existing-order-via-history.spec.ts:57",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/reorder-from-existing-order-via-history.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

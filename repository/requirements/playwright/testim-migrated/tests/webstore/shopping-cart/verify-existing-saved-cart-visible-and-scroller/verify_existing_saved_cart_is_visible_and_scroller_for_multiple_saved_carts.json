@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-existing-saved-cart-visible-and-scroller.spec.ts > Webstore - Shopping Cart > verify existing saved cart is visible and scroller for multiple saved carts",
+  "scenario": {
+    "summary": "A registered user who owns several saved carts signs in, empties the cart, finds an existing saved cart by name in the Saved Carts list and moves it to the cart, checks the moved product's name and SKU in the cart, opens the Save Cart panel's Saved Carts tab and checks the saved-carts scroller is shown, then empties the cart and logs out. The saved carts are only read.",
+    "steps": [
+      "Empty storage state: sign in with the declared account, empty the cart",
+      "Open the Saved Carts list, filter by the saved cart's name, read its row id (must exist), Move To Cart; check the moved-to-cart alert",
+      "Open the cart, find the line by product name, check name and 'SKU: <sku>'",
+      "Open the Save Cart panel, click the Saved Carts tab, check the saved-carts scroller is visible, scroll it (scrollability only logged), cancel the panel",
+      "Remove all items, check the empty-cart message, log out and check the sign-in link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "saved_cart",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "The signed-in user's cart: emptied, filled by Move To Cart, emptied again",
+      "Saved carts are only read: Move To Cart copies the saved cart, which stays"
+    ],
+    "assertions": [
+      "The saved cart named existingCartName is found in the Saved Carts list",
+      "Alert contains movedToCartMessage",
+      "Cart line for the product name present; shows the name and 'SKU: <sku>'",
+      "Saved-carts scroller visible on the Saved Carts tab",
+      "Empty cart message after removal; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify existing saved cart is visible and scroller for multiple saved carts'",
+      "Spec comment: relies on seeded saved carts (SaveCart1..6) of the dedicated account from the AT Stage backup DB, never deleted; user decision: the saved cart is FOUND read-only on the declared account",
+      "OWNERSHIP: the saved cart must belong to the signed-in (declared) account, and that account must own at least minSavedCarts saved carts. SAVED_CART_OF_USER_WITH_PRODUCTS expresses this with constraints owner = {user} and ownerSavedCartCount >= {minSavedCarts}; its 'user' param is documented as the alias of the declared USER_WEBSTORE_REGISTERED need bound at run time. Core 0.9.0 cannot bind it: a declared account cannot be linked to and the username must never be written here. The 'user' param is therefore left out; ownership is NOT enforced by this entry until the core/query binds the owner from the declared account at test start (gap reported)",
+      "minSavedCarts 2: the scroller check needs several saved carts on the account (key guidance: 2 or more for the scroller); whether the list overflows is logged only (spec: best-effort), the asserted check is the scroller's presence. The original seed had six",
+      "The migrated test must take the saved cart's name (existingCartName) and its product's name and SKU from the resolved record. User fact: the spec FAILS on atstage because the seeded product RegUi_SimpleProd is stale there. Profile still finds SKU z-240008 named RegUi_SimpleProd as an active published SimpleProduct (inventory 999) but with storefrontProductIndex 0 (not in the storefront index), consistent with it not being usable on the webstore",
+      "The saved cart's product must be active and on the storefront for Move To Cart and the cart line check; the key constrains productStatus active only, not storefront visibility (gap reported)",
+      "Spec carries a MAINTENANCE NOTE (last run 2026-09-18 failed waiting for the empty cart message, not triaged): recorded as evidence only"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+      "alias": "savedCart",
+      "params": {
+        "minSavedCarts": 2,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "SaveCart1",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:5",
+      "kind": "json",
+      "keyPath": "existingCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart"
+    },
+    {
+      "value": "Saved Cart moved back to the cart successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:6",
+      "kind": "json",
+      "keyPath": "movedToCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "RegUi_SimpleProd",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:8",
+      "kind": "json",
+      "keyPath": "name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart"
+    },
+    {
+      "value": "z-240008",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:7",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "savedCart"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/existing-saved-cart-scroller.json:4",
+      "kind": "json",
+      "keyPath": "emptyShoppingCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

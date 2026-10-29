@@ -3,7 +3,7 @@
   "framework": "playwright",
   "testId": "testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts > Webstore - Shopping Cart > verify request quote access for guest and retail",
   "scenario": {
-    "summary": "A guest adds one simple product and checks that the cart has no Request Quote button. The registered user then signs in, opens the merged cart and checks that Request Quote is visible. The cart is emptied and the user logs out. No quote or order is created.",
+    "summary": "A guest adds one simple product and checks that the cart has no Request Quote button. The registered user then signs in, opens the merged cart and checks that Request Quote is visible on a store with quote requests from the webstore enabled. The cart is emptied and the user logs out. No quote or order is created.",
     "steps": [
       "Guest (empty storage state): add sku with quantity 1 and open the cart",
       "Check the Request Quote button is absent (count 0)",
@@ -13,6 +13,7 @@
       "Log out and check the sign-in link"
     ],
     "entitiesTouched": [
+      "store",
       "user",
       "product",
       "cart"
@@ -29,14 +30,22 @@
     ],
     "evidence": [
       "Title: 'verify request quote access for guest and retail'",
-      "Profile: sku z-240008 is an active published SimpleProduct 'RegUi_SimpleProd', inventory 999 (not filtered by store)",
-      "The signed-in assertion depends on the user (or its profile or store) being allowed to request quotes; USER_WEBSTORE_REGISTERED does not constrain this and no vocabulary key covers quote access",
+      "Profile: sku z-240008 is an active published SimpleProduct 'RegUi_SimpleProd', inventory 999",
+      "The signed-in assertion needs the store's 'Enable Quote Requests From Web Store' = Yes: STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED (store MaxwellsHardware), used instead of STORE_WEBSTORE_ACTIVE (it includes the active-webstore condition; declaring both could demand two different stores)",
+      "Not covered by any key: whether the user's role or profile further restricts quotes (KB Quote Settings are per store); confirm on atstage",
       "Literal '0' at spec line 40 is the toHaveCount expectation (config)"
     ],
-    "confidence": "low",
+    "confidence": "medium",
     "needsReview": true
   },
   "requires": [
+    {
+      "key": "STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED",
+      "alias": "store",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
     {
       "key": "USER_WEBSTORE_REGISTERED",
       "alias": "user",
@@ -122,6 +131,6 @@
     }
   ],
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

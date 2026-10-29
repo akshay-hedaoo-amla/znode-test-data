@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROMOTION_PERCENT_OFF_PRODUCT",
+  "sql" : "SELECT TOP 10 p.PromoCode AS promoCode, p.Name AS name, p.Discount AS discountAmount, p.OrderMinimum AS orderMinimum, p.QuantityMinimum AS minimumQuantity FROM dbo.ZnodePromotion p INNER JOIN dbo.ZnodePromotionType t ON t.PromotionTypeId = p.PromotionTypeId INNER JOIN dbo.ZnodePortal s ON s.PortalId = p.PortalId WHERE t.Name = @promotionTypeName AND s.StoreCode = @store AND p.StartDate <= @now AND p.EndDate >= @now AND p.IsCouponRequired = @couponRequired AND p.Discount = @discountAmount AND p.QuantityMinimum <= @quantityUsed AND EXISTS (SELECT m.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper m LEFT JOIN dbo.ZnodeProfile pr ON pr.ProfileId = m.ProfileId WHERE m.PromotionId = p.PromotionId AND (m.ProfileId IS NULL OR pr.ProfileName = @profile)) AND (CASE WHEN EXISTS (SELECT a.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper a WHERE a.PromotionId = p.PromotionId AND a.ProfileId IS NULL) THEN @flagTrue ELSE @flagFalse END) = @allProfiles AND EXISTS (SELECT pp.PromotionProductId FROM dbo.ZnodePromotionProduct pp WHERE pp.PromotionId = p.PromotionId) AND (@preferred IS NULL OR p.PromoCode = @preferred) ORDER BY p.PromotionId",
+  "params" : [ "promotionTypeName", "store", "now", "couponRequired", "discountAmount", "quantityUsed", "profile", "flagTrue", "flagFalse", "allProfiles", "preferred" ],
+  "constants" : {
+    "promotionTypeName" : "Percent Off Product",
+    "couponRequired" : "0",
+    "flagTrue" : "1",
+    "flagFalse" : "0"
+  },
+  "outputs" : [ "promoCode", "name", "discountAmount", "orderMinimum", "minimumQuantity" ],
+  "identity" : "promoCode",
+  "schemaFingerprint" : "sha256:bb96ef461642f0957926cb0f3b806d031c5f7e0fc9efb3bbbc9e49dfaade9ad8",
+  "vocabularyFingerprint" : "sha256:7558c991fc3db4509e242c73422b1a85015715e450c7be3291e718a31c16122e",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
+  "createdAt" : "2026-10-29T00:00:00Z",
+  "lastValidated" : "2026-10-29T07:54:36Z"
+}

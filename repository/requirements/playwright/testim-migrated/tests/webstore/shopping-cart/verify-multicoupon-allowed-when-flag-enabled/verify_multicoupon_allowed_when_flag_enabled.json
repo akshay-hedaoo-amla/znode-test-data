@@ -1,0 +1,350 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts > Webstore - Shopping Cart > verify multicoupon allowed when flag enabled",
+  "scenario": {
+    "summary": "A registered user applies a Percent Off Product coupon to two products raised to quantity 5, then stacks an Amount Off Order coupon; both coupons allow clubbing, so both apply and the discount is percent x subtotal + flat amount. No order.",
+    "steps": [
+      "Sign in as the registered user, empty the cart and remove all coupons",
+      "Add sku1 and sku2 at qty 1, apply couponCode1, raise both lines (found by name1, name2) to updatedQuantity",
+      "Coupon 1 at index 0: success message and code; one coupon applied",
+      "SKU labels show sku1 and sku2",
+      "Check discount = discountAmount% x subtotal and order total = subtotal - discount",
+      "Apply couponCode2: two coupons applied, labels index 0 = couponCode1 and index 1 = couponCode2, success message at index 1",
+      "Check combined discount = discountAmount% x subtotal + discountAmount2 and order total = subtotal - discount",
+      "Remove all coupons, empty cart, log out"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Both coupons are created per run through the API (consumable COUPON_* keys); the test only applies and removes them, no order is placed",
+      "Registered user's cart: products added, coupons applied/removed, emptied at cleanup"
+    ],
+    "assertions": [
+      "Coupon message at index 0 equals \"- \" + promoAppliedSuccesssMessage; coupon row 0 shows couponCode1; applied coupon count 1",
+      "SKU labels equal \"SKU: \" + sku1 / sku2",
+      "Discount close to subtotal x discountAmount/100; order total close to subtotal - discount",
+      "Applied coupon count 2; coupon labels 0 and 1 equal couponCode1 and couponCode2; message at index 1 is the success message",
+      "Combined discount close to subtotal x discountAmount/100 + discountAmount2; order total close to subtotal - discount",
+      "Empty cart message visible; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify multicoupon allowed when flag enabled'",
+      "User decision: no store key; the 'flag' is each coupon's Is Allowed With Other Coupon - both created with allowedWithOtherCoupons true",
+      "Profile: PRODUCT10 (Percent Off Product, 10.0, orderMinimum 400) and ORDER15 (Amount Off Order, 15.0, orderMinimum 1) on MaxwellsHardware; sku1 z-2100007 and sku2 z-2100005 are active in-stock simple products",
+      "No profile check: both coupons apply to every profile (allProfiles true)",
+      "Discount assertions use the resolved coupons' discountAmount (role data), not the literals 10.00 and 15.0",
+      "coupon2 orderMinimum left out: the collection default (0) is met by any cart",
+      "Links: coupon1 is created for both products (productId @product1.productId, secondProductId @product2.productId), so the discount is asserted over both lines as the original spec does (User decision)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_PERCENT_OFF_PRODUCT",
+      "alias": "coupon1",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "quantityUsed": 5,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": true,
+        "allProfiles": true,
+        "productId": "@product1.productId",
+        "secondProductId": "@product2.productId"
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon2",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 15.0,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": true,
+        "allProfiles": true
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "10.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:8",
+      "kind": "json",
+      "keyPath": "discountAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon1"
+    },
+    {
+      "value": "15.0",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:11",
+      "kind": "json",
+      "keyPath": "discountAmount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon2"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2100007",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:13",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2100005",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:17",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PRODUCT10",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:9",
+      "kind": "json",
+      "keyPath": "couponCode1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon1"
+    },
+    {
+      "value": "WORKSKIN",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:14",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1"
+    },
+    {
+      "value": "NO DAYS OFF",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:18",
+      "kind": "json",
+      "keyPath": "name2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:91",
+      "kind": "literal",
+      "keyPath": "couponMessageByIndex",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:7",
+      "kind": "json",
+      "keyPath": "promoAppliedSuccesssMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "promoCouponRowByIndex",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:110",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ORDER15",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/multicoupon-allowed.json:10",
+      "kind": "json",
+      "keyPath": "couponCode2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "coupon2"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "couponCodeLabel",
+      "sensitive": false,
+      "profiled": true,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:123",
+      "kind": "literal",
+      "keyPath": "couponCodeLabel",
+      "sensitive": false,
+      "profiled": true,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:124",
+      "kind": "literal",
+      "keyPath": "couponMessageByIndex",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:135",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts:136",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

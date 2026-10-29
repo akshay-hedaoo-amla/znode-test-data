@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "entity": "promotion_settings",
+  "tables": [
+    "dbo.ZnodePromotion",
+    "dbo.ZnodePromotionType",
+    "dbo.ZnodePortal",
+    "dbo.ZnodePromotionProfileMapper",
+    "dbo.ZnodeProfile"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePromotion.PromotionTypeId", "to": "dbo.ZnodePromotionType.PromotionTypeId", "kind": "inner" },
+    { "from": "dbo.ZnodePromotion.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "left" },
+    { "from": "dbo.ZnodePromotion.PromotionId", "to": "dbo.ZnodePromotionProfileMapper.PromotionId", "kind": "left" },
+    { "from": "dbo.ZnodePromotionProfileMapper.ProfileId", "to": "dbo.ZnodeProfile.ProfileId", "kind": "left" }
+  ],
+  "properties": {
+    "promoCode": "dbo.ZnodePromotion.PromoCode",
+    "name": "dbo.ZnodePromotion.Name",
+    "discountType": "dbo.ZnodePromotionType.Name",
+    "discountTypeClass": "dbo.ZnodePromotionType.ClassName",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "allStores": "IFNULL(dbo.ZnodePromotion.PortalId, true, false)",
+    "startDate": "dbo.ZnodePromotion.StartDate",
+    "endDate": "dbo.ZnodePromotion.EndDate",
+    "requiresCoupon": "dbo.ZnodePromotion.IsCouponRequired",
+    "allowedWithOtherCoupons": "dbo.ZnodePromotion.IsAllowedWithOtherCoupons",
+    "discountAmount": "dbo.ZnodePromotion.Discount",
+    "orderMinimum": "dbo.ZnodePromotion.OrderMinimum",
+    "minimumQuantity": "dbo.ZnodePromotion.QuantityMinimum",
+    "promotionMessage": "dbo.ZnodePromotion.PromotionMessage",
+    "displayOrder": "dbo.ZnodePromotion.DisplayOrder",
+    "profile": "dbo.ZnodeProfile.ProfileName",
+    "profileId": "dbo.ZnodePromotionProfileMapper.ProfileId",
+    "allProfiles": "IFNULL(dbo.ZnodePromotionProfileMapper.ProfileId, true, false)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "profile": "dbo.ZnodeProfile.ProfileName"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:f836447c17ce6853767ebf3f20f5440e8f7eb1bc1a34ad04dd02c82613341871",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

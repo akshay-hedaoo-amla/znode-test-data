@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_global_attributes",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodePortalGlobalAttributeValue",
+    "dbo.ZnodePortalGlobalAttributeValueLocale",
+    "dbo.ZnodeGlobalAttribute",
+    "dbo.ZnodeGlobalEntity",
+    "dbo.ZnodeGlobalAttributeDefaultValue"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalGlobalAttributeValue.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalGlobalAttributeValue.PortalGlobalAttributeValueId", "to": "dbo.ZnodePortalGlobalAttributeValueLocale.PortalGlobalAttributeValueId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalGlobalAttributeValue.GlobalAttributeId", "to": "dbo.ZnodeGlobalAttribute.GlobalAttributeId", "kind": "inner" },
+    { "from": "dbo.ZnodeGlobalAttribute.GlobalEntityId", "to": "dbo.ZnodeGlobalEntity.GlobalEntityId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalGlobalAttributeValueLocale.GlobalAttributeDefaultValueId", "to": "dbo.ZnodeGlobalAttributeDefaultValue.GlobalAttributeDefaultValueId", "kind": "left" }
+  ],
+  "properties": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "attributeCode": "dbo.ZnodeGlobalAttribute.AttributeCode",
+    "attributeActive": "dbo.ZnodeGlobalAttribute.IsActive",
+    "globalEntity": "dbo.ZnodeGlobalEntity.EntityName",
+    "attributeValue": "dbo.ZnodePortalGlobalAttributeValueLocale.AttributeValue",
+    "attributeDefaultValueCode": "dbo.ZnodeGlobalAttributeDefaultValue.AttributeDefaultValueCode",
+    "localeId": "dbo.ZnodePortalGlobalAttributeValueLocale.LocaleId",
+    "quoteRequestsFromWebstore": "dbo.ZnodePortalGlobalAttributeValueLocale.AttributeValue"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeGlobalEntity.EntityName": "Store",
+    "dbo.ZnodeGlobalAttribute.AttributeCode": "EnableQuoteRequest"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:f844cc3668a25b68f685486ec9904ad4539afbbe429cea54068e9cc13c9cdd23",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

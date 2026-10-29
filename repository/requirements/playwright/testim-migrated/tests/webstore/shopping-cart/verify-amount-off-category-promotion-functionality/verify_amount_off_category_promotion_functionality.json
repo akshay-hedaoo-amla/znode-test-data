@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts > Webstore - Shopping Cart > verify amount off category promotion functionality",
+  "scenario": {
+    "summary": "A guest checks that an automatic (no coupon) Amount Off Category promotion gives no discount on a product outside its category or on an eligible product below the minimum, then applies once the eligible line is raised: discount = amount x quantity, order total = subtotal - discount. A registered user whose profile the promotion does not cover then signs in and gets no such discount. No order is placed.",
+    "steps": [
+      "Guest (empty storage state): add the other-category product (sku2) at quantity 1, open the cart, check there is no discount; remove all items",
+      "Guest: add the eligible product (sku1) at quantity 1, open the cart, check there is no discount (below the minimum)",
+      "Raise the eligible line (found by name1) to updatedQuantity (2), reload the cart; check the quantity and the 'Discount (On Sub Total)' label",
+      "Read subtotal, discount, order total: discount = categoryPromoAmtOff x quantity; order total = subtotal - discount; subtotal = price1 x quantity",
+      "Sign in as the registered user (a profile the promotion does not apply to), open the merged cart, check the discount is NOT amount x quantity",
+      "Empty the cart, check the empty-cart message, log out"
+    ],
+    "entitiesTouched": [
+      "promotion",
+      "product",
+      "user",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: products added, quantity raised, items removed",
+      "Registered user's cart: guest cart merged on sign-in, emptied at cleanup",
+      "The promotion is only read; no order is placed"
+    ],
+    "assertions": [
+      "No discount with only the other-category product in the cart",
+      "No discount with the eligible product at quantity 1",
+      "Eligible line quantity equals updatedQuantity; discount label visible with text 'Discount (On Sub Total)'",
+      "Discount close to categoryPromoAmtOff x quantity (precision 2)",
+      "Order total close to subtotal - discount (precision 2)",
+      "Subtotal close to price1 x quantity (precision 2)",
+      "Signed-in non-selected profile: discount is not close to amount x quantity",
+      "Empty cart message visible; sign-in link visible after logout"
+    ],
+    "evidence": [
+      "Title: 'verify amount off category promotion functionality'; spec note: AUTO-promotion twin of the category-coupon spec, no promo code entered",
+      "Spec comment: guest flow; step 5 signs in as a non-selected profile (user30) to confirm the discount does NOT apply for it -> promotion scoped to the guest's Anonymous profile with allProfiles false",
+      "Profile: sku1 z-1234574 and sku2 z-2100018 are active simple products (requiredAddOnCount 0)",
+      "atstage (read-only rows): MaxwellsHardware (PortalId 7) default anonymous profile is 'Anonymous', default registered profile 'Retail Customer'",
+      "Recorded categoryPromoAmtOff 15.00 is role data of the promotion (discountAmount) and also its discountAmount param, as in the approved coupon cart test",
+      "updatedQuantity 2 is role data of the promotion: the migrated test computes the quantity from the resolved promotion's minimumQuantity; quantityUsed 2 stays the upper bound",
+      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)",
+      "Gap: no key constraint makes the declared user's profile one the promotion does NOT cover; 'no discount at quantity 1' also depends on the promotion's orderMinimum (live TestimAmountoffCategory: QuantityMinimum 1, OrderMinimum 400)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PROMOTION_AMOUNT_OFF_CATEGORY",
+      "alias": "promotion",
+      "params": {
+        "discountAmount": 15.0,
+        "allProfiles": false,
+        "store": "MaxwellsHardware",
+        "profile": "Anonymous",
+        "quantityUsed": 2
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_NOT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "otherProduct",
+      "params": {
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_DISCOUNTED_BY_PROMOTION_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "productType": "simple",
+        "promotion": "@promotion.promoCode",
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "15.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:7",
+      "kind": "json",
+      "keyPath": "categoryPromoAmtOff",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:4",
+      "kind": "json",
+      "keyPath": "updatedQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "promotion"
+    },
+    {
+      "value": "z-2100018",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:13",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherProduct"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234574",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:9",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "MovinCool CM12",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:10",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Discount (On Sub Total)",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$260.00",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:11",
+      "kind": "json",
+      "keyPath": "price1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/shopping-cart/amount-off-category-promotion.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}

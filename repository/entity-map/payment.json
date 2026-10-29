@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "entity": "payment",
+  "tables": [
+    "dbo.ZnodePaymentSetting",
+    "dbo.ZnodePaymentType",
+    "dbo.ZnodePortalPaymentSetting",
+    "dbo.ZnodePublishState",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePaymentSetting.PaymentTypeId", "to": "dbo.ZnodePaymentType.PaymentTypeId", "kind": "inner" },
+    { "from": "dbo.ZnodePaymentSetting.PaymentSettingId", "to": "dbo.ZnodePortalPaymentSetting.PaymentSettingId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalPaymentSetting.PublishStateId", "to": "dbo.ZnodePublishState.PublishStateId", "kind": "left" },
+    { "from": "dbo.ZnodePortalPaymentSetting.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" }
+  ],
+  "properties": {
+    "paymentCode": "dbo.ZnodePaymentSetting.PaymentCode",
+    "paymentName": "dbo.ZnodePaymentSetting.PaymentName",
+    "displayName": "dbo.ZnodePortalPaymentSetting.PaymentDisplayName",
+    "settingDisplayName": "dbo.ZnodePaymentSetting.PaymentDisplayName",
+    "gatewayType": "dbo.ZnodePaymentType.Name",
+    "paymentTypeCode": "dbo.ZnodePaymentType.Code",
+    "paymentTypeName": "dbo.ZnodePaymentType.Name",
+    "paymentTypeActive": "dbo.ZnodePaymentType.IsActive",
+    "isActive": "dbo.ZnodePaymentSetting.IsActive",
+    "isTestMode": "dbo.ZnodePaymentSetting.IsTestMode",
+    "displayOrder": "dbo.ZnodePaymentSetting.DisplayOrder",
+    "displayOnWebstore": "dbo.ZnodePortalPaymentSetting.IsUsedForWebStorePayment",
+    "displayOnOffline": "dbo.ZnodePortalPaymentSetting.IsUsedForOfflinePayment",
+    "approvalRequired": "dbo.ZnodePortalPaymentSetting.IsApprovalRequired",
+    "publishState": "dbo.ZnodePublishState.PublishStateCode",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:e13ef654b48ab1c6474016649ffe2b84227147a8a6e892ec0a7fd3af6b622c95",
+  "scannedAt": "2026-10-29T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
+}
