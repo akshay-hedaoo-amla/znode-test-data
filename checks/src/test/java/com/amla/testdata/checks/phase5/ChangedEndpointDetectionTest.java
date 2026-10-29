@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,8 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Phase 5 exit criterion 2 (offline, never calls the API): a changed endpoint is detected the same way. In a temporary
  * copy of the project, one operation an approved collection calls gets a new required parameter; {@code maintain}'s
- * check marks that collection {@code STALE_SPEC} and queues it, while a prose-only edit to another collection's operation
- * and every other approved entry leave them approved. The database and the offline verifiers are replaced by "unchanged,
+ * check marks every approved collection that calls that operation {@code STALE_SPEC} and queues it, while a prose-only
+ * edit to another collection's operation and every other approved entry leave them approved. The database and the
+ * offline verifiers are replaced by "unchanged,
  * passing" stand-ins: only the spec differs.
  */
 class ChangedEndpointDetectionTest {
@@ -50,12 +52,20 @@ class ChangedEndpointDetectionTest {
 
 		String specFile = changed.path("spec").path("file").asText();
 		String operation = changed.path("spec").path("operations").get(0).asText();
+		// Every approved collection that calls the changed operation goes stale (several coupon types share one create call).
+		Set<String> expected = new TreeSet<>();
+		before.collections().forEach((key, c) -> {
+			if ("approved".equals(c.path("status").asText()) && specFile.equals(c.path("spec").path("file").asText())
+					&& calls(c, operation)) {
+				expected.add(key);
+			}
+		});
 		Phase5Copies.edit(home.resolve(specFile), spec -> {
 			ObjectNode op = operation(spec, operation);
 			ArrayNode params = op.has("parameters") ? (ArrayNode) op.get("parameters") : op.putArray("parameters");
 			params.addObject().put("name", "phase5Changed").put("in", "query").put("required", true).putObject("schema").put("type", "string");
 			// Prose only: must not make any collection stale.
-			before.collections().values().stream().filter(c -> !CHANGED.equals(c.path("key").asText()))
+			before.collections().values().stream().filter(c -> !calls(c, operation))
 					.filter(c -> specFile.equals(c.path("spec").path("file").asText()))
 					.forEach(c -> operation(spec, c.path("spec").path("operations").get(0).asText()).put("summary", "phase5 prose edit"));
 		});
@@ -69,17 +79,34 @@ class ChangedEndpointDetectionTest {
 				Map.of(), now);
 		List<Maintenance.Finding> marked = Maintenance.apply(outcome, repository, home.resolve("work/maintenance/regeneration-queue.json"), now);
 
-		assertEquals(1, marked.size(), "only the changed collection: " + outcome.findings());
-		assertEquals(CHANGED, marked.get(0).key());
-		assertEquals(Maintenance.Reason.STALE_SPEC, marked.get(0).reason());
+		Set<String> markedKeys = new TreeSet<>();
+		marked.forEach(f -> markedKeys.add(f.key()));
+		assertEquals(expected, markedKeys, "only the collections that call the changed operation: " + outcome.findings());
+		marked.forEach(f -> assertEquals(Maintenance.Reason.STALE_SPEC, f.reason(), f.key()));
 		RepositoryData after = RepositoryData.load(repository);
-		assertEquals("stale", after.collections().get(CHANGED).path("status").asText());
-		assertEquals("STALE_SPEC", after.collections().get(CHANGED).path("staleReason").asText());
-		after.collections().forEach((key, c) -> assertTrue(CHANGED.equals(key) || "approved".equals(c.path("status").asText()), key));
+		for (String key : expected) {
+			assertEquals("stale", after.collections().get(key).path("status").asText(), key);
+			assertEquals("STALE_SPEC", after.collections().get(key).path("staleReason").asText(), key);
+		}
+		after.collections().forEach((key, c) -> assertTrue(expected.contains(key)
+				|| before.collections().get(key).path("status").asText().equals(c.path("status").asText()), key));
 		JsonNode queue = Phase5Copies.read(home.resolve("work/maintenance/regeneration-queue.json"));
-		assertEquals(1, queue.get("items").size());
-		assertEquals(CHANGED, queue.at("/items/0/key").asText());
-		assertEquals("open", queue.at("/items/0/status").asText());
+		assertEquals(expected.size(), queue.get("items").size());
+		Set<String> queued = new TreeSet<>();
+		queue.get("items").forEach(i -> {
+			queued.add(i.path("key").asText());
+			assertEquals("open", i.path("status").asText());
+		});
+		assertEquals(expected, queued);
+	}
+
+	private static boolean calls(JsonNode collection, String operation) {
+		for (JsonNode o : collection.path("spec").path("operations")) {
+			if (operation.equals(o.asText())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** "Schema unchanged": each entry's tables fingerprint to the stamp it already carries. */
