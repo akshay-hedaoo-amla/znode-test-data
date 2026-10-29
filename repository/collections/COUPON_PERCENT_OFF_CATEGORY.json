@@ -82,7 +82,9 @@
     "bodyTemplate" : "payloads/COUPON_PERCENT_OFF_CATEGORY.teardown.json"
   },
   "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status" : "pending_approval",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z",
   "createdAt" : "2026-10-29T00:00:00Z",
   "lastValidated" : "2026-10-29T10:48:58Z"
 }
