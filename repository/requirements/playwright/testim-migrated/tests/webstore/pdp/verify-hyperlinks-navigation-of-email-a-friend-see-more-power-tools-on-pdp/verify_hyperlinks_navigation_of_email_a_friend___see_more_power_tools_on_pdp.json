@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts > Webstore - PDP > verify hyperlinks navigation of email a friend & see more power tools on pdp",
+  "scenario": {
+    "summary": "Registered user signs in, opens a product's PDP by SKU, follows the See More (category) button to the category listing, then reopens the PDP, opens Email A Friend, checks the modal and the required-email validation, and sends the product to a friend's email address.",
+    "steps": [
+      "Sign in on the webstore with the test-data username and password (empty storageState).",
+      "Search the product SKU and open the result; assert breadcrumb and product heading.",
+      "Click See More; on the category listing assert the category heading and that a first product is visible.",
+      "Search and reopen the PDP; assert breadcrumb and heading again.",
+      "Open Email A Friend; assert the modal heading, the Friend's Email Address label and the Send Mail button.",
+      "Submit empty to get 'Email is required.'; fill the receiver email and submit; assert 'Email sent successfully.'."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "category",
+      "store"
+    ],
+    "stateChanges": [
+      "Sends one Email A Friend message about the product to the receiver address (an outgoing email; no database record the test reads back)."
+    ],
+    "assertions": [
+      "Breadcrumb equals Home/<category path>/<product name>; heading equals the product name (twice).",
+      "See More opens the listing of the product's category (heading equals seeMoreCategory) with at least one product.",
+      "Email A Friend modal: heading 'email a friend', Friend's Email Address label, 'Send Mail' button.",
+      "Empty submit shows 'Email is required.'; a valid address shows 'Email sent successfully.'."
+    ],
+    "evidence": [
+      "Title 'verify hyperlinks navigation of email a friend & see more power tools on pdp' and step labels '1) See More Power Tools -> category listing', '2) Email A Friend - modal, validation, send' match the flow.",
+      "Spec lines 27-28 sign in with data.username / data.password (masked in the scan): declared account USER_WEBSTORE_REGISTERED, preferred required, credentials stay in the test data (role credential).",
+      "Profile: productSKU z-1234579 FOUND as BundleProduct, active, PRODUCTION, inventory 28362, storefront index 1; productName matches 2 rows. The product type is incidental; PRODUCT_BUNDLE_IN_STOCK keeps today's record as the preferred one.",
+      "Missing output: productCategory (Tools / Power Tools) and seeMoreCategory (Power Tools, the category the See More button opens) are the product's category path and category name; no product key returns a category name or path (PRODUCT_BUNDLE_IN_STOCK outputs: sku, name, productId, price, addOnProductId, addOnName).",
+      "receiverEmail (masked) is a recipient address the test types, not an environment record: role config. The masked literal at spec line 58 is the label text \"Friend's Email Address\" (masked by the email key-name rule): role expected-output, kept masked.",
+      "The send step needs the store to have outgoing email configured; that is environment configuration, not a vocabulary key.",
+      "strategy migrate: loadData is used, but productCategory and seeMoreCategory (data values in assertions) map to no output of PRODUCT_BUNDLE_IN_STOCK, so swap rule 2 fails.",
+      "No linked AIO cases."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "seeMoreCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "email a friend",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts:54",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts:58",
+      "kind": "literal",
+      "keyPath": "emailFormLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Send Mail",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts:61",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Email is required.",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts:69",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "receiverEmail",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Email sent successfully.",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

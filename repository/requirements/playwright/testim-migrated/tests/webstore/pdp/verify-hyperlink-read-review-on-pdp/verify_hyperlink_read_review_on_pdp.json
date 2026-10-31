@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts > Webstore - PDP > verify hyperlink read review on pdp",
+  "scenario": {
+    "summary": "Guest searches a product by SKU, opens its PDP, follows Read Reviews and Write a review, checks the Product Review form labels and buttons, submits a 4-star review, then reopens the PDP Reviews tab and expects the new review (headline, user, comments) at the top.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU and open the result; assert breadcrumb Home/<category>/<name> and the product heading.",
+      "Open Read Reviews, then Write a review.",
+      "Assert the Product Review form heading, labels (Review for, Rating, Review headline, Review, Your name, Your state/country), disclaimer and Submit Review / Cancel buttons; the form names the product.",
+      "Fill rating, headline, comments, name and state and submit; assert the success alert.",
+      "Reopen the PDP, open the Reviews tab (with a reload) and assert the first review shows the submitted headline, \"By <name> in <state>,\" and comments."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "product_review",
+      "store"
+    ],
+    "stateChanges": [
+      "Creates a product review (rating 4, headline, comments, reviewer name and state) on the product as a guest; every run adds another review."
+    ],
+    "assertions": [
+      "Breadcrumb equals Home/<category path>/<product name>; heading equals the product name.",
+      "Review form shows the fixed heading, labels, disclaimer and button texts; Review for contains the product name.",
+      "Alert contains the submit success message ('Review submitted successfully.').",
+      "The first review on the Reviews tab shows the submitted headline, the reviewer line and the comments."
+    ],
+    "evidence": [
+      "Title 'verify hyperlink read review on pdp' and step labels '1) Open PDP -> Read Reviews -> Write a review form' .. '4) Reopen PDP -> Reviews tab -> verify the review' match the flow.",
+      "Profile: productSKU z-1234579 FOUND as BundleProduct, active, PRODUCTION, inventory 28362, storefront index 1, no required add-ons; productName matches 2 rows (z-1234579, z-345678). The product type is incidental to the test (any PDP product works); PRODUCT_BUNDLE_IN_STOCK keeps today's record as the preferred one.",
+      "Review inputs (rating, headline, comments, reviewer name/state) are created by the test; submitSuccess and reviewUserDisplay are asserted texts (reviewUserDisplay is built from reviewerName/reviewerState).",
+      "Missing key: the test expects a guest review to show on the PDP right after submit, so the store must publish reviews without manual approval (review moderation setting). No vocabulary key covers a store with that review setting; the need is left out.",
+      "Missing output: the breadcrumb asserts productCategory (Tools / Power Tools); PRODUCT_BUNDLE_IN_STOCK has no category name/path output (outputs: sku, name, productId, price, addOnProductId, addOnName).",
+      "strategy migrate: loadData is used, but productCategory (a data value in the breadcrumb assertion) maps to no output of PRODUCT_BUNDLE_IN_STOCK, so swap rule 2 fails.",
+      "No linked AIO cases."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Product Review",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:42",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review for",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:43",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Rating *",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:45",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review headline *",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:46",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review *",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Your name *",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Your state/country*",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:49",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "All submissions are reviewed and must be approved",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:50",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Submit Review",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cancel",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "4",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "reviewRating",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Great Purchase, Guys",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "reviewHeadline",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Product is good, Guys",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "reviewComments",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "John",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "reviewerName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "US",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:9",
+      "kind": "json",
+      "keyPath": "reviewerState",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Review submitted successfully.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "submitSuccess",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "By John in US,",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlink-read-review-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "reviewUserDisplay",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

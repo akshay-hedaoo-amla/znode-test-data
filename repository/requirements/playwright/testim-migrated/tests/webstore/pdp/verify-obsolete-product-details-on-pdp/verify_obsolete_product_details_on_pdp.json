@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-obsolete-product-details-on-pdp.spec.ts > Webstore - PDP > verify obsolete product details on pdp",
+  "scenario": {
+    "summary": "Guest searches the webstore for an obsolete product by SKU, opens its PDP and validates the header, highlights, rating, inventory section, the obsolete message, action buttons, the Reviews tab and the Replacement Product Suggestions cards (name, SKU, inventory per location). Read-only. No vocabulary key covers an obsolete product or its replacement, so no need is declared.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search for the obsolete product SKU and open the first result.",
+      "Assert image, breadcrumb Home/<category>/<name>, wishlist heart, product name and SKU.",
+      "If isHighlightPresent, assert the Free Shipping and WaterSense highlights; assert star rating, Read Reviews link, inventory label and default warehouse.",
+      "Assert the obsolete message.",
+      "Assert Print, See More and Email a Friend buttons, open the Reviews tab and assert Write a Review.",
+      "Assert the Replacement Product Suggestions heading and each replacement card (name, SKU, Read Reviews, Add to Cart, inventory label and per-location inventory lines)."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "warehouse",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Breadcrumb, heading and SKU:<sku> match the obsolete product.",
+      "Obsolete message reads that the product is obsolete and replacements are suggested.",
+      "Reviews tab opens and Write a Review is visible.",
+      "Section heading equals 'Replacement Product Suggestions'; each replacement card shows the recorded name, SKU, Read Reviews, Add to Cart and the inventory lines ('25 Milwaukee, Wisconsin', '250 All Locations')."
+    ],
+    "evidence": [
+      "Title 'verify obsolete product details on pdp' and the four step labels match the flow; guest storageState; no linked AIO cases.",
+      "All data comes from loadData(ObsoleteDataSchema, rawData, ...) (spec line 22).",
+      "Profile: SKU z-1238988 FOUND as SimpleProduct 'testim.ObsoleteProduct', active, PRODUCTION, no brand, inventory 5, storefrontProductIndex 1; replacement z-2200019 FOUND as active SimpleProduct (Toro), inventory 250.",
+      "Missing key: no vocabulary key describes an obsolete product (all product keys require storefrontObsolete = false) or a replacement product linked to it. The need is left out; the product values are recorded as expected-output only because a data source needs a declared alias. They are really data of the obsolete product (alias product) and its linked replacement; re-map them once a key exists.",
+      "Data in code: highlight selectors imgFreeShipping / imgWatersenseEpaCertified are product highlights (gated by isHighlightPresent); the replacement inventory texts embed a warehouse name and quantities.",
+      "migrate: expected values depend on the recorded product (name, category, replacement product name/SKU and its per-location inventory), and no key exists to swap from."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1238988",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output"
+    },
+    {
+      "value": "AutomationTest_Category",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "testim.ObsoleteProduct",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output"
+    },
+    {
+      "value": "true",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "isHighlightPresent",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This product is obsolete. Please choose from suggested replacement products.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:9",
+      "kind": "json",
+      "keyPath": "obsoleteMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Replacement Product Suggestions",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "replacementSectionHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Toro PowerClear 18 inch Single Stage Electric start Gas Snow Blower",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "replacementProducts.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2200019",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:14",
+      "kind": "json",
+      "keyPath": "replacementProducts.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output"
+    },
+    {
+      "value": "25 Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "replacementProducts.0.inventoryDetails.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "250 All Locations",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-obsolete-product-details-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "replacementProducts.0.inventoryDetails.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Read Reviews",
+      "location": "testim-migrated/tests/webstore/pdp/verify-obsolete-product-details-on-pdp.spec.ts:90",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

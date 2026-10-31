@@ -1,0 +1,669 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts > Webstore - PDP > verify group product details on pdp",
+  "scenario": {
+    "summary": "Guest searches the webstore for a grouped product by SKU, opens its PDP and validates the header details, highlights, 'Starting at' price, three tiered offers, the group products table (child SKU, inventory, warehouse, price), the required checkbox and dropdown add-on groups with their options, and the info tabs. Read-only; nothing is added to the cart.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search for the grouped product SKU and open the first result.",
+      "Assert image, breadcrumb Home/<category>/<name>, wishlist heart, product name, SKU, brand and short description.",
+      "Assert the Free Shipping and WaterSense highlights, the 'Starting at' price and the three tiered special offers.",
+      "Assert the group table headers Product, Price, Quantity and, per child product, its SKU, inventory text, warehouse address, default warehouse name, price and quantity input.",
+      "Assert the 'Add-on options' heading, the required checkbox add-on group label and its options, the 'Select Add-on *' label and the dropdown option list.",
+      "Assert Print, See More and Email a Friend buttons; assert the Details, Specifications and Shipping Info tab panels and open Reviews."
+    ],
+    "entitiesTouched": [
+      "product",
+      "brand",
+      "category",
+      "warehouse",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Breadcrumb, heading, SKU:<sku>, Brand:<brand> and short description match the grouped product.",
+      "'Starting at' price equals the lowest child price.",
+      "Three tiered offers show 'Buy N or more', '$<price>/item' and 'Save <discount>%'.",
+      "Group table lists each child SKU with inventory text, warehouse address and name, and price.",
+      "Checkbox add-on group 'Checkbox *' shows its four options; the 'Select Add-on *' dropdown options equal the recorded list.",
+      "Details, Specifications and Shipping Info panels contain the recorded texts."
+    ],
+    "evidence": [
+      "Title 'verify group product details on pdp' and the six step labels match the flow; guest storageState; no linked AIO cases.",
+      "All data comes from loadData(GroupDataSchema, rawData, ...) (spec line 42).",
+      "Profile: SKU z-1234599 FOUND as GroupedProduct, active, PRODUCTION, brand Nibco, inventory 100000, storefrontProductIndex 1, requiredAddOnCount 2; the four child SKUs are FOUND active SimpleProducts.",
+      "Params: minAddOns 2 because the PDP must show two required add-on groups (data.addOnOptionType 'Checkbox *' and the 'Select Add-on *' dropdown; profile requiredAddOnCount 2, and the key needs requiredAddOnCount <= minAddOns); addOnDisplayType CheckBox for the checkbox group. The key takes one display type, so the second (DropDown) group is not constrained. minPersonalizableAttributes 0 (no personalisation asserted). The test selects nothing.",
+      "selectAddOnOptions.0 'Select' is the dropdown placeholder text (expected-output), not product data.",
+      "Gap: PRODUCT_GROUPED_IN_STOCK returns only sku, name, productId, price, addOnProductId, addOnName, child1Sku. The asserted category, brand, short description, starting price, tier offers, child table (four children with prices), add-on option labels and tab texts have no output.",
+      "Data in code: page object test ids lblAddOnGroupCheckbox and lblAddOnGroupSelectAddOn carry the add-on group names (Checkbox, Select Add-on); highlight selectors imgFreeShipping / imgWatersenseEpaCertified are product highlights not in the JSON.",
+      "migrate: data only through loadData, but expected values depend on the recorded product (starting price, tier prices and discounts, child prices, add-on option labels with prices, descriptions), and the add-on group names are in page-object selectors."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 2,
+        "addOnDisplayType": "CheckBox",
+        "minPersonalizableAttributes": 0
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234599",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Plumbing / Plumbing Parts & Repair",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Nibco 40S PVC Coupling Group",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Nibco",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "productBrand",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Connects PVC piping in drain, waste and vent piping systems.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "productShortDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Starting at: $1.25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "startingPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "66.60",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "62.90",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "55.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "9",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "20",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Product",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Price",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:86",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Nibco 3 in. 40S PVC Coupling",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234614",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$4.34",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "groupProductDetails.0.productPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Nibco 1-1/2 in. 40S PVC Coupling",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234612",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$1.40",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "groupProductDetails.1.productPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Nibco 1-1/4 in. 40S PVC Coupling",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234611",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$7.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "groupProductDetails.2.productPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Nibco 2 in. 40S PVC Coupling",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234613",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$1.25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "groupProductDetails.3.productPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "SKU:",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Inventory:",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:90",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add-on options",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Checkbox *",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:9",
+      "kind": "json",
+      "keyPath": "addOnOptionType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE 6' Extension Cord(+$7.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "addOnOptions.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE 9' Extension Cord(+$17.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:12",
+      "kind": "json",
+      "keyPath": "addOnOptions.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Mountain Plumbing 4 Inch Round Solid Nickel Bronze Plated Grid Shower Drain(+$200.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "addOnOptions.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Mountain Plumbing 10 Inch Traditional Round Rain Head(+$28.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:14",
+      "kind": "json",
+      "keyPath": "addOnOptions.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Select Add-on *",
+      "location": "testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Select",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "selectAddOnOptions.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Apollo Tools Multi-Purpose Hand Tool Set(+$27.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "selectAddOnOptions.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)(+$46.84)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "selectAddOnOptions.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Use the NIBCO PVC DWV Coupling to connect PVC piping lengths in drain, waste and vent piping systems.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "productDetails",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Brand - NIBCO",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "productSpecifications.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Additional Information - Lead-Free",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:26",
+      "kind": "json",
+      "keyPath": "productSpecifications.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Application - Cold Water Pressure",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:27",
+      "kind": "json",
+      "keyPath": "productSpecifications.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "End Connection - Slip x Slip",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:28",
+      "kind": "json",
+      "keyPath": "productSpecifications.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Manufacturer Part Number - L00227Y",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:29",
+      "kind": "json",
+      "keyPath": "productSpecifications.4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "All orders are processed within 2-3 business days",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-group-product-details-on-pdp.json:31",
+      "kind": "json",
+      "keyPath": "productShippingInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

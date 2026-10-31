@@ -1,0 +1,811 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts > Webstore - PDP > verify quick view functionality on pdp",
+  "scenario": {
+    "summary": "Guest opens a product PDP by SKU, then opens Quick View for every product in its Frequently Bought and You May Also Like sections and checks each one's name, SKU, category, retail and sales price, three tiered offers, rating, quantity, Add to Cart and inventory.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result, assert the image and product heading.",
+      "Scroll to the first related section, assert 'Frequently Bought', and Quick View each listed product.",
+      "Scroll to the second related section, assert 'You May Also Like', and Quick View each listed product.",
+      "In each Quick View assert name, SKU:<sku>, category, retail and sales price, the three tiers (Buy N or more, $price/item, Save N%), star, quantity input, Add to Cart and (when given) inventory text, then close."
+    ],
+    "entitiesTouched": [
+      "product",
+      "related_product",
+      "category",
+      "price",
+      "tier_price",
+      "inventory",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search shows exactly one result; heading equals the product name.",
+      "Related section headings 'Frequently Bought' and 'You May Also Like'.",
+      "Each related product's Quick View shows its name, SKU, category, retail and sales prices, three tier offers and inventory as listed in the test data."
+    ],
+    "evidence": [
+      "Title 'verify quick view functionality on pdp' and step labels '1) Search + open the product PDP', '2) Frequently Bought - Quick View each product', '3) You May Also Like - Quick View each product' match the flow.",
+      "Profile: productSKU z-1234579 FOUND as BundleProduct, active, PRODUCTION, inventory 28362, storefront index 1. Related products z-1234606, z-1234605 (Frequently Bought) and z-1234602, z-1234603, z-1234604 (You May Also Like) FOUND as active SimpleProducts; z-1234603 shows inventory -619687597 (its data inventory is empty, so the test skips the inventory check for it).",
+      "Missing key: the test needs a product whose Frequently Bought and You May Also Like lists hold products with retail/sales prices and three tier prices. No vocabulary key covers a product with related (linked) products or tier prices; that need is left out. PRODUCT_BUNDLE_IN_STOCK covers only the main product, with today's record as the preferred one. The related products' names and SKUs are recorded as data of alias product (they follow from the main product's links); their prices, tiers, categories and inventory are expected-output derived from them.",
+      "youMayAlsoLike.1.inventory (empty string, json line 41) is not listed in sources: a source value must not be empty.",
+      "strategy migrate: loadData is used, but prices, tier prices and discounts asserted in Quick View depend on the data (swap rule 3) and the related-product values map to no key output (swap rule 2).",
+      "No linked AIO cases."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "scrollToRelatedSection",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "relatedSectionHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Frequently Bought",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234606",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:9",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$25.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$23.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:12",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "22.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "21.25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "18.75",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "18",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:13",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE Pro 6-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234605",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:17",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$12.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$11.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:20",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10.80",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10.20",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "9.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "7",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "18",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:22",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "scrollToRelatedSection",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "relatedSectionHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "You May Also Like",
+      "location": "testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE 6' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:27",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234602",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:28",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:29",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$8.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:30",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$7.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:31",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:32",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "7.20",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "6.80",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "6.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "-3",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "14",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:33",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE 9' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:36",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234603",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:37",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:38",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$18.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:39",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$17.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:40",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "16.20",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15.30",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "13.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "21",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE 12' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:45",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234604",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:46",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:47",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$180.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:48",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$170.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:49",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:50",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "16.20",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15.30",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "13.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "90",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "91",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "92",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-quick-view-functionality-on-pdp.json:51",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

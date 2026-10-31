@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.spec.ts > Webstore - PDP > verify add to wishlist functionality on pdp for retail user",
+  "scenario": {
+    "summary": "A registered webstore user signs in, clears the wishlist, opens a product PDP by SKU, adds it to the wishlist from the heart (tooltips and alert), checks it on the Wishlist page (count, name, sales price) and removes it again.",
+    "steps": [
+      "Open the webstore home page and sign in from the header with the test's own registered account.",
+      "Clear the user's wishlist.",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and check the product image.",
+      "Hover the heart ('Add to Wishlist'), click it ('Product added to your Wishlist.'), hover again ('Remove from Wishlist').",
+      "Open the Wishlist page; check the count text, product name and sales price.",
+      "Remove the first wishlist item and check the removed alert."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "wishlist",
+      "store"
+    ],
+    "stateChanges": [
+      "User's wishlist cleared at start, the product added, then removed (wishlist ends empty)."
+    ],
+    "assertions": [
+      "Search shows 'Showing 1 of 1 Results' and the product image is visible.",
+      "Tooltip 'Add to Wishlist' before and 'Remove from Wishlist' after adding; alert 'Product added to your Wishlist.'",
+      "Wishlist page shows 'Showing 1 of 1 results.', the product name and its sales price ($500.00).",
+      "Alert 'Product removed from your Wishlist.' after removal."
+    ],
+    "evidence": [
+      "Title 'verify add to wishlist functionality on pdp for retail user' and step labels 1) to 5) match the flow.",
+      "Credentials are masked in the scan (profile: SENSITIVE); the test signs in with its own dedicated account, so the user need is preferred-required on the recorded username.",
+      "Profile: z-1234579 FOUND as active BundleProduct, PRODUCTION, inventory 28362, storefrontProductIndex 1, requiredAddOnCount 0: meets PRODUCT_BUNDLE_IN_STOCK.",
+      "productSalesPrice ($500.00) is the asserted wishlist price of the product; PRODUCT_BUNDLE_IN_STOCK returns price, but which price the wishlist shows for a bundle (sales vs retail) is not confirmed.",
+      "migrate: the asserted sales price ($500.00) depends on the product data, so swap is not allowed.",
+      "Spec carries a MAINTENANCE NOTE: last run 2026-09-18 failed waiting for the 'Remove from Wishlist' tooltip, not triaged (evidence only).",
+      "No data value appears in the spec code; the spec reads the JSON through loadData."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.spec.ts:43",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.spec.ts:50",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add to Wishlist",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "addToWishlistTooltip",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:9",
+      "kind": "json",
+      "keyPath": "addedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Remove from Wishlist",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "removeFromWishlistTooltip",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Showing 1 of 1 results.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "wishlistCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "removedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

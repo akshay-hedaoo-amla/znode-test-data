@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.spec.ts > Webstore - PDP > verify hyperlinks navigation of highlights on pdp",
+  "scenario": {
+    "summary": "Guest opens a product PDP by SKU, checks breadcrumb, name and the Free Shipping, WaterSense EPA Certified and BIO highlight badges, clicks the WaterSense highlight to its detail page (h1, description, Back to Product Page) and goes back to the PDP.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and assert the product image.",
+      "Assert breadcrumb Home/<category>/<name>, the product heading and the Free Shipping, WaterSense and BIO highlight badges (expanding See More if needed).",
+      "Click the WaterSense highlight; assert the detail page h1, the start of its description and the Back to Product Page button.",
+      "Click Back to Product Page and assert the product heading again."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "highlight",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search shows exactly one result ('Showing 1 of 1 Results').",
+      "Breadcrumb equals Home/<category path>/<product name>; heading equals the product name.",
+      "Free Shipping, WaterSense and BIO highlight badges are visible on the PDP.",
+      "The WaterSense highlight page shows h1 waterSenseH1, a description starting with waterSenseDescriptionStart and a Back to Product Page button that returns to the PDP."
+    ],
+    "evidence": [
+      "Title 'verify hyperlinks navigation of highlights on pdp' and step labels '1) Open the bundle PDP (search -> result)' .. '4) Back to Product Page -> returns to the PDP' match the flow.",
+      "Profile: productSKU z-1234579 FOUND as BundleProduct, active, PRODUCTION, inventory 28362, storefront index 1; productName matches 2 rows.",
+      "Missing key: the test needs a product with the Free Shipping, WaterSense EPA Certified and BIO highlights assigned (and the WaterSense highlight content). No vocabulary key covers a product with given highlights; that need is left out. PRODUCT_BUNDLE_IN_STOCK covers only the product itself, with today's record (which has the highlights) as the preferred one; a fallback product would likely lack the highlights.",
+      "Missing output: the breadcrumb asserts productCategory; no product key returns a category name or path.",
+      "waterSenseH1 and waterSenseDescriptionStart are highlight content the test asserts: role expected-output.",
+      "strategy migrate: the spec reads its data with `rawData as HighlightData` (line 14), not loadData (swap rule 1); productCategory also has no output.",
+      "Data in code: spec comments at lines 17 and 44 name the product (z-1234579, DeWalt bundle, Home/Tools/...) and line 64/70 use data.backToProductText in a locator hasText; backToProductText and highlightTitles are in the spec interface but not in the scan values.",
+      "No linked AIO cases."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.spec.ts:38",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "WaterSense EPA Certified",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "waterSenseH1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "WaterSense labeled products are backed by independent",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "waterSenseDescriptionStart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

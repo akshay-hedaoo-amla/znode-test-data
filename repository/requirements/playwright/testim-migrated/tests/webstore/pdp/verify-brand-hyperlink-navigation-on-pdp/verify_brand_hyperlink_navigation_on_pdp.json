@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.spec.ts > Webstore - PDP > verify brand hyperlink navigation on pdp",
+  "scenario": {
+    "summary": "Guest opens a product PDP by SKU, checks the breadcrumb (category path and name) and the 'Brand:<brand>' label, clicks the brand hyperlink and checks the brand listing page heading, breadcrumb 'Home / Shop By Brand / <brand>' and results. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and check the product image.",
+      "Assert breadcrumb Home/<category path>/<product name> and the label Brand:<brand>.",
+      "Click the brand hyperlink and wait for the brand listing page.",
+      "Assert the brand page heading, its breadcrumb and that results are shown."
+    ],
+    "entitiesTouched": [
+      "product",
+      "brand",
+      "category",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search shows 'Showing 1 of 1 Results' and the product image is visible.",
+      "Breadcrumb equals Home/<category path>/<product name>; brand label equals Brand:<brand>.",
+      "Brand page heading equals the brand; breadcrumb equals 'Home / Shop By Brand / <brand>'; results text contains 'Showing'."
+    ],
+    "evidence": [
+      "Title 'verify brand hyperlink navigation on pdp' and step labels 1) and 2) match the flow.",
+      "Profile: z-1234579 FOUND as active BundleProduct, brand Dewalt, PRODUCTION; brand Dewalt FOUND active (code Dewalt) with 58 products.",
+      "The test needs any product whose brand is set, plus that brand; PRODUCT_SIMPLE_OF_BRAND_IN_STOCK (linked to the brand need by @brand.code) fits better than a bundle key, which cannot tie the product to the brand. The recorded product is a bundle, so it is not set as preferred and the resolver will pick a simple Dewalt product.",
+      "GAP: the breadcrumb asserts the product's category path (productCategory 'Tools / Power Tools'); no key returns a product's category path, so that value has no output to come from.",
+      "brandBreadcrumb is derived from the brand ('Home / Shop By Brand / ' + brand).",
+      "migrate: productCategory maps to no key output and brandBreadcrumb is derived from the brand data.",
+      "No data value appears in the spec code; the spec reads the JSON through loadData."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "BRAND_WITH_ACTIVE_PRODUCTS",
+      "alias": "brand",
+      "params": {
+        "brand": "Dewalt",
+        "minProducts": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OF_BRAND_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "brand": "@brand.code",
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.spec.ts:27",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Dewalt",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "productBrand",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "brand"
+    },
+    {
+      "value": "Home / Shop By Brand / Dewalt",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "brandBreadcrumb",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "brand"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}
