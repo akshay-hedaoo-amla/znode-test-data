@@ -17,3 +17,57 @@ excluded:
     status: approved
     approvedBy: Akshay Hedaoo
     approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: BabyFrock
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: priced $599-$849 in category hierarchy 124, which automatic PromoAmountOffCategory (id 14, $15/unit, min $400, Anonymous) discounts at quantity 1; cart limit 10.
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: KAFFKEC
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: priced $599-$849 in category hierarchy 124, which automatic PromoAmountOffCategory (id 14, $15/unit, min $400, Anonymous) discounts at quantity 1; cart limit 10.
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: AutomationTestimPriceCurrencyProduct
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: price-list and currency fixture of the Testim suite (sale $22.49, list $101-$599); cart limit 10.
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: TestimSimplePriceListProduct
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: price-list and currency fixture of the Testim suite (sale $22.49, list $101-$599); cart limit 10.
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: RegUIPriceProduct
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: fixture of the RegUI suite; cart limit 10 (storefront: Selected quantity should be between 1 to 10).
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"
+  - entity: product
+    identity: RegUI_testAutomation_Groups_SimpleProduct1
+    reason: >-
+      Another automation suite's product, served as a substitute on atstage MaxwellsHardware on 2026-10-29: fixture of the RegUI suite; cart limit 10 (storefront: Selected quantity should be between 1 to 10).
+      Stage-2 fallback run tda-playwright-1793276742068 failed on it (extra discounts, quantity rejected). Evidence:
+      docs/memory.md 2026-10-29 (C1 investigation).
+    status: approved
+    approvedBy: Akshay Hedaoo
+    approvedAt: "2026-10-29T14:30:00Z"

@@ -37,7 +37,13 @@
       "Both eligible products declared as productType simple: the assertions only need two eligible lines; a simple product avoids variant selection and the unprofiled parent inventory (B-100004 inventory NOT_FOUND). sku2 therefore has no preferred source",
       "The export's non-selected-profile check is manual; allProfiles false keeps the promotion mapped to 'Retail Customer' (default registered profile, assumed to be the declared user's)",
       "Recorded discountAmount 20.00 and updatedQuantity 5 are role data of the promotion (discountAmount, minimumQuantity)",
-      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)"
+      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)",
+      "User decision 2026-10-29 (C2c): product1/product2 belowOrderMinimum @promotion.orderMinimum and minimumQuantity @promotion.minimumQuantity: no discount at the starting quantity and the minimum reachable within each product's cart limit",
+      "User decision 2026-10-29 (C2d): signed-in cart (Retail order minimum 650): both lines are raised to qty = max(minimumQuantity 5, floor(400 / (p1 + p2)) + 1) (PromoPercentOffProduct 9: orderMinimum 400, QuantityMinimum 5). At qty 5 the cart is 5 x (p1 + p2) < 650 -> each price < 65 -> maxPrice 65; above qty 5 the cart is at most 400 + p1 + p2 < 530",
+      "User decision 2026-10-29 (data gap): maxPrice raised to 105 on both products. With 65 only z-2200004 ($22.48) qualified, so product2 had no record; z-2420001 (about $69) now qualifies and the pair sums to about $91.50 (5 x 91.50 = $457 < 650). A pair summing over $130 would cross the Retail order minimum; the spec's subtotal soft check reports that case",
+      "User decision 2026-10-29: minMaxQuantity is linked to @promotion.minimumQuantity (PromoPercentOffProduct 9: QuantityMinimum 5), so the product's cart limit follows the promotion if its minimum changes",
+      "User decision 2026-10-31: belowOrderMinimum and minimumQuantity removed from product1/product2. Their per-product check (price x cart limit >= orderMinimum 400) rejected z-2200004 ($22.48) although the PAIR qualifies (5 x (22.48 + 69) = $457 > 400) because the spec raises both lines together. No discount at quantity 1 is already guaranteed by the promotion's QuantityMinimum 5; maxPrice 105 and minMaxQuantity stay",
+      "User decision 2026-10-29 (C2d): minMaxQuantity 5 on both = the promotion's minimum quantity and the reserved quantity (quantityUsed 5, spec RESERVED_QUANTITY 5); the computed quantity stays 5 only when p1 + p2 > 80, which no param enforces"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -85,7 +91,9 @@
         "productType": "simple",
         "promotion": "@promotion.promoCode",
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "maxPrice": 105,
+        "minMaxQuantity": "@promotion.minimumQuantity"
       }
     },
     {
@@ -95,7 +103,9 @@
         "productType": "simple",
         "promotion": "@promotion.promoCode",
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "maxPrice": 105,
+        "minMaxQuantity": "@promotion.minimumQuantity"
       },
       "preferred": {
         "source": 8,
@@ -270,5 +280,5 @@
   ],
   "status": "approved",
   "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedAt": "2026-10-31T14:30:00Z"
 }

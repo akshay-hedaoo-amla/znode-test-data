@@ -39,7 +39,8 @@
       "User decision: the test computes quantities from the resolved promotion's orderMinimum and the cart's unit prices; products use PRODUCT_SIMPLE_IN_STOCK with maxPrice so the quantity-1 cart stays below the minimum",
       "maxPrice 100 per product (cart at quantity 1 < $200, below the $800 minimum of PromoAmountOffOrder and the $400 minimum of the category promotions); sku1 at $260 cannot qualify, so it has no preferred source",
       "quantityUsed 100: upper bound for the computed quantity (inventory headroom); the test must stay within it",
-      "ensureNoDiscountForNonSelectedProfiles is manual in the export and not migrated, so no user is needed; promotion scoped to the guest's Anonymous profile"
+      "ensureNoDiscountForNonSelectedProfiles is manual in the export and not migrated, so no user is needed; promotion scoped to the guest's Anonymous profile",
+      "User decision 2026-10-29 (C2d): this test IS the Anonymous order promotion (PromoAmountOffOrder 1758, orderMinimum 800): the products must be able to REACH it. Both lines are raised to qty = floor(800 / (p1 + p2)) + 1; with maxPrice 100 each (qty-1 cart < 200) that is at least 5 and up to the reserved 100 (quantityUsed 100, spec RESERVED_QUANTITY 100) -> minMaxQuantity 100 on both, so 100 x (p1 + p2) > 800 whenever p1 + p2 > 8"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -61,7 +62,8 @@
       "params": {
         "quantityUsed": 100,
         "store": "MaxwellsHardware",
-        "maxPrice": 100
+        "maxPrice": 100,
+        "minMaxQuantity": 100
       }
     },
     {
@@ -70,7 +72,8 @@
       "params": {
         "quantityUsed": 100,
         "store": "MaxwellsHardware",
-        "maxPrice": 100
+        "maxPrice": 100,
+        "minMaxQuantity": 100
       },
       "preferred": {
         "source": 4,
@@ -170,6 +173,15 @@
     {
       "value": "2",
       "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts:81",
       "kind": "literal",
       "keyPath": "expected",
       "sensitive": false,

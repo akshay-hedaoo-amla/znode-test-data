@@ -36,7 +36,9 @@
       "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 40.00",
       "allProfiles false, profile Retail Customer (the signed-in user's profile); the guest (Anonymous) must not get it",
       "orderMinimum 200.0 = the minimum order amount of the recorded coupon ORDER50 (work/profiles/profile.json, orderMinimum 200.0); the recorded quantities 1 and 8 are kept (User decision)",
-      "With substituted products (not the preferred z-2100018 / z-2100022) the cart at qty 1 may already reach 200 or the cart at qty 8 may stay below it, so the below-minimum and above-minimum steps may not hold"
+      "With substituted products (not the preferred z-2100018 / z-2100022) the cart at qty 1 may already reach 200 or the cart at qty 8 may stay below it, so the below-minimum and above-minimum steps may not hold",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Retail Customer on both products: the coupon is applied and the percent discount asserted signed in; the guest step only asserts rejection",
+      "User decision 2026-10-29 (C2d): signed-in cart (Retail order minimum 650): product1 + product2 at qty 8 each -> 8 x (p1 + p2) < 650 -> each price < 650 / 16 = 40.625 -> maxPrice 40.625. The guest step (Anonymous 800) stays below too"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -47,7 +49,9 @@
       "alias": "product1",
       "params": {
         "quantityUsed": 8,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 40.625
       },
       "preferred": {
         "source": 4,
@@ -59,7 +63,9 @@
       "alias": "product2",
       "params": {
         "quantityUsed": 8,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 40.625
       },
       "preferred": {
         "source": 6,

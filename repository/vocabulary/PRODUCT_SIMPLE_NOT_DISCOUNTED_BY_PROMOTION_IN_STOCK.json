@@ -9,7 +9,8 @@
     "publishState": "production",
     "promotion": "!= {promotion}",
     "inventory": ">= {quantityUsed}",
-    "price": "> 0"
+    "price": "> 0",
+    "maxQuantity": ">= {minMaxQuantity}"
   },
   "scope": {
     "store": "{store}"
@@ -28,9 +29,14 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minMaxQuantity": {
+      "type": "number",
+      "description": "Optional: the product must allow at least this quantity in the cart (MaximumQuantity >= value); left out = any maximum",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }

@@ -45,4 +45,20 @@ migrated:
     - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-group-products.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-for-simple-products.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-save-for-later-unsupported-for-guest-user.spec.ts
+    # Stage 2 (2026-10-29): coupons created per run, promotions found read-only, request quote. Not yet: order-promotion
+    # threshold and reorder-from-receipt (wait for SHIPPING_FLAT_RATE_ON_STORE), amount-off-product promotion (data gap),
+    # existing-order reorder and existing saved cart (deferred)
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-coupon-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-coupon-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-coupon-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-coupon-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-coupon-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-allowed-when-flag-enabled.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-multicoupon-not-allowed-when-flag-disabled.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-order-promotion-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-category-promotion-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-promotion-functionality.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts
   selenium: []   # Phase 6 wave 2

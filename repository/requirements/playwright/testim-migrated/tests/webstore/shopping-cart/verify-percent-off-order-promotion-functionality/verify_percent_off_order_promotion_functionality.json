@@ -36,7 +36,8 @@
       "atstage (read-only rows): PromoPercentOffOrder on MaxwellsHardware is 10% automatic with OrderMinimum 650",
       "User decision: quantities computed from the resolved promotion's orderMinimum and unit prices; products PRODUCT_SIMPLE_IN_STOCK with maxPrice 100 each (quantity-1 cart < $200, below every observed order minimum); sku1 (~$120 on atstage) cannot qualify, so no preferred source",
       "quantityUsed 100 for the raised line (upper bound of the computed quantity), 1 for the other",
-      "Promotion profile 'Retail Customer' (default registered profile, assumed to be the declared user's), allProfiles false (guest check in step 6)"
+      "Promotion profile 'Retail Customer' (default registered profile, assumed to be the declared user's), allProfiles false (guest check in step 6)",
+      "User decision 2026-10-29 (C2d): this test IS the Retail order promotion (PromoPercentOffOrder 1760, orderMinimum 650): product1 must be able to REACH it. Only product1 is raised, to qty = floor((650 - p2) / p1) + 1; with maxPrice 100 each that is at least 6 and up to the reserved 100 (quantityUsed 100, spec RESERVED_QUANTITY 100) -> minMaxQuantity 100 on product1, so 100 x p1 + p2 > 650 whenever p1 > 6.5. product2 stays at qty 1. The guest step (qty-1 cart < 200) stays below the Anonymous minimum 800"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -69,7 +70,8 @@
       "params": {
         "quantityUsed": 100,
         "store": "MaxwellsHardware",
-        "maxPrice": 100
+        "maxPrice": 100,
+        "minMaxQuantity": 100
       }
     },
     {
@@ -208,6 +210,15 @@
       "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:128",
       "kind": "literal",
       "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
       "sensitive": false,
       "profiled": false,
       "role": "config"

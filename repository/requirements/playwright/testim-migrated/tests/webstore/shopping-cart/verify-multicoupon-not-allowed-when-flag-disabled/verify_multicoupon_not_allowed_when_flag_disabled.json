@@ -38,7 +38,9 @@
       "No profile check: both coupons apply to every profile (allProfiles true)",
       "Discount assertions use the resolved coupon1 discountAmount (role data), not the literal 10.00",
       "coupon2 orderMinimum left out: the collection default (0) is met by any cart",
-      "Links: coupon1 is created for both products (productId @product1.productId, secondProductId @product2.productId), so the discount is asserted over both lines as the original spec does (User decision)"
+      "Links: coupon1 is created for both products (productId @product1.productId, secondProductId @product2.productId), so the discount is asserted over both lines as the original spec does (User decision)",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Retail Customer on both products: the whole test runs signed in",
+      "User decision 2026-10-29 (C2d): signed-in cart (Retail order minimum 650): product1 + product2 at qty 5 each -> 5 x (p1 + p2) < 650 -> each price < 65 -> maxPrice 65"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -49,7 +51,9 @@
       "alias": "product1",
       "params": {
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 65
       },
       "preferred": {
         "source": 4,
@@ -61,7 +65,9 @@
       "alias": "product2",
       "params": {
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 65
       },
       "preferred": {
         "source": 6,

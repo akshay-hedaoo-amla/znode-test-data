@@ -36,7 +36,9 @@
       "Profile: AMTOFFPROD4 is an Amount Off Product coupon on MaxwellsHardware, discount 10.0, orderMinimum 10.0; sku2 z-2100023 (eligible) and sku1 z-4567890 (other) are active in-stock simple products",
       "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 10.00",
       "Link: the coupon is created for product (productId @product.productId); otherProduct is a different record by the distinct rule, so the coupon does not cover it",
-      "allProfiles true (applies before and after sign-in), so no profile"
+      "allProfiles true (applies before and after sign-in), so no profile",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Anonymous on product and otherProduct: the coupon is applied and the discount math asserted as guest; after sign-in (Retail Customer) only the label, message and coupon row are checked, so a Retail-only automatic promotion on the product is not excluded",
+      "User decision 2026-10-29 (C2d): guest cart (Anonymous order minimum 800): product alone at qty 5 -> 5 x price < 800 -> maxPrice 160; otherProduct alone at qty 1 -> maxPrice 800"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -47,7 +49,9 @@
       "alias": "otherProduct",
       "params": {
         "quantityUsed": 1,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Anonymous",
+        "maxPrice": 800
       },
       "preferred": {
         "source": 1,
@@ -59,7 +63,9 @@
       "alias": "product",
       "params": {
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Anonymous",
+        "maxPrice": 160
       },
       "preferred": {
         "source": 5,
@@ -228,5 +234,4 @@
   ],
   "status": "approved",
   "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
-}
+  "approvedAt": "2026-10-29T14:30:00Z"}

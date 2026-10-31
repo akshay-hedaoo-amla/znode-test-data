@@ -9,7 +9,11 @@
     "publishState": "production",
     "promotion": "{promotion}",
     "inventory": ">= {quantityUsed}",
-    "price": "> 0"
+    "price": "> 0",
+    "maxQuantity": ">= {minMaxQuantity}",
+    "retailPrice": "< {maxPrice}",
+    "startingLineTotal": "< {belowOrderMinimum}",
+    "maxLineTotal": ">= {belowOrderMinimum}"
   },
   "scope": {
     "store": "{store}"
@@ -32,9 +36,29 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minMaxQuantity": {
+      "type": "number",
+      "description": "Optional: the product must allow at least this quantity in the cart (MaximumQuantity >= value); left out = any maximum",
+      "optional": true
+    },
+    "maxPrice": {
+      "type": "number",
+      "description": "Optional upper bound (exclusive) on the unit price, e.g. so a cart stays under another promotion's minimum order; left out = any price above zero",
+      "optional": true
+    },
+    "belowOrderMinimum": {
+      "type": "number",
+      "description": "Optional: promotion order minimum (e.g. @promotion.orderMinimum): unit price x max(1, minimumQuantity) below it, unit price x MaximumQuantity (when numeric) at or above it",
+      "optional": true
+    },
+    "minimumQuantity": {
+      "type": "number",
+      "description": "Optional: the quantity the test starts the line at for the belowOrderMinimum check (e.g. @promotion.minimumQuantity); left out = 1. Used only with belowOrderMinimum",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-29T14:30:00Z"
 }
