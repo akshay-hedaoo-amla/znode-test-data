@@ -39,7 +39,10 @@
       "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 30.00",
       "allProfiles false, profile Retail Customer (the signed-in user's profile); the guest (Anonymous) must not get it",
       "Links: the coupon is created on product1's category (categoryId @product1.categoryId); product2 is in the same category (inCategoryId), otherProduct outside it (notInCategoryId)",
-      "orderMinimum left out: the minimum the test crosses is modelled as minimumQuantity <= quantityUsed (13)"
+      "orderMinimum left out: the minimum the test crosses is modelled as minimumQuantity <= quantityUsed (13)",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Retail Customer on all three products: the coupon is applied and the percent discount asserted signed in; the guest step only asserts the coupon is rejected",
+      "User decision 2026-10-29 (C2d): signed-in cart (Retail order minimum 650, PromoPercentOffOrder): product1 + product2 at qty 13 each -> 13 x (p1 + p2) < 650 -> each price < 650 / 26 = 25 -> maxPrice 25; otherProduct alone at qty 1 -> maxPrice 650. The guest step (same cart, Anonymous minimum 800) stays below too",
+      "User decision 2026-10-29 (C2d): minMaxQuantity 13 on product1 and product2: the spec raises both lines to updatedQuantity 13 and the storefront caps a line at the product's MaximumQuantity"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -51,7 +54,9 @@
       "params": {
         "quantityUsed": 1,
         "store": "MaxwellsHardware",
-        "notInCategoryId": "@product1.categoryId"
+        "notInCategoryId": "@product1.categoryId",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 650
       },
       "preferred": {
         "source": 4,
@@ -63,7 +68,10 @@
       "alias": "product1",
       "params": {
         "quantityUsed": 13,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 25,
+        "minMaxQuantity": 13
       },
       "preferred": {
         "source": 8,
@@ -76,7 +84,10 @@
       "params": {
         "quantityUsed": 13,
         "store": "MaxwellsHardware",
-        "inCategoryId": "@product1.categoryId"
+        "inCategoryId": "@product1.categoryId",
+        "notDiscountedForProfile": "Retail Customer",
+        "maxPrice": 25,
+        "minMaxQuantity": 13
       },
       "preferred": {
         "source": 10,

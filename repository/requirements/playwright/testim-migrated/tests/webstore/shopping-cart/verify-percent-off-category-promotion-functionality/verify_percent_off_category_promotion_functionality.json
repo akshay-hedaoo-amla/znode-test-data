@@ -37,7 +37,10 @@
       "Promotion profile 'Retail Customer' = MaxwellsHardware's default registered profile (atstage rows), assumed to be the declared user's profile (USER_WEBSTORE_REGISTERED does not constrain profile)",
       "allProfiles false: the export's non-selected-profile check is manual (not migrated); false keeps the promotion mapped to the named profile",
       "Recorded discountAmount 20.00 and updatedQuantity 2 are role data of the promotion (discountAmount, minimumQuantity)",
-      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)"
+      "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)",
+      "User decision 2026-10-29 (C2c): product belowOrderMinimum @promotion.orderMinimum and minimumQuantity @promotion.minimumQuantity: no discount at qty 1 and the minimum reachable within the product's cart limit",
+      "User decision 2026-10-29 (C2d): signed-in cart (Retail order minimum 650, PromoPercentOffOrder): the spec raises the line to qty = floor(orderMinimum / price) + 1, so the cart is at most orderMinimum + price = 200 + price (PromoPercentOffCategory 15: orderMinimum 200) -> 200 + price < 650 -> maxPrice 450 (belowOrderMinimum already keeps price < 200)",
+      "User decision 2026-10-29 (C2d): minMaxQuantity 2 on product = the quantity the requirement reserves (quantityUsed 2, spec RESERVED_QUANTITY 2); the computed quantity is <= 2 only when price > orderMinimum / 2 (100), which no param enforces"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -85,7 +88,11 @@
         "productType": "simple",
         "promotion": "@promotion.promoCode",
         "quantityUsed": 2,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "belowOrderMinimum": "@promotion.orderMinimum",
+        "minimumQuantity": "@promotion.minimumQuantity",
+        "maxPrice": 450,
+        "minMaxQuantity": 2
       },
       "preferred": {
         "source": 6,

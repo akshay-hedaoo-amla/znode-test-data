@@ -15,7 +15,9 @@
     "requiredAddOnCount": "= 0",
     "retailPrice": "< {maxPrice}",
     "categoryId": "= {inCategoryId}",
-    "notCategoryId": "!= {notInCategoryId}"
+    "notCategoryId": "!= {notInCategoryId}",
+    "maxQuantity": ">= {minMaxQuantity}",
+    "discountedForProfile": "!= {notDiscountedForProfile}"
   },
   "scope": {
     "store": "{store}"
@@ -44,6 +46,16 @@
     "notInCategoryId": {
       "type": "integer",
       "description": "Optional: the product must be in NO category with this id (e.g. @product.categoryId), so a category discount stays off it. Same id kind as promotion_categories.categoryId",
+      "optional": true
+    },
+    "minMaxQuantity": {
+      "type": "number",
+      "description": "Optional: the product must allow at least this quantity in the cart (MaximumQuantity >= value); left out = any maximum",
+      "optional": true
+    },
+    "notDiscountedForProfile": {
+      "type": "string",
+      "description": "Optional: profile name the test shops as (e.g. Anonymous); no active automatic product/category promotion of the store for that profile (or all profiles) may discount the product",
       "optional": true
     }
   },

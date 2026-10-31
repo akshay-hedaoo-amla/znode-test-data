@@ -41,7 +41,10 @@
       "Recorded categoryPromoAmtOff 15.00 is role data of the promotion (discountAmount) and also its discountAmount param, as in the approved coupon cart test",
       "updatedQuantity 2 is role data of the promotion: the migrated test computes the quantity from the resolved promotion's minimumQuantity; quantityUsed 2 stays the upper bound",
       "The discounted / not-discounted products are tied to the resolved promotion through their 'promotion' param, written as '@promotion.promoCode' (the promo code output of the promotion need in this test); the resolver cannot bind a param to another need's output yet (reported gap)",
-      "Gap: no key constraint makes the declared user's profile one the promotion does NOT cover; 'no discount at quantity 1' also depends on the promotion's orderMinimum (live TestimAmountoffCategory: QuantityMinimum 1, OrderMinimum 400)"
+      "Gap: no key constraint makes the declared user's profile one the promotion does NOT cover; 'no discount at quantity 1' also depends on the promotion's orderMinimum (live TestimAmountoffCategory: QuantityMinimum 1, OrderMinimum 400)",
+      "User decision 2026-10-29 (C2c): product belowOrderMinimum @promotion.orderMinimum and minimumQuantity @promotion.minimumQuantity: no discount at qty 1 and the minimum reachable within the product's cart limit",
+      "User decision 2026-10-29 (C2d): this test asserts the Anonymous category promotion; the guest cart must stay below the Anonymous order minimum 800 (PromoAmountOffOrder). The spec raises the line to qty = floor(orderMinimum / price) + 1, so the cart is at most orderMinimum + price = 400 + price (live promotions 14 / 1801: orderMinimum 400) -> 400 + price < 800 -> maxPrice 400 (also implied by belowOrderMinimum). The signed-in Retail step only asserts the amount x qty discount is absent, so the Retail minimum 650 is not bounded",
+      "User decision 2026-10-29 (C2d): minMaxQuantity 2 on product = the quantity the requirement reserves (quantityUsed 2, spec RESERVED_QUANTITY 2); the computed quantity is <= 2 only when price > orderMinimum / 2 (200), which no param enforces"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -78,7 +81,11 @@
         "productType": "simple",
         "promotion": "@promotion.promoCode",
         "quantityUsed": 2,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "belowOrderMinimum": "@promotion.orderMinimum",
+        "minimumQuantity": "@promotion.minimumQuantity",
+        "maxPrice": 400,
+        "minMaxQuantity": 2
       },
       "preferred": {
         "source": 4,
@@ -214,6 +221,15 @@
       "profiled": false,
       "role": "credential",
       "alias": "user"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/shopping-cart/verify-amount-off-category-promotion-functionality.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
     }
   ],
   "status": "approved",

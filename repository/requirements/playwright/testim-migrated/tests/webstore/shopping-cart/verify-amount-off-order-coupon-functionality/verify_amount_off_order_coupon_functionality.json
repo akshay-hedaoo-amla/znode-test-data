@@ -42,7 +42,9 @@
       "Profile: couponCode ORDER15 is an Amount Off Order promotion on store MaxwellsHardware, availableQuantity 9824",
       "No checkout or place-order call in the step list",
       "The test asserts discount against data.discountAmount (15.00), passed as the COUPON_AMOUNT_OFF_ORDER param discountAmount",
-      "COUPON_AMOUNT_OFF_ORDER reopened with allowedWithOtherCoupons/allProfiles/profile params (user decision): one coupon only (allowedWithOtherCoupons false); it applies to the guest and the signed-in user (allProfiles true, so no profile param)"
+      "COUPON_AMOUNT_OFF_ORDER reopened with allowedWithOtherCoupons/allProfiles/profile params (user decision): one coupon only (allowedWithOtherCoupons false); it applies to the guest and the signed-in user (allProfiles true, so no profile param)",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Anonymous: the coupon is first applied as guest; it is re-applied after sign-in (Retail Customer), which this single profile param does not cover",
+      "User decision 2026-10-29 (C2d): product alone at qty 1, discount math asserted as guest (Anonymous order minimum 800) and again signed in (Retail order minimum 650) -> price < min(800, 650) -> maxPrice 650"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -53,7 +55,9 @@
       "alias": "product",
       "params": {
         "quantityUsed": 1,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Anonymous",
+        "maxPrice": 650
       },
       "preferred": {
         "source": 1,

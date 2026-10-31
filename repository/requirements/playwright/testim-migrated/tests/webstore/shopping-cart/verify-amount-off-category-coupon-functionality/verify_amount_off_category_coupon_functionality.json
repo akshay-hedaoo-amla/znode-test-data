@@ -39,7 +39,9 @@
       "Discount assertions use the resolved coupon's discountAmount (role data), not the literal 10.00",
       "The coupon applies to the guest and NOT to the registered user: allProfiles false, profile Anonymous (MaxwellsHardware's default guest profile); the user is in Retail Customer",
       "Links: the coupon is created on product's category (categoryId @product.categoryId); otherProduct is outside it (notInCategoryId @product.categoryId)",
-      "orderMinimum left out: the minimum the test crosses is modelled as minimumQuantity <= quantityUsed (5), so qty 1 is below it and qty 5 meets it"
+      "orderMinimum left out: the minimum the test crosses is modelled as minimumQuantity <= quantityUsed (5), so qty 1 is below it and qty 5 meets it",
+      "User decision 2026-10-29 (C2b): notDiscountedForProfile Anonymous on product and otherProduct: the coupon is applied and its amount x qty discount asserted as guest; the signed-in Retail Customer step only asserts the discount is absent",
+      "User decision 2026-10-29 (C2d): guest cart (Anonymous order minimum 800, PromoAmountOffOrder): product alone at qty 5 -> 5 x price < 800 -> maxPrice 160; otherProduct alone at qty 1 -> maxPrice 800. The signed-in step (Retail order minimum 650) only asserts no amount x qty discount, so it is not bounded (5 x 160 = 800 may cross 650; a 10% order discount there does not make the absence check pass or fail)"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -51,7 +53,9 @@
       "params": {
         "quantityUsed": 1,
         "store": "MaxwellsHardware",
-        "notInCategoryId": "@product.categoryId"
+        "notInCategoryId": "@product.categoryId",
+        "notDiscountedForProfile": "Anonymous",
+        "maxPrice": 800
       },
       "preferred": {
         "source": 2,
@@ -63,7 +67,9 @@
       "alias": "product",
       "params": {
         "quantityUsed": 5,
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "notDiscountedForProfile": "Anonymous",
+        "maxPrice": 160
       },
       "preferred": {
         "source": 7,
