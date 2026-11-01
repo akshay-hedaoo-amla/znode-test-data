@@ -61,6 +61,12 @@ migrated:
     - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-order-promotion-functionality.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-promotion-functionality.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts
+    # Shipping specs (FLAT verified and approved 2026-11-01; FLAT serves all countries on atstage)
+    - testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-estimate-shipping-cost-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-receipt-and-history.spec.ts
+    - testim-migrated/tests/webstore/shopping-cart/verify-selected-shipping-deselected-by-removing-postal-code.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
