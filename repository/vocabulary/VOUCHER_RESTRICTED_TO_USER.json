@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "VOUCHER_RESTRICTED_TO_USER",
+  "entity": "voucher",
+  "type": "restricted_to_user",
+  "constraints": {
+    "isActive": "true",
+    "restrictedToCustomer": "true",
+    "startDate": "<= {now}",
+    "expirationDate": ">= {now}",
+    "remainingAmount": "> 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active voucher of the store, started, not expired, with balance left, restricted to one customer account (only that customer may use it; checkout auto-applies it to them). Applied/removed, no order placed. KB: Managing Vouchers; Configuring a Voucher.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); a voucher belongs to one store"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

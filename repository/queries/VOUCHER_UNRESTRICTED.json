@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "VOUCHER_UNRESTRICTED",
+  "sql" : "SELECT TOP 10 gc.CardNumber AS voucherNumber, gc.Name AS name, gc.Amount AS amount, gc.RemainingAmount AS remainingAmount FROM dbo.ZnodeGiftCard gc INNER JOIN dbo.ZnodePortal po ON po.PortalId = gc.PortalId WHERE po.StoreCode = @store AND gc.IsActive = @isActive AND gc.RestrictToCustomerAccount = @restrictedToCustomer AND gc.StartDate <= @now AND gc.ExpirationDate >= @now AND gc.RemainingAmount > @zeroAmount AND (@preferred IS NULL OR gc.CardNumber = @preferred) ORDER BY gc.GiftCardId",
+  "params" : [ "store", "isActive", "restrictedToCustomer", "now", "zeroAmount", "preferred" ],
+  "constants" : {
+    "isActive" : "1",
+    "restrictedToCustomer" : "0",
+    "zeroAmount" : "0"
+  },
+  "outputs" : [ "voucherNumber", "name", "amount", "remainingAmount" ],
+  "identity" : "voucherNumber",
+  "schemaFingerprint" : "sha256:3bff3757b8d66452f0bf237aaab9f2b40dd1f7bd58589bbdd7c854050b86972a",
+  "vocabularyFingerprint" : "sha256:bf0083b1d520c070cbf306e3ac9b8309e9db6836392b941a2a4d3326812dac65",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T03:41:07Z",
+  "verifiedHash" : "sha256:3cac94541a8f5f25454935220fb2b432c31fcfaa6a7d84d1f935ee627510fc8c"
+}
