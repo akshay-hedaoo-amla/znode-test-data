@@ -42,7 +42,5 @@
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
     }
   },
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "status": "pending_approval"
 }
