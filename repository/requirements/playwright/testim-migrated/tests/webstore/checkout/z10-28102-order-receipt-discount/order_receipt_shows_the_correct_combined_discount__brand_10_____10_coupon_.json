@@ -46,7 +46,9 @@
       "Data in code: the test title and a step title name the coupon and amounts ('brand 10% + $10 coupon', 'apply the $10 amountOff coupon'); the test account name appears in a step title. Text only, but it would go stale with resolved data.",
       "Spec carries a MAINTENANCE NOTE: last atstage run 2026-09-18 failed waiting for the Shipping Address heading, not triaged (evidence only).",
       "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
-      "migrate: brandPercentOff maps to no key output (swap rule 2) and the asserted discounts depend on it; the coupon code and amount also appear in test and step titles."
+      "migrate: brandPercentOff maps to no key output (swap rule 2) and the asserted discounts depend on it; the coupon code and amount also appear in test and step titles.",
+      "Re-mapped (new keys 2026-11-01): need promotion = PROMOTION_PERCENT_OFF_BRAND (auto-applied, multistore13); need product = PRODUCT_SIMPLE_OF_BRAND_IN_STOCK with brand linked to @promotion.brand, so the product is discounted by that promotion; brandPercentOff -> promotion.discountAmount; need freeShipping = SHIPPING_FREE_ON_STORE code FreeShipping (a Custom method; its radio id = shippingName without spaces + '-' + shippingId, the spec's #FreeShipping-5)",
+      "Fix (2026-11-01 run): coupon allowedWithOtherCoupons true. The test's own coupon amountOff (portal 27, $10, Is Allowed With Other Coupon = true) did not qualify, and a per-run coupon that does not stack was not applied on top of the auto-applied brand promotion (order total unchanged)"
     ],
     "confidence": "low",
     "needsReview": true
@@ -64,9 +66,17 @@
       }
     },
     {
-      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "key": "PROMOTION_PERCENT_OFF_BRAND",
+      "alias": "promotion",
+      "params": {
+        "store": "MaxwellsHardwareMultistore13"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OF_BRAND_IN_STOCK",
       "alias": "product",
       "params": {
+        "brand": "@promotion.brand",
         "quantityUsed": 1,
         "store": "MaxwellsHardwareMultistore13"
       },
@@ -82,7 +92,7 @@
         "redemptionsNeeded": 1,
         "store": "MaxwellsHardwareMultistore13",
         "discountAmount": 10.0,
-        "allowedWithOtherCoupons": false,
+        "allowedWithOtherCoupons": true,
         "allProfiles": true
       },
       "preferred": {
@@ -94,6 +104,14 @@
       "key": "PAYMENT_COD_ON_STORE",
       "alias": "payment",
       "params": {
+        "store": "MaxwellsHardwareMultistore13"
+      }
+    },
+    {
+      "key": "SHIPPING_FREE_ON_STORE",
+      "alias": "freeShipping",
+      "params": {
+        "shippingCode": "FreeShipping",
         "store": "MaxwellsHardwareMultistore13"
       }
     }
@@ -128,7 +146,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "1",
@@ -146,7 +165,9 @@
       "keyPath": "brandPercentOff",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "promotion",
+      "output": "discountAmount"
     },
     {
       "value": "2",

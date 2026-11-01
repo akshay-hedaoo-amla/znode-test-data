@@ -41,7 +41,9 @@
       "Values only in the spec header comment (SHIPOFF, ORDER15, $2.00, $100, 15.00) are evidence, not data in code; the spec reads every data value through loadData.",
       "Missing key: shippingCouponCode SHIPOFF is an active Amount Off Shipping With Carrier coupon (live, read-only: promotion CouponAmountOffShippingWithCarrier, type 20, $2.00, OrderMinimum 1, profile 1, store PortalId 7, coupon AvailableQuantity 9997) that the storefront refuses with the shipping cap message once the shipping promotion covers shipping. No vocabulary key covers shipping coupons; the need is left out and the value is recorded as expected-output only because a data source needs a declared alias. It is not redeemed (no order).",
       "orderCouponCode ORDER15 / orderCouponDiscount 15: COUPON_AMOUNT_OFF_ORDER (discountAmount 15, one coupon only so allowedWithOtherCoupons false, guest so allProfiles true, redemptionsNeeded 1 as the minimum; no order placed); ORDER15 is the preferred record as in the approved shopping-cart order-coupon entry.",
-      "migrate: shippingCouponCode and promotionMinimumOrder map to no key output (swap rule 2). orderCouponDiscount would swap from coupon.discountAmount."
+      "migrate: shippingCouponCode and promotionMinimumOrder map to no key output (swap rule 2). orderCouponDiscount would swap from coupon.discountAmount.",
+      "Re-mapped (new keys 2026-11-01): need shippingPromotion = PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER (it must be auto-applied for the cap to be reached); need shippingCoupon = COUPON_AMOUNT_OFF_SHIPPING_WITH_CARRIER (SHIPOFF first, read only: refused by the cap, never redeemed); shippingCouponCode -> shippingCoupon.couponCode",
+      "Fix (2026-11-01 run): coupon allowedWithOtherCoupons true. The refused shipping coupon stays listed as applied, so a coupon that does not stack is refused 'cannot be clubbed with the already applied coupon' (seen with a per-run created coupon)"
     ],
     "confidence": "low",
     "needsReview": true
@@ -75,11 +77,29 @@
         "redemptionsNeeded": 1,
         "store": "MaxwellsHardware",
         "discountAmount": 15.0,
-        "allowedWithOtherCoupons": false,
+        "allowedWithOtherCoupons": true,
         "allProfiles": true
       },
       "preferred": {
         "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+      "alias": "shippingPromotion",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+      "alias": "shippingCoupon",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
         "required": false
       }
     }
@@ -186,7 +206,9 @@
       "keyPath": "shippingCouponCode",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "shippingCoupon",
+      "output": "couponCode"
     },
     {
       "value": "Maximum discount limit reached for shipping.",

@@ -39,7 +39,8 @@
       "Admin credentials come from the environment (getAdminUser), not from the test data: not a source.",
       "Shared state: z10-27984 relies on Custom Flat Rate being assigned to the Retail Customer profile; the two must not run in parallel.",
       "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
-      "migrate: shippingMethodName names the record the admin step toggles, which no key covers (profile assignment); the admin grid row is found by this text and the label locator is fixed to FLAT, so a swapped name cannot be trusted to name the same record (unsure, so migrate)."
+      "migrate: shippingMethodName names the record the admin step toggles, which no key covers (profile assignment); the admin grid row is found by this text and the label locator is fixed to FLAT, so a swapped name cannot be trusted to name the same record (unsure, so migrate).",
+      "Re-mapped (2026-11-01): shippingMethodName -> shipping.expectedShippingOptionName (ZnodeShipping.Description 'Custom Flat Rate', the text the admin grid and checkout show; shippingName is 'Flat') (SHIPPING_FLAT_RATE_ON_STORE, code FLAT on multistore13: the record the admin step toggles and the FLAT label shows). The Retail Customer profile stays fixed in the admin page object; no key for the profile assignment"
     ],
     "confidence": "low",
     "needsReview": true
@@ -88,7 +89,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "shipping"
+      "alias": "shipping",
+      "output": "expectedShippingOptionName"
     },
     {
       "value": "<masked:username>",

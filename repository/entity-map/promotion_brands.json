@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "entity": "promotion_brands",
+  "tables": [
+    "dbo.ZnodePromotion",
+    "dbo.ZnodePromotionType",
+    "dbo.ZnodePortal",
+    "dbo.ZnodePromotionProfileMapper",
+    "dbo.ZnodeProfile",
+    "dbo.ZnodePromotionBrand",
+    "dbo.ZnodeBrandDetails"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePromotion.PromotionTypeId",
+      "to": "dbo.ZnodePromotionType.PromotionTypeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePromotion.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePromotion.PromotionId",
+      "to": "dbo.ZnodePromotionProfileMapper.PromotionId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePromotionProfileMapper.ProfileId",
+      "to": "dbo.ZnodeProfile.ProfileId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePromotion.PromotionId",
+      "to": "dbo.ZnodePromotionBrand.PromotionId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePromotionBrand.BrandId",
+      "to": "dbo.ZnodeBrandDetails.BrandId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "promoCode": "dbo.ZnodePromotion.PromoCode",
+    "name": "dbo.ZnodePromotion.Name",
+    "discountType": "dbo.ZnodePromotionType.Name",
+    "discountTypeClass": "dbo.ZnodePromotionType.ClassName",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "allStores": "IFNULL(dbo.ZnodePromotion.PortalId, true, false)",
+    "startDate": "dbo.ZnodePromotion.StartDate",
+    "endDate": "dbo.ZnodePromotion.EndDate",
+    "requiresCoupon": "dbo.ZnodePromotion.IsCouponRequired",
+    "allowedWithOtherCoupons": "dbo.ZnodePromotion.IsAllowedWithOtherCoupons",
+    "discountAmount": "dbo.ZnodePromotion.Discount",
+    "orderMinimum": "dbo.ZnodePromotion.OrderMinimum",
+    "minimumQuantity": "dbo.ZnodePromotion.QuantityMinimum",
+    "promotionMessage": "dbo.ZnodePromotion.PromotionMessage",
+    "displayOrder": "dbo.ZnodePromotion.DisplayOrder",
+    "profile": "dbo.ZnodeProfile.ProfileName",
+    "profileId": "dbo.ZnodePromotionProfileMapper.ProfileId",
+    "allProfiles": "IFNULL(dbo.ZnodePromotionProfileMapper.ProfileId, true, false)",
+    "brand": "dbo.ZnodeBrandDetails.BrandCode",
+    "brandActive": "dbo.ZnodeBrandDetails.IsActive",
+    "isWhenBuying": "dbo.ZnodePromotionBrand.IsWhenBuying",
+    "isGetsDiscounted": "dbo.ZnodePromotionBrand.IsGetsDiscounted"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "profile": "dbo.ZnodeProfile.ProfileName"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:a8be7d38c7d5de848cd4b431493abaae7dec2619031b789fe6a85d16d1aeb4bf",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

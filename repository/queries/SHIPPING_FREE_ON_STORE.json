@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "SHIPPING_FREE_ON_STORE",
+  "sql" : "SELECT TOP 10 s.ShippingCode AS shippingCode, s.ShippingName AS shippingName, s.Description AS expectedShippingOptionName, s.ShippingId AS shippingId FROM dbo.ZnodeShipping s INNER JOIN dbo.ZnodeShippingTypes st ON st.ShippingTypeId = s.ShippingTypeId INNER JOIN dbo.ZnodePortalShipping pship ON pship.ShippingId = s.ShippingId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pship.PortalId LEFT JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = pship.PublishStateId WHERE po.StoreCode = @store AND s.ShippingCode = @shippingCode AND s.IsActive = @isActive AND st.Name = @shippingType AND st.IsActive = @isActive AND ps.PublishStateCode = @publishState ORDER BY s.ShippingId",
+  "params" : [ "store", "shippingCode", "isActive", "shippingType", "publishState" ],
+  "constants" : {
+    "isActive" : "true",
+    "shippingType" : "Custom",
+    "publishState" : "PRODUCTION"
+  },
+  "outputs" : [ "shippingCode", "shippingName", "expectedShippingOptionName", "shippingId" ],
+  "identity" : "expectedShippingOptionName",
+  "schemaFingerprint" : "sha256:d4f322b8888168f58a3723033776e77020f2802c023089118a324e6a8f7777ed",
+  "vocabularyFingerprint" : "sha256:9e36fd6b806868ab84d46bd5d45cdc4162d46e05b100abd8588da5d18b264e73",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T14:15:17Z",
+  "verifiedHash" : "sha256:e73c866f7c8ac26092a4a6b9d0ad29a031fd9ae42c245bb85e22961096aa7b8e"
+}

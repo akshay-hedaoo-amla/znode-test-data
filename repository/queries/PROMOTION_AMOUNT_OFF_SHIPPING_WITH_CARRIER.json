@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+  "sql" : "SELECT TOP 10 p.PromoCode AS promoCode, p.Name AS name, p.Discount AS discountAmount, p.OrderMinimum AS orderMinimum FROM dbo.ZnodePromotion p INNER JOIN dbo.ZnodePromotionType t ON t.PromotionTypeId = p.PromotionTypeId INNER JOIN dbo.ZnodePortal s ON s.PortalId = p.PortalId WHERE t.Name = @promotionTypeName AND s.StoreCode = @store AND p.StartDate <= @now AND p.EndDate >= @now AND p.IsCouponRequired = @couponRequired AND p.OrderMinimum > @zeroAmount AND (@profile IS NULL OR EXISTS (SELECT m.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper m LEFT JOIN dbo.ZnodeProfile pr ON pr.ProfileId = m.ProfileId WHERE m.PromotionId = p.PromotionId AND (m.ProfileId IS NULL OR pr.ProfileName = @profile))) AND (@preferred IS NULL OR p.PromoCode = @preferred) ORDER BY p.PromotionId",
+  "params" : [ "promotionTypeName", "store", "now", "couponRequired", "zeroAmount", "profile", "preferred" ],
+  "constants" : {
+    "promotionTypeName" : "Amount Off Shipping with carrier",
+    "couponRequired" : "0",
+    "zeroAmount" : "0"
+  },
+  "outputs" : [ "promoCode", "name", "discountAmount", "orderMinimum" ],
+  "identity" : "promoCode",
+  "schemaFingerprint" : "sha256:f836447c17ce6853767ebf3f20f5440e8f7eb1bc1a34ad04dd02c82613341871",
+  "vocabularyFingerprint" : "sha256:b435d71f3ef11b15e89705803bf1b9bab1f4ae266b6826647a52d6a2f780a1be",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T14:15:07Z",
+  "verifiedHash" : "sha256:9d738a09a9583c8302c11e469d4f3fd3fbdfbdc55d7b4d96dd0d7ea07c9664bf"
+}

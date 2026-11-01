@@ -12,7 +12,7 @@
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Charge on Delivery (COD) payment method associated with the store and shown in webstore checkout, so the test can place an order without a card. KB: Configuring Charge on Delivery (COD) Payment Plugin (Display Setting); Managing Payment Process Plugins.",
+  "description": "Charge on Delivery (COD) payment method associated with the store, or with one of the store's profiles, and shown in webstore checkout, so the test can place an order without a card. KB: Configuring Charge on Delivery (COD) Payment Plugin; Managing Payment Process Plugins.",
   "declaredParams": {
     "store": {
       "type": "string",
@@ -21,5 +21,5 @@
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

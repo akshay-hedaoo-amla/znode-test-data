@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "SHIPPING_FREE_ON_STORE",
+  "entity": "shipping",
+  "type": "custom_by_code",
+  "constraints": {
+    "isActive": "true",
+    "shippingType": "custom",
+    "code": "{shippingCode}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active custom shipping method with the given code (the store's 'Free Shipping' method, code FreeShipping) associated with the store. Its rules may still charge (handling): the test reads the totals. KB: Managing Shipping Methods.",
+  "declaredParams": {
+    "shippingCode": {
+      "type": "string",
+      "description": "ZnodeShipping.ShippingCode of the option the test selects (FreeShipping); the checkout radio id is the shipping name without spaces, '-', and shippingId"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

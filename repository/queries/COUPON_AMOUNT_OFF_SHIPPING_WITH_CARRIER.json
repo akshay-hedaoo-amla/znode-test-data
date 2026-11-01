@@ -1,0 +1,23 @@
+{
+  "schemaVersion" : 1,
+  "key" : "COUPON_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+  "sql" : "SELECT TOP 10 c.Code AS couponCode, p.PromoCode AS promoCode, p.Name AS name, p.Discount AS discountAmount, p.OrderMinimum AS orderMinimum FROM dbo.ZnodePromotion p INNER JOIN dbo.ZnodePromotionCoupon c ON c.PromotionId = p.PromotionId INNER JOIN dbo.ZnodePromotionType t ON t.PromotionTypeId = p.PromotionTypeId INNER JOIN dbo.ZnodePortal s ON s.PortalId = p.PortalId WHERE t.Name = @promotionTypeName AND s.StoreCode = @store AND p.StartDate <= @now AND p.EndDate >= @now AND p.IsCouponRequired = @couponRequired AND c.IsActive = @couponActive AND c.AvailableQuantity > @zeroQuantity AND p.PromoCode NOT LIKE @tdaPromoCodePattern AND (@profile IS NULL OR EXISTS (SELECT m.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper m LEFT JOIN dbo.ZnodeProfile pr ON pr.ProfileId = m.ProfileId WHERE m.PromotionId = p.PromotionId AND (m.ProfileId IS NULL OR pr.ProfileName = @profile))) AND (@preferred IS NULL OR c.Code = @preferred) ORDER BY c.PromotionCouponId",
+  "params" : [ "promotionTypeName", "store", "now", "couponRequired", "couponActive", "zeroQuantity", "tdaPromoCodePattern", "profile", "preferred" ],
+  "constants" : {
+    "promotionTypeName" : "Amount Off Shipping with carrier",
+    "couponRequired" : "1",
+    "couponActive" : "1",
+    "zeroQuantity" : "0",
+    "tdaPromoCodePattern" : "TDA-%"
+  },
+  "outputs" : [ "couponCode", "promoCode", "name", "discountAmount", "orderMinimum" ],
+  "identity" : "couponCode",
+  "schemaFingerprint" : "sha256:68922cbb5b96232cd89d97a79c7f4ebfc4b6ba012886e3c4d18fcd003c0f3af4",
+  "vocabularyFingerprint" : "sha256:e66e02091e751bccb48265f777475fbd030b48953f1f163147e1add6cd4423b5",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T14:15:10Z",
+  "verifiedHash" : "sha256:020946c27f920ddada1da90b0ae17fa993f1fdc7a6fa796c7eaffd293ec55e13"
+}

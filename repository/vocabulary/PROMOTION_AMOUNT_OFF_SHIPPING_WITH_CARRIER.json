@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+  "entity": "promotion",
+  "type": "carrier_shipping_promotion",
+  "constraints": {
+    "discountType": "amount_off_shipping_with_carrier",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "requiresCoupon": "false",
+    "orderMinimum": "> 0"
+  },
+  "scope": {
+    "store": "{store}",
+    "profile": "{profile}"
+  },
+  "usage": "read-only",
+  "description": "Active automatic (no coupon) Amount Off Shipping with carrier promotion on the store and profile with a minimum order amount: above it, shipping is discounted with no code entered. Read only. KB: Configuring a Promotion (Minimum Order Amount).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps",
+      "optional": true
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

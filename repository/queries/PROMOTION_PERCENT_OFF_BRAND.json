@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROMOTION_PERCENT_OFF_BRAND",
+  "sql" : "SELECT TOP 10 p.PromoCode AS promoCode, p.Name AS name, p.Discount AS discountAmount, p.OrderMinimum AS orderMinimum, p.QuantityMinimum AS minimumQuantity, b.BrandCode AS brand FROM dbo.ZnodePromotion p INNER JOIN dbo.ZnodePromotionType t ON t.PromotionTypeId = p.PromotionTypeId INNER JOIN dbo.ZnodePortal s ON s.PortalId = p.PortalId INNER JOIN dbo.ZnodePromotionBrand pb ON pb.PromotionId = p.PromotionId INNER JOIN dbo.ZnodeBrandDetails b ON b.BrandId = pb.BrandId WHERE t.Name = @promotionTypeName AND s.StoreCode = @store AND p.StartDate <= @now AND p.EndDate >= @now AND p.IsCouponRequired = @couponRequired AND (@discountAmount IS NULL OR p.Discount = @discountAmount) AND b.IsActive = @brandActive AND (@profile IS NULL OR EXISTS (SELECT m.PromotionProfileMapperId FROM dbo.ZnodePromotionProfileMapper m LEFT JOIN dbo.ZnodeProfile pr ON pr.ProfileId = m.ProfileId WHERE m.PromotionId = p.PromotionId AND (m.ProfileId IS NULL OR pr.ProfileName = @profile))) AND (@preferred IS NULL OR p.PromoCode = @preferred) ORDER BY p.PromotionId, b.BrandCode",
+  "params" : [ "promotionTypeName", "store", "now", "couponRequired", "discountAmount", "brandActive", "profile", "preferred" ],
+  "constants" : {
+    "promotionTypeName" : "Percent Off Brand",
+    "couponRequired" : "0",
+    "brandActive" : "1"
+  },
+  "outputs" : [ "promoCode", "name", "discountAmount", "orderMinimum", "minimumQuantity", "brand" ],
+  "identity" : "promoCode",
+  "schemaFingerprint" : "sha256:a8be7d38c7d5de848cd4b431493abaae7dec2619031b789fe6a85d16d1aeb4bf",
+  "vocabularyFingerprint" : "sha256:72aac38ab246caf30525f6f629e4ac1ed5e0f91feefa2d799a6e626666848a18",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T14:15:13Z",
+  "verifiedHash" : "sha256:e286b3b45c1b7c974a24005d7b51cdec1a9242314871653873b26a806dad2b5b"
+}
