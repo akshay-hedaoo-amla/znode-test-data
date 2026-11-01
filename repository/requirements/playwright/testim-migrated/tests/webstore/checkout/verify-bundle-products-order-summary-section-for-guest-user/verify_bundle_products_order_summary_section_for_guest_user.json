@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.spec.ts > Webstore - Checkout > verify bundle products order summary section for guest user",
+  "scenario": {
+    "summary": "Guest opens a bundle product's PDP (name, category, brand), adds it (qty 3), checks out as guest with Custom Flat Rate shipping, checks the bundle's child rows in the order summary, applies a voucher (Amount To Be Paid math), checks invalid voucher and coupon messages, applies a valid coupon (order-total math), fills additional info and places a COD order.",
+    "steps": [
+      "Open the webstore as a guest.",
+      "Search the bundle SKU and open it: heading = productName, category label, brand label.",
+      "Set quantity 3, add to cart, open the cart, Checkout as Guest, fill the guest address, select Ship Complete + Custom Flat Rate.",
+      "Bundle child rows of the bundle SKU contain bundleChildren.",
+      "Apply voucherNumber: voucher row number, Voucher Amount / Amount To Be Paid labels, order total - voucher = amount to be paid; remove the voucher.",
+      "Apply an invalid voucher and an invalid coupon: error messages.",
+      "Apply the coupon: success message, discount visible, Handling Charges, order-total math.",
+      "Fill cart name and additional info, select COD, place the order, check the thank-you banner."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "brand",
+      "coupon",
+      "voucher",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the bundle",
+      "A guest order is placed (COD) with the coupon; one coupon redemption is used"
+    ],
+    "assertions": [
+      "PDP heading equals productName; category label 'Category:Power Tools'; brand label 'Brand:Dewalt'",
+      "Bundle child rows contain the three '<child sku> - <child name>' strings",
+      "Voucher row equals voucherNumber; Voucher Amount / Amount To Be Paid labels; |order total - voucher - to be paid| <= 0.05",
+      "Invalid voucher / invalid coupon messages",
+      "Coupon success message; discount visible; Handling Charges label; order-total math within 0.05",
+      "ADDITIONAL INFO heading; thank-you banner"
+    ],
+    "evidence": [
+      "Title and the six step labels match the flow; guest storageState.",
+      "bundleProduct z-1234579: tda rows shows PimProductId 142, active BundleProduct 'DeWalt 3-Tool Combo Kit Bundle' (another profile run: PRODUCTION, inventory 28362). PRODUCT_BUNDLE_IN_STOCK quantityUsed 3, outputs sku, name.",
+      "Missing outputs: category ('Category:Power Tools'), brand ('Brand:Dewalt') and the bundle child rows ('<child sku> - <child name>') are product data the test asserts; PRODUCT_BUNDLE_IN_STOCK returns none of them. Recorded as expected-output of alias product.",
+      "coupon TestimTestCoupon25: tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 25, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
+      "DOUBT: the asserted coupon success message ('- Coupon successfully applied.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon successfully applied'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
+      "Re-mapped (voucher keys 2026-11-01): voucherNumber E2O43NF74Y -> need voucher (VOUCHER_UNRESTRICTED), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE, shippingCode FLAT. tda rows: ZnodeShipping FLAT is Custom, DestinationCountryCode US, so countries 'us' (the address itself is masked).",
+      "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "Guest address (masked), cartName and additionalInfo are typed into the order: created-by-test. couponAmount is in the spec's schema but not in the scan values.",
+      "migrate: category, brand and child rows asserted are derived from the bundle's data and have no key output (swap rules 2 and 3 fail). No data value in the spec code (comments only)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 25.0,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": true,
+        "allProfiles": true,
+        "orderMinimum": 10.0
+      },
+      "preferred": {
+        "source": 24,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "VOUCHER_UNRESTRICTED",
+      "alias": "voucher",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 16,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "bundleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "Category:Power Tools",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "category",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Brand:Dewalt",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "brand",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:28",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:29",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:30",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:31",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:32",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:33",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:34",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "z-1234582 - DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "bundleChildren.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234607 - DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "bundleChildren.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234580 - DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "bundleChildren.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "E2O43NF74Y",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "Voucher Amount",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "voucherAmountLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Amount To Be Paid",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "amountToBePaidLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.spec.ts:106",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "InvalidVoucher",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:15",
+      "kind": "json",
+      "keyPath": "invalidVoucher",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This voucher is invalid.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "invalidVoucherMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "invalidCoupon",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "invalidCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "- Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TestimTestCoupon25",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "coupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon",
+      "output": "couponCode"
+    },
+    {
+      "value": "- Coupon successfully applied.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "couponSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "handlingChargeLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.spec.ts:131",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ADDITIONAL INFO",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:23",
+      "kind": "json",
+      "keyPath": "additionalInfoHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TestimTest",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:24",
+      "kind": "json",
+      "keyPath": "cartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "This is additional info",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:25",
+      "kind": "json",
+      "keyPath": "additionalInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.json:26",
+      "kind": "json",
+      "keyPath": "thankYouMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

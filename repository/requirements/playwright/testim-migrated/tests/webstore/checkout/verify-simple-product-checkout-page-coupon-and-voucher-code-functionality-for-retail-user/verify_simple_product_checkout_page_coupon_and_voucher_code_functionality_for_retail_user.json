@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.spec.ts > Webstore - Checkout > verify simple product checkout page coupon and voucher code functionality for retail user",
+  "scenario": {
+    "summary": "A registered user signs in, adds a simple product at quantity 5 and reaches checkout with the flat-rate shipping method, removes the auto-applied voucher, applies a voucher and checks Amount To Be Paid, checks that an invalid voucher and an invalid coupon are rejected, applies an Amount Off Order coupon and checks the order-total reconciliation, then pays with Vantiv Express, checks the receipt and logs out.",
+    "steps": [
+      "Sign in with username/password, add simpleProduct at quantity productQuantity, open the cart and proceed to checkout",
+      "Select the flat-rate shipping method and remove the auto-applied voucher",
+      "Apply voucherNumber: number, labels and order total - voucher amount = amount to be paid (0.05); remove it",
+      "Apply invalidVoucher and check invalidVoucherMessage; apply invalidCoupon and check invalidCouponMessage; remove it",
+      "Apply coupon: success message, discount line, Handling Charges label, order-summary reconciliation (0.05)",
+      "Fill projectName and additional information, pay with Vantiv Express (masked card), check the receipt banner and job name, log out"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "voucher",
+      "promotion",
+      "shipping",
+      "payment",
+      "order",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user cart: product added, voucher removed and re-applied then removed, coupon applied",
+      "An order is placed with the coupon (one coupon redemption consumed); the voucher is removed before payment, so its balance is not spent"
+    ],
+    "assertions": [
+      "Applied voucher number equals voucherNumber; Voucher Amount and Amount To Be Paid labels",
+      "Order total - voucher amount - amount to be paid within 0.05",
+      "Invalid voucher message equals invalidVoucherMessage; invalid coupon message equals invalidCouponMessage",
+      "Coupon message equals couponSuccessMessage; discount visible; Handling Charges label; reconciliation within 0.05",
+      "Thank-you banner visible; job name equals projectName",
+      "Sign-in heading visible after logout"
+    ],
+    "evidence": [
+      "Title matches the flow (retail user, simple product, coupon and voucher, order placed)",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "DOUBT: proceedFromCart goes straight to shipping, so the account must already have a default shipping/billing address; USER_WEBSTORE_REGISTERED does not constrain that (same gap as the other retail checkout entries).",
+      "Store MaxwellsHardware: the store every atstage webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT; destination country assumed 'us'; assumption.",
+      "Spec carries a MAINTENANCE NOTE: last run 2026-09-18 failed on the Vantiv Express payment modal (build mismatch); evidence only.",
+      "simpleProduct at productQuantity 5: PRODUCT_SIMPLE_IN_STOCK quantityUsed 5, minMaxQuantity 5. z-1002656 and the voucher number also appear in spec comments only.",
+      "coupon TESTCHECKOUT (live, read-only: promotion Testim_CheckoutPageCoupon, Amount Off Order, Discount 10, OrderMinimum 10, no profile, store PortalId 7, AvailableQuantity 100): COUPON_AMOUNT_OFF_ORDER discountAmount 10 (amount not asserted), allProfiles true, allowedWithOtherCoupons false, redemptionsNeeded 1 (the order consumes one redemption).",
+      "Re-mapped (voucher keys 2026-11-01): voucherNumber JDL4WZ9XYS -> need voucher (VOUCHER_RESTRICTED_TO_USER), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
+      "Ownership gap: the voucher must be the one restricted to the declared account. A declared account (preferred required) cannot be linked to (validator), so VOUCHER_RESTRICTED_TO_USER has no user param: the test's own voucher is tried first (preferred, bound to this account in the data); a fallback voucher is restricted to SOME customer, not necessarily this one. Enforcing it needs the planned core feature 'record owned by the declared account' (as for saved carts and reorder)",
+      "invalidVoucher and invalidCoupon are deliberately non-existent codes: config (they must stay absent from the store).",
+      "Missing key: the Vantiv Express credit-card payment method associated with MaxwellsHardware and shown at webstore checkout (payWithVantivExpress). PAYMENT_COD_ON_STORE covers COD only; the need is left out. Card values are masked test-gateway settings: config.",
+      "migrate: the payment method (Vantiv Express) has no key. voucherNumber now maps to voucher.voucherNumber."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 5
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "redemptionsNeeded": 1,
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": true
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "VOUCHER_RESTRICTED_TO_USER",
+      "alias": "voucher",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1002656",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "JDL4WZ9XYS",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "Voucher Amount",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "voucherAmountLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Amount To Be Paid",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "amountToBePaidLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "INVALIDVOUCHER",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:9",
+      "kind": "json",
+      "keyPath": "invalidVoucher",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This voucher is invalid.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "invalidVoucherMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "INVALIDCOUPON",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "invalidCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "- Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TESTCHECKOUT",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:13",
+      "kind": "json",
+      "keyPath": "coupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "- Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:14",
+      "kind": "json",
+      "keyPath": "couponSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:15",
+      "kind": "json",
+      "keyPath": "handlingChargeLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Testim regression",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:16",
+      "kind": "json",
+      "keyPath": "projectName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This is additional information",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:17",
+      "kind": "json",
+      "keyPath": "additionalInformation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:19",
+      "kind": "json",
+      "keyPath": "cardholderName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:20",
+      "kind": "json",
+      "keyPath": "cardNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:21",
+      "kind": "json",
+      "keyPath": "expiryDate",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-retail-user.json:22",
+      "kind": "json",
+      "keyPath": "cvv",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

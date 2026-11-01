@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/z10-28100-profile-shipping.spec.ts > Webstore - Profile shipping (z10-28100, cross-app) > profile-based Custom Flat Rate renders at checkout only when assigned",
+  "scenario": {
+    "summary": "Cross-app regression for z10-28100 on Multistore13: admin unassigns the Custom Flat Rate shipping method from the Retail Customer profile and the registered user does not see it at checkout; admin assigns it again and the user sees it. A finally block restores the assignment. No order is placed.",
+    "steps": [
+      "Admin (credentials from the environment): open the Retail Customer profile shipping, unassign shippingMethodName and check it is unassigned",
+      "Webstore: sign in with webUsername/webPassword, empty the cart, add sku at quantity 1, check out, click Ship Complete if shown",
+      "Shipping options render (count > 0) and the Custom Flat Rate label (lblShippingMethodFLAT) is absent",
+      "Admin: assign shippingMethodName to the Retail Customer profile and check it is assigned",
+      "Webstore: reach checkout shipping again; the Custom Flat Rate label is visible",
+      "Empty the cart; finally re-assign the method if it is not assigned"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "shipping",
+      "profile",
+      "cart"
+    ],
+    "stateChanges": [
+      "Admin unassigns and re-assigns the shipping method on the Retail Customer profile (shared store configuration; restored in finally)",
+      "The user's cart gets the product and is emptied at the end",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Admin: method unassigned, then assigned (soft)",
+      "Shipping options render while unassigned",
+      "Custom Flat Rate absent at checkout when unassigned, visible when assigned"
+    ],
+    "evidence": [
+      "Title matches the flow; Testim z10_28100 bug-repro, cross-app (admin + webstore)",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "Store MaxwellsHardwareMultistore13: the spec pins baseURL webstore-multistore13-z10-at; ZnodePortal StoreCode MaxwellsHardwareMultistore13 (PortalId 27) checked read-only with tda rows.",
+      "sku z-2300014: PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (preferred, not required).",
+      "shippingMethodName 'Custom Flat Rate' is the description (expectedShippingOptionName) of the FLAT custom method (approved estimate-shipping evidence); flatShippingLabel is fixed to lblShippingMethodFLAT, so the method must be FLAT: SHIPPING_FLAT_RATE_ON_STORE shippingCode FLAT, country assumed 'us'.",
+      "Missing key: a shipping method associated with the store's Retail Customer profile (profile-based shipping): the FLAT custom flat-rate method on MaxwellsHardwareMultistore13 that the admin can assign to and unassign from the profile of the declared user, assigned at baseline, while at least one other shipping method stays assigned to that profile (options must still render when FLAT is unassigned). The need is left out; SHIPPING_FLAT_RATE_ON_STORE covers only the store-level method.",
+      "Admin credentials come from the environment (getAdminUser), not from the test data: not a source.",
+      "Shared state: z10-27984 relies on Custom Flat Rate being assigned to the Retail Customer profile; the two must not run in parallel.",
+      "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
+      "migrate: shippingMethodName names the record the admin step toggles, which no key covers (profile assignment); the admin grid row is found by this text and the label locator is fixed to FLAT, so a swapped name cannot be trusted to name the same record (unsure, so migrate)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardwareMultistore13"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardwareMultistore13"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardwareMultistore13"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "Custom Flat Rate",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-28100-profile-shipping.json:5",
+      "kind": "json",
+      "keyPath": "shippingMethodName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "shipping"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-28100-profile-shipping.json:2",
+      "kind": "json",
+      "keyPath": "webUsername",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-28100-profile-shipping.json:3",
+      "kind": "json",
+      "keyPath": "webPassword",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2300014",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-28100-profile-shipping.json:4",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/checkout/z10-28100-profile-shipping.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/z10-28100-profile-shipping.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/z10-28100-profile-shipping.spec.ts:113",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

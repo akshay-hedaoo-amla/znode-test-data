@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-shipping-address-validation-for-guest-user.spec.ts > Webstore - Checkout > blank shipping address reports a message for every required field @ZPD-TC-9247",
+  "scenario": {
+    "summary": "Blank guest shipping address save reports a required-field message for first name, last name, phone, street, postal code and city. No address saved, no order placed.",
+    "steps": [
+      "Open the webstore home page as a guest (empty storageState), empty the cart (errors ignored).",
+      "Add the simple product with quantity 1 (addProductOfAnyType), open the cart and checkout as guest.",
+      "Save the empty address form.",
+      "Check the six required-field messages."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart emptied and filled with the simple product",
+      "No address saved, no order placed"
+    ],
+    "assertions": [
+      "First name, last name, phone number, street address, postal code and city errors equal requiredMessages.* (fixed UI text, masked by the scanner)."
+    ],
+    "evidence": [
+      "Title 'blank shipping address reports a message for every required field @ZPD-TC-9247' matches the flow.",
+      "Spec header: coverage gap fill ported from the Selenium suite (not a Testim port); the three tests share the data file and run serially.",
+      "productSku z-2420004 added at quantity 1: PRODUCT_SIMPLE_IN_STOCK, quantityUsed 1. Other profile runs: z-2420004 is an active PRODUCTION SimpleProduct, inventory 235, requiredAddOnCount 0, storefrontProductIndex 0 (not filtered by store).",
+      "'/' (page.goto) is navigation config.",
+      "No shipping or payment is selected and no order is placed: no shipping/payment need.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "requiredMessages.* are masked by key name but are validation messages: expected-output, kept masked.",
+      "swap: data only through loadData (productSku -> product.sku), no derived assertions (messages and labels are fixed UI text), no data value in the spec code, no other data file."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9247",
+    "ZPD-TC-9248",
+    "ZPD-TC-9250"
+  ],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/checkout/verify-shipping-address-validation-for-guest-user.spec.ts:104",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "productSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "requiredMessages.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "requiredMessages.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "requiredMessages.phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "requiredMessages.streetAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:21",
+      "kind": "json",
+      "keyPath": "requiredMessages.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "requiredMessages.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

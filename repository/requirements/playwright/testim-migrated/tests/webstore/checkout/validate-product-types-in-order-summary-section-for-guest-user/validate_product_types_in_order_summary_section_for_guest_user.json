@@ -1,0 +1,429 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.spec.ts > Webstore - Checkout > validate product types in order summary section for guest user",
+  "scenario": {
+    "summary": "Guest adds one product of each type (simple, bundle, grouped, configurable; qty 2 each), checks the cart line names, checks out as guest with Custom Flat Rate shipping, removes an auto-applied voucher if present, checks that the line totals add up to the sub total and the order-total math, checks the Purchase Order payment label, and places a COD order.",
+    "steps": [
+      "Open the webstore as a guest.",
+      "For each of the four products: addProductOfAnyType(sku, 2).",
+      "Open the cart: 'Cart' heading; productNameLink(id) contains name for each product.",
+      "Checkout as Guest; check the configurable line name (product id '532' hardcoded); fill the guest address; check and click the Custom Flat Rate label; remove voucher voucherNumber if present.",
+      "Read the four line totals by hardcoded product ids 532/142/408/415 and the summary amounts; sub total = sum of line totals; order-total math; amount to be paid if a voucher is present; PurchaseOrder payment label text.",
+      "Select COD, place the order, check the thank-you banner."
+    ],
+    "entitiesTouched": [
+      "product",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the four products",
+      "A guest order is placed (COD)"
+    ],
+    "assertions": [
+      "Cart heading equals 'Cart'; each productNameLink(id) contains its name",
+      "'Proceed to Checkout'; configurable line name equals configurableProductName",
+      "Flat shipping label contains 'Custom Flat Rate'; Handling Charges visible",
+      "|sum of line totals - sub total| <= 0.05; order-total math within 0.05; amount to be paid math when a voucher shows",
+      "paymentLabel(PurchaseOrder) text equals 'PurchaseOrder'; thank-you banner"
+    ],
+    "evidence": [
+      "Title and the four step labels match the flow; guest storageState.",
+      "tda rows: z-2200010 = PimProductId 415 SimpleProduct; z-1234579 = 142 BundleProduct; z-2200003 = 408 GroupedProduct; B-100004 = 676 ConfigurableProduct whose line id 532 and name are its default variant z-2510001 ('75-Watt Equivalent BR40 ...').",
+      "Keys: PRODUCT_SIMPLE_IN_STOCK / PRODUCT_BUNDLE_IN_STOCK / PRODUCT_GROUPED_IN_STOCK (outputs sku, productId, name) and PRODUCT_CONFIGURABLE_WITH_VARIANTS (parentProductSku, variant1Name; variantAttributes BulbSize,Color,Technology as in the approved cart entries), quantityUsed 2 each.",
+      "Missing output: the configurable key returns no productId for the variant line (532).",
+      "customFlatRateLabel 'Custom Flat Rate' is the FLAT shipping method's description: data of the shipping need (output expectedShippingOptionName). tda rows: FLAT is Custom, DestinationCountryCode US, so countries 'us'.",
+      "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
+      "MISSING KEY: Purchase Order payment offered on the store to the guest (Anonymous) profile; need left out, paymentMethodLabel kept as expected-output.",
+      "voucherNumber TJD1K8YCH7 is only passed to removeVoucherByNumberIfPresent (removes an auto-applied voucher when its number matches): config, not a record the test needs.",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "Guest address (masked) is typed into the guest order: created-by-test.",
+      "Data in code: product ids '532' (line 84, find by id) and '532', '142', '408', '415' (lines 105-108, readTotal) are hardcoded in the spec; comments at lines 62, 70 and 105-108 name the SKUs.",
+      "migrate: product ids are hardcoded in the spec code and the configurable variant's productId has no key output (swap rules 2 and 4 fail). Pre-survey flag confirmed."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "simple",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundle",
+      "params": {
+        "quantityUsed": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "group",
+      "params": {
+        "quantityUsed": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "configurable",
+      "params": {
+        "quantityUsed": 2,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2200010",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "products.0.sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "sku"
+    },
+    {
+      "value": "415",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "products.0.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "productId"
+    },
+    {
+      "value": "Speedaire Air Roofing Stapler",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "products.0.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "name"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "products.1.sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "sku"
+    },
+    {
+      "value": "142",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "products.1.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "productId"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "products.1.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "name"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "products.2.sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "group",
+      "output": "sku"
+    },
+    {
+      "value": "408",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "products.2.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "group",
+      "output": "productId"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "products.2.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "group",
+      "output": "name"
+    },
+    {
+      "value": "B-100004",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "products.3.sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "532",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "products.3.id",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "products.3.name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "variant1Name"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "cart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "configurableProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "variant1Name"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:21",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:23",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Custom Flat Rate",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "customFlatRateLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "shipping",
+      "output": "expectedShippingOptionName"
+    },
+    {
+      "value": "TJD1K8YCH7",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.spec.ts:128",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.spec.ts:133",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.spec.ts:138",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PurchaseOrder",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "paymentMethodLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-product-types-in-order-summary-section-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "thankYouMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

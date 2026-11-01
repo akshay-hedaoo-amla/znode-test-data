@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts > Webstore - Checkout > validate checkout page functionalities for retail user",
+  "scenario": {
+    "summary": "A registered retail user signs in, empties the cart, adds a simple product (qty 5), checks out, edits the first saved address to a Canada address, picks the Canada shipping method, checks the order-summary line and labels, checks the payment methods and that Purchase Order and COD selection is exclusive, then empties the cart and logs out. No order is placed.",
+    "steps": [
+      "Sign in with the dedicated retail account (username/password from the test data); 'Hello,' greeting.",
+      "Empty the cart; search the simple product SKU, open it, read the unit price, set quantity 5, add to cart, open the cart and proceed to checkout.",
+      "Edit the first address card: Display Name, names, phone, street, country, state, postal code, city; save; select CanadaShipping2 (or CanadaShipping).",
+      "Check the line: quantity, unit x qty = line total, Qty./Total labels, Remove link if present, Shipping label.",
+      "Check the PurchaseOrder label text and the PurchaseOrder/InvoiceMe/COD labels; radios unchecked; select Purchase Order, then COD (Purchase Order unchecked).",
+      "Empty the cart, check the empty-cart message, log out and check the Sign In heading."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "address",
+      "shipping",
+      "payment",
+      "cart"
+    ],
+    "stateChanges": [
+      "The user's first saved address is overwritten with the test's Canada address",
+      "Registered user's cart emptied, filled with the simple product, then emptied again",
+      "No order is placed"
+    ],
+    "assertions": [
+      "lblUserName contains 'Hello,'",
+      "Line quantity equals productQuantity (5); unit price > 0 and |unit x qty - line total| <= 0.05",
+      "Qty. / Total / Shipping labels",
+      "paymentLabel(PurchaseOrder) text equals 'PurchaseOrder'; PurchaseOrder, InvoiceMe, COD labels visible",
+      "Radios unchecked; Purchase Order checked after click; COD checked and Purchase Order unchecked after clicking COD",
+      "Empty cart message visible; Sign In heading after logout"
+    ],
+    "evidence": [
+      "Title 'validate checkout page functionalities for retail user' and the step labels match the flow.",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "simpleProduct z-1002656 and productId 933: tda rows shows PimProductId 933, active SimpleProduct; PRODUCT_SIMPLE_IN_STOCK quantityUsed 5, outputs sku and productId.",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
+      "The address values (masked) overwrite the user's first saved address: created-by-test; recorded under stateChanges. DOUBT: the test needs the account to have at least one saved address (editAddressButton.first()); USER_WEBSTORE_REGISTERED does not constrain that.",
+      "MISSING KEY: the CanadaShipping2 / CanadaShipping custom shipping method on the store for a CA destination; tda rows shows both (ShippingId 9 and 10, Custom, CA) have no shipping rule, so SHIPPING_FLAT_RATE_ON_STORE does not cover them. Need left out.",
+      "MISSING KEY: Purchase Order and Invoice Me payment methods offered on the store to the registered user's profile. Needs left out; purchaseOrderText is asserted as label text (expected-output) and the paymentMethods codes are config.",
+      "swap: data only through loadData (simpleProduct -> product.sku, productId -> product.productId; credentials kept), no derived assertions (unit price read from the page; labels fixed UI text), no data value in the spec code (z-1002656 and spnRetailPrice933 appear only in comments), no other data file."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "933",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "productId"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "lblUserName",
+      "location": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-1002656",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:15",
+      "kind": "json",
+      "keyPath": "addressName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:16",
+      "kind": "json",
+      "keyPath": "addressFirstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:17",
+      "kind": "json",
+      "keyPath": "addressLastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:18",
+      "kind": "json",
+      "keyPath": "addressPhone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:19",
+      "kind": "json",
+      "keyPath": "addressStreet",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:22",
+      "kind": "json",
+      "keyPath": "addressCountry",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:23",
+      "kind": "json",
+      "keyPath": "addressState",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:20",
+      "kind": "json",
+      "keyPath": "addressPostalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:21",
+      "kind": "json",
+      "keyPath": "addressCity",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts:112",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts:113",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Qty.",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "quantityText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Total",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "totalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "shippingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PurchaseOrder",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "purchaseOrderText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PurchaseOrder",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "paymentMethods.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "InvoiceMe",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "paymentMethods.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "COD",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "paymentMethods.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "txtBraintreeCC",
+      "location": "testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts:135",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

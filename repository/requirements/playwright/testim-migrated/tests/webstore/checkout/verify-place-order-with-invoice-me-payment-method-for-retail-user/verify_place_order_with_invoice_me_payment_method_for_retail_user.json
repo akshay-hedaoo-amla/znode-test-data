@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.spec.ts > Webstore - Checkout > verify place order with invoice me payment method for retail user",
+  "scenario": {
+    "summary": "A registered retail user signs in, adds a configurable product (quantity 5) to the cart, checks out with the account default address and Custom Flat Rate shipping, pays with Invoice Me and places the order; the receipt thank-you banner is checked.",
+    "steps": [
+      "Start with an empty storageState and sign in with the dedicated retail account (username/password from the test data).",
+      "Search the configurable product SKU, open its result, set quantity 5, add to cart and open the cart.",
+      "Proceed to checkout from the cart (the account default address is used) and select Ship Complete + Custom Flat Rate shipping.",
+      "Check the 'Order Total' label.",
+      "Remove the auto-applied voucher if its number matches voucherNumberData.",
+      "Select Invoice Me.",
+      "Place the order and check the 'Thank You For Your Purchase' receipt banner."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Registered user's cart filled with the configurable product",
+      "A new order is placed for the user (Invoice Me)"
+    ],
+    "assertions": [
+      "Order total label equals 'Order Total'.",
+      "Receipt banner visible and equals orderReceiptText ('Thank You For Your Purchase')."
+    ],
+    "evidence": [
+      "Title 'verify place order with invoice me payment method for retail user' matches the flow: signed-in retail user, configurable product, Invoice Me payment, order placed.",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "configurableProduct B-100000 is searched and opened by its parent SKU and added with the default variant (no variant picked) at quantity 5: PRODUCT_CONFIGURABLE_WITH_VARIANTS, minVariants 1, quantityUsed 5, output parentProductSku. Other profile run: B-100000 is an active PRODUCTION ConfigurableProduct (Philips); variantAttributes BulbSize,Color,Technology as in the approved PDP/cart entries for it.",
+      "DOUBT: the spec relies on the account already having a default shipping/billing address (checkout goes straight to shipping); USER_WEBSTORE_REGISTERED does not constrain that. A key (or param) for a registered user with a default address is missing.",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT. Destination country assumed 'us' (the address is masked or is the account's default address); assumption.",
+      "voucherNumberData '1QGSS8ZG6B' is passed to removeVoucherByNumberIfPresent: the test removes an auto-applied voucher only when its number equals this value. It is a defensive clean-up setting (config), not a record the test needs; no vocabulary key covers vouchers. If another voucher is auto-applied it stays on the order.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "MISSING KEY: the test needs Invoice Me payment active on the store and offered to the registered user's profile; no vocabulary key covers it, so the need is left out.",
+      "swap: data only through loadData (configurableProduct -> product.parentProductSku; credentials are kept, not swapped), no derived assertions (fixed UI text only), no data value in the spec code, no other data file."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "configurableProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "orderTotalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1QGSS8ZG6B",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "voucherNumberData",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "orderReceiptText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

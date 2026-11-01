@@ -68,3 +68,20 @@ migrated:
 swapped:
   playwright:
     - testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.spec.ts
+    # Phase 6 module webstore/checkout (requirements approved 2026-11-01; z10-27984 is swap too but outside the
+    # webstore regression config and has a COD gap on Multistore13)
+    - testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/validate-checkout-page-functionalities-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/validate-user-can-place-order-with-cod-payment-method-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/validate-user-can-place-order-with-invoice-me-payment-method-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-order-calculation-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-place-order-using-purchase-order-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-place-order-with-cod-payment-method-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-place-order-with-invoice-me-payment-method-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-shipping-address-validation-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-voucher-discount-calculation-and-removal.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-voucher-for-all-users.spec.ts
+    - testim-migrated/tests/webstore/checkout/verify-voucher-restriction-and-entitlement.spec.ts

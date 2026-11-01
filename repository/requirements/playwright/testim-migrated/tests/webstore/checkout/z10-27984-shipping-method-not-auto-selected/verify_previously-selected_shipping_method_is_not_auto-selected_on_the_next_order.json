@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/z10-27984-shipping-method-not-auto-selected.spec.ts > Webstore - Checkout (multistore13 regression) > verify previously-selected shipping method is not auto-selected on the next order",
+  "scenario": {
+    "summary": "Regression for z10-27984 on Multistore13: a registered user places a COD order with the Custom Flat Rate shipping method selected, then starts a second order and checks that no shipping method is auto-selected (shipping cost 0 before selection) and that the selected method price equals shipping plus handling, on both orders.",
+    "steps": [
+      "Sign in with username/password on the Multistore13 webstore and empty the cart",
+      "Order 1: add sku1 at quantity 1, open the cart, check out, check the Shipping Address heading, click Ship Complete",
+      "No shipping radio is checked and shipping cost is 0; select #FLAT-1; selected price = shipping + handling",
+      "Pay with COD, place the order and check the thank-you banner",
+      "Order 2: add sku2 at quantity 1, reach the shipping options again; no method auto-selected and cost 0; select #FLAT-1; price = shipping + handling",
+      "Empty the cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "shipping",
+      "payment",
+      "order",
+      "cart"
+    ],
+    "stateChanges": [
+      "One COD order is placed by the declared user (order 1)",
+      "The user's cart holds sku2 during order 2 and is emptied at the end"
+    ],
+    "assertions": [
+      "Shipping Address heading text (soft)",
+      "No shipping method auto-selected and shipping cost 0 before selection (orders 1 and 2, page.evaluate throws on failure)",
+      "Selected method price equals shipping cost plus handling (orders 1 and 2)",
+      "Thank-you banner after placing order 1"
+    ],
+    "evidence": [
+      "Title matches the flow; Testim z10_27984 bug-repro",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "Store MaxwellsHardwareMultistore13: the spec pins baseURL webstore-multistore13-z10-at; ZnodePortal StoreCode MaxwellsHardwareMultistore13 (PortalId 27) checked read-only with tda rows.",
+      "sku1 z-2200022 and sku2 z-2100025: PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 each (alias product1, product2; preferred, not required). z-2100025 also appears in a spec comment only.",
+      "#FLAT-1 is clicked by a fixed selector in the spec: SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT pins the record to that method (a need parameter, not a swapped value). Country assumed 'us' (the account's default address); assumption.",
+      "DOUBT: the Custom Flat Rate method must also be assigned to the user's Retail Customer profile (z10-28100 toggles exactly that and restores it). No key covers a profile's shipping assignment (see the z10-28100 entry); run the two serially.",
+      "DOUBT: proceedFromCart goes straight to shipping, so the account must already have a default shipping/billing address; USER_WEBSTORE_REGISTERED does not constrain that (same gap as the other retail checkout entries).",
+      "checkoutPage.selectCOD: PAYMENT_COD_ON_STORE on MaxwellsHardwareMultistore13.",
+      "The test account name appears in step titles and comments of the spec (credential, kept from test data, not swapped).",
+      "Spec carries a MAINTENANCE NOTE: last atstage run 2026-09-18 failed waiting for the Shipping Address heading, not triaged (evidence only).",
+      "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
+      "swap: data only through loadData (sku1 -> product1.sku, sku2 -> product2.sku; credentials are kept, not swapped), no derived assertions (Shipping Address is fixed UI text; the price checks compare values read on the page), no data value in the spec code, no other data file."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardwareMultistore13"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardwareMultistore13"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardwareMultistore13"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardwareMultistore13"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardwareMultistore13"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-27984-shipping-auto-select.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-27984-shipping-auto-select.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2200022",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-27984-shipping-auto-select.json:4",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1",
+      "output": "sku"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/checkout/z10-27984-shipping-method-not-auto-selected.spec.ts:118",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Shipping Address",
+      "location": "testim-migrated/tests/webstore/checkout/z10-27984-shipping-method-not-auto-selected.spec.ts:104",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2100025",
+      "location": "testim-migrated/test-data/webstore/checkout/z10-27984-shipping-auto-select.json:5",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2",
+      "output": "sku"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/checkout/z10-27984-shipping-method-not-auto-selected.spec.ts:140",
+      "kind": "literal",
+      "keyPath": "addProductOfAnyType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

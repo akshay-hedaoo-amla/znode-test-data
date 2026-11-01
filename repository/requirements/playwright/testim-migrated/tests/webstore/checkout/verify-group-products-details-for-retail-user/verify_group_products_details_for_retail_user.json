@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts > Webstore - Checkout > verify group products details for retail user",
+  "scenario": {
+    "summary": "A registered retail user signs in, adds a grouped product (qty 5), checks the product and its child product name in the order summary, selects Custom Flat Rate shipping, removes the account's auto-applied voucher, applies a voucher (Amount To Be Paid math), checks invalid voucher and coupon messages, applies a valid coupon (order-total math), pays with Vantiv Express, checks the receipt and logs out.",
+    "steps": [
+      "Sign in with the dedicated retail account (username/password from the test data).",
+      "addProductOfAnyType(groupProduct, 5); open the cart.",
+      "Proceed to checkout: productNameLink(productId) contains productName; groupedProductName(groupChildSku) contains groupChildName; select Ship Complete + Custom Flat Rate; remove the auto-applied voucher.",
+      "Apply voucherNumber: voucher row number, Voucher Amount / Amount To Be Paid labels, order total - voucher = amount to be paid; remove the voucher.",
+      "Apply an invalid voucher and an invalid coupon: error messages.",
+      "Apply the coupon: success message, discount visible, Handling Charges, order-total math.",
+      "Fill project name and additional information, pay with Vantiv Express, check the receipt (thank-you banner, job name = projectName), log out."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "coupon",
+      "voucher",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Registered user's cart filled with the grouped product",
+      "A new order is placed for the user, paid by card (Vantiv Express), with the coupon; one coupon redemption is used"
+    ],
+    "assertions": [
+      "productNameLink(productId) contains productName",
+      "groupedProductName(groupChildSku) contains groupChildName",
+      "Voucher row equals voucherNumber; Voucher Amount / Amount To Be Paid labels; |order total - voucher - to be paid| <= 0.05",
+      "Invalid voucher / invalid coupon messages",
+      "Coupon success message; discount visible; Handling Charges label; order-total math within 0.05",
+      "Thank-you banner visible; receipt job name equals projectName; Sign In heading after logout"
+    ],
+    "evidence": [
+      "Title and the five step labels match the flow.",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "groupProduct z-2200003 / productId 408: tda rows shows an active GroupedProduct (PimProductId 408); child z-2200004 is 'Speedaire Vacuum Pump Oil' (another profile run: active SimpleProduct, PRODUCTION, inventory 1000). PRODUCT_GROUPED_IN_STOCK quantityUsed 5, outputs sku, productId, name, child1Sku.",
+      "Missing output: groupChildName (the child product's name) has no output of PRODUCT_GROUPED_IN_STOCK (it returns child1Sku only). DOUBT: child1Sku must be the child addProductOfAnyType adds; not confirmed.",
+      "coupon TESTCHECKOUT (promotion Testim_CheckoutPageCoupon): tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 10, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
+      "DOUBT: the asserted coupon success message ('- Coupon applied successfully.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon Applied Successfully'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
+      "Re-mapped (voucher keys 2026-11-01): voucherNumber 5ZYXIF16WZ -> need voucher (VOUCHER_RESTRICTED_TO_USER), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
+      "Ownership gap: the voucher must be the one restricted to the declared account. A declared account (preferred required) cannot be linked to (validator), so VOUCHER_RESTRICTED_TO_USER has no user param: the test's own voucher is tried first (preferred, bound to this account in the data); a fallback voucher is restricted to SOME customer, not necessarily this one. Enforcing it needs the planned core feature 'record owned by the declared account' (as for saved carts and reorder)",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE, shippingCode FLAT. tda rows: ZnodeShipping FLAT is Custom, DestinationCountryCode US, so countries 'us' (the address itself is masked).",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "MISSING KEY: a credit-card payment method (Vantiv Express via Spreedly) offered on the store to the registered profile; need left out. Card values (masked) kept as config.",
+      "projectName and additionalInformation are typed into the order (created-by-test); invalidVoucher is a deliberately invalid code (config).",
+      "migrate: the asserted child product name is product data with no key output (swap rules 2 and 3 fail). No data value in the spec code (z-2200003, z-2200004 and 5ZYXIF16WZ appear only in comments)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 10.0,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": true,
+        "allProfiles": true,
+        "orderMinimum": 10.0
+      },
+      "preferred": {
+        "source": 16,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "VOUCHER_RESTRICTED_TO_USER",
+      "alias": "voucher",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "groupProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "408",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "productId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "productId"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "groupChildSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Sku"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:9",
+      "kind": "json",
+      "keyPath": "groupChildName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "5ZYXIF16WZ",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "Voucher Amount",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "voucherAmountLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Amount To Be Paid",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "amountToBePaidLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "INVALIDVOUCHER",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:13",
+      "kind": "json",
+      "keyPath": "invalidVoucher",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This voucher is invalid.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:14",
+      "kind": "json",
+      "keyPath": "invalidVoucherMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "- Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:15",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TESTCHECKOUT",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:16",
+      "kind": "json",
+      "keyPath": "coupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon",
+      "output": "couponCode"
+    },
+    {
+      "value": "- Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:17",
+      "kind": "json",
+      "keyPath": "couponSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:18",
+      "kind": "json",
+      "keyPath": "handlingChargeLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts:110",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Testim regression",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:19",
+      "kind": "json",
+      "keyPath": "projectName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "This is additional information",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:20",
+      "kind": "json",
+      "keyPath": "additionalInformation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:21",
+      "kind": "json",
+      "keyPath": "cardholderName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:22",
+      "kind": "json",
+      "keyPath": "cardNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:23",
+      "kind": "json",
+      "keyPath": "expiryDate",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-group-products-details-for-retail-user.json:24",
+      "kind": "json",
+      "keyPath": "cvv",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}
