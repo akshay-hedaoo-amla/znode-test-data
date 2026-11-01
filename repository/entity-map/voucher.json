@@ -15,7 +15,6 @@
     { "from": "dbo.AspNetUsers.UserName", "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId", "kind": "left" }
   ],
   "properties": {
-    "voucherNumber": "dbo.ZnodeGiftCard.CardNumber",
     "name": "dbo.ZnodeGiftCard.Name",
     "amount": "dbo.ZnodeGiftCard.Amount",
     "remainingAmount": "dbo.ZnodeGiftCard.RemainingAmount",

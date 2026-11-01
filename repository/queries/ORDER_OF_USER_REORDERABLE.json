@@ -45,8 +45,6 @@
   "identity": "orderNumber",
   "schemaFingerprint": "sha256:eaf9ada194f8309f848b8ac75d4a7e7f43ddbb669dd01a5aa4525ec041d1143e",
   "vocabularyFingerprint": "sha256:35815b14f58590f31823e2aa609e04d1e631a35b1452dd9a3dbb5d12628548a8",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z",
+  "status": "pending_approval",
   "createdAt": "2026-11-01T00:00:00Z"
 }

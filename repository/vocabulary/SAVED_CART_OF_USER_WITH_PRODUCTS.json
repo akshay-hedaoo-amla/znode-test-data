@@ -17,7 +17,8 @@
   "declaredParams": {
     "owner": {
       "type": "integer",
-      "description": "ZnodeUser.UserId of the account that owns the saved cart: link it to the test's declared account (@user.userId), never a username"
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the saved cart: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
     },
     "minSavedCarts": {
       "type": "integer",
