@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.spec.ts > Webstore - Checkout > validate user can place order using purchase order (guest user)",
+  "scenario": {
+    "summary": "Guest adds a grouped product (quantity 3) to the cart, checks out as guest with a typed address, picks Custom Flat Rate shipping and pays with Purchase Order (PO number); the order is placed and the receipt thank-you banner is checked.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the grouped product SKU, open its result, set the group quantity to 3, add to cart and view the cart.",
+      "Checkout as guest ('Proceed to Checkout') and fill the guest shipping address.",
+      "Select Ship Complete and Custom Flat Rate shipping.",
+      "Set the In Hands Date to the next day (best effort), select Purchase Order and type the PO number.",
+      "Place the order and check the 'Thank You For Your Purchase' receipt banner and the 'In Hands Date:' label."
+    ],
+    "entitiesTouched": [
+      "product",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the grouped product",
+      "A new guest order is placed (Purchase Order (PO number))"
+    ],
+    "assertions": [
+      "Checkout heading contains 'Proceed to Checkout'.",
+      "Receipt banner visible and equals thankYouMessage ('Thank You For Your Purchase').",
+      "Receipt In Hands Date label equals 'In Hands Date:'."
+    ],
+    "evidence": [
+      "Title 'validate user can place order using purchase order (guest user)' matches the flow: grouped product, guest checkout, Purchase Order (PO number) payment, order placed.",
+      "groupProduct z-2200003 is searched, opened (page object clicks [id='0-<sku>']) and its group quantity set to 3: PRODUCT_GROUPED_IN_STOCK, quantityUsed 3, no add-ons or personalization selected.",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT. Destination country assumed 'us' (the address is masked or is the account's default address); assumption.",
+      "Guest address fields (address.*) are typed by the test into its own guest order: created-by-test, kept masked; not records.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "purchaseOrderNumber is typed into the order the test creates: created-by-test.",
+      "MISSING KEY: the test needs Purchase Order payment active on the store and offered to guest (Anonymous profile) checkout; no vocabulary key covers it, so the need is left out.",
+      "swap: data only through loadData (groupProduct -> product.sku), no derived assertions (receipt texts are fixed UI text), no data value in the spec code (z-2200003 only in the JSON), no other data file."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "groupProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "testimPurchaceOrder",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "purchaseOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "thankYouMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Hands Date:",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-user-can-place-order-using-purchase-order-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "inHandsDateLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

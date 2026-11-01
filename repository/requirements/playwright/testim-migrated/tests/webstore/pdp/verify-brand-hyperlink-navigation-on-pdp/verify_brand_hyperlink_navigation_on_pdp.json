@@ -122,5 +122,7 @@
     }
   ],
   "strategy": "migrate",
-  "status": "pending_approval"
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

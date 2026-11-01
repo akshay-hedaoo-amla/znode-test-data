@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "VOUCHER_UNRESTRICTED",
+  "entity": "voucher",
+  "type": "unrestricted",
+  "constraints": {
+    "isActive": "true",
+    "restrictedToCustomer": "false",
+    "startDate": "<= {now}",
+    "expirationDate": ">= {now}",
+    "remainingAmount": "> 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active voucher (gift card) of the store, started and not expired, not restricted to a customer (any guest or user may enter its number), with balance left; applied and removed, no order placed with it. KB: Managing Vouchers; Configuring a Voucher.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); a voucher belongs to one store"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

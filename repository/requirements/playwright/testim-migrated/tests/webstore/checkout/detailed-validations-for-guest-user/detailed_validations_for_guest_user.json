@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts > Webstore - Checkout > detailed validations for guest user",
+  "scenario": {
+    "summary": "Guest adds a simple product (qty 2) from its PDP, checks out as guest with a Canada address and the Canada shipping method, checks the order-summary line (quantity, unit x qty = line total, Qty./Total/Shipping labels) and that Purchase Order, Invoice Me and COD are offered and unselected, then selects COD. No order is placed.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the simple product SKU, open it, read the unit price (spnRetailPrice<productId>), set quantity 2 and add to cart.",
+      "Open the cart, Checkout as Guest ('Proceed to Checkout'), fill the guest address (Canada) and select Ship Complete + CanadaShipping.",
+      "Check the order-summary line: quantity, unit price x quantity = line total, Qty./Total labels, Remove link if present, Shipping label.",
+      "Check the PurchaseOrder/InvoiceMe/COD payment labels are visible and all radios unchecked (Braintree CC if present), then select COD."
+    ],
+    "entitiesTouched": [
+      "product",
+      "store",
+      "shipping",
+      "payment",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the simple product (quantity 2)",
+      "No order is placed"
+    ],
+    "assertions": [
+      "'Proceed to Checkout' heading",
+      "Line quantity equals data.quantity (2)",
+      "Unit price > 0 and |unit x qty - line total| <= 0.05 (rounding tolerance)",
+      "Qty. / Total / Shipping labels",
+      "PurchaseOrder, InvoiceMe, COD payment labels visible; radios unchecked; COD checked after click"
+    ],
+    "evidence": [
+      "Title 'detailed validations for guest user' and the three step labels match the flow; guest storageState.",
+      "simpleProduct z-2200010 and productId 415: tda rows shows PimProductId 415, active SimpleProduct 'Speedaire Air Roofing Stapler'; PRODUCT_SIMPLE_IN_STOCK quantityUsed 2, outputs sku and productId (PimProductId).",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
+      "MISSING KEY: the test needs the CanadaShipping custom shipping method on the store for a CA destination (page object selectCanadaShipping clicks lblShippingMethodCanadaShipping / #CanadaShipping-9). tda rows: CanadaShipping (ShippingId 9, Custom, DestinationCountryCode CA) has no shipping rule, so SHIPPING_FLAT_RATE_ON_STORE (needs a FlatRatePerItem rule) does not cover it. Need left out.",
+      "MISSING KEY: Purchase Order and Invoice Me payment methods offered on the store to the guest (Anonymous) profile; no key covers them. Needs left out; the payment method codes (paymentMethods) are kept as config.",
+      "Guest address fields (masked) are typed into the guest checkout: created-by-test.",
+      "swap: data only through loadData (simpleProduct -> product.sku, productId -> product.productId), no derived assertions (unit price is read from the page; 0.05 is a rounding tolerance; labels are fixed UI text), no data value in the spec code (comments only), no other data file."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "415",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "productId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "productId"
+    },
+    {
+      "value": "z-2200010",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts:60",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:15",
+      "kind": "json",
+      "keyPath": "address.country",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "address.state",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts:73",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Qty.",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "quantityLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Total",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "totalLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "shippingLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PurchaseOrder",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "paymentMethods.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "InvoiceMe",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "paymentMethods.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "COD",
+      "location": "testim-migrated/test-data/webstore/checkout/detailed-validations-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "paymentMethods.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "txtBraintreeCC",
+      "location": "testim-migrated/tests/webstore/checkout/detailed-validations-for-guest-user.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

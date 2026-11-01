@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-shipping-address-validation-for-guest-user.spec.ts > Webstore - Checkout > every shipping address field renders its label @ZPD-TC-9248",
+  "scenario": {
+    "summary": "Guest checkout address form renders the label of every field (first/last name, company, street, country, state, city, postal code, phone, email). No address saved, no order placed.",
+    "steps": [
+      "Open the webstore home page as a guest (empty storageState), empty the cart (errors ignored).",
+      "Add the simple product with quantity 1 (addProductOfAnyType), open the cart and checkout as guest.",
+      "For each label in the test data, check the address field label contains it."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart emptied and filled with the simple product",
+      "No address saved, no order placed"
+    ],
+    "assertions": [
+      "Each address field label contains its labels.* text (fixed UI text)."
+    ],
+    "evidence": [
+      "Title 'every shipping address field renders its label @ZPD-TC-9248' matches the flow.",
+      "Spec header: coverage gap fill ported from the Selenium suite (not a Testim port); the three tests share the data file and run serially.",
+      "productSku z-2420004 added at quantity 1: PRODUCT_SIMPLE_IN_STOCK, quantityUsed 1. Other profile runs: z-2420004 is an active PRODUCTION SimpleProduct, inventory 235, requiredAddOnCount 0, storefrontProductIndex 0 (not filtered by store).",
+      "'/' (page.goto) is navigation config.",
+      "No shipping or payment is selected and no order is placed: no shipping/payment need.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "labels.* are field labels (some masked by key name): expected-output, kept masked.",
+      "swap: data only through loadData (productSku -> product.sku), no derived assertions (messages and labels are fixed UI text), no data value in the spec code, no other data file."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9247",
+    "ZPD-TC-9248",
+    "ZPD-TC-9250"
+  ],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/checkout/verify-shipping-address-validation-for-guest-user.spec.ts:135",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "productSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "labels.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "labels.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Company Name",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "labels.companyName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "labels.streetAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Country",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "labels.country",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "State",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "labels.state",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "labels.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "labels.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "labels.phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-address-validation-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "labels.emailAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

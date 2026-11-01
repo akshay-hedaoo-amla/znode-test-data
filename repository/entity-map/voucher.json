@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "entity": "voucher",
+  "tables": [
+    "dbo.ZnodeGiftCard",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodeGiftCard.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodeGiftCard.UserId", "to": "dbo.ZnodeUser.UserId", "kind": "left" },
+    { "from": "dbo.ZnodeUser.AspNetUserId", "to": "dbo.AspNetUsers.Id", "kind": "left" },
+    { "from": "dbo.AspNetUsers.UserName", "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId", "kind": "left" }
+  ],
+  "properties": {
+    "voucherNumber": "dbo.ZnodeGiftCard.CardNumber",
+    "name": "dbo.ZnodeGiftCard.Name",
+    "amount": "dbo.ZnodeGiftCard.Amount",
+    "remainingAmount": "dbo.ZnodeGiftCard.RemainingAmount",
+    "isActive": "dbo.ZnodeGiftCard.IsActive",
+    "restrictedToCustomer": "dbo.ZnodeGiftCard.RestrictToCustomerAccount",
+    "startDate": "dbo.ZnodeGiftCard.StartDate",
+    "expirationDate": "dbo.ZnodeGiftCard.ExpirationDate",
+    "isReferralCommission": "dbo.ZnodeGiftCard.IsReferralCommission",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "ownerUserId": "dbo.ZnodeGiftCard.UserId",
+    "owner": "dbo.AspNetZnodeUser.UserName"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeUser.CustomerPaymentGUID",
+    "dbo.ZnodeUser.RefreshToken",
+    "dbo.ZnodeUser.ExternalId",
+    "dbo.ZnodeUser.Custom1",
+    "dbo.ZnodeUser.Custom2",
+    "dbo.ZnodeUser.Custom3",
+    "dbo.ZnodeUser.Custom4",
+    "dbo.ZnodeUser.Custom5"
+  ],
+  "schemaFingerprint": "sha256:5abaab7365a0338f319d9b5d6583c70e2b2f6ca59a0153589bd38b4fe0924730",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

@@ -1,0 +1,403 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts > Webstore - Checkout > validate simple product checkout page coupon and voucher code functionality for guest user",
+  "scenario": {
+    "summary": "Guest adds a simple product (qty 2), checks out as guest with Custom Flat Rate shipping, applies a voucher (Amount To Be Paid math), checks invalid voucher and coupon messages, applies a valid coupon (order-total math), fills additional info and pays with Vantiv Express (card), then checks the thank-you banner.",
+    "steps": [
+      "Open the webstore as a guest.",
+      "addProductOfAnyType(simpleProduct, 2); open the cart; Checkout as Guest; fill the guest address; 'Shipping Method' heading; select Ship Complete + Custom Flat Rate.",
+      "Apply voucherNumber: voucher row number, Voucher Amount / Amount To Be Paid labels, order total - voucher = amount to be paid; remove the voucher.",
+      "Apply an invalid voucher and an invalid coupon: error messages.",
+      "Apply the coupon: success message, discount visible, Handling Charges, order-total math.",
+      "Fill cart name and additional info, pay with Vantiv Express (card fields in the Spreedly iframe), check the thank-you banner."
+    ],
+    "entitiesTouched": [
+      "product",
+      "coupon",
+      "voucher",
+      "shipping",
+      "payment",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the simple product",
+      "A guest order is placed and paid by card (Vantiv Express) with the coupon; one coupon redemption is used"
+    ],
+    "assertions": [
+      "'Proceed to Checkout' and 'Shipping Method' headings",
+      "Voucher row equals voucherNumber; Voucher Amount / Amount To Be Paid labels; |order total - voucher - to be paid| <= 0.05",
+      "Invalid voucher / invalid coupon messages",
+      "Coupon success message; discount visible; Handling Charges label; order-total math within 0.05",
+      "ADDITIONAL INFO heading; thank-you banner visible"
+    ],
+    "evidence": [
+      "Title and the four step labels match the flow; guest storageState.",
+      "simpleProduct z-2200010: tda rows shows PimProductId 415, active SimpleProduct. PRODUCT_SIMPLE_IN_STOCK quantityUsed 2, output sku.",
+      "coupon TestimTestCoupon25: tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 25, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
+      "DOUBT: the asserted coupon success message ('- Coupon successfully applied.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon successfully applied'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
+      "Re-mapped (voucher keys 2026-11-01): voucherNumber E2O43NF74Y -> need voucher (VOUCHER_UNRESTRICTED), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE, shippingCode FLAT. tda rows: ZnodeShipping FLAT is Custom, DestinationCountryCode US, so countries 'us' (the address itself is masked).",
+      "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
+      "MISSING KEY: a credit-card payment method (Vantiv Express via Spreedly, lblPaymentVantivExpress) offered on the store to the guest profile; need left out. The card values (masked) are payment-provider test inputs kept as config.",
+      "Guest address (masked), cartName and additionalInfo are typed into the order: created-by-test.",
+      "swap: data only through loadData (simpleProduct -> product.sku, coupon -> coupon.couponCode, voucherNumber -> voucher.voucherNumber), no derived assertions (totals read from the page, fixed UI text), no data value in the spec code (z-2200010 only in a comment), no other data file. The voucher is removed before payment.",
+      "2026-11-01 run evidence: migrate, not swap - COUPON_AMOUNT_OFF_ORDER is created by its collection; the expected coupon message wraps the original coupon promotion message (\"- Coupon successfully applied.\"), the created coupon shows \"Coupon applied successfully\" (normal run tda-playwright-1793504829267). Rule 3: an expected value depends on the record."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "store": "MaxwellsHardware",
+        "discountAmount": 25,
+        "redemptionsNeeded": 1,
+        "allowedWithOtherCoupons": true,
+        "allProfiles": true,
+        "orderMinimum": 10
+      },
+      "preferred": {
+        "source": 20,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "VOUCHER_UNRESTRICTED",
+      "alias": "voucher",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 11,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2200010",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:21",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:23",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:24",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:25",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "shippingMethodText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "E2O43NF74Y",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "Voucher Amount",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "voucherAmountLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Amount To Be Paid",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "amountToBePaidLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "InvalidVoucher",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "invalidVoucher",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This voucher is invalid.",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "invalidVoucherMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "invalidCoupon",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "invalidCoupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "- Invalid coupon code.",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "invalidCouponMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TestimTestCoupon25",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "coupon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon",
+      "output": "couponCode"
+    },
+    {
+      "value": "- Coupon successfully applied.",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "couponSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "handlingChargeLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts:111",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ADDITIONAL INFO",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:15",
+      "kind": "json",
+      "keyPath": "additionalInfoHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TestimTest",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "cartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "This is additional info",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "additionalInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:27",
+      "kind": "json",
+      "keyPath": "cardholderName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:28",
+      "kind": "json",
+      "keyPath": "cardNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:29",
+      "kind": "json",
+      "keyPath": "expiryDate",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.json:30",
+      "kind": "json",
+      "keyPath": "cvv",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

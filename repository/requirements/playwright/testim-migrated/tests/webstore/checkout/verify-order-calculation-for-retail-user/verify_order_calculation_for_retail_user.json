@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-order-calculation-for-retail-user.spec.ts > Webstore - Checkout > verify order calculation for retail user",
+  "scenario": {
+    "summary": "A registered retail user signs in, adds a simple product (quantity 5), proceeds to checkout, checks the section labels, the address form required-field messages and the empty-voucher message, then selects Custom Flat Rate shipping and checks the order total calculation (within 0.05). No order is placed.",
+    "steps": [
+      "Start with an empty storageState and sign in with the dedicated retail account.",
+      "Add the simple product with quantity 5, open the cart and proceed to checkout (the account default address is used).",
+      "Check the checkout section labels.",
+      "Open an empty address form, save it and check the seven required-field messages; cancel.",
+      "Apply an empty voucher and check 'Please enter valid voucher.'.",
+      "Select Ship Complete + Custom Flat Rate shipping, wait for Handling Charges and a non-zero order total, read the totals and check the calculation."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "shipping",
+      "cart"
+    ],
+    "stateChanges": [
+      "Registered user's cart filled with the simple product",
+      "No address saved, no order placed"
+    ],
+    "assertions": [
+      "Section labels equal the test data texts (fixed UI text).",
+      "Display name, first/last name, phone, street, postal code and city required messages equal the test data.",
+      "Empty voucher shows 'Please enter valid voucher.'.",
+      "Handling charge label equals 'Handling Charges'.",
+      "Order total > 0 and |subTotal + shipping + handling + tax - discount - shippingDiscount - orderTotal| <= 0.05 (all amounts read from the page)."
+    ],
+    "evidence": [
+      "Title 'verify order calculation for retail user' matches the flow.",
+      "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
+      "simpleProduct z-1002656 added at productQuantity 5: PRODUCT_SIMPLE_IN_STOCK, quantityUsed 5. z-1002656 appears in the spec only inside a comment.",
+      "DOUBT: the spec relies on the account already having a default address (proceedFromCart goes to shipping); USER_WEBSTORE_REGISTERED does not constrain that.",
+      "The calculation compares amounts read from the page; 0 and 0.05 are a threshold and a rounding tolerance (config).",
+      "Masked error-message and heading values (scanner masked them by key name) are expected-output, kept masked.",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT. Destination country assumed 'us' (the address is masked or is the account's default address); assumption.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "swap: data only through loadData (simpleProduct -> product.sku; credentials kept), totals computed from page values only, messages/labels fixed UI text, no data value in the spec code, no other data file."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1002656",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "shippingAddressText",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "billingAddressText",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "shippingMethodText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Hands Date:",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:9",
+      "kind": "json",
+      "keyPath": "inHandDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Constraints:",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "shippingConstraintsText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Ship Complete",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "shipCompleteText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Ship Partial",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "shipPartial",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Voucher Number",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:13",
+      "kind": "json",
+      "keyPath": "voucherNumberText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Payment Type",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:14",
+      "kind": "json",
+      "keyPath": "pymentType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:15",
+      "kind": "json",
+      "keyPath": "orderSummaryText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:16",
+      "kind": "json",
+      "keyPath": "orderTotalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Display name is required.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:17",
+      "kind": "json",
+      "keyPath": "displayNameErrorMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:18",
+      "kind": "json",
+      "keyPath": "firstNameErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:19",
+      "kind": "json",
+      "keyPath": "lastNameErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:20",
+      "kind": "json",
+      "keyPath": "phoneNumberErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:21",
+      "kind": "json",
+      "keyPath": "streetAddressErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:22",
+      "kind": "json",
+      "keyPath": "zipCodeErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:23",
+      "kind": "json",
+      "keyPath": "cityErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please enter valid voucher.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-order-calculation-for-retail-user.json:24",
+      "kind": "json",
+      "keyPath": "voucherValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/tests/webstore/checkout/verify-order-calculation-for-retail-user.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/verify-order-calculation-for-retail-user.spec.ts:99",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-order-calculation-for-retail-user.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

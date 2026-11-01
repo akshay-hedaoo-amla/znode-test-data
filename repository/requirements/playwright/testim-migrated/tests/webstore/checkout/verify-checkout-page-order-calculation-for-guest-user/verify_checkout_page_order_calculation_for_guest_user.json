@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts > Webstore - Checkout > verify checkout page order calculation for guest user",
+  "scenario": {
+    "summary": "Guest adds a simple product (quantity 5), checks out as guest with a typed address, checks every checkout section label, selects Custom Flat Rate shipping and checks that the order total equals subtotal + shipping + handling + tax - discounts (within 0.05). No order is placed.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Add the simple product with quantity 5 (addProductOfAnyType), open the cart and checkout as guest.",
+      "Fill the guest shipping address.",
+      "Check the shipping/billing address, shipping method, In Hands Date, shipping constraints, voucher, payment type, order summary and order total labels.",
+      "Select Ship Complete + Custom Flat Rate shipping, wait for Handling Charges and a non-zero order total, read the totals and check the calculation."
+    ],
+    "entitiesTouched": [
+      "product",
+      "shipping",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the simple product",
+      "No order is placed"
+    ],
+    "assertions": [
+      "Checkout heading contains 'Proceed to Checkout'.",
+      "Section labels equal the test data texts (fixed UI text).",
+      "Handling charge label equals 'Handling Charges'.",
+      "Order total > 0 and |subTotal + shipping + handling + tax - discount - shippingDiscount - orderTotal| <= 0.05 (all amounts read from the page)."
+    ],
+    "evidence": [
+      "Title 'verify checkout page order calculation for guest user' matches the flow.",
+      "simpleProduct z-1002656 added at productQuantity 5: PRODUCT_SIMPLE_IN_STOCK, quantityUsed 5. z-1002656 appears in the spec only inside a comment, which is not code.",
+      "The calculation compares amounts read from the page with each other; 0 and 0.05 are a threshold and a rounding tolerance (config), not data-derived amounts.",
+      "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT. Destination country assumed 'us' (the address is masked or is the account's default address); assumption.",
+      "Guest address fields (address.*) are typed by the test into its own guest order: created-by-test, kept masked; not records.",
+      "shippingAddressText/billingAddressText are headings masked by the scanner (key contains address): expected-output, kept masked.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage 2026-10-31) has no observations for this spec: every source is profiled false.",
+      "swap: data only through loadData (simpleProduct -> product.sku), totals computed from page values only, label texts fixed UI text, no data value in the spec code, no other data file."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1002656",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "simpleProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Proceed to Checkout",
+      "location": "testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "address.displayName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:21",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:23",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "shippingAddressText",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "billingAddressText",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "shippingMethodText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Hands Date:",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "inHandDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Constraints:",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "shippingConstraintsText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Ship Complete",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "shipCompleteText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Ship Partial",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "shipPartial",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Voucher Number",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "voucherNumberText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Payment Type",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "pymentType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "orderSummaryText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "orderTotalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Handling Charges",
+      "location": "testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts:80",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.05",
+      "location": "testim-migrated/tests/webstore/checkout/verify-checkout-page-order-calculation-for-guest-user.spec.ts:86",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

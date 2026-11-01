@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/checkout/verify-shipping-promotion-and-coupon-cap.spec.ts > Webstore - Checkout > a shipping coupon is refused once the shipping discount cap is reached",
+  "scenario": {
+    "summary": "A guest reaches checkout with the automatic shipping promotion already covering the shipping charge, applies a shipping coupon and gets the shipping-cap refusal with totals unchanged, then applies an Amount Off Order coupon that is accepted and lowers the order total by its flat amount. The coupon is removed and the cart emptied; no order is placed.",
+    "steps": [
+      "Guest: open the home page, empty the cart, add productSku at quantity 1 and check out as guest",
+      "Fill the guest address, select the flat-rate shipping method and wait for shipping and shipping discount above 0",
+      "Apply shippingCouponCode: the shipping cap message shows and shipping discount and order total are unchanged",
+      "Apply orderCouponCode: success message, discount equals orderCouponDiscount, order total drops by orderCouponDiscount",
+      "Remove the coupon and empty the cart"
+    ],
+    "entitiesTouched": [
+      "product",
+      "promotion",
+      "shipping",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product added, order coupon applied then removed, cart emptied",
+      "No order is placed, so no coupon redemption is consumed"
+    ],
+    "assertions": [
+      "Invalid-coupon message contains shippingCapMessage",
+      "Shipping discount and order total unchanged after the refused shipping coupon",
+      "Coupon message contains orderCouponSuccessMessage",
+      "Discount equals orderCouponDiscount",
+      "Order total is close to the previous order total minus orderCouponDiscount (precision 1)"
+    ],
+    "evidence": [
+      "Title: 'a shipping coupon is refused once the shipping discount cap is reached'; linked ZPD-TC-11577",
+      "Spec header: coverage gap fill derived from the Selenium shipping-discount specs (ZPD-TC-11577), guest flow, no account touched, no order placed.",
+      "Spec header (atstage 2026-09-25): the automatic PromoAmountOffShippingWithCarrier promotion ($2.00 off shipping, minimum order $100, store Maxwell's Hardware) covers the flat-rate shipping charge with no code entered.",
+      "Missing key: an automatic (no coupon) Amount Off Shipping promotion on MaxwellsHardware for the Anonymous profile (or all profiles), active now, with a minimum order amount (orderMinimum output) and a discount at least the flat-rate shipping charge, applying to the Custom Flat Rate (FLAT) method. No vocabulary key covers shipping promotions; the need is left out. promotionMinimumOrder (100) is its orderMinimum and is recorded as expected-output only because a data source needs a declared alias; re-map it to that need (output orderMinimum) once the key exists.",
+      "Missing param: the cart (productSku at quantity 1) must exceed the shipping promotion minimum (subtotal > promotionMinimumOrder); PRODUCT_SIMPLE_IN_STOCK has maxPrice but no minimum price, so the need cannot express it. Recorded product z-1234567 (DeWalt Cordless Propane Radiant Heater, active SimpleProduct, PRODUCTION, profiled for a PDP spec) is the preferred record.",
+      "selectFlatRateAnyLayout clicks #FLAT-1 (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE with shippingCode FLAT; destination country assumed 'us' (address masked); assumption.",
+      "Guest address values (masked) are typed by the test: role config, never customer data.",
+      "Store MaxwellsHardware: the store every atstage webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
+      "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
+      "Values only in the spec header comment (SHIPOFF, ORDER15, $2.00, $100, 15.00) are evidence, not data in code; the spec reads every data value through loadData.",
+      "Missing key: shippingCouponCode SHIPOFF is an active Amount Off Shipping With Carrier coupon (live, read-only: promotion CouponAmountOffShippingWithCarrier, type 20, $2.00, OrderMinimum 1, profile 1, store PortalId 7, coupon AvailableQuantity 9997) that the storefront refuses with the shipping cap message once the shipping promotion covers shipping. No vocabulary key covers shipping coupons; the need is left out and the value is recorded as expected-output only because a data source needs a declared alias. It is not redeemed (no order).",
+      "orderCouponCode ORDER15 / orderCouponDiscount 15: COUPON_AMOUNT_OFF_ORDER (discountAmount 15, one coupon only so allowedWithOtherCoupons false, guest so allProfiles true, redemptionsNeeded 1 as the minimum; no order placed); ORDER15 is the preferred record as in the approved shopping-cart order-coupon entry.",
+      "migrate: shippingCouponCode and promotionMinimumOrder map to no key output (swap rule 2). orderCouponDiscount would swap from coupon.discountAmount."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "COUPON_AMOUNT_OFF_ORDER",
+      "alias": "coupon",
+      "params": {
+        "redemptionsNeeded": 1,
+        "store": "MaxwellsHardware",
+        "discountAmount": 15.0,
+        "allowedWithOtherCoupons": false,
+        "allProfiles": true
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-11577"
+  ],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/checkout/verify-shipping-promotion-and-coupon-cap.spec.ts:124",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234567",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:2",
+      "kind": "json",
+      "keyPath": "productSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:11",
+      "kind": "json",
+      "keyPath": "address.firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:12",
+      "kind": "json",
+      "keyPath": "address.lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:13",
+      "kind": "json",
+      "keyPath": "address.phone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:14",
+      "kind": "json",
+      "keyPath": "address.street",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:15",
+      "kind": "json",
+      "keyPath": "address.postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:16",
+      "kind": "json",
+      "keyPath": "address.city",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:17",
+      "kind": "json",
+      "keyPath": "address.email",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SHIPOFF",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:4",
+      "kind": "json",
+      "keyPath": "shippingCouponCode",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Maximum discount limit reached for shipping.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:7",
+      "kind": "json",
+      "keyPath": "shippingCapMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "ORDER15",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:5",
+      "kind": "json",
+      "keyPath": "orderCouponCode",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "Coupon applied successfully.",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:8",
+      "kind": "json",
+      "keyPath": "orderCouponSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/checkout/verify-shipping-promotion-and-coupon-cap.json:6",
+      "kind": "json",
+      "keyPath": "orderCouponDiscount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "coupon"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/checkout/verify-shipping-promotion-and-coupon-cap.spec.ts:169",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}
