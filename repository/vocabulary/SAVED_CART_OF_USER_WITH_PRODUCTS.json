@@ -4,7 +4,7 @@
   "entity": "saved_cart",
   "type": "of_user_with_products",
   "constraints": {
-    "owner": "{user}",
+    "ownerUserId": "{owner}",
     "productCount": ">= 1",
     "productStatus": "active",
     "ownerSavedCartCount": ">= {minSavedCarts}"
@@ -15,9 +15,9 @@
   "usage": "read-only",
   "description": "Existing saved cart of the declared registered user with at least one active product, the user owning at least N saved carts. Moving it to the cart copies it; the saved cart stays. KB: Create an Order from the Storefront (Option G: Saved Cart); Shopping Cart.",
   "declaredParams": {
-    "user": {
-      "type": "string",
-      "description": "Alias of the declared USER_WEBSTORE_REGISTERED need in the same requirement; bound to that account at run time, never a username in the repository"
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId of the account that owns the saved cart: link it to the test's declared account (@user.userId), never a username"
     },
     "minSavedCarts": {
       "type": "integer",
@@ -30,5 +30,5 @@
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

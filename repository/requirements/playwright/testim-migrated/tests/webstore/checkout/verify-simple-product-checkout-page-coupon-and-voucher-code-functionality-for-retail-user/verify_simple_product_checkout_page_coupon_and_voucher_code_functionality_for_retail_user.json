@@ -45,7 +45,7 @@
       "simpleProduct at productQuantity 5: PRODUCT_SIMPLE_IN_STOCK quantityUsed 5, minMaxQuantity 5. z-1002656 and the voucher number also appear in spec comments only.",
       "coupon TESTCHECKOUT (live, read-only: promotion Testim_CheckoutPageCoupon, Amount Off Order, Discount 10, OrderMinimum 10, no profile, store PortalId 7, AvailableQuantity 100): COUPON_AMOUNT_OFF_ORDER discountAmount 10 (amount not asserted), allProfiles true, allowedWithOtherCoupons false, redemptionsNeeded 1 (the order consumes one redemption).",
       "Re-mapped (voucher keys 2026-11-01): voucherNumber JDL4WZ9XYS -> need voucher (VOUCHER_RESTRICTED_TO_USER), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
-      "Ownership gap: the voucher must be the one restricted to the declared account. A declared account (preferred required) cannot be linked to (validator), so VOUCHER_RESTRICTED_TO_USER has no user param: the test's own voucher is tried first (preferred, bound to this account in the data); a fallback voucher is restricted to SOME customer, not necessarily this one. Enforcing it needs the planned core feature 'record owned by the declared account' (as for saved carts and reorder)",
+      "Ownership (core 0.13.0, 2026-11-01): the voucher must be the one restricted to the declared account: need voucher links owner to @user.userId (VOUCHER_RESTRICTED_TO_USER gc.UserId = @owner), so it resolves at test start when the test declares the account (testData.useExisting); the test's own voucher is still tried first (preferred) and a fallback is restricted to this same account",
       "invalidVoucher and invalidCoupon are deliberately non-existent codes: config (they must stay absent from the store).",
       "Missing key: the Vantiv Express credit-card payment method associated with MaxwellsHardware and shown at webstore checkout (payWithVantivExpress). PAYMENT_COD_ON_STORE covers COD only; the need is left out. Card values are masked test-gateway settings: config.",
       "migrate: the payment method (Vantiv Express) has no key. voucherNumber now maps to voucher.voucherNumber."
@@ -106,7 +106,8 @@
       "key": "VOUCHER_RESTRICTED_TO_USER",
       "alias": "voucher",
       "params": {
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "owner": "@user.userId"
       },
       "preferred": {
         "source": 4,

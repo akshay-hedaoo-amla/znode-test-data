@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+  "sql": "SELECT TOP 10 o.ClassNumber AS savedCartNumber, ad.Name AS name, ln.sku AS productSku, ln.pname AS productName FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodeOrderAdditionalDetail ad ON ad.OrderId = o.OrderId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId CROSS APPLY (SELECT TOP 1 op.SKU AS sku, pp.ProductName AS pname FROM dbo.ZnodeOrderProduct op INNER JOIN dbo.ZnodePimProduct pp ON pp.PimProductId = op.ZnodeProductId WHERE op.OrderId = o.OrderId AND op.IsAddOn = @notAddOn AND pp.IsActive = @isActive ORDER BY op.SKU) ln WHERE oc.ClassCode = @savedCartClass AND po.StoreCode = @store AND o.UserId = @owner AND ad.Name IS NOT NULL AND (SELECT COUNT(oo.OrderId) FROM dbo.ZnodeOrder oo WHERE oo.UserId = o.UserId AND oo.ClassId = o.ClassId AND oo.PortalId = o.PortalId) >= @minSavedCarts ORDER BY o.ClassNumber",
+  "params": [
+    "owner",
+    "minSavedCarts",
+    "store",
+    "savedCartClass",
+    "notAddOn",
+    "isActive"
+  ],
+  "constants": {
+    "savedCartClass": "SavedCarts",
+    "notAddOn": "0",
+    "isActive": "true"
+  },
+  "outputs": [
+    "savedCartNumber",
+    "name",
+    "productSku",
+    "productName"
+  ],
+  "identity": "savedCartNumber",
+  "schemaFingerprint": "sha256:258bbd3605ee35b92386b3c5e78954a3d3edaac57ca2ca24d7ad82947c42a444",
+  "vocabularyFingerprint": "sha256:ca09538b1bd1f56b833ebc0cda4c24a39541e0a7c7c1c538f8500a3b6b121eea",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt": "2026-11-01T00:00:00Z"
+}

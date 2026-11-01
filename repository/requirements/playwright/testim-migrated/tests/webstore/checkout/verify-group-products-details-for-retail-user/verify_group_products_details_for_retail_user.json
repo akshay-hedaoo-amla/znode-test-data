@@ -43,7 +43,7 @@
       "coupon TESTCHECKOUT (promotion Testim_CheckoutPageCoupon): tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 10, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
       "DOUBT: the asserted coupon success message ('- Coupon applied successfully.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon Applied Successfully'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
       "Re-mapped (voucher keys 2026-11-01): voucherNumber 5ZYXIF16WZ -> need voucher (VOUCHER_RESTRICTED_TO_USER), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
-      "Ownership gap: the voucher must be the one restricted to the declared account. A declared account (preferred required) cannot be linked to (validator), so VOUCHER_RESTRICTED_TO_USER has no user param: the test's own voucher is tried first (preferred, bound to this account in the data); a fallback voucher is restricted to SOME customer, not necessarily this one. Enforcing it needs the planned core feature 'record owned by the declared account' (as for saved carts and reorder)",
+      "Ownership (core 0.13.0, 2026-11-01): the voucher must be the one restricted to the declared account: need voucher links owner to @user.userId (VOUCHER_RESTRICTED_TO_USER gc.UserId = @owner), so it resolves at test start when the test declares the account (testData.useExisting); the test's own voucher is still tried first (preferred) and a fallback is restricted to this same account",
       "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE, shippingCode FLAT. tda rows: ZnodeShipping FLAT is Custom, DestinationCountryCode US, so countries 'us' (the address itself is masked).",
       "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
       "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
@@ -109,7 +109,8 @@
       "key": "VOUCHER_RESTRICTED_TO_USER",
       "alias": "voucher",
       "params": {
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "owner": "@user.userId"
       },
       "preferred": {
         "source": 8,

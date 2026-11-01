@@ -32,7 +32,7 @@
     "evidence": [
       "Title: 'verify product details after reorder from existing order via history'; step 3 title says 'the reordered configurable product'",
       "Spec comment: relies on a seeded order in the dedicated account's history (AT Stage backup DB); user decision: the order is FOUND read-only on the declared account, never created",
-      "OWNERSHIP: the order must belong to the signed-in (declared) account. ORDER_OF_USER_REORDERABLE expresses this with constraint owner = {user}, whose param 'user' is documented as the alias of the declared USER_WEBSTORE_REGISTERED need bound at run time. Core 0.9.0 cannot bind it: a declared account (preferred required) cannot be linked to ('@user.username' is rejected) and the username must never be written here. The 'user' param is therefore left out; ownership is NOT enforced by this entry until the core/query binds the owner from the declared account at test start (gap reported)",
+      "OWNERSHIP (core 0.13.0, 2026-11-01): the order must belong to the signed-in (declared) account. Need order links owner to @user.userId (ORDER_OF_USER_REORDERABLE: ZnodeOrder.UserId = @owner), so it resolves at test start when the test declares the account (testData.useExisting); strategy stays migrate",
       "The test reorders rows[0] (the most recent order of the account), not a named order: the migrated test must click Reorder for the resolved order's orderNumber (order history row id = order number), or another order of the same account (e.g. one placed by the receipt-and-history test) is reordered instead",
       "Profile: PinkApple is an active published product (inventory 4999836, storefrontProductIndex 1, requiredAddOnCount 1) stored as SimpleProduct: it is the variant SKU of a configurable parent (cart test-ids divConfigurableProductAddons<sku> / divConfigurableProductPersonalization<sku> are keyed by the variant SKU), so productType 'configurable' is the ordered type; the query must match it on the parent product (lineParentProductType), not on the line's own PIM type",
       "minAddOns 3: three add-on groups asserted (checkbox, drop-down, radio); profile finds all three add-on products (RegUi_SimpleProd, the Lutron switch, the DeWalt sander kit) active with inventory",
@@ -40,7 +40,8 @@
       "Add-on group labels 'Checkbox', 'Select Add-on', 'Radio' and the personalization label 'Anniversary Gift' are literals inside the spec's template strings (not scanned values): they are the resolved order's add-on group and personalization attribute names and must come from the resolved record in the migrated test",
       "quantity 1 is the ordered line quantity (reorder copies it): role data of the order; quantityUsed 1",
       "price $509.25 is the current unit price incl. add-ons shown in the cart: expected-output, computed from the resolved line, not the order total",
-      "Fact from the user: this spec PASSES on atstage unmigrated"
+      "Fact from the user: this spec PASSES on atstage unmigrated",
+      "Outputs: orderNumber (click Reorder for it), sku, name (current PIM product name), quantity (ordered line quantity), addOn1..3Group/Name (the line's add-ons ordered by group name: Checkbox, Radio, Select Add-on on the seeded order). GAP: personalizableText and its label ('Anniversary Gift') live in the masked ZnodeOrderProduct.Customization, so no output carries them; the query only checks that the line is personalized (presence, at most 1)"
     ],
     "confidence": "medium",
     "needsReview": true
@@ -61,6 +62,7 @@
       "key": "ORDER_OF_USER_REORDERABLE",
       "alias": "order",
       "params": {
+        "owner": "@user.userId",
         "productType": "configurable",
         "quantityUsed": 1,
         "minAddOns": 3,
@@ -79,7 +81,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "sku"
     },
     {
       "value": "Apple iPhone 15 128 GB - Pink",
@@ -89,7 +92,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "name"
     },
     {
       "value": "Pink Apple",
@@ -109,7 +113,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "addOn1Name"
     },
     {
       "value": "Lutron Claro 15 Amp Single-Pole Paddle Switch",
@@ -119,7 +124,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "addOn2Name"
     },
     {
       "value": "DeWalt 3 Amp 5 in. Variable Speed Orbital Sander Kit",
@@ -129,7 +135,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "addOn3Name"
     },
     {
       "value": "$509.25",
@@ -149,7 +156,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "quantity"
     },
     {
       "value": "<masked:username>",
@@ -191,6 +199,6 @@
     }
   ],
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

@@ -1,16 +1,21 @@
 {
   "schemaVersion" : 1,
   "key" : "USER_WEBSTORE_REGISTERED",
-  "sql" : "SELECT TOP 10 az.UserName AS userName, po.StoreCode AS storeCode FROM dbo.ZnodeUser u INNER JOIN dbo.AspNetUsers a ON a.Id = u.AspNetUserId INNER JOIN dbo.AspNetZnodeUser az ON az.AspNetZnodeUserId = a.UserName INNER JOIN dbo.ZnodeUserPortal up ON up.UserId = u.UserId INNER JOIN dbo.ZnodePortal po ON po.PortalId = up.PortalId WHERE u.AspNetUserId IS NOT NULL AND a.LockoutEnd IS NULL AND po.StoreCode = @store AND (@preferred IS NULL OR az.UserName = @preferred) GROUP BY az.UserName, po.StoreCode ORDER BY az.UserName",
-  "params" : [ "store", "preferred" ],
-  "outputs" : [ "userName", "storeCode" ],
+  "sql" : "SELECT TOP 10 az.UserName AS userName, po.StoreCode AS storeCode, MIN(u.UserId) AS userId, MIN(pp.ProfileId) AS profileId FROM dbo.ZnodeUser u INNER JOIN dbo.AspNetUsers a ON a.Id = u.AspNetUserId INNER JOIN dbo.AspNetZnodeUser az ON az.AspNetZnodeUserId = a.UserName INNER JOIN dbo.ZnodeUserPortal up ON up.UserId = u.UserId INNER JOIN dbo.ZnodePortal po ON po.PortalId = up.PortalId LEFT JOIN dbo.ZnodePortalProfile pp ON pp.PortalId = po.PortalId AND pp.IsDefaultRegistedProfile = @defaultRegisteredProfile WHERE u.AspNetUserId IS NOT NULL AND a.LockoutEnd IS NULL AND po.StoreCode = @store AND (@preferred IS NULL OR az.UserName = @preferred) GROUP BY az.UserName, po.StoreCode ORDER BY az.UserName",
+  "params" : [ "store", "preferred", "defaultRegisteredProfile" ],
+  "constants" : {
+    "defaultRegisteredProfile" : "1"
+  },
+  "outputs" : [ "userName", "storeCode", "userId", "profileId" ],
   "candidates" : true,
   "preferredOnly" : true,
   "identity" : "userName",
-  "schemaFingerprint" : "sha256:a6b9c46fff5656a5bc716ebb3335f151ea20faa4a6a17d3aad87d1168e260087",
-  "status" : "approved",
-  "approvedBy" : "Akshay Hedaoo",
-  "approvedAt" : "2026-10-23T14:30:00Z",
+  "schemaFingerprint" : "sha256:4184a40d5de8a546852a8d2b9cf66efe81763ca63c26b3c9ac48accc8e2378ab",
+  "vocabularyFingerprint" : "sha256:83191f216f740d1e7ee9e51e469ac97a2fc397a59197867383357ba1e5dcb873",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
   "createdAt" : "2026-10-23T00:00:00Z",
-  "lastValidated" : "2026-10-26T15:00:07Z"
+  "lastValidated" : "2026-11-01T08:21:48Z",
+  "verifiedHash" : "sha256:c5177ec5073671fc0c6264f5d2fd7ce09a97bb685f6ff144d964e46cb10fa933"
 }
