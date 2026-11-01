@@ -81,6 +81,8 @@ migrated:
     - testim-migrated/tests/webstore/checkout/verify-bundle-product-details-for-retail-user.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-bundle-products-order-summary-section-for-guest-user.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-group-products-details-for-retail-user.spec.ts
+    # Moved from swapped: its vouchers link owner/notOwner to the declared account (core 0.13.2, 2026-11-01)
+    - testim-migrated/tests/webstore/checkout/verify-voucher-restriction-and-entitlement.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
@@ -104,4 +106,3 @@ swapped:
     - testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-guest-user.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-voucher-discount-calculation-and-removal.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-voucher-for-all-users.spec.ts
-    - testim-migrated/tests/webstore/checkout/verify-voucher-restriction-and-entitlement.spec.ts

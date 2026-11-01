@@ -34,7 +34,8 @@
       "Store MaxwellsHardware: the store every atstage webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
       "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
       "invalidVoucherMessage is in the data schema but not used (the spec matches /This voucher is invalid/ in code); not scanned.",
-      "swap: data only through loadData (productSku -> product.sku, restrictedVoucher -> voucher.voucherNumber), no derived amounts, no data value in the spec code (voucher numbers only in the header comment), no other data file."
+      "swap: data only through loadData (productSku -> product.sku, restrictedVoucher -> voucher.voucherNumber), no derived amounts, no data value in the spec code (voucher numbers only in the header comment), no other data file.",
+      "OWNERSHIP (core 0.13.2, 2026-11-01): need voucher links notOwner to @user.userId, so it is a voucher restricted to a customer OTHER than the declared account; it resolves when the test declares the account (testData.useExisting). Strategy moves from swap to migrate (a swapped spec never declares an account)"
     ],
     "confidence": "low",
     "needsReview": true
@@ -67,6 +68,7 @@
       "key": "VOUCHER_RESTRICTED_TO_USER",
       "alias": "voucher",
       "params": {
+        "notOwner": "@user.userId",
         "store": "MaxwellsHardware"
       },
       "preferred": {
@@ -143,7 +145,7 @@
       "output": "voucherNumber"
     }
   ],
-  "strategy": "swap",
+  "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
   "approvedAt": "2026-11-01T14:30:00Z"
