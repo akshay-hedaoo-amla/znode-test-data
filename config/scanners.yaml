@@ -67,6 +67,8 @@ migrated:
     - testim-migrated/tests/webstore/shopping-cart/verify-order-promotion-threshold-on-cart-and-checkout.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-product-details-after-reorder-from-receipt-and-history.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-selected-shipping-deselected-by-removing-postal-code.spec.ts
+    # Saved cart of the declared account (owner @user.userId, core 0.13.2; verified and approved 2026-11-01)
+    - testim-migrated/tests/webstore/shopping-cart/verify-existing-saved-cart-visible-and-scroller.spec.ts
     # Phase 6 module webstore/checkout, migrated specs (requirements approved 2026-11-01)
     - testim-migrated/tests/webstore/checkout/validate-group-product-order-summary-section-for-guest-user.spec.ts
     - testim-migrated/tests/webstore/checkout/validate-simple-product-checkout-page-coupon-and-voucher-code-functionality-guest-user.spec.ts
