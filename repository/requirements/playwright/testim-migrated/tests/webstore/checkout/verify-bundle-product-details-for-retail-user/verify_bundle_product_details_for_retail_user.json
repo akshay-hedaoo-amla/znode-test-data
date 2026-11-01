@@ -39,7 +39,7 @@
       "Title and the five step labels match the flow.",
       "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
       "bundleProduct z-123765: tda rows shows PimProductId 680, active BundleProduct named 'Mobile' (DontTrackInventory, MaximumQuantity 10). PRODUCT_BUNDLE_IN_STOCK quantityUsed 5, outputs sku, productId, name.",
-      "Missing output: bundleChildren ('<child sku> - <child name>') are derived from the bundle's child products; PRODUCT_BUNDLE_IN_STOCK returns no child SKUs or names.",
+      "Re-mapped (product outputs 2026-11-01): bundleChildren ('<child sku> - <child name>') stay expected-output; the migrated spec composes them from child1Sku/child1Name and child2Sku/child2Name of PRODUCT_BUNDLE_IN_STOCK (active children in ZnodePimProductTypeAssociation DisplayOrder, then PimProductId order; tda rows: z-123765 children 116 z-1234602 'GE 6' Extension Cord', 117 z-1234603 'GE 9' Extension Cord', both DisplayOrder 99, as recorded).",
       "variantAlt (the swatch the test clicks) is in the spec's schema but not in the scan values; DOUBT: a bundle with a 'Mobile' swatch is unusual - PRODUCT_BUNDLE_IN_STOCK does not constrain swatches.",
       "coupon TESTCHECKOUT (promotion Testim_CheckoutPageCoupon): tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 10, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
       "DOUBT: the asserted coupon success message ('- Coupon applied successfully.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon Applied Successfully'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
@@ -51,7 +51,7 @@
       "MISSING KEY: a credit-card payment method (Vantiv Express via Spreedly) offered on the store to the registered profile; need left out. Card values (masked) kept as config.",
       "projectName and additionalInformation are typed into the order (created-by-test); projectName is asserted back on the receipt.",
       "Data in code: the step title 'Sign in and add the bundle (Mobile variant)' (line 62) names the product; comments at lines 63 and 83 name z-123765 and the voucher.",
-      "migrate: the bundle child rows asserted are derived from the product data and have no key output (swap rules 2 and 3 fail), and the product name appears in the spec code (step title). Pre-survey flag confirmed."
+      "migrate (kept): the bundle child rows asserted are composed from the product data (child1Sku/child1Name, child2Sku/child2Name; swap rule 3 fails), and the product name appears in the spec code (step title). Pre-survey flag confirmed."
     ],
     "confidence": "low",
     "needsReview": true

@@ -35,7 +35,7 @@
       "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
       "tda rows: z-1002656 = PimProductId 933 SimpleProduct; B-100000 = 666 ConfigurableProduct whose line id 532 and name are its default variant z-2510001; z-1234579 = 142 BundleProduct; z-2200003 = 408 GroupedProduct.",
       "Keys: PRODUCT_SIMPLE_IN_STOCK / PRODUCT_BUNDLE_IN_STOCK / PRODUCT_GROUPED_IN_STOCK (sku, productId, name), PRODUCT_CONFIGURABLE_WITH_VARIANTS (parentProductSku, variant1Name; variantAttributes BulbSize,Color,Technology), quantityUsed 5 each.",
-      "Missing output: the configurable key returns no productId for the variant line (532).",
+      "Re-mapped (product outputs 2026-11-01): productId 532 -> output variant1ProductId of PRODUCT_CONFIGURABLE_WITH_VARIANTS (PimProductId of the same variant as variant1Sku/variant1Name; tda rows: z-2510001 has PimProductId 532, and its published ZnodeProductId is also 532, so the storefront line id is the PIM id).",
       "totalCartQuantity '20' is 4 products x quantity 5 (config arithmetic, not product data): expected-output.",
       "checkoutPage.selectShippingMethod clicks Ship Complete and then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE, shippingCode FLAT. tda rows: ZnodeShipping FLAT is Custom, DestinationCountryCode US, so countries 'us' (the address itself is masked).",
       "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
@@ -43,7 +43,7 @@
       "Data in code: voucher number '1QGSS8ZG6B' is a literal in removeVoucherByNumberIfPresent (line 73), a defensive clean-up (config). Comments at lines 40 and 52 name the SKUs and ids; lines 63-66 are commented-out code.",
       "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
       "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
-      "migrate: the configurable variant's productId (532) has no key output (swap rule 2 fails). The pre-survey flag on totalCartQuantity is not a data dependency (it follows from the quantity), but the strategy is migrate anyway."
+      "migrate (kept, the checkout specs are migrated): the configurable variant's productId (532) is now covered by variant1ProductId. The pre-survey flag on totalCartQuantity is not a data dependency (it follows from the quantity)."
     ],
     "confidence": "low",
     "needsReview": true
@@ -207,7 +207,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "configurable"
+      "alias": "configurable",
+      "output": "variant1ProductId"
     },
     {
       "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
@@ -362,4 +363,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"}
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

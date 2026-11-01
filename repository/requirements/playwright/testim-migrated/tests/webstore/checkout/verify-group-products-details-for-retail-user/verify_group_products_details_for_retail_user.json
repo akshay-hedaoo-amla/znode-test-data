@@ -39,7 +39,7 @@
       "Title and the five step labels match the flow.",
       "Credentials (masked) name the existing registered user: USER_WEBSTORE_REGISTERED with preferred.required true (credential source).",
       "groupProduct z-2200003 / productId 408: tda rows shows an active GroupedProduct (PimProductId 408); child z-2200004 is 'Speedaire Vacuum Pump Oil' (another profile run: active SimpleProduct, PRODUCTION, inventory 1000). PRODUCT_GROUPED_IN_STOCK quantityUsed 5, outputs sku, productId, name, child1Sku.",
-      "Missing output: groupChildName (the child product's name) has no output of PRODUCT_GROUPED_IN_STOCK (it returns child1Sku only). DOUBT: child1Sku must be the child addProductOfAnyType adds; not confirmed.",
+      "Re-mapped (product outputs 2026-11-01): groupChildName -> output child1Name of PRODUCT_GROUPED_IN_STOCK (name of the same child as child1Sku; tda rows: z-2200003's only child is 409 z-2200004 'Speedaire Vacuum Pump Oil'). DOUBT: child1Sku must be the child addProductOfAnyType adds; not confirmed.",
       "coupon TESTCHECKOUT (promotion Testim_CheckoutPageCoupon): tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 10, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
       "DOUBT: the asserted coupon success message ('- Coupon applied successfully.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon Applied Successfully'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
       "Re-mapped (voucher keys 2026-11-01): voucherNumber 5ZYXIF16WZ -> need voucher (VOUCHER_RESTRICTED_TO_USER), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
@@ -49,7 +49,7 @@
       "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
       "MISSING KEY: a credit-card payment method (Vantiv Express via Spreedly) offered on the store to the registered profile; need left out. Card values (masked) kept as config.",
       "projectName and additionalInformation are typed into the order (created-by-test); invalidVoucher is a deliberately invalid code (config).",
-      "migrate: the asserted child product name is product data with no key output (swap rules 2 and 3 fail). No data value in the spec code (z-2200003, z-2200004 and 5ZYXIF16WZ appear only in comments)."
+      "migrate (kept, the checkout specs are migrated): the child product name is now covered by child1Name. No data value in the spec code (z-2200003, z-2200004 and 5ZYXIF16WZ appear only in comments)."
     ],
     "confidence": "low",
     "needsReview": true
@@ -199,8 +199,9 @@
       "keyPath": "groupChildName",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output",
-      "alias": "product"
+      "role": "data",
+      "alias": "product",
+      "output": "child1Name"
     },
     {
       "value": "5ZYXIF16WZ",

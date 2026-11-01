@@ -37,8 +37,8 @@
     "evidence": [
       "Title and the four step labels match the flow; guest storageState.",
       "configurableProduct B-100004: tda rows shows an active ConfigurableProduct (PimProductId 676). productId 532 and productName are the variant z-2510001 (PimProductId 532, '75-Watt Equivalent BR40 ...'), not the parent. PRODUCT_CONFIGURABLE_WITH_VARIANTS (minVariants 1, variantAttributes BulbSize,Color,Technology as in the approved cart entries), outputs parentProductSku, variantSku, variant1Name.",
-      "Missing output: PRODUCT_CONFIGURABLE_WITH_VARIANTS returns no productId for the variant, so productId 532 (used in productNameLink) cannot be resolved.",
-      "Derived assertions: 'Bulb Size : Small' / 'Color : White' / 'Technology : LED' are '<attribute label> : <value>' of the variant; variant1Attr1..3 return the value only. DOUBT: addProductOfAnyType adds the PDP default variant; variantSku/variant1Sku is the first variant by SKU, which may differ.",
+      "Re-mapped (product outputs 2026-11-01): productId 532 -> output variant1ProductId of PRODUCT_CONFIGURABLE_WITH_VARIANTS (PimProductId of the same variant as variant1Sku/variant1Name; tda rows: z-2510001 has PimProductId 532, and its published ZnodeProductId is also 532, so the storefront line id is the PIM id).",
+      "Derived assertions: '<attribute label> : <value>' rows stay expected-output; the migrated spec composes them from variant1Attr1..3 (values) and the attribute labels. No label output: attr1Label..attr3Label did not fit the configurable query (schema limit 8000 characters); the labels are fixed by variantAttributes BulbSize,Color,Technology (tda rows ZnodePimAttributeLocale, locale 1: 'Bulb Size', 'Color', 'Technology'). DOUBT: addProductOfAnyType adds the PDP default variant; variant1 is the first qualifying variant by SKU, which may differ.",
       "coupon TestimTestCoupon25: tda rows shows an Amount Off Order coupon of store MaxwellsHardware (PortalId 7), discount 25, order minimum 10, coupon required, allowed with other coupons, no profile; mapped to COUPON_AMOUNT_OFF_ORDER (collection, creates a fresh coupon per run; output couponCode). The test does not assert the discount amount (only the totals math read from the page).",
       "DOUBT: the asserted coupon success message ('- Coupon successfully applied.') may be the promotion's PromotionMessage (the recorded coupon's message is 'Coupon successfully applied'); the COUPON_AMOUNT_OFF_ORDER collection creates 'Coupon Applied Successfully'. If the page shows the promotion message, this assertion depends on the coupon data. The approved cart coupon entries (ORDER15, message 'Coupon Applied Successfully', asserted 'Coupon applied successfully.') suggest the page shows a fixed resource string instead.",
       "Re-mapped (voucher keys 2026-11-01): voucherNumber E2O43NF74Y -> need voucher (VOUCHER_UNRESTRICTED), output voucherNumber, preferred (the test's own voucher first); read-only: applied and removed, no order placed with it",
@@ -47,7 +47,7 @@
       "Profile (atstage 2026-10-31) has no observations for the checkout specs: every source is profiled false. Values were checked read-only with `tda rows` where noted.",
       "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
       "invalidVoucher/invalidCoupon are deliberately invalid codes (config); guest address (masked), cartName and additionalInfo are typed into the order the test creates (created-by-test).",
-      "migrate: productId has no output of the configurable key and the attribute rows are derived from the variant data (swap rules 2 and 3 fail). No data value in the spec code (B-100004 and z-2510001 appear only in comments)."
+      "migrate (kept): the attribute rows are composed from the variant data (swap rule 3 fails); productId is now covered by variant1ProductId. No data value in the spec code (B-100004 and z-2510001 appear only in comments)."
     ],
     "confidence": "low",
     "needsReview": true
@@ -215,7 +215,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "variant1ProductId"
     },
     {
       "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
