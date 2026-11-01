@@ -34,7 +34,7 @@
       "Title and the four step labels match the flow; guest storageState.",
       "tda rows: z-2200010 = PimProductId 415 SimpleProduct; z-1234579 = 142 BundleProduct; z-2200003 = 408 GroupedProduct; B-100004 = 676 ConfigurableProduct whose line id 532 and name are its default variant z-2510001 ('75-Watt Equivalent BR40 ...').",
       "Keys: PRODUCT_SIMPLE_IN_STOCK / PRODUCT_BUNDLE_IN_STOCK / PRODUCT_GROUPED_IN_STOCK (outputs sku, productId, name) and PRODUCT_CONFIGURABLE_WITH_VARIANTS (parentProductSku, variant1Name; variantAttributes BulbSize,Color,Technology as in the approved cart entries), quantityUsed 2 each.",
-      "Missing output: the configurable key returns no productId for the variant line (532).",
+      "Re-mapped (product outputs 2026-11-01): productId 532 -> output variant1ProductId of PRODUCT_CONFIGURABLE_WITH_VARIANTS (PimProductId of the same variant as variant1Sku/variant1Name; tda rows: z-2510001 has PimProductId 532, and its published ZnodeProductId is also 532, so the storefront line id is the PIM id).",
       "customFlatRateLabel 'Custom Flat Rate' is the FLAT shipping method's description: data of the shipping need (output expectedShippingOptionName). tda rows: FLAT is Custom, DestinationCountryCode US, so countries 'us'.",
       "selectCOD/codRadio pays with COD (txtCOD): PAYMENT_COD_ON_STORE. No source carries the COD code the page object uses, so the need has no data source.",
       "MISSING KEY: Purchase Order payment offered on the store to the guest (Anonymous) profile; need left out, paymentMethodLabel kept as expected-output.",
@@ -43,7 +43,7 @@
       "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart and PDP entries); not named in the scan.",
       "Guest address (masked) is typed into the guest order: created-by-test.",
       "Data in code: product ids '532' (line 84, find by id) and '532', '142', '408', '415' (lines 105-108, readTotal) are hardcoded in the spec; comments at lines 62, 70 and 105-108 name the SKUs.",
-      "migrate: product ids are hardcoded in the spec code and the configurable variant's productId has no key output (swap rules 2 and 4 fail). Pre-survey flag confirmed."
+      "migrate (kept): product ids are hardcoded in the spec code (swap rule 4 fails); the configurable line id is now covered by variant1ProductId. Pre-survey flag confirmed."
     ],
     "confidence": "low",
     "needsReview": true
@@ -242,7 +242,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "configurable"
+      "alias": "configurable",
+      "output": "variant1ProductId"
     },
     {
       "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
