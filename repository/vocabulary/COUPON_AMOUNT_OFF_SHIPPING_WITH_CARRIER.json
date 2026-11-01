@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "COUPON_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+  "entity": "promotion",
+  "type": "amount_off_shipping_with_carrier_coupon",
+  "constraints": {
+    "discountType": "amount_off_shipping_with_carrier",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "requiresCoupon": "true",
+    "couponActive": "true"
+  },
+  "scope": {
+    "store": "{store}",
+    "profile": "{profile}"
+  },
+  "usage": "read-only",
+  "description": "Active Amount Off Shipping with carrier coupon on the store and profile. Read only: applied on a cart whose shipping is already discounted, it is refused (shipping discount cap), never redeemed. KB: Managing Promotions and Coupons.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps",
+      "optional": true
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

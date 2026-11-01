@@ -38,7 +38,8 @@
       "Store MaxwellsHardware: the store every atstage webstore spec runs on (same as the approved shopping-cart and PDP entries); not named in the scan.",
       "Profile (atstage, generated 2026-10-31T17:34) has no observations for this spec (scanned 2026-11-01): every source is profiled false.",
       "Values only in the spec header comment (SHIPOFF, ORDER15, $2.00, $100, 15.00) are evidence, not data in code; the spec reads every data value through loadData.",
-      "migrate: promotionMinimumOrder belongs to a shipping promotion no key covers (swap rule 2: no key output to swap from), and the subtotal assertion depends on it and on the product price."
+      "migrate: promotionMinimumOrder belongs to a shipping promotion no key covers (swap rule 2: no key output to swap from), and the subtotal assertion depends on it and on the product price.",
+      "Re-mapped (new keys 2026-11-01): need shippingPromotion = PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER (the auto-applied carrier shipping promotion; atstage: PromoAmountOffShippingWithCarrier, type 'Amount Off Shipping with carrier'); promotionMinimumOrder -> shippingPromotion.orderMinimum. Not enforced: the product price x quantity must clear that minimum (the spec asserts it)"
     ],
     "confidence": "low",
     "needsReview": true
@@ -62,6 +63,13 @@
       "params": {
         "shippingCode": "FLAT",
         "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PROMOTION_AMOUNT_OFF_SHIPPING_WITH_CARRIER",
+      "alias": "shippingPromotion",
+      "params": {
         "store": "MaxwellsHardware"
       }
     }
@@ -168,7 +176,9 @@
       "keyPath": "promotionMinimumOrder",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "shippingPromotion",
+      "output": "orderMinimum"
     },
     {
       "value": "0",

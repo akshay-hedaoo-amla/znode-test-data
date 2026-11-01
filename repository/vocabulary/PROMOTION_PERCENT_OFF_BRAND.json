@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "key": "PROMOTION_PERCENT_OFF_BRAND",
+  "entity": "promotion",
+  "type": "percent_off_brand_promotion",
+  "constraints": {
+    "discountType": "percent_off_brand",
+    "startDate": "<= {now}",
+    "endDate": ">= {now}",
+    "requiresCoupon": "false",
+    "discountAmount": "{discountAmount}",
+    "brandActive": "true"
+  },
+  "scope": {
+    "store": "{store}",
+    "profile": "{profile}"
+  },
+  "usage": "read-only",
+  "description": "Active automatic (no coupon) Percent Off Brand promotion on the store and profile, with the active brand it discounts; link the test's product to its brand output. KB: Configuring a Promotion (Percent Off Brand); Brands.",
+  "declaredParams": {
+    "discountAmount": {
+      "type": "number",
+      "description": "Optional percent the promotion takes off, when the test asserts a fixed percent; left out = any (read it from the record)",
+      "optional": true
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile code the promotion must apply to: the declared user's profile, or the store's default anonymous profile for guest steps",
+      "optional": true
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

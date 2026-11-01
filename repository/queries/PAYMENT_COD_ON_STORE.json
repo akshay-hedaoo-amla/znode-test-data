@@ -1,7 +1,7 @@
 {
   "schemaVersion" : 1,
   "key" : "PAYMENT_COD_ON_STORE",
-  "sql" : "SELECT TOP 10 ps.PaymentCode AS paymentCode, ps.PaymentName AS paymentName, COALESCE(pps.PaymentDisplayName, ps.PaymentDisplayName) AS displayName FROM dbo.ZnodePaymentSetting ps INNER JOIN dbo.ZnodePaymentType pt ON pt.PaymentTypeId = ps.PaymentTypeId INNER JOIN dbo.ZnodePortalPaymentSetting pps ON pps.PaymentSettingId = ps.PaymentSettingId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pps.PortalId LEFT JOIN dbo.ZnodePublishState pub ON pub.PublishStateId = pps.PublishStateId WHERE po.StoreCode = @store AND pt.Name = @gatewayType AND pt.Code = @paymentTypeCode AND pt.IsActive = @isActive AND ps.IsActive = @isActive AND pps.IsUsedForWebStorePayment = @isActive AND pub.PublishStateCode = @publishState AND (@preferred IS NULL OR ps.PaymentCode = @preferred) ORDER BY ps.PaymentSettingId",
+  "sql" : "SELECT TOP 10 ps.PaymentCode AS paymentCode, ps.PaymentName AS paymentName, COALESCE(sp.dn, ps.PaymentDisplayName) AS displayName FROM dbo.ZnodePaymentSetting ps INNER JOIN dbo.ZnodePaymentType pt ON pt.PaymentTypeId = ps.PaymentTypeId OUTER APPLY (SELECT TOP 1 pps.PaymentSettingId AS sid, pps.PaymentDisplayName AS dn FROM dbo.ZnodePortalPaymentSetting pps INNER JOIN dbo.ZnodePortal po ON po.PortalId = pps.PortalId LEFT JOIN dbo.ZnodePublishState pub ON pub.PublishStateId = pps.PublishStateId WHERE pps.PaymentSettingId = ps.PaymentSettingId AND po.StoreCode = @store AND pps.IsUsedForWebStorePayment = @isActive AND pub.PublishStateCode = @publishState) sp WHERE pt.Name = @gatewayType AND pt.Code = @paymentTypeCode AND pt.IsActive = @isActive AND ps.IsActive = @isActive AND (sp.sid IS NOT NULL OR EXISTS (SELECT pp.ProfilePaymentSettingId FROM dbo.ZnodeProfilePaymentSetting pp INNER JOIN dbo.ZnodePortalProfile ppr ON ppr.ProfileId = pp.ProfileId INNER JOIN dbo.ZnodePortal po2 ON po2.PortalId = ppr.PortalId LEFT JOIN dbo.ZnodePublishState pub2 ON pub2.PublishStateId = pp.PublishStateId WHERE pp.PaymentSettingId = ps.PaymentSettingId AND po2.StoreCode = @store AND (pp.PublishStateId IS NULL OR pub2.PublishStateCode = @publishState))) AND (@preferred IS NULL OR ps.PaymentCode = @preferred) ORDER BY ps.PaymentSettingId",
   "params" : [ "store", "gatewayType", "paymentTypeCode", "isActive", "publishState", "preferred" ],
   "constants" : {
     "gatewayType" : "COD",
@@ -11,11 +11,12 @@
   },
   "outputs" : [ "paymentCode", "paymentName", "displayName" ],
   "identity" : "paymentCode",
-  "schemaFingerprint" : "sha256:e13ef654b48ab1c6474016649ffe2b84227147a8a6e892ec0a7fd3af6b622c95",
+  "schemaFingerprint" : "sha256:20ba27b0fd52597cd7a1e4e29167a85414e9cdc405629353c48ff18ea2e644f5",
   "vocabularyFingerprint" : "sha256:6f6a6395361cb1e17d83fda08250ae05759cb5b9831aff281e7dc8eb66c5f250",
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
   "createdAt" : "2026-10-29T00:00:00Z",
-  "lastValidated" : "2026-10-29T07:55:52Z"
+  "lastValidated" : "2026-11-01T14:31:03Z",
+  "verifiedHash" : "sha256:292d38529131229b08e411e46cf671bb841b832dee2b10c3ce29c901bf8b2396"
 }
