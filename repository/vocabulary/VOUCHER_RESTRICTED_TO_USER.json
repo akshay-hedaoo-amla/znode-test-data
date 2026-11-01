@@ -8,7 +8,8 @@
     "restrictedToCustomer": "true",
     "startDate": "<= {now}",
     "expirationDate": ">= {now}",
-    "remainingAmount": "> 0"
+    "remainingAmount": "> 0",
+    "ownerUserId": "{owner}"
   },
   "scope": {
     "store": "{store}"
@@ -23,6 +24,16 @@
     "now": {
       "type": "string",
       "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    },
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId the voucher must be restricted to; link it to the test's declared account (@user.userId). Left out: any customer"
+    },
+    "notOwner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId the voucher must NOT be restricted to (a different customer's voucher): link it to @user.userId. Left out: no exclusion"
     }
   },
   "status": "approved",

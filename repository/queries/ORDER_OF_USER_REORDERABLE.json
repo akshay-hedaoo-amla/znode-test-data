@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_OF_USER_REORDERABLE",
+  "sql": "SELECT TOP 10 o.ClassNumber AS orderNumber, ol.SKU AS sku, lp.ProductName AS name, ol.Quantity AS quantity, a1.g AS addOn1Group, a1.n AS addOn1Name, a2.g AS addOn2Group, a2.n AS addOn2Name, a3.g AS addOn3Group, a3.n AS addOn3Name FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId INNER JOIN dbo.ZnodeOrderProduct ol ON ol.OrderId = o.OrderId INNER JOIN dbo.ZnodePimProduct lp ON lp.PimProductId = ol.ZnodeProductId OUTER APPLY (SELECT a1x.g, a1x.n FROM (SELECT a1o.AddOnGroupName AS g, a1p.ProductName AS n, ROW_NUMBER() OVER (ORDER BY a1o.AddOnGroupName, a1o.SKU) AS rn FROM dbo.ZnodeOrderProduct a1o INNER JOIN dbo.ZnodePimProduct a1p ON a1p.PimProductId = a1o.ZnodeProductId WHERE a1o.OrderId = o.OrderId AND a1o.ProductChecksum = ol.ProductChecksum AND a1o.IsAddOn = @addOn) a1x WHERE a1x.rn = @one) a1 OUTER APPLY (SELECT a2x.g, a2x.n FROM (SELECT a2o.AddOnGroupName AS g, a2p.ProductName AS n, ROW_NUMBER() OVER (ORDER BY a2o.AddOnGroupName, a2o.SKU) AS rn FROM dbo.ZnodeOrderProduct a2o INNER JOIN dbo.ZnodePimProduct a2p ON a2p.PimProductId = a2o.ZnodeProductId WHERE a2o.OrderId = o.OrderId AND a2o.ProductChecksum = ol.ProductChecksum AND a2o.IsAddOn = @addOn) a2x WHERE a2x.rn = @two) a2 OUTER APPLY (SELECT a3x.g, a3x.n FROM (SELECT a3o.AddOnGroupName AS g, a3p.ProductName AS n, ROW_NUMBER() OVER (ORDER BY a3o.AddOnGroupName, a3o.SKU) AS rn FROM dbo.ZnodeOrderProduct a3o INNER JOIN dbo.ZnodePimProduct a3p ON a3p.PimProductId = a3o.ZnodeProductId WHERE a3o.OrderId = o.OrderId AND a3o.ProductChecksum = ol.ProductChecksum AND a3o.IsAddOn = @addOn) a3x WHERE a3x.rn = @three) a3 WHERE oc.ClassCode = @orderClass AND po.StoreCode = @store AND o.UserId = @owner AND ol.IsAddOn = @notAddOn AND lp.IsActive = @isActive AND (lp.ProductType = CONCAT(@productType, @typeSuffix) OR EXISTS (SELECT ta.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation ta INNER JOIN dbo.ZnodePimProduct tp ON tp.PimProductId = ta.PimParentProductId WHERE ta.PimProductId = lp.PimProductId AND tp.ProductType = CONCAT(@productType, @typeSuffix))) AND (SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = ol.SKU AND pw.PortalId = o.PortalId) >= @quantityUsed AND (SELECT COUNT(DISTINCT ag.AddOnGroupName) FROM dbo.ZnodeOrderProduct ag WHERE ag.OrderId = o.OrderId AND ag.ProductChecksum = ol.ProductChecksum AND ag.IsAddOn = @addOn) >= @minAddOns AND (CASE WHEN ol.Customization IS NULL THEN @zero ELSE @one END) >= @minPersonalizableAttributes ORDER BY o.ClassNumber, ol.SKU",
+  "params": [
+    "owner",
+    "productType",
+    "quantityUsed",
+    "minAddOns",
+    "minPersonalizableAttributes",
+    "store",
+    "orderClass",
+    "addOn",
+    "notAddOn",
+    "isActive",
+    "typeSuffix",
+    "zero",
+    "one",
+    "two",
+    "three"
+  ],
+  "constants": {
+    "orderClass": "Orders",
+    "addOn": "1",
+    "notAddOn": "0",
+    "isActive": "true",
+    "typeSuffix": "Product",
+    "zero": "0",
+    "one": "1",
+    "two": "2",
+    "three": "3"
+  },
+  "outputs": [
+    "orderNumber",
+    "sku",
+    "name",
+    "quantity",
+    "addOn1Group",
+    "addOn1Name",
+    "addOn2Group",
+    "addOn2Name",
+    "addOn3Group",
+    "addOn3Name"
+  ],
+  "identity": "orderNumber",
+  "schemaFingerprint": "sha256:eaf9ada194f8309f848b8ac75d4a7e7f43ddbb669dd01a5aa4525ec041d1143e",
+  "vocabularyFingerprint": "sha256:35815b14f58590f31823e2aa609e04d1e631a35b1452dd9a3dbb5d12628548a8",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt": "2026-11-01T00:00:00Z"
+}
