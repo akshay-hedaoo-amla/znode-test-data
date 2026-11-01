@@ -11,7 +11,7 @@
   "outputs" : [ "savedCartNumber", "name", "productSku", "productName" ],
   "identity" : "savedCartNumber",
   "schemaFingerprint" : "sha256:258bbd3605ee35b92386b3c5e78954a3d3edaac57ca2ca24d7ad82947c42a444",
-  "vocabularyFingerprint" : "sha256:ca09538b1bd1f56b833ebc0cda4c24a39541e0a7c7c1c538f8500a3b6b121eea",
+  "vocabularyFingerprint" : "sha256:9c81867376aab2d0f3a314732ad167d2f5518542c53b4147e75d0b50bebad62c",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
   "approvedAt": "2026-11-01T14:30:00Z",
