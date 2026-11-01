@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.spec.ts > Webstore - PDP > verify add to wishlist functionality on pdp for guest user",
+  "scenario": {
+    "summary": "Guest searches the webstore for a product by SKU, opens its PDP, hovers the wishlist heart (tooltip 'Add to Wishlist') and clicks it; the guest is told to log in to add a product to the wishlist. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and check the product image.",
+      "Assert the wishlist heart is visible, hover it and check the tooltip.",
+      "Click the heart and check the login-required alert."
+    ],
+    "entitiesTouched": [
+      "product",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search shows 'Showing 1 of 1 Results' and the product image is visible.",
+      "Wishlist heart visible; tooltip reads 'Add to Wishlist'.",
+      "Alert contains 'Please login to add a product to your Wishlist.'"
+    ],
+    "evidence": [
+      "Title 'verify add to wishlist functionality on pdp for guest user' and step labels 1) and 2) match the flow; spec comment refers to the export's validateBundleProductDetails.",
+      "Profile: z-1234579 FOUND as active BundleProduct, PRODUCTION, inventory 28362, storefrontProductIndex 1, requiredAddOnCount 0: meets PRODUCT_BUNDLE_IN_STOCK. Any searchable PDP product would do; the bundle key keeps the recorded product as the preferred record.",
+      "quantityUsed 1: nothing is added to the cart; the product only needs to be in stock and searchable.",
+      "swap: data only through loadData (productSKU -> sku), no derived assertions (tooltip, alert and 'Showing 1 of 1 Results' are fixed UI text), no data value in the spec code, no other data file."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.spec.ts:25",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add to Wishlist",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "addToWishlistTooltip",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please login to add a product to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "guestWishlistMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-10-31T14:30:00Z"
+}

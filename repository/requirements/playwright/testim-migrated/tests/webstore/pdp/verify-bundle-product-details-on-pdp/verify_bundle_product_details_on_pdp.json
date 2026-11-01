@@ -1,0 +1,822 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts > Webstore - PDP > verify bundle product details on pdp",
+  "scenario": {
+    "summary": "Guest searches the webstore for a bundle product by SKU, opens its PDP and validates the header details, highlights, retail and sales price, three tiered offers, personalisation field, checkbox add-on group and options, stock status, the Included Products table (child SKU, quantity, warehouse, inventory), the info tabs and the Frequently Bought / You May Also Like cards. Read-only; nothing is added to the cart.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search for the bundle SKU, assert 'Showing 1 of 1 Results' and open the result for that SKU.",
+      "Assert image, breadcrumb Home/<category>/<name>, wishlist heart, product name, SKU, brand and short description.",
+      "Assert the Free Shipping, WaterSense and Bio highlights, See More, retail price, sales price and star rating.",
+      "Assert the three tiered special offers (buy quantity, price per item, discount percentage).",
+      "Assert the personalisation label and input, the 'Add-on options' heading, the checkbox add-on group label and each add-on option, and the stock status.",
+      "Assert the 'Included Products' table: per child product its SKU, quantity in bundle, warehouse name, inventory text and warehouse address.",
+      "Assert Print, See More and Email a Friend buttons; assert the Details, Specifications and Shipping Info tab panels and open Reviews.",
+      "Assert the Frequently Bought and You May Also Like sections and their cards (name, SKU, Read Reviews, Add to Cart)."
+    ],
+    "entitiesTouched": [
+      "product",
+      "brand",
+      "category",
+      "warehouse",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search for the bundle SKU shows exactly one result ('Showing 1 of 1 Results').",
+      "Breadcrumb, heading, SKU:<sku>, Brand:<brand> and short description match the bundle.",
+      "Retail price and sales price equal the recorded amounts.",
+      "Three tiered offers show 'Buy N or more', '$<price>/item' and 'Save <discount>%'.",
+      "Personalisation label equals the attribute code; checkbox add-on group label and each add-on option label (with its price) are shown; stock status contains 'In Stock'.",
+      "Included Products table lists each child SKU with quantity, warehouse name, inventory text and warehouse address.",
+      "Details, Specifications and Shipping Info panels contain the recorded texts.",
+      "Frequently Bought and You May Also Like cards show the recorded product names and SKUs with Read Reviews and Add to Cart."
+    ],
+    "evidence": [
+      "Title 'verify bundle product details on pdp' and the eight step labels match the flow; guest storageState; no linked AIO cases.",
+      "All data comes from loadData(BundleDataSchema, rawData, ...) (spec line 52).",
+      "Profile: SKU z-1234579 FOUND as BundleProduct, active, PRODUCTION, brand Dewalt, inventory 28362, storefrontProductIndex 1, requiredAddOnCount 0. The name matched 2 rows (z-1234579, z-345678).",
+      "Profile: child SKUs z-1234582, z-1234607, z-1234580 and the related products are FOUND active SimpleProducts; youMayAlsoLike.1 (z-1234603) shows negative inventory (-619687597).",
+      "Params: minAddOns 1 + addOnDisplayType CheckBox because the PDP must show one checkbox add-on group (data.addOnOptionType Checkbox, three options); minPersonalizableAttributes 1 + personalizationAttribute AdditionalInformation because the PDP must show that personalisation field (data.personalisationLabel, page object personalisationInput is #AdditionalInformation). The test selects nothing.",
+      "Gap: PRODUCT_BUNDLE_IN_STOCK returns only sku, name, productId, price, addOnProductId, addOnName. The asserted category, brand, short description, retail/sales price, tier offers, add-on option labels, child-product table, tab texts and related products have no output; a migrated spec cannot get them from this key (a bundle PDP-details key like PRODUCT_CONFIGURABLE_PDP_DETAILS would be needed).",
+      "Data in code: page object hardcodes the personalisation input #AdditionalInformation (= data.personalisationLabel), the add-on group test id lblAddOnGroupCheckbox (group name Checkbox) and the highlight selectors imgFreeShipping / imgWatersenseEpaCertified / imgBioCertified (product highlights, not in the JSON).",
+      "migrate: data only through loadData, but expected values depend on the recorded bundle (retail/sales prices, tier prices and discounts, add-on option labels with prices, child-product list, descriptions, related products), and #AdditionalInformation is also in code."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "addOnDisplayType": "CheckBox",
+        "minPersonalizableAttributes": 1,
+        "personalizationAttribute": "AdditionalInformation"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:66",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Dewalt",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "productBrand",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Completing a wide range of applications, it also offers a 1/2\" single sleeve Ratcheting chuck which provides tight bit gripping strength. This drill has a compact, lightweight design to fit into tight areas, along with an ergonomic handle delivering comfort and control.",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "productShortDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$530.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:8",
+      "kind": "json",
+      "keyPath": "productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "15",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "specialOffer.buyQty3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "477.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "450.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "397.50",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "specialOffer.offerPrice3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:12",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:12",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "21",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:12",
+      "kind": "json",
+      "keyPath": "specialOffer.offerDiscount3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:14",
+      "kind": "json",
+      "keyPath": "personalisationLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Add-on options",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Checkbox",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "addOnOptionType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Sonic Tools Flat file 8 in.(+$17.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:17",
+      "kind": "json",
+      "keyPath": "addOnOptions.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector(+$23.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:18",
+      "kind": "json",
+      "keyPath": "addOnOptions.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE Pro 6-Outlet Surge Protector(+$11.00)",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:19",
+      "kind": "json",
+      "keyPath": "addOnOptions.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:21",
+      "kind": "json",
+      "keyPath": "inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Included Products",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quantities In Bundle",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234582",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.0.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234607",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:24",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.1.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234580",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productWarehouseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productInventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productWarehouseAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:25",
+      "kind": "json",
+      "keyPath": "bundleProductDetails.2.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "SKU:",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:118",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Inventory:",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "The DeWalt DCK340C2 20V max 3-tool Combo kit features three 20V max DeWalt tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:27",
+      "kind": "json",
+      "keyPath": "productDetails",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DCF899 - 20V MAX* Lithium Ion 1/2\" High Torque Impact Wrench",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:29",
+      "kind": "json",
+      "keyPath": "productSpecifications.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DCL040 - 20V MAX* LED Work Light",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:30",
+      "kind": "json",
+      "keyPath": "productSpecifications.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Charger",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:31",
+      "kind": "json",
+      "keyPath": "productSpecifications.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Contractor Bag",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:32",
+      "kind": "json",
+      "keyPath": "productSpecifications.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "All orders are processed within 2-3 business days",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:34",
+      "kind": "json",
+      "keyPath": "productShippingInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Frequently Bought",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:155",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:36",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234606",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:36",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$25.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:36",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$23.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:36",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE Pro 6-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:37",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234605",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:37",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$12.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:37",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$11.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:37",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Read Reviews",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:162",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "You May Also Like",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:166",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "GE 6' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:40",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234602",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:40",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$8.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:40",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$7.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:40",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE 9' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:41",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234603",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:41",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$18.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:41",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$17.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:41",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE 12' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234604",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$180.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$170.00",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-bundle-product-details-on-pdp.json:42",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Read Reviews",
+      "location": "testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts:171",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

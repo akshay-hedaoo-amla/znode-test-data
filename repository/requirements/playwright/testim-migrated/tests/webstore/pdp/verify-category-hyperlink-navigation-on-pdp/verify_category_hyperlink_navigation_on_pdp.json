@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.spec.ts > Webstore - PDP > verify category hyperlink navigation on pdp",
+  "scenario": {
+    "summary": "Guest opens a product PDP by SKU, checks the breadcrumb (category path and name) and the 'Category:<leaf>' label, clicks the category hyperlink and checks the category listing page heading, breadcrumb Home/<category path> and results. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and check the product image.",
+      "Assert breadcrumb Home/<category path>/<product name> and the label Category:<leaf category>.",
+      "Click the category hyperlink and wait for the category listing page.",
+      "Assert the category heading, breadcrumb Home/<category path> and that results are shown."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search shows 'Showing 1 of 1 Results' and the product image is visible.",
+      "Breadcrumb equals Home/<category path>/<product name>; category label equals Category:<leaf category>.",
+      "Category page heading equals the leaf category; breadcrumb equals Home/<category path>; results text contains 'Showing'."
+    ],
+    "evidence": [
+      "Title 'verify category hyperlink navigation on pdp' and step labels 1) and 2) match the flow.",
+      "Profile: z-1234579 FOUND as active BundleProduct, PRODUCTION, inventory 28362, storefrontProductIndex 1: meets PRODUCT_BUNDLE_IN_STOCK. categoryPath and categoryLeaf: no profiling rule.",
+      "GAP: the core data of this test is the product's category (leaf name and full path as the storefront shows it). No vocabulary key returns a category name or path (PRODUCT_SIMPLE_IN_STOCK returns only categoryId; PRODUCT_BUNDLE_IN_STOCK none). categoryPath and categoryLeaf are kept under the product need only because they belong to that product.",
+      "migrate: categoryPath and categoryLeaf map to no output of the product key.",
+      "No data value appears in the spec code; the spec reads the JSON through loadData."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.spec.ts:26",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.json:5",
+      "kind": "json",
+      "keyPath": "categoryPath",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "categoryLeaf",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

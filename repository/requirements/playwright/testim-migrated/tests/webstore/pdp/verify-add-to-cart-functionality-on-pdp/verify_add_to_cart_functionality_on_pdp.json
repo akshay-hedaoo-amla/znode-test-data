@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/pdp/verify-add-to-cart-functionality-on-pdp.spec.ts > Webstore - PDP > verify add to cart functionality on pdp",
+  "scenario": {
+    "summary": "Guest searches the webstore for a bundle product by SKU, opens its PDP, checks breadcrumb and name, adds it to the cart (quantity 1), then adds each Frequently Bought Together product (2) and each You May Also Like product (3) from the PDP, checking the cart count after every add and a total of 6.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the product SKU, assert 'Showing 1 of 1 Results', open the result and check the product image.",
+      "Assert breadcrumb Home/<category path>/<product name> and the product heading.",
+      "Assert the 'Add to Cart' button, add the product to the cart; the flyout shows 'Add to Cart', SKU and Qty 1; cart count 1.",
+      "For each Frequently Bought Together product: assert its heading, add it to the cart, cart count +1.",
+      "For each You May Also Like product: assert its heading, add it to the cart, cart count +1.",
+      "Assert the total cart count equals expectedCartCount (6)."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Guest cart receives the main product and its 5 related products (session cart only; no order placed)."
+    ],
+    "assertions": [
+      "Search shows 'Showing 1 of 1 Results' and the product image is visible.",
+      "Breadcrumb equals Home/<category path>/<product name>; heading equals the product name.",
+      "Add to Cart button and flyout label read 'Add to Cart'; cart notification contains 'SKU: <sku>' and 'Qty: 1'.",
+      "Each related product heading shows its name; cart count increases by one per add and ends at 6."
+    ],
+    "evidence": [
+      "Title 'verify add to cart functionality on pdp' and step labels 1) to 6) match the flow; spec comment says 'open the bundle PDP'.",
+      "Profile: z-1234579 FOUND as active BundleProduct 'DeWalt 3-Tool Combo Kit Bundle', brand Dewalt, PRODUCTION, inventory 28362, storefrontProductIndex 1, requiredAddOnCount 0: meets PRODUCT_BUNDLE_IN_STOCK.",
+      "Profile: FBT z-1234606, z-1234605 and YMAL z-1234602, z-1234603, z-1234604 FOUND as active simple products; z-1234603 inventory is negative (-619687597).",
+      "GAP: the test needs a product that has 2 Frequently Bought Together and 3 You May Also Like associated products (and its category path for the breadcrumb). No vocabulary key covers related-product associations, and PRODUCT_BUNDLE_IN_STOCK returns no category path or related products. If the resolver falls back from the recorded bundle, the related-product values no longer belong to it.",
+      "Related products, category path and expectedCartCount are kept as values of the product need (alias product) only because no key supplies them; they must come from a key once one exists.",
+      "migrate: productCategory and the related-product values map to no output of PRODUCT_BUNDLE_IN_STOCK, and expectedCartCount (6) is derived from the number of related products in the data.",
+      "No data value appears in the spec code; the spec reads the JSON through loadData."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:3",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-cart-functionality-on-pdp.spec.ts:34",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tools / Power Tools",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:4",
+      "kind": "json",
+      "keyPath": "productCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:2",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Add to Cart",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-cart-functionality-on-pdp.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add to Cart",
+      "location": "testim-migrated/tests/webstore/pdp/verify-add-to-cart-functionality-on-pdp.spec.ts:49",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:6",
+      "kind": "json",
+      "keyPath": "productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234606",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:10",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.0.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE Pro 6-Outlet Surge Protector",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234605",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:11",
+      "kind": "json",
+      "keyPath": "frequentlyBoughtProducts.1.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE 6' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234602",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:15",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.0.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE 9' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234603",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:16",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.1.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE 12' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:17",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234604",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:17",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:17",
+      "kind": "json",
+      "keyPath": "youMayAlsoLike.2.productQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "6",
+      "location": "testim-migrated/test-data/webstore/pdp/verify-add-to-cart-functionality-on-pdp.json:7",
+      "kind": "json",
+      "keyPath": "expectedCartCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "pending_approval"
+}

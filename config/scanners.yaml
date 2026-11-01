@@ -62,3 +62,9 @@ migrated:
     - testim-migrated/tests/webstore/shopping-cart/verify-percent-off-product-promotion-functionality.spec.ts
     - testim-migrated/tests/webstore/shopping-cart/verify-request-quote-access-for-guest-and-retail.spec.ts
   selenium: []   # Phase 6 wave 2
+
+# Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
+# swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.
+swapped:
+  playwright:
+    - testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-guest-user.spec.ts
