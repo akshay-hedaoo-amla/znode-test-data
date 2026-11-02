@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts > Webstore - My Account - Pending Orders > validate pending orders functionality",
+  "scenario": {
+    "summary": "The signed-in user opens Pending Orders, checks heading, filters and columns, pages through 8-row pages, checks the total, sorts by order number, status and amount, checks per-status filter counts, opens one pending order's details and its approver history, and checks that invalid searches in five filters return no records.",
+    "steps": [
+      "Open Pending Orders: heading, filter options and column headers",
+      "Page size 8: footer '1 - 8 of <total>'; next page: '9 - <total> of <total>'",
+      "Page size 64: row count equals the footer total, which equals totalPendingOrders",
+      "Sort Order Number asc/desc: first-row anchors",
+      "Sort Pending Order Status asc/desc: first-row anchors",
+      "Sort Pending Order Amount asc/desc: monotonic (anchors only logged)",
+      "Filter status 'Pending Approval' then 'Approved': row counts",
+      "Open pending order PendingOrderNumber: heading, number, status, date",
+      "See Approver History: heading",
+      "Invalid search text in five filters: 'No records found.'"
+    ],
+    "entitiesTouched": [
+      "user",
+      "pending_order"
+    ],
+    "stateChanges": [
+      "None: pending orders are only read"
+    ],
+    "assertions": [
+      "Heading, filter options and column headers",
+      "Pagination footers and total (10)",
+      "Sort anchors for order number and status; amounts monotonic",
+      "Status counts: Pending Approval 8, Approved 2",
+      "Pending order details: heading, number, status PENDING APPROVAL, date; Approver History heading",
+      "No records for invalid searches"
+    ],
+    "evidence": [
+      "Title 'validate pending orders functionality' matches the 10 steps; no linked AIO cases; data through loadData (spec line 32); username/password in the JSON are unused (not scanned, loginPage fixture unused)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP + SHAPE: pending orders are ZnodeOrder rows of ClassCode ApprovalRoutings (numbers AR-...) visible to the signed-in account. Data shape: 9 to 64 pending orders (a second 8-row page must exist, all must fit a 64-row page), with at least one 'Pending Approval' and one 'Approved'",
+      "MISSING KEY: proposed PENDING_ORDER_OF_USER (entity order, ClassCode ApprovalRoutings): params owner (link @user.userId), store, status (optional), minPendingOrders, maxPendingOrders optional; outputs pendingOrderNumber, status, orderDate (MM/DD/YY), pendingCount, pendingApprovalCount, approvedCount. Reviewer to confirm whether the list shows the user's own submitted orders or the orders the user approves (Customer Name / Account Name filters suggest B2B account scope); the owner filter must follow that rule",
+      "Until then PendingOrderNumber, its status and date, the total and the status counts, and the sort anchors are recorded as expected-output only because a data source needs a declared alias; they are really account data. The sort anchors are first rows over all pending orders: proposal to keep monotonic checks and drop or derive the anchors",
+      "DATA IN CODE: spec line 122 asserts the literal 'AR-01102025-0068' (the same order as PendingOrderNumber): the migrated spec must use the resolved pending order number instead",
+      "migrate: owner-linked data, data in code, counts over many rows",
+      "Re-mapped to new keys (2026-11-01): pendingOrder = PENDING_ORDER_OF_USER (owner @user.userId as submitter, status pendingapproval since the opened order must show PENDING APPROVAL, minPendingOrders 9 so the 8-row default page has a second page, maxPendingOrders 64 = largePageSize, store): totalPendingOrders -> pendingCount, pendingApprovalCount -> pendingApprovalCount, approvedCount -> approvedCount, PendingOrderNumber and the literal receipt number (spec:122) -> pendingOrderNumber, pendingOrderStatus -> status, pendingOrderDate -> orderDate (status/orderDate from the key description, the pending_order entity map and the drafting proposal). The status filter counts need at least one Approved and one Pending Approval order: the key has no per-status minimum. LEFT AS expected-output: the sort anchors Ascending/Descending order number, status and amount (the key outputs no anchors); the two status anchors are also the filter values (fixed labels). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PENDING_ORDER_OF_USER",
+      "alias": "pendingOrder",
+      "params": {
+        "owner": "@user.userId",
+        "status": "pendingapproval",
+        "minPendingOrders": 9,
+        "maxPendingOrders": 64,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Pending Orders",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "PendingOrdersHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "defaultPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "totalPendingOrders",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "pendingCount"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "largePageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OrderNumber",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AR-01102025-0062",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "AscendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "AR-01102025-0072",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "DescendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PendingOrderStatus",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Approved",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "AscendingPendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Pending Approval",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "DescendingPendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PendingOrderAmount",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$45.10",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:13",
+      "kind": "json",
+      "keyPath": "AscendingPendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$6,855.10",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:14",
+      "kind": "json",
+      "keyPath": "DescendingPendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Pending Order Status",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:106",
+      "kind": "literal",
+      "keyPath": "filterByText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:15",
+      "kind": "json",
+      "keyPath": "pendingApprovalCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "pendingApprovalCount"
+    },
+    {
+      "value": "Pending Order Status",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:111",
+      "kind": "literal",
+      "keyPath": "filterByText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:16",
+      "kind": "json",
+      "keyPath": "approvedCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "approvedCount"
+    },
+    {
+      "value": "AR-01102025-0068",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:18",
+      "kind": "json",
+      "keyPath": "PendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "pendingOrderNumber"
+    },
+    {
+      "value": "Pending order details",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "PendingOrderDetailsHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "AR-01102025-0068",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "pendingOrderNumber"
+    },
+    {
+      "value": "PENDING APPROVAL",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:19",
+      "kind": "json",
+      "keyPath": "pendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "status"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:20",
+      "kind": "json",
+      "keyPath": "pendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingOrder",
+      "output": "orderDate"
+    },
+    {
+      "value": "Approver History",
+      "location": "testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts:131",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "!@#$%^&",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:22",
+      "kind": "json",
+      "keyPath": "invalidSearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-orders-validate-functionality.json:17",
+      "kind": "json",
+      "keyPath": "NoRecordFoundMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

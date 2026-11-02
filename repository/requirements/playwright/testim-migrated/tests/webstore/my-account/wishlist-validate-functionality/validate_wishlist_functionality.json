@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/wishlist-validate-functionality.spec.ts > Webstore - My Account > validate wishlist functionality",
+  "scenario": {
+    "summary": "A registered user signs in from the header with the test's own credentials (guest storageState), empties the wishlist, adds/removes/re-adds a product from search results, checks the wishlist shows it (1 of 1) and removes it, adds a second product from its PDP, adds it to the cart from the wishlist, empties the cart, and removes it from the wishlist.",
+    "steps": [
+      "Guest session; open home, sign in from the header with username/password; check the greeting contains accountName; clear the wishlist; check 'No records found.'",
+      "Search productSku1; toggle the wishlist heart on the first result: add (toast), remove (toast), add (toast)",
+      "Open Wishlist: has items, 'Showing 1 of 1', product link productName1; remove (toast); empty again",
+      "Search productSku2, open its PDP, add to wishlist (toast)",
+      "Wishlist: Add to Cart on the first item; check the cart heading; empty the cart; check the empty-cart message",
+      "Wishlist still has the item; remove it (toast); afterEach clears the wishlist and the cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "wishlist",
+      "cart"
+    ],
+    "stateChanges": [
+      "The account's wishlist is cleared, filled and emptied",
+      "One product is added to the cart and the cart is emptied"
+    ],
+    "assertions": [
+      "Header greeting contains accountName",
+      "Wishlist empty message",
+      "Add/remove wishlist toasts",
+      "'1 of 1' count",
+      "Wishlist product link shows productName1",
+      "Cart heading after Add to Cart",
+      "Empty cart message",
+      "Item still in the wishlist after Add to Cart"
+    ],
+    "evidence": [
+      "Title 'validate wishlist functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: although under my-account/ (webstore-auth project), the spec opts out of the shared session (test.use storageState empty) and signs in with username/password from its own JSON (credential sources). USER_WEBSTORE_REGISTERED preferred.required true on the username source; the migrated test declares it with await testData.useExisting('user', data.username) before signing in",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "productSku1 z-26597945: profile FOUND active SimpleProduct (inventory 99, storefront index 1). Need wishlistProduct PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (only wishlisted), preferred source productSku1; productSku1 -> wishlistProduct.sku, productName1 -> wishlistProduct.name",
+      "productSku2 z-4567890: profile FOUND active SimpleProduct (inventory, storefront index 1). Need pdpProduct PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (added to cart once from the wishlist), preferred source productSku2; productSku2 -> pdpProduct.sku. The spec comments name codegen ids (#0-z-4567890, linkProductName931) that the POM no longer uses",
+      "accountName 'Hello, Testim My Account' is the header greeting with the account's display name: it depends on the declared account, and no key outputs a display name (personal data, never returned). Kept as expected-output; propose changing the spec to check the greeting is shown (e.g. starts with 'Hello,')",
+      "migrate: the spec reads its JSON through a raw import cast (rawData as WishlistData), not loadData"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "wishlistProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "pdpProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/my-account/wishlist-validate-functionality.spec.ts:46",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello, Testim My Account",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "accountName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "noRecordFound",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-26597945",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "productSku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "wishlistProduct",
+      "output": "sku"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "addToWishlistSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "removeFromWishlistSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1 of 1",
+      "location": "testim-migrated/tests/webstore/my-account/wishlist-validate-functionality.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Auto_12 Pack Cut Level 1 Nitrile Dipped Gloves",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "productName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "wishlistProduct",
+      "output": "name"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "productSku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdpProduct",
+      "output": "sku"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "cartHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/my-account/wishlist-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "emptyCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

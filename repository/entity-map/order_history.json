@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "entity": "order_history",
+  "tables": [
+    "dbo.ZnodeOrder",
+    "dbo.ZnodeCPOrderClass",
+    "dbo.ZnodeOmsOrderState",
+    "dbo.ZnodeOmsPaymentState",
+    "dbo.ZnodeOrderPaymentDetail",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser"
+  ],
+  "aliases": {
+    "ownerOrder": "dbo.ZnodeOrder",
+    "ownerOrderState": "dbo.ZnodeOmsOrderState",
+    "ownerOrderPaymentState": "dbo.ZnodeOmsPaymentState",
+    "ownerOrderPayment": "dbo.ZnodeOrderPaymentDetail",
+    "statusOrder": "dbo.ZnodeOrder"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodeOrder.ClassId",
+      "to": "dbo.ZnodeCPOrderClass.CPOrderClassId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsOrderStateId",
+      "to": "dbo.ZnodeOmsOrderState.OmsOrderStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsPaymentStateId",
+      "to": "dbo.ZnodeOmsPaymentState.OmsPaymentStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderPaymentDetail.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "dbo.ZnodeUser.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "ownerOrder.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "ownerOrder.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "ownerOrder.OmsOrderStateId",
+      "to": "ownerOrderState.OmsOrderStateId",
+      "kind": "left"
+    },
+    {
+      "from": "ownerOrder.OmsPaymentStateId",
+      "to": "ownerOrderPaymentState.OmsPaymentStateId",
+      "kind": "left"
+    },
+    {
+      "from": "ownerOrder.OrderId",
+      "to": "ownerOrderPayment.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "statusOrder.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "statusOrder.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsOrderStateId",
+      "to": "statusOrder.OmsOrderStateId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "orderId": "dbo.ZnodeOrder.OrderId",
+    "orderNumber": "dbo.ZnodeOrder.ClassNumber",
+    "orderClass": "dbo.ZnodeCPOrderClass.ClassCode",
+    "orderDate": "dbo.ZnodeOrder.OrderDate",
+    "orderStatus": "dbo.ZnodeOmsOrderState.OrderStateName",
+    "orderStatusCode": "dbo.ZnodeOmsOrderState.StatusCode",
+    "orderStatusAllowsReturn": "dbo.ZnodeOmsOrderState.IsAllowReturn",
+    "paymentStatus": "dbo.ZnodeOmsPaymentState.Name",
+    "paymentStatusCode": "dbo.ZnodeOmsPaymentState.PaymentStateCode",
+    "paymentType": "dbo.ZnodeOrderPaymentDetail.ConfigurationSetCode",
+    "paymentTypeCode": "dbo.ZnodeOrderPaymentDetail.SubTypeCode",
+    "orderTotal": "dbo.ZnodeOrder.Total",
+    "orderOrigin": "dbo.ZnodeOrder.OrderOrigin",
+    "revisionType": "dbo.ZnodeOrder.RevisionType",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "ownerUserId": "dbo.ZnodeOrder.UserId",
+    "owner": "dbo.AspNetZnodeUser.UserName",
+    "ownerOrderCount": "COUNT(DISTINCT ownerOrder.OrderId)",
+    "ownerOrderCountCap": "COUNT(DISTINCT ownerOrder.OrderId)",
+    "ownerOrderStatusCount": "COUNT(DISTINCT ownerOrderState.StatusCode)",
+    "statusOrderCount": "COUNT(DISTINCT statusOrder.OrderId)",
+    "statusOrderCountCap": "COUNT(DISTINCT statusOrder.OrderId)",
+    "firstOrderNumberAsc": "MIN(ownerOrder.ClassNumber)",
+    "firstOrderNumberDesc": "MAX(ownerOrder.ClassNumber)",
+    "firstOrderStatusAsc": "MIN(ownerOrderState.OrderStateName)",
+    "firstOrderStatusDesc": "MAX(ownerOrderState.OrderStateName)",
+    "firstPaymentStatusAsc": "MIN(ownerOrderPaymentState.Name)",
+    "firstPaymentStatusDesc": "MAX(ownerOrderPaymentState.Name)",
+    "firstPaymentTypeDesc": "MAX(ownerOrderPayment.ConfigurationSetCode)",
+    "firstOrderDateAsc": "MIN(ownerOrder.OrderDate)",
+    "firstOrderDateDesc": "MAX(ownerOrder.OrderDate)",
+    "minOrderTotal": "MIN(ownerOrder.Total)",
+    "maxOrderTotal": "MAX(ownerOrder.Total)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeCPOrderClass.ClassCode": "Orders",
+    "ownerOrder.ClassId": "1",
+    "statusOrder.ClassId": "1"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeOrder.PurchaseOrderNumber",
+    "dbo.ZnodeOrder.OrderDetail",
+    "dbo.ZnodeOrder.Custom1",
+    "dbo.ZnodeOrder.Custom2",
+    "dbo.ZnodeOrder.Custom3",
+    "dbo.ZnodeOrder.Custom4",
+    "dbo.ZnodeOrder.Custom5",
+    "dbo.ZnodeOrderPaymentDetail.PaymentTransactionToken",
+    "dbo.ZnodeOrderPaymentDetail.CreditCardNumber",
+    "dbo.ZnodeOrderPaymentDetail.CardType",
+    "dbo.ZnodeOrderPaymentDetail.CreditCardExpMonth",
+    "dbo.ZnodeOrderPaymentDetail.CreditCardExpYear",
+    "dbo.ZnodeOrderPaymentDetail.CustomerGatewayProfileId",
+    "dbo.ZnodeOrderPaymentDetail.GatewayClientId",
+    "dbo.ZnodeOrderPaymentDetail.ExternalTransactionId",
+    "dbo.ZnodeOrderPaymentDetail.PurchaseOrderDocumentFilePath",
+    "dbo.ZnodeOrderPaymentDetail.PaymentModeSummary",
+    "dbo.ZnodeOrderPaymentDetail.Custom1",
+    "dbo.ZnodeOrderPaymentDetail.Custom2",
+    "dbo.ZnodeOrderPaymentDetail.Custom3",
+    "dbo.ZnodeOrderPaymentDetail.Custom4",
+    "dbo.ZnodeOrderPaymentDetail.Custom5"
+  ],
+  "schemaFingerprint": "sha256:64ba86b8c86ee0677f9d0cd0ef338655938a53e24ddc0d5d937b8df86897e638",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

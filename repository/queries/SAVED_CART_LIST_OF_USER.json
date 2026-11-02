@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "SAVED_CART_LIST_OF_USER",
+  "sql" : "SELECT TOP 10 o.UserId AS userId, COUNT(DISTINCT o.OrderId) AS savedCartCount, MIN(ad.Name) AS firstNameAsc, MAX(ad.Name) AS firstNameDesc, MIN(q.qty) AS firstQuantityAsc, MAX(q.qty) AS firstQuantityDesc, MIN(uq.Name) AS uniqueCartName FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId LEFT JOIN dbo.ZnodeOrderAdditionalDetail ad ON ad.OrderId = o.OrderId OUTER APPLY (SELECT SUM(op.Quantity) AS qty FROM dbo.ZnodeOrderProduct op WHERE op.OrderId = o.OrderId AND op.IsAddOn = @notAddOn) q OUTER APPLY (SELECT TOP 1 ua.Name FROM dbo.ZnodeOrderAdditionalDetail ua WHERE ua.OrderId = o.OrderId AND ua.Name IS NOT NULL AND NOT EXISTS (SELECT xo.OrderId FROM dbo.ZnodeOrder xo INNER JOIN dbo.ZnodeOrderAdditionalDetail xa ON xa.OrderId = xo.OrderId WHERE xo.UserId = o.UserId AND xo.ClassId = o.ClassId AND xo.PortalId = o.PortalId AND xo.OrderId <> o.OrderId AND CHARINDEX(ua.Name, xa.Name) > @zero) ORDER BY ua.Name) uq WHERE oc.ClassCode = @savedCartClass AND po.StoreCode = @store AND (@owner IS NULL OR o.UserId = @owner) GROUP BY o.UserId HAVING COUNT(DISTINCT o.OrderId) >= @minSavedCarts AND COUNT(DISTINCT o.OrderId) <= @maxSavedCarts AND MIN(uq.Name) IS NOT NULL ORDER BY o.UserId",
+  "params" : [ "notAddOn", "zero", "savedCartClass", "store", "owner", "minSavedCarts", "maxSavedCarts" ],
+  "constants" : {
+    "savedCartClass" : "SavedCarts",
+    "notAddOn" : "0",
+    "zero" : "0"
+  },
+  "outputs" : [ "userId", "savedCartCount", "firstNameAsc", "firstNameDesc", "firstQuantityAsc", "firstQuantityDesc", "uniqueCartName" ],
+  "identity" : "userId",
+  "schemaFingerprint" : "sha256:fc4135d1cead358f6e5a0899cb9ea13c2ff922ddd18f975a10c673a934b655fe",
+  "vocabularyFingerprint" : "sha256:e6f1a63e6eb812468993ec660e6a0d4bf3a06fbb9bd3eb15f484536b8d845b23",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T16:30:00Z",
+  "lastValidated" : "2026-11-01T17:13:16Z",
+  "verifiedHash" : "sha256:6c0b1402721c2e114e91f1bd76ab7717c59ba1054271196b4a19c9823f5edc15"
+}

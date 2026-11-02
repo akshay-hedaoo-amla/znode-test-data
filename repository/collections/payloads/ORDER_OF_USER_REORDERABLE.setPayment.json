@@ -1,0 +1,10 @@
+{
+  "ClassNumber": "{cartNumber}",
+  "BillingAddressId": "{billingAddressId}",
+  "UserId": "{owner?}",
+  "IsTaxExemption": false,
+  "PaymentDetails": {
+    "PaymentSubTypeCode": "{paymentSubTypeCode}",
+    "ConfigurationSetCode": "{configurationSetCode}"
+  }
+}

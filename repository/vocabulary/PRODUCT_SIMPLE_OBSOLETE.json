@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_OBSOLETE",
+  "entity": "product",
+  "type": "simple_obsolete",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "publishState": "production",
+    "obsolete": "= true",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= true",
+    "storefrontProductIndex": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active simple product marked obsolete (PIM IsObsolete and the published storefront record) and published to the store, so the storefront shows the obsolete message. Inventory not constrained. KB: Product Types; Product attributes (Obsolete).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

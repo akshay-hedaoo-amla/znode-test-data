@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts > Webstore - My Account - Order History > validate actions, sorting and button status",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Order History, checks headers and row actions, sorts every column both ways (first-row anchors plus monotonic order), checks an invalid status filter and a best-effort date filter, selects one of its orders (Generate Invoice enabled), opens its details (number, status, payment type, date, total, Create Return and Print) and reorders it to the cart, then empties the cart.",
+    "steps": [
+      "Open Order History; check column headers, the Actions column and view/reorder buttons on the first row (at least one order)",
+      "Page size 64; sort Order Number, Order Status, Payment Status, Payment Type, Order Date, Order Amount ascending and descending; check first-row anchors and monotonic order",
+      "Filter Order Status by junk text: 'No records found.'",
+      "Filter Order Date (best-effort, only logged)",
+      "Select the order viewOrderNumber: checkbox checked, Generate Invoice enabled",
+      "Open its details: heading, order number, status, payment type, date, total, Create Return and Print visible",
+      "Reorder it from the list: cart shows items; empty the cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order",
+      "cart"
+    ],
+    "stateChanges": [
+      "The signed-in account's cart: filled by Reorder, then emptied",
+      "Orders are only read (Reorder copies the order's lines to the cart)"
+    ],
+    "assertions": [
+      "Order History headers and Actions column header text",
+      "First-row value after each sort equals the recorded anchor; columns sorted monotonically",
+      "Invalid status filter shows 'No records found.'",
+      "Selected order's checkbox checked and Generate Invoice enabled",
+      "Order details show the order's number, status, payment type, date and total; Create Return and Print visible",
+      "Reorder adds at least one cart line; empty cart message after emptying"
+    ],
+    "evidence": [
+      "Title 'validate actions, sorting and button status' matches the 7 steps; no linked AIO cases; all JSON data through loadData (spec line 36)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP: the viewed/reordered order (viewOrderNumber OS-01102025-00255) must be in the signed-in account's Order History. Need order = ORDER_OF_USER_REORDERABLE with owner @user.userId (query filters o.UserId = @owner), so it resolves when the test declares the account; strategy migrate",
+      "ORDER_OF_USER_REORDERABLE params: the test only checks that Reorder adds at least one line, so any product type works; the key requires productType, so 'simple' is an assumption (reviewer may change it); quantityUsed 1, minAddOns 0, minPersonalizableAttributes 0",
+      "MISSING OUTPUTS: the detail assertions (DetailOrderStatus SUBMITTED, PaymentType InvoiceMe, OrderDate 10/01/25, detailOrderTotal $1,018.40) and the date filter (dateFilter 2025-10-01 / dateFilterDisplay 10/01/25, the same order's date) are the order's own values; ORDER_OF_USER_REORDERABLE returns orderNumber, sku, name, quantity and add-ons only. Recorded as data of alias order without output; the key needs outputs orderStatus, paymentType, orderDate (MM/DD/YY and yyyy-MM-dd), orderTotal (formatted) - or a read-only ORDER_OF_USER_WITH_DETAILS key. Create Return must be offered for the order (status-dependent): not expressible today",
+      "SORT ANCHORS: Ascending/Descending OrderNumber, OrderStatus, PaymentStatus, PaymentType, OrderDate, OrderAmount are the first rows of the account's whole order history, not of one record; no key can express them. Recorded as expected-output only because a data source needs a declared alias. Data shape the test needs: at least 2 orders (ideally different statuses, payment statuses, payment types, dates and amounts) and at most 64 (page size 64 shows all). Proposal: the migrated spec keeps the monotonic checks and drops the first-row anchors (or compares them with the list it read); a count key (proposed ORDER_COUNT_OF_USER, minOrders 2, maxOrders 64) can guarantee the shape",
+      "The date anchors already drifted on atstage (spec comment), which supports dropping them",
+      "Recorded order numbers are kept as data only for viewOrderNumber / InvoiceMePaymentOrder (same value, output orderNumber)",
+      "Re-mapped to new keys (2026-11-01): orderHistory = ORDER_HISTORY_OF_USER_SORT_ANCHORS (owner @user.userId, minOrders 2, maxOrders 64 = largePageSize, minStatuses 2 since the status sort shows CANCELED first and SUBMITTED last, store): the 11 sort anchors -> firstOrderNumberAsc/Desc, firstOrderStatusAsc/Desc, firstPaymentStatusAsc/Desc, firstPaymentTypeDesc, firstOrderDateAsc/Desc, minOrderTotal/maxOrderTotal (checked against the pending query). UNCHANGED: the order detail values (DetailOrderStatus, PaymentType, OrderDate, detailOrderTotal) and dateFilter/dateFilterDisplay stay data of alias order without output - no key outputs them yet (proposed as outputs on ORDER_OF_USER_REORDERABLE, not done). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_OF_USER_REORDERABLE",
+      "alias": "order",
+      "params": {
+        "owner": "@user.userId",
+        "productType": "simple",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_HISTORY_OF_USER_SORT_ANCHORS",
+      "alias": "orderHistory",
+      "params": {
+        "owner": "@user.userId",
+        "minOrders": 2,
+        "maxOrders": 64,
+        "minStatuses": 2,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Actions",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:2",
+      "kind": "json",
+      "keyPath": "ActionColumnHeader",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:62",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:3",
+      "kind": "json",
+      "keyPath": "largePageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OrderNumber",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OS-01102025-00254",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:4",
+      "kind": "json",
+      "keyPath": "AscendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderNumberAsc"
+    },
+    {
+      "value": "OS-26092025-00253",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:5",
+      "kind": "json",
+      "keyPath": "DescendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderNumberDesc"
+    },
+    {
+      "value": "OrderStatus",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "CANCELED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:6",
+      "kind": "json",
+      "keyPath": "AscendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderStatusAsc"
+    },
+    {
+      "value": "SUBMITTED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:7",
+      "kind": "json",
+      "keyPath": "DescendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderStatusDesc"
+    },
+    {
+      "value": "PaymentStatus",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:91",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "captured",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:8",
+      "kind": "json",
+      "keyPath": "AscendingPaymentStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstPaymentStatusAsc"
+    },
+    {
+      "value": "pending",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:9",
+      "kind": "json",
+      "keyPath": "DescendingPaymentStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstPaymentStatusDesc"
+    },
+    {
+      "value": "PaymentType",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:97",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PurchaseOrder",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:10",
+      "kind": "json",
+      "keyPath": "DescendingPaymentType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstPaymentTypeDesc"
+    },
+    {
+      "value": "OrderDate",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "09/17/25",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:11",
+      "kind": "json",
+      "keyPath": "AscendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderDateAsc"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:12",
+      "kind": "json",
+      "keyPath": "DescendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderDateDesc"
+    },
+    {
+      "value": "OrderAmount",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:110",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$0.00",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:13",
+      "kind": "json",
+      "keyPath": "AscendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "minOrderTotal"
+    },
+    {
+      "value": "$3,793.16",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:14",
+      "kind": "json",
+      "keyPath": "DescendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "maxOrderTotal"
+    },
+    {
+      "value": "!@#$%^&",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:16",
+      "kind": "json",
+      "keyPath": "invalidFilter",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:15",
+      "kind": "json",
+      "keyPath": "NoRecordFoundMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2025-10-01",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:17",
+      "kind": "json",
+      "keyPath": "dateFilter",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:18",
+      "kind": "json",
+      "keyPath": "dateFilterDisplay",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "OS-01102025-00255",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:19",
+      "kind": "json",
+      "keyPath": "viewOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order",
+      "output": "orderNumber"
+    },
+    {
+      "value": "Order Details",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:20",
+      "kind": "json",
+      "keyPath": "OrderDetailsHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "OS-01102025-00255",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:21",
+      "kind": "json",
+      "keyPath": "InvoiceMePaymentOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order",
+      "output": "orderNumber"
+    },
+    {
+      "value": "SUBMITTED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:25",
+      "kind": "json",
+      "keyPath": "DetailOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "InvoiceMe",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:22",
+      "kind": "json",
+      "keyPath": "PaymentType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:24",
+      "kind": "json",
+      "keyPath": "OrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "$1,018.40",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-actions-sorting-and-button-status.json:23",
+      "kind": "json",
+      "keyPath": "detailOrderTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts:168",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

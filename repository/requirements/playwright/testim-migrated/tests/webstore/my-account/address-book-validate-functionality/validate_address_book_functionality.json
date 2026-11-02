@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/address-book-validate-functionality.spec.ts > Webstore - My Account - Address Book > validate address book functionality",
+  "scenario": {
+    "summary": "The signed-in registered user opens the Address Book, checks the heading and the Add Address link, creates a new address with a unique display name (prefix + timestamp), checks the created toast, finds the address in the list and deletes it, checking the deleted toast. afterEach deletes any address left with the prefix.",
+    "steps": [
+      "Open Address Book (signed in through the shared storageState); check heading and 'Add Address' link",
+      "Add Address: fill display name (prefix + Date.now()), street, first/last name, phone, city, postal code; save; check the created toast",
+      "Reopen Address Book, check the address is listed, delete it, check the deleted toast",
+      "afterEach: delete addresses whose display name starts with the prefix"
+    ],
+    "entitiesTouched": [
+      "user",
+      "address"
+    ],
+    "stateChanges": [
+      "An address is created on the signed-in account and deleted again (afterEach cleans up by prefix)"
+    ],
+    "assertions": [
+      "Address Book heading equals addressBookHeading",
+      "Add Address link text 'Add Address'",
+      "Toast contains addressSuccessMessage after save",
+      "Created address is listed",
+      "Toast contains addressDeleteMessage after delete"
+    ],
+    "evidence": [
+      "Title 'validate address book functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "The test needs no record from the environment besides the account: every address value is typed in by the test (created-by-test); the masked heading and toasts are fixed UI text masked only because their keys contain 'address'",
+      "swap: no data value (nothing to replace); the spec stays as it is and keeps the storageState session. The user need is only checked at pre-warm (the account is not declared or leased); to declare and lease it, use strategy migrate and add the useExisting line above",
+      "Profile: no observation FOUND for this spec (headings and messages NO_RULE, address values SENSITIVE)"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Testim Address",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "displayNamePrefix",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "addressBookHeading",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add Address",
+      "location": "testim-migrated/tests/webstore/my-account/address-book-validate-functionality.spec.ts:39",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "streetAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "cityName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "addressSuccessMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/address-book-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "addressDeleteMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

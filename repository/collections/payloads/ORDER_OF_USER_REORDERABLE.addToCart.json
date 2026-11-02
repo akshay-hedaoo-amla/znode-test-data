@@ -1,0 +1,24 @@
+{
+  "UserId": "{owner?}",
+  "CatalogCode": "{catalogCode}",
+  "SkuDetails": [
+    {
+      "Sku": "{parentSku}",
+      "Quantity": "{quantityUsed}",
+      "AddToCartChildItems": [
+        {
+          "Sku": "{variantSku}",
+          "Quantity": "{quantityUsed}",
+          "AddOnSkuListModel": [
+            { "Sku": "{addOn1Sku}", "GroupName": "{addOn1Group}" },
+            { "Sku": "{addOn2Sku}", "GroupName": "{addOn2Group}" },
+            { "Sku": "{addOn3Sku}", "GroupName": "{addOn3Group}" }
+          ],
+          "PersonalizedDetails": [
+            { "Code": "{personalizationCode}", "Value": "{runIdTag}{uniqueSuffix}" }
+          ]
+        }
+      ]
+    }
+  ]
+}

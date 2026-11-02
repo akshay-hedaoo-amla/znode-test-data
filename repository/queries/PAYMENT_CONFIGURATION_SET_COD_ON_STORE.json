@@ -1,0 +1,24 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PAYMENT_CONFIGURATION_SET_COD_ON_STORE",
+  "sql" : "SELECT TOP 10 cs.ConfigurationSetCode AS configurationSetCode, cs.ConfigurationSetDisplayName AS configurationSetName FROM dbo.ZnodePluginConfigurationSet cs INNER JOIN dbo.ZnodePluginConfigurationSetMapper m ON m.PluginConfigurationSetId = cs.PluginConfigurationSetId INNER JOIN dbo.ZnodePluginScope sc ON sc.ScopeId = m.ScopeId INNER JOIN dbo.ZnodePortal po ON po.PortalId = m.ExternalId INNER JOIN dbo.ZnodePluginDetails pd ON pd.PluginDetailsId = cs.PluginDetailsId INNER JOIN dbo.ZnodePluginTypes pt ON pt.PluginTypeId = pd.PluginTypeId WHERE sc.Scope = @storeScope AND po.StoreCode = @store AND pt.TypeName IN (@pluginType, @internalPluginType) AND pd.IsActive = @isActive AND CHARINDEX(@subTypeMarker, cs.ConfigurationSetAttributeValues) > @zero ORDER BY LEN(cs.ConfigurationSetCode), cs.ConfigurationSetCode",
+  "params" : [ "store", "storeScope", "pluginType", "internalPluginType", "isActive", "subTypeMarker", "zero" ],
+  "constants" : {
+    "storeScope" : "Store",
+    "pluginType" : "Payment",
+    "internalPluginType" : "PaymentInternal",
+    "isActive" : "1",
+    "subTypeMarker" : "\"COD\"",
+    "zero" : "0"
+  },
+  "outputs" : [ "configurationSetCode", "configurationSetName" ],
+  "identity" : "configurationSetCode",
+  "schemaFingerprint" : "sha256:6acf2ce472ef5572e0211af7d780db1e76dd8c13db78dd2b55a61203419967bf",
+  "vocabularyFingerprint" : "sha256:7748542edf3af49c1f14de4067ea3a8af8a0cd8a6f162677922b0f06fe4a4301",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T02:16:36Z",
+  "verifiedHash" : "sha256:582672bd1ffb0c490583f12c7f64de694b99d516cb0f67995e2103717f8fcdbf"
+}

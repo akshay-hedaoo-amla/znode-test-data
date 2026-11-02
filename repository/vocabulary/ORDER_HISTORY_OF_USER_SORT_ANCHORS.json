@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_HISTORY_OF_USER_SORT_ANCHORS",
+  "entity": "order_history",
+  "type": "sort_anchors_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "ownerOrderCount": ">= {minOrders}",
+    "ownerOrderCountCap": "<= {maxOrders}",
+    "ownerOrderStatusCount": ">= {minStatuses}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "The declared account's Order History (class Orders) on the store, all on one page: first value per sort - order number, status, payment status asc/desc, payment type desc, date asc/desc, amount asc/desc. Read only.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the orders: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minOrders": {
+      "type": "integer",
+      "description": "Orders the account must own on the store (at least; 2 so a sort can be seen)"
+    },
+    "maxOrders": {
+      "type": "integer",
+      "description": "Most orders allowed: the page size the test shows, so the first rows are over all orders"
+    },
+    "minStatuses": {
+      "type": "integer",
+      "optional": true,
+      "description": "Distinct order statuses among the account's orders (at least). Left out: any"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

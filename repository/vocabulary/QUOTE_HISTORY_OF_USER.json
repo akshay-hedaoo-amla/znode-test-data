@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "key": "QUOTE_HISTORY_OF_USER",
+  "entity": "quote",
+  "type": "history_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "ownerQuoteCount": ">= {minQuotes}",
+    "ownerQuoteCountCap": "<= {maxQuotes}",
+    "ownerQuoteStatusCount": ">= {minStatuses}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "The declared account's quotes on the store as a whole (Quote History list): between min and max quotes, in at least N distinct statuses. Outputs: total, count per status, first quote number asc/desc, min/max total. Read only.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the quotes: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minQuotes": {
+      "type": "integer",
+      "description": "Quotes the account must own on the store (at least)"
+    },
+    "maxQuotes": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most quotes allowed, e.g. the page size so all fit one page. Left out: no upper bound"
+    },
+    "minStatuses": {
+      "type": "integer",
+      "optional": true,
+      "description": "Distinct quote statuses the account's quotes must cover (5 when the test filters every status). Left out: any"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

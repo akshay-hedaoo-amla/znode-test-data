@@ -14,12 +14,13 @@
   "scope": {
     "store": "{store}"
   },
-  "usage": "read-only",
-  "description": "Existing order in the declared user's Order History with a line of the given product type (with add-ons and personalization) whose product is still active and in stock, so Reorder copies it to the cart. KB: Create an Order from the Storefront (Option C: Reorder); My Account Dashboard.",
+  "usage": "consumable",
+  "description": "Order in the declared user's Order History with a line of the given product type (with add-ons and personalization), product still active and in stock, so Reorder copies it to the cart; created for the run when none exists. KB: Create an Order from the Storefront (Option C: Reorder).",
   "declaredParams": {
     "owner": {
       "type": "integer",
-      "description": "ZnodeUser.UserId of the account that owns the order: link it to the test's declared account (@user.userId), never a username"
+      "description": "ZnodeUser.UserId of the account that owns the order: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner",
+      "optional": true
     },
     "productType": {
       "type": "string",
@@ -42,5 +43,7 @@
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
     }
   },
-  "status": "pending_approval"
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

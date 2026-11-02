@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts > Webstore - My Account - Voucher History > validate history and details",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Voucher History, finds the account's voucher by number and checks its name, number, start and expiration dates in the list, opens it and checks total remaining, name, number, dates and amount, then checks the first transaction's order number and opens that order's details. Read only.",
+    "steps": [
+      "Signed in through the shared storageState; open Voucher History, heading visible",
+      "Find the row of voucherNumber: name, number, start date, expiration date",
+      "View the voucher: 'Total Remaining: <remaining>', name, number, start date, expiration date, amount",
+      "Transactions: at least one; the first transaction's order number equals transactionOrderNumber; open it; order detail shows that order number"
+    ],
+    "entitiesTouched": [
+      "user",
+      "voucher",
+      "order"
+    ],
+    "stateChanges": [
+      "None: the voucher and its order are only read"
+    ],
+    "assertions": [
+      "Voucher row present with name, number, start and expiration dates",
+      "Detail: total remaining text, name, number, dates, amount",
+      "At least one transaction; first transaction order number; order detail number"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**), signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts. That setup signs in with getMyAccountUser() (testim-migrated/src/data/credentials.ts) = loadEnvironment().myAccountUser, whose username is requireEnv('MY_ACCOUNT_USERNAME') (testim-migrated/src/config/env.ts:80; process.env, then .env.<env>, then .env). Source 0 records that credential (masked; kind properties = environment variable). On migration the test declares it before reading any owned record: await testData.useExisting('user', getMyAccountUser().username) - the same value the setup signed in with, so the declared account is the signed-in one. No spec data file holds it",
+      "LEASE NOTE: every webstore-auth spec shares this one account; declaring it leases the account per test (useExisting waits while another test holds it), so migrated my-account specs run one at a time on it (protects counts from parallel runtime carts, but lengthens the phase that must finish inside the storageState session's 1-hour token)",
+      "Title 'validate history and details'",
+      "OWNERSHIP: Voucher History lists the vouchers whose ZnodeGiftCard.UserId is the signed-in account (read-only tda rows: the spec's two vouchers share one UserId and the store MaxwellsHardware, PortalId 7; IQ2UMBUJ9B is RestrictToCustomerAccount true, active, expires 2031, balance left; 1KPV2W1Y9Z is NOT restricted but still carries the account's UserId). Need voucher = VOUCHER_RESTRICTED_TO_USER with owner @user.userId (gc.UserId = @owner): resolves at useExisting; strategy migrate",
+      "voucherNumber -> voucher.voucherNumber, voucherName -> voucher.name (data). voucherAmount '$999,999.00' and the literal 'Total Remaining: $2,846.99' are display texts built from voucher.amount / voucher.remainingAmount (expected-output built from outputs on migration; the literal is in the spec's code)",
+      "MISSING OUTPUTS on VOUCHER_RESTRICTED_TO_USER: startDate and expirationDate (ZnodeGiftCard.StartDate / ExpirationDate, mapped in the voucher entity map but not returned by the query). startDate/expirationDate stay expected-output until added",
+      "MISSING KEY (proposed VOUCHER_OF_USER_WITH_TRANSACTIONS, entity voucher, read-only): a voucher of the declared account on the store with at least minTransactions redemptions; params owner (@user.userId), store, minTransactions; outputs voucherNumber, name, amount, remainingAmount, startDate, expirationDate, firstTransactionOrderNumber. Needs the voucher transaction history table (ZnodeGiftCardHistory or equivalent, not in any entity map) mapped. VOUCHER_RESTRICTED_TO_USER cannot require a transaction: in fallback it could pick a voucher with none (step 3 fails). transactionOrderNumber and the order-number literal stay expected-output until then",
+      "Literal 0 (transactions > 0) is config",
+      "Not profiled: no profile observation exists for this test",
+      "Re-mapped to new keys (2026-11-01): need voucher changed from VOUCHER_RESTRICTED_TO_USER to VOUCHER_OF_USER_WITH_TRANSACTIONS (owner @user.userId, minTransactions 1, store): the test opens one voucher and checks its first transaction, so it must be one record with a transaction (the restricted key cannot require one; Voucher History lists every voucher carrying the account's UserId, restricted or not). voucherNumber -> voucherNumber, voucherName -> name, startDate -> startDate, expirationDate -> expirationDate, the Total Remaining literal (spec:43) -> remainingAmount, voucherAmount -> amount, transactionOrderNumber and the order-number literal (spec:60) -> firstTransactionOrderNumber (checked against the pending query). So the new VOUCHER_RESTRICTED_TO_USER startDate/expirationDate outputs are not used here (switch back to that key if a restricted voucher is required). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "VOUCHER_OF_USER_WITH_TRANSACTIONS",
+      "alias": "voucher",
+      "params": {
+        "owner": "@user.userId",
+        "minTransactions": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "properties",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "IQ2UMBUJ9B",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:4",
+      "kind": "json",
+      "keyPath": "voucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "Testim_MyAccount_Voucher",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:3",
+      "kind": "json",
+      "keyPath": "voucherName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "name"
+    },
+    {
+      "value": "09/17/25",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:5",
+      "kind": "json",
+      "keyPath": "startDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "startDate"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:6",
+      "kind": "json",
+      "keyPath": "expirationDate",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "expirationDate"
+    },
+    {
+      "value": "Total Remaining: $2,846.99",
+      "location": "testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts:43",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "remainingAmount"
+    },
+    {
+      "value": "$999,999.00",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:7",
+      "kind": "json",
+      "keyPath": "voucherAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "amount"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OS-26092025-00253",
+      "location": "testim-migrated/test-data/webstore/my-account/voucher-history-validate-history-and-details.json:9",
+      "kind": "json",
+      "keyPath": "transactionOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "firstTransactionOrderNumber"
+    },
+    {
+      "value": "OS-26092025-00253",
+      "location": "testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts:60",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "firstTransactionOrderNumber"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

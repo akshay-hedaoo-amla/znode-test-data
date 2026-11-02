@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+  "entity": "product",
+  "type": "simple_with_required_addon",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "inventory": ">= {quantityUsed}",
+    "requiredAddOnCount": ">= {minRequiredAddOns}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product published to the store with at least N add-on associations marked Required (ZnodePimAddOnProduct.RequiredType), so it cannot be added without choosing add-ons. KB: Configuring Product Add-ons (Required add-ons); Product Types.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test enters for this product"
+    },
+    "minRequiredAddOns": {
+      "type": "integer",
+      "description": "Minimum number of required add-on associations the product must have (1 or more)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

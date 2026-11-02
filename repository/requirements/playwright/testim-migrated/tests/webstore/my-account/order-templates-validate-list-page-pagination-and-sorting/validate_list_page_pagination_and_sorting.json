@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.spec.ts > Webstore - My Account - Order Templates > validate list page pagination and sorting",
+  "scenario": {
+    "summary": "The signed-in user opens Order Templates, sorts by template name and by quantity both ways (first-row anchors plus monotonic order), checks the page-size options, shows all templates on one page and checks the total, checks the previous-page arrow is disabled, and searches a template to check its created and modified dates are MM/DD/YY.",
+    "steps": [
+      "Open Order Templates: heading visible",
+      "Sort Template Name ascending / descending: first-row name (and quantity) anchors; names monotonic",
+      "Sort Quantity ascending / descending: first-row quantity anchors; quantities monotonic",
+      "Page-size options 8/12/16/32/64; page size 12: row count equals totalTemplateCount",
+      "Previous-page arrow disabled on page 1",
+      "Search a template by name: created and modified dates in MM/DD/YY"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template"
+    ],
+    "stateChanges": [
+      "None: the account's templates are only read"
+    ],
+    "assertions": [
+      "At least one template; first-row anchors after each sort; monotonic order",
+      "Page-size options; all templates on one page of pageSizeToApply equal totalTemplateCount (12)",
+      "Searched template row shows created/modified dates in MM/DD/YY"
+    ],
+    "evidence": [
+      "Title 'validate list page pagination and sorting' matches the flow; no linked AIO cases; all data through loadData (spec line 20)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP + SHAPE: everything read is the signed-in account's order templates (ZnodeOrder with ClassCode OrderTemplates). Data shape: at least 2 templates with different names and quantities, at most pageSizeToApply (12) so all fit one page; the recorded set had exactly 12",
+      "MISSING KEY: proposed ORDER_TEMPLATE_OF_USER (entity order, ClassCode OrderTemplates: params owner (link @user.userId), store, minTemplates, maxTemplates optional; outputs templateName, quantity, templateCount). With it: CreatedAndModifiedDateTemplateName -> templateName, totalTemplateCount -> templateCount, and pageSizeToApply must be >= templateCount (a page-size option). Until then template names, quantities and the count are recorded as expected-output only because a data source needs a declared alias",
+      "SORT ANCHORS (AscendingTemplate, DescendingTemplate, DefaultTemplateQuantity, Ascending/DescendingTemplateQuantity) are first rows over all the account's templates: no key can express them; proposal: the migrated spec keeps the monotonic checks and drops or derives the anchors",
+      "Collision risk: order-template-validate-quantity-and-total creates and deletes templates on the same account while this test counts them",
+      "migrate: values depend on the account's templates (and a swapped spec never declares an account)",
+      "Re-mapped to new keys (2026-11-01): template = ORDER_TEMPLATE_OF_USER (owner @user.userId, minTemplates 2 so a sort can be seen, maxTemplates 12 = pageSizeToApply so every template shows on that page and the previous arrow is disabled, store): totalTemplateCount -> templateCount, CreatedAndModifiedDateTemplateName -> templateName. LEFT AS expected-output: the sort anchors AscendingTemplate, DescendingTemplate, DefaultTemplateQuantity, Ascending/DescendingTemplateQuantity - the key outputs no first-row anchors (propose anchor outputs on ORDER_TEMPLATE_OF_USER, or have the migrated spec rely on its sortedness checks). pageSizeOptions are fixed UI. Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_TEMPLATE_OF_USER",
+      "alias": "template",
+      "params": {
+        "owner": "@user.userId",
+        "minTemplates": 2,
+        "maxTemplates": 12,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.spec.ts:39",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "CleaningSupplies_Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:2",
+      "kind": "json",
+      "keyPath": "AscendingTemplate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "WarehouseStock_Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:3",
+      "kind": "json",
+      "keyPath": "DescendingTemplate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "30",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:4",
+      "kind": "json",
+      "keyPath": "DefaultTemplateQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:5",
+      "kind": "json",
+      "keyPath": "AscendingTemplateQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1660",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:6",
+      "kind": "json",
+      "keyPath": "DescendingTemplateQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "pageSizeOptions.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "12",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "pageSizeOptions.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "16",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "pageSizeOptions.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "32",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "pageSizeOptions.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "pageSizeOptions.4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "12",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:10",
+      "kind": "json",
+      "keyPath": "pageSizeToApply",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "12",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:11",
+      "kind": "json",
+      "keyPath": "totalTemplateCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "template",
+      "output": "templateCount"
+    },
+    {
+      "value": "WarehouseStock_Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.json:8",
+      "kind": "json",
+      "keyPath": "CreatedAndModifiedDateTemplateName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "template",
+      "output": "templateName"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

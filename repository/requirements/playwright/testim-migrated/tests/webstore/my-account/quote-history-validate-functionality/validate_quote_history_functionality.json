@@ -1,0 +1,352 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/quote-history-validate-functionality.spec.ts > Webstore - My Account - Quote History > validate quote history functionality",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Quote History, checks the heading, column order and Actions column, filters by each quote status (APPROVED, SUBMITTED, CANCELED, EXPIRED, IN REVIEW) and checks the row count per status, checks the total quote count, opens one quote and checks its number, status, date, expiration date and total, then sorts by quote number (first row asc/desc) and by order amount (monotonic; anchors only warned). Read only.",
+    "steps": [
+      "Signed in through the shared storageState (webstore-auth project); open Quote History; check heading, column headers, Actions column text",
+      "For each status: fresh list, filter by the status, page size largePageSize, count rows (all of that status) and compare to the expected count",
+      "Unfiltered list, page size largePageSize: rendered rows equal the footer total, footer total equals totalQuotes",
+      "View quote viewQuoteNumber: print button visible; quote number, status, quote date, expiration date and total shown",
+      "Sort by QuoteNumber ascending / descending: first row equals ascendingQuoteNumber / descendingQuoteNumber",
+      "Sort by OrderAmount ascending / descending: amounts monotonic; first-row amounts compared to the recorded anchors with a warning only"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order"
+    ],
+    "stateChanges": [
+      "None: the account's quotes are only read"
+    ],
+    "assertions": [
+      "Heading visible; column headers equal QuoteHistoryPage.EXPECTED_HEADERS; Actions header text",
+      "Row count per status equals approvedQuote / submittedQuote / canceledQuote / expiredQuote / inReviewQuote",
+      "Rendered rows equal footer total; footer total equals totalQuotes",
+      "Quote detail: number, status, date, expiration date, total (contains)",
+      "First row after quote-number sort asc/desc; amounts sorted low-high and high-low"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**), signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts. That setup signs in with getMyAccountUser() (testim-migrated/src/data/credentials.ts) = loadEnvironment().myAccountUser, whose username is requireEnv('MY_ACCOUNT_USERNAME') (testim-migrated/src/config/env.ts:80; process.env, then .env.<env>, then .env). Source 0 records that credential (masked; kind properties = environment variable). On migration the test declares it before reading any owned record: await testData.useExisting('user', getMyAccountUser().username) - the same value the setup signed in with, so the declared account is the signed-in one. No spec data file holds it",
+      "LEASE NOTE: every webstore-auth spec shares this one account; declaring it leases the account per test (useExisting waits while another test holds it), so migrated my-account specs run one at a time on it (protects counts from parallel runtime carts, but lengthens the phase that must finish inside the storageState session's 1-hour token)",
+      "Title 'validate quote history functionality'; spec comments: EXPIRED drifted 1->3 and the total 17->19 on atstage, new May-2026 quotes changed the ascending first row: every asserted number is a property of the account's quote set",
+      "Quotes are ZnodeOrder rows of class Quotes (ZnodeCPOrderClass ClassCode 'Quotes', number format Q-<DD><MM><YYYY>-<Number>), owned by the account (ZnodeOrder.UserId): read-only tda rows shows Q-17092025-0069 is the same UserId and store (MaxwellsHardware, PortalId 7) as the my-account vouchers. The order entity map already covers orderClass, orderNumber (ClassNumber), orderState, owner",
+      "MISSING KEY (proposed QUOTE_OF_USER, entity order, read-only): a quote of the declared account on the store, optional status param (ZnodeOmsOrderState name); params owner (@user.userId), store, status; outputs quoteNumber, status, quoteDate, expirationDate, total. Would supply viewQuoteNumber/quoteNumber (data) and quoteStatus/quoteDate/quoteExpirationDate/quoteTotal (expected-output built from outputs). Need left out; the values are recorded as config/expected-output until the key exists",
+      "MISSING KEY (proposed QUOTE_HISTORY_OF_USER, entity order, read-only, aggregate over the account's quotes on the store): params owner, store, minQuotes; outputs totalQuotes, countApproved, countSubmitted, countCanceled, countExpired, countInReview, firstQuoteNumberAscending, firstQuoteNumberDescending, minQuoteTotal, maxQuoteTotal. Data shape the test needs: at least one quote in each of the 5 statuses and at most largePageSize (64) quotes in total (one page). No existing key expresses quote counts",
+      "Status labels (quoteStatus1..5), page size and sort column ids are config; the counts and anchors are expected-output for now (MISSING KEY above)",
+      "Strategy migrate: the quotes belong to the signed-in account, so their needs must be linked owner @user.userId and resolve at useExisting; a swap spec never declares an account",
+      "Spec MAINTENANCE NOTE (last run 2026-09-18 failed on the SUBMITTED count) recorded as evidence only",
+      "Not profiled: no profile observation exists for this test",
+      "Re-mapped to new keys (2026-11-01): quote = QUOTE_OF_USER (owner @user.userId, status approved, store): viewQuoteNumber/quoteNumber -> quoteNumber, quoteStatus -> status, quoteDate -> quoteDate, quoteExpirationDate -> expirationDate, quoteTotal -> total. quoteHistory = QUOTE_HISTORY_OF_USER (owner @user.userId, minQuotes 5, maxQuotes 64 = largePageSize so all fit one page, minStatuses 5 = every filtered status, store): totalQuotes -> totalQuotes, approvedQuote/submittedQuote/canceledQuote/expiredQuote/inReviewQuote -> approvedCount/submittedCount/canceledCount/expiredCount/inReviewCount, ascending/descendingQuoteNumber -> firstQuoteNumberAsc/Desc, ascending/descendingOrderAmount (warned only) -> minTotal/maxTotal (output names checked against the pending queries). DATA GAP: no IN REVIEW quote exists on atstage, so minStatuses 5 (and inReviewQuote) find no account until one is created; mapped anyway. Status labels, page size and sort ids stay config. Strategy migrate (owner-linked needs)"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "QUOTE_OF_USER",
+      "alias": "quote",
+      "params": {
+        "owner": "@user.userId",
+        "status": "approved",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "QUOTE_HISTORY_OF_USER",
+      "alias": "quoteHistory",
+      "params": {
+        "owner": "@user.userId",
+        "minQuotes": 5,
+        "maxQuotes": 64,
+        "minStatuses": 5,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "properties",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Actions",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "actionColumnHeader",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "APPROVED",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "quoteStatus1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "13",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "approvedQuote",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "approvedCount"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "largePageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SUBMITTED",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "quoteStatus2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "submittedQuote",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "submittedCount"
+    },
+    {
+      "value": "CANCELED",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "quoteStatus3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "canceledQuote",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "canceledCount"
+    },
+    {
+      "value": "EXPIRED",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "quoteStatus4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:13",
+      "kind": "json",
+      "keyPath": "expiredQuote",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "expiredCount"
+    },
+    {
+      "value": "IN REVIEW",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:14",
+      "kind": "json",
+      "keyPath": "quoteStatus5",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:15",
+      "kind": "json",
+      "keyPath": "inReviewQuote",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "inReviewCount"
+    },
+    {
+      "value": "19",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:3",
+      "kind": "json",
+      "keyPath": "totalQuotes",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "totalQuotes"
+    },
+    {
+      "value": "Q-17092025-0069",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:20",
+      "kind": "json",
+      "keyPath": "viewQuoteNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "quoteNumber"
+    },
+    {
+      "value": "Q-17092025-0069",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:21",
+      "kind": "json",
+      "keyPath": "quoteNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "quoteNumber"
+    },
+    {
+      "value": "APPROVED",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:22",
+      "kind": "json",
+      "keyPath": "quoteStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "status"
+    },
+    {
+      "value": "09/17/25",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:23",
+      "kind": "json",
+      "keyPath": "quoteDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "quoteDate"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:24",
+      "kind": "json",
+      "keyPath": "quoteExpirationDate",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "expirationDate"
+    },
+    {
+      "value": "$82.90",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:25",
+      "kind": "json",
+      "keyPath": "quoteTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quote",
+      "output": "total"
+    },
+    {
+      "value": "QuoteNumber",
+      "location": "testim-migrated/tests/webstore/my-account/quote-history-validate-functionality.spec.ts:111",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Q-05052026-0103",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:16",
+      "kind": "json",
+      "keyPath": "ascendingQuoteNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "firstQuoteNumberAsc"
+    },
+    {
+      "value": "Q-26092025-0101",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:17",
+      "kind": "json",
+      "keyPath": "descendingQuoteNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "firstQuoteNumberDesc"
+    },
+    {
+      "value": "OrderAmount",
+      "location": "testim-migrated/tests/webstore/my-account/quote-history-validate-functionality.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$38.70",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:18",
+      "kind": "json",
+      "keyPath": "ascendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "minTotal"
+    },
+    {
+      "value": "$6,556.36",
+      "location": "testim-migrated/test-data/webstore/my-account/quote-history-validate-functionality.json:19",
+      "kind": "json",
+      "keyPath": "descendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "quoteHistory",
+      "output": "maxTotal"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

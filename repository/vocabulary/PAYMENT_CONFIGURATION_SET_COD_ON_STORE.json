@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "key": "PAYMENT_CONFIGURATION_SET_COD_ON_STORE",
+  "entity": "payment_configuration",
+  "type": "cod",
+  "constraints": {
+    "scope": "store",
+    "pluginActive": "true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Payment plugin configuration set mapped to the store whose sub-type is COD. Commerce Portal place order needs its code as PaymentDetails.ConfigurationSetCode for COD. Only code and name are read; attribute values (may hold gateway credentials) are matched in the DB, never selected.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

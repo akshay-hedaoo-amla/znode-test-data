@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "entity": "payment_configuration",
+  "tables": [
+    "dbo.ZnodePluginConfigurationSet",
+    "dbo.ZnodePluginConfigurationSetMapper",
+    "dbo.ZnodePluginScope",
+    "dbo.ZnodePluginDetails",
+    "dbo.ZnodePluginTypes",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePluginConfigurationSet.PluginConfigurationSetId",
+      "to": "dbo.ZnodePluginConfigurationSetMapper.PluginConfigurationSetId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePluginConfigurationSetMapper.ScopeId",
+      "to": "dbo.ZnodePluginScope.ScopeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePluginConfigurationSet.PluginDetailsId",
+      "to": "dbo.ZnodePluginDetails.PluginDetailsId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePluginDetails.PluginTypeId",
+      "to": "dbo.ZnodePluginTypes.PluginTypeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePluginConfigurationSetMapper.ExternalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "configurationSetCode": "dbo.ZnodePluginConfigurationSet.ConfigurationSetCode",
+    "configurationSetName": "dbo.ZnodePluginConfigurationSet.ConfigurationSetDisplayName",
+    "pluginName": "dbo.ZnodePluginDetails.Name",
+    "pluginActive": "dbo.ZnodePluginDetails.IsActive",
+    "pluginType": "dbo.ZnodePluginTypes.TypeName",
+    "scope": "dbo.ZnodePluginScope.Scope",
+    "scopeExternalId": "dbo.ZnodePluginConfigurationSetMapper.ExternalId",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.ZnodePluginConfigurationSet.ConfigurationSetAttributeValues",
+    "dbo.ZnodePluginConfigurationSet.PluginFeatureAttributeValues",
+    "dbo.ZnodePluginConfigurationSetMapper.ConfigurationSetAttributeValues",
+    "dbo.ZnodePluginDetails.GlobalConfiguration",
+    "dbo.ZnodePluginDetails.PluginLicense"
+  ],
+  "schemaFingerprint": "sha256:6acf2ce472ef5572e0211af7d780db1e76dd8c13db78dd2b55a61203419967bf",
+  "scannedAt": "2026-11-02T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

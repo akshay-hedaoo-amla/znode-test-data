@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/order-template-validate-quantity-and-total.spec.ts > Webstore - My Account - Order Template > validate quantity and total behavior",
+  "scenario": {
+    "summary": "The signed-in user checks that an existing template name is rejected, creates a uniquely named template with a simple product (quantity rules 1-10, line total = qty x price), finds and edits it, moves it to the cart and sets the cart quantity, then creates a second template with the simple product and a bundle, removes a line, and finally deletes every template matching the runtime name.",
+    "steps": [
+      "Open Order Templates; Create; name = an existing template's name; add the simple product (search '09876') quantity 1; Save: 'Template Name already exists.'",
+      "Reload; unique runtime name; add z-09876; quantity 11 -> exceeding message, 0 -> 'Enter valid quantity.', 1 -> added; line quantity 11 -> exceeding message, back to 1; Save: saved toast",
+      "Search junk -> 'No records found.'; search the runtime name -> row present",
+      "Edit: product name visible; total = qty x price; quantity 5; total = qty x price; Save",
+      "Move the template to cart: cart line 'SKU: z-09876'; cart quantity 10",
+      "Best-effort max-cart-quantity message when adding the SKU again",
+      "Empty the cart",
+      "Create '<runtime>_Bundle' with the simple product and the bundle; Save: saved toast",
+      "Open it: bundle and simple product names visible; remove the first line: deleted toast",
+      "Search 'Runtime Order Template', select all, delete: confirm text, deleted toast, no records"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Creates two order templates on the signed-in account (runtime name and runtime name + '_Bundle')",
+      "Deletes every template of the account whose name matches 'Runtime Order Template' (its own and any left by earlier runs)",
+      "The account's cart: filled by Move To Cart (quantity 10), then emptied"
+    ],
+    "assertions": [
+      "Duplicate template name rejected",
+      "Quantity validations: above max (message names the range 1 to 10) and below min",
+      "Saved / deleted toasts and no-records text",
+      "Line total equals quantity x price before and after the update",
+      "Cart line shows 'SKU: <sku>' and the set quantity",
+      "Bundle template lists the bundle and the simple product"
+    ],
+    "evidence": [
+      "Title 'validate quantity and total behavior' matches the 10 steps; no linked AIO cases; all data through loadData (spec line 35)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP: the duplicate-name check needs a template named testimTemplate ('Testim Order Template') owned by the signed-in account; the cleanup deletes the account's templates matching 'Runtime Order Template'. MISSING KEY: no order-template key (proposed ORDER_TEMPLATE_OF_USER, entity order with ClassCode OrderTemplates: params owner (link @user.userId), store, minTemplates, maxTemplates optional; outputs templateName, templateNumber, quantity, templateCount). testimTemplate is recorded as expected-output only because a data source needs a declared alias; it is really data of that need (output templateName)",
+      "product: PRODUCT_SIMPLE_IN_STOCK (outputs sku, name, maxQuantity). The quantity rules depend on the product: the message 'Selected quantity should be in between 1 to 10', invalidHighQuantity 11 and cartQuantity 10 follow from its maximum quantity 10; minMaxQuantity 10 and quantityUsed 10 (cart quantity). The migrated spec must derive 11 and the message's range from maxQuantity, so these stay expected-output/config today but depend on the data (swap rule fails)",
+      "sku '09876' is the autocomplete search text for z-09876 (the SKU without its 'z-' prefix): data of alias product with no output of its own (derive it from sku)",
+      "SCANNER GAP: productName, bundleProductName and bundleChildProductName (JSON lines 22-24, used in productNames.filter({ hasText })) were not in the scan; added here from the data file. bundleChildProductName equals the simple product's name (the bundle template holds the simple product and the bundle), so it maps to product.name; reviewer to confirm it is not meant to be the bundle's child (bundle.child1Name)",
+      "bundle: PRODUCT_BUNDLE_IN_STOCK (outputs sku, name); profile: z-2252025 BundleProduct 'Auto_DeWalt 3-Tool Combo Kit Bundle' active PRODUCTION, inventory 9999990; recorded bundleProductName is a substring of it",
+      "Collision risk: creates/deletes templates on the shared account while order-templates-validate-list-page-pagination-and-sorting counts them (totalTemplateCount 12)",
+      "migrate: derived quantity values, owner-linked template, and the user need (a swapped spec never declares an account)",
+      "Re-mapped to new keys (2026-11-01): template = ORDER_TEMPLATE_OF_USER (owner @user.userId, minTemplates 1, store): testimTemplate (the existing name the duplicate-name check types) -> templateName. The quantity-rule values (11, the 1 to 10 message, cart quantity 10) still follow product.maxQuantity as recorded before. Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 10,
+        "minMaxQuantity": 10,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundle",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 17,
+        "required": false
+      }
+    },
+    {
+      "key": "ORDER_TEMPLATE_OF_USER",
+      "alias": "template",
+      "params": {
+        "owner": "@user.userId",
+        "minTemplates": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Testim_Runtime Order Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:2",
+      "kind": "json",
+      "keyPath": "SetTemplateName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Testim Order Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:3",
+      "kind": "json",
+      "keyPath": "testimTemplate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "template",
+      "output": "templateName"
+    },
+    {
+      "value": "09876",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:13",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:16",
+      "kind": "json",
+      "keyPath": "primaryQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Template Name already exists.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:4",
+      "kind": "json",
+      "keyPath": "ExistingTemplateValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-09876",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:14",
+      "kind": "json",
+      "keyPath": "skuPrefixed",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "11",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:17",
+      "kind": "json",
+      "keyPath": "invalidHighQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Selected quantity should be in between 1 to 10",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:5",
+      "kind": "json",
+      "keyPath": "ExceedingQuantityMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-quantity-and-total.spec.ts:81",
+      "kind": "literal",
+      "keyPath": "setFirstProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Enter valid quantity.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:6",
+      "kind": "json",
+      "keyPath": "BelowMinimumQuantityMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Template saved successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:8",
+      "kind": "json",
+      "keyPath": "TemplateSavedSuccessPopUpMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "!@#$%^&",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:20",
+      "kind": "json",
+      "keyPath": "specialCharSearch",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:12",
+      "kind": "json",
+      "keyPath": "NoRecordsFound",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:18",
+      "kind": "json",
+      "keyPath": "secondaryQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:19",
+      "kind": "json",
+      "keyPath": "cartQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Only 0 more quantities can be added to your cart.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:7",
+      "kind": "json",
+      "keyPath": "MaxQuantityCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2252025",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:15",
+      "kind": "json",
+      "keyPath": "bundleSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundle",
+      "output": "sku"
+    },
+    {
+      "value": "Record deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:9",
+      "kind": "json",
+      "keyPath": "RecordDeletedSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Runtime Order Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:21",
+      "kind": "json",
+      "keyPath": "existingTemplateSearch",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Are you sure you want to delete the selected record(s)?",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:10",
+      "kind": "json",
+      "keyPath": "ConfirmDeletePopUpMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Record(s) deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:11",
+      "kind": "json",
+      "keyPath": "OrderTemplateDeleteSuccessPopUpMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Auto_DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:22",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:23",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "name"
+    },
+    {
+      "value": "Auto_DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-quantity-and-total.json:24",
+      "kind": "json",
+      "keyPath": "bundleChildProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

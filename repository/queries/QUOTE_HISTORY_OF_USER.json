@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "key": "QUOTE_HISTORY_OF_USER",
+  "sql": "SELECT TOP 10 COUNT(DISTINCT o.OrderId) AS totalQuotes, COUNT(DISTINCT CASE WHEN s.StatusCode = @submittedCode THEN o.OrderId END) AS submittedCount, COUNT(DISTINCT CASE WHEN s.StatusCode = @approvedCode THEN o.OrderId END) AS approvedCount, COUNT(DISTINCT CASE WHEN s.StatusCode = @canceledCode THEN o.OrderId END) AS canceledCount, COUNT(DISTINCT CASE WHEN s.StatusCode = @inReviewCode THEN o.OrderId END) AS inReviewCount, COUNT(DISTINCT CASE WHEN s.StatusCode = @expiredCode THEN o.OrderId END) AS expiredCount, MIN(o.ClassNumber) AS firstQuoteNumberAsc, MAX(o.ClassNumber) AS firstQuoteNumberDesc, MIN(o.Total) AS minTotal, MAX(o.Total) AS maxTotal FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId LEFT JOIN dbo.ZnodeOmsOrderState s ON s.OmsOrderStateId = o.OmsOrderStateId WHERE oc.ClassCode = @quoteClass AND po.StoreCode = @store AND (@owner IS NULL OR o.UserId = @owner) GROUP BY o.UserId, o.PortalId HAVING COUNT(DISTINCT o.OrderId) >= @minQuotes AND (@maxQuotes IS NULL OR COUNT(DISTINCT o.OrderId) <= @maxQuotes) AND (@minStatuses IS NULL OR COUNT(DISTINCT s.StatusCode) >= @minStatuses) ORDER BY MIN(o.ClassNumber)",
+  "params": [
+    "submittedCode",
+    "approvedCode",
+    "canceledCode",
+    "inReviewCode",
+    "expiredCode",
+    "quoteClass",
+    "store",
+    "owner",
+    "minQuotes",
+    "maxQuotes",
+    "minStatuses"
+  ],
+  "constants": {
+    "quoteClass": "Quotes",
+    "submittedCode": "SUBMITTED",
+    "approvedCode": "APPROVED",
+    "canceledCode": "CANCELED",
+    "inReviewCode": "INREVIEW",
+    "expiredCode": "EXPIRED"
+  },
+  "outputs": [
+    "totalQuotes",
+    "submittedCount",
+    "approvedCount",
+    "canceledCount",
+    "inReviewCount",
+    "expiredCount",
+    "firstQuoteNumberAsc",
+    "firstQuoteNumberDesc",
+    "minTotal",
+    "maxTotal"
+  ],
+  "identity": "firstQuoteNumberAsc",
+  "schemaFingerprint": "sha256:5f57c56d8f59d8085452f33e54bbe16633ba210737afdf896aaf59fd7383bac2",
+  "vocabularyFingerprint": "sha256:7bcd61b9ec0d99a8dd13fd8f8e4715d696076d6d6c374b2d6b25d404a39254a9",
+  "status": "pending_approval",
+  "createdAt": "2026-11-01T15:00:00Z"
+}

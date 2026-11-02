@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "entity": "user_address",
+  "tables": [
+    "dbo.ZnodeUser",
+    "dbo.ZnodeUserAddress",
+    "dbo.ZnodeAddress"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodeUser.UserId", "to": "dbo.ZnodeUserAddress.UserId", "kind": "inner" },
+    { "from": "dbo.ZnodeUserAddress.AddressId", "to": "dbo.ZnodeAddress.AddressId", "kind": "inner" }
+  ],
+  "properties": {
+    "ownerUserId": "dbo.ZnodeUserAddress.UserId",
+    "addressId": "dbo.ZnodeAddress.AddressId",
+    "isActive": "dbo.ZnodeAddress.IsActive",
+    "isDefaultBilling": "dbo.ZnodeAddress.IsDefaultBilling",
+    "isDefaultShipping": "dbo.ZnodeAddress.IsDefaultShipping",
+    "isBilling": "dbo.ZnodeAddress.IsBilling",
+    "isShipping": "dbo.ZnodeAddress.IsShipping"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeAddress.FirstName",
+    "dbo.ZnodeAddress.LastName",
+    "dbo.ZnodeAddress.DisplayName",
+    "dbo.ZnodeAddress.CompanyName",
+    "dbo.ZnodeAddress.Address1",
+    "dbo.ZnodeAddress.Address2",
+    "dbo.ZnodeAddress.Address3",
+    "dbo.ZnodeAddress.CountryName",
+    "dbo.ZnodeAddress.StateName",
+    "dbo.ZnodeAddress.CityName",
+    "dbo.ZnodeAddress.PostalCode",
+    "dbo.ZnodeAddress.PhoneNumber",
+    "dbo.ZnodeAddress.Mobilenumber",
+    "dbo.ZnodeAddress.AlternateMobileNumber",
+    "dbo.ZnodeAddress.FaxNumber",
+    "dbo.ZnodeAddress.EmailAddress",
+    "dbo.ZnodeAddress.ExternalId",
+    "dbo.ZnodeAddress.Custom1",
+    "dbo.ZnodeAddress.Custom2",
+    "dbo.ZnodeAddress.Custom3",
+    "dbo.ZnodeAddress.Custom4",
+    "dbo.ZnodeAddress.Custom5"
+  ],
+  "schemaFingerprint": "sha256:b553121c7e17a9973d922f09ee1045ef1b0918fd82722647564007ca1dfcf03f",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

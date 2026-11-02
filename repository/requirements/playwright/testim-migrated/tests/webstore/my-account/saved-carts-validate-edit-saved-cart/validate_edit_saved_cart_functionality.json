@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/saved-carts-validate-edit-saved-cart.spec.ts > Webstore - My Account - Saved Carts > validate edit saved cart functionality",
+  "scenario": {
+    "summary": "The signed-in my-account user moves an existing saved cart to the cart, checks the duplicate-name error, saves a runtime copy, edits its quantity and name (blank / invalid / valid), moves it back and checks product and quantity, removes its line, checks an all-product-types saved cart (configurable, grouped, bundle, simple with add-on), clears another runtime copy and bulk-deletes the runtime carts.",
+    "steps": [
+      "Signed in through the shared storageState; Saved Carts, open the Edit page of editActionCartName, read its first product name, Move Items To Cart (toast, Cart heading)",
+      "Save Cart with an existing saved-cart name (deleteSaveCartName) -> duplicate-name error; save as '<runtimeBaseName> <ts>' -> saved toast; empty the cart",
+      "Edit the runtime cart: quantity -> Updated_Product_Quantity (changes saved toast, unit and total price visible); name blank -> required; name with symbols -> alphanumeric error; valid '<editRuntimeBaseName> <ts>' -> saved",
+      "Move the edited cart to the cart: product name contains the read name, quantity equals Updated_Product_Quantity; empty the cart",
+      "Edit the renamed cart, remove its item: 'No items are in your Saved Cart.'",
+      "Open savedCartWithAllTypeProduct: configurable name, SKU, personalization texts, variant attributes (best-effort), grouped name (child best-effort), bundle name, SKU and 3 children, simple name, checkbox add-on, SKU",
+      "Move editActionCartName to the cart again, save as '<runtimeBaseName> <ts+1>', Clear All Items (record deleted toast, empty message), empty the cart",
+      "Filter runtime carts, bulk delete them by id: deleted toast, 'No records found.'; afterEach sweeps leftovers"
+    ],
+    "entitiesTouched": [
+      "user",
+      "saved_cart",
+      "cart",
+      "product"
+    ],
+    "stateChanges": [
+      "The account's cart is filled by Move To Cart and emptied several times",
+      "Runtime saved carts '<runtimeBaseName> <ts>', '<editRuntimeBaseName> <ts>', '<runtimeBaseName> <ts+1>' are created, edited and deleted by the test; existing saved carts are only read"
+    ],
+    "assertions": [
+      "Edit Saved Cart / Cart headings; moved, saved, changes-saved, record(s)-deleted toasts",
+      "Duplicate-name, required-name and alphanumeric-name validation messages",
+      "Edited quantity kept in the saved cart and in the cart; moved product name in the cart",
+      "Empty saved-cart message; all-product-types cart shows the configured product names, SKUs, personalization, bundle children, add-on",
+      "'No records found.' after the bulk delete"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**), signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts. That setup signs in with getMyAccountUser() (testim-migrated/src/data/credentials.ts) = loadEnvironment().myAccountUser, whose username is requireEnv('MY_ACCOUNT_USERNAME') (testim-migrated/src/config/env.ts:80; process.env, then .env.<env>, then .env). Source 0 records that credential (masked; kind properties = environment variable). On migration the test declares it before reading any owned record: await testData.useExisting('user', getMyAccountUser().username) - the same value the setup signed in with, so the declared account is the signed-in one. No spec data file holds it",
+      "LEASE NOTE: every webstore-auth spec shares this one account; declaring it leases the account per test (useExisting waits while another test holds it), so migrated my-account specs run one at a time on it (protects counts from parallel runtime carts, but lengthens the phase that must finish inside the storageState session's 1-hour token)",
+      "Title 'validate edit saved cart functionality'",
+      "OWNERSHIP: the saved cart must belong to the signed-in (declared) account: need savedCart links owner to @user.userId (SAVED_CART_OF_USER_WITH_PRODUCTS: ZnodeOrder.UserId = @owner, class SavedCarts, store, at least one active non-add-on product, owner's saved-cart count >= minSavedCarts), so it resolves at test start when the test declares the account (testData.useExisting); strategy migrate",
+      "editActionCartName ('Testim Save Cart 4', used in steps 1 and 6) -> savedCart.name. minSavedCarts 1",
+      "deleteSaveCartName is used here only as an EXISTING saved-cart name of the account, to trigger 'Name already in use': any saved cart name of the account does it, so it maps to savedCart.name too (the moved copy is saved under the resolved cart's own name). In the action-column spec the same key is a runtime prefix instead",
+      "MISSING KEY (proposed SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES, entity saved_cart, read-only): a saved cart of the declared account on the store holding a configurable product line with personalization values and its variant attributes, a grouped product with a child line, a bundle product with 3 child products, and a simple product with a checkbox add-on; params owner (@user.userId), store; outputs name, configurableName, configurableSku, configurablePersonalization1..2, configurableVariant1..3, groupName, groupChildName, bundleName, bundleSku, bundleChild1..3 (sku - name), simpleName, simpleSku, simpleAddOnName. Would supply savedCartWithAllTypeProduct and every product value of step 5 (configSku/bundleSku are locator args). Need left out; values kept as config/expected-output until the key exists. The spec notes atstage drift (variants not rendered, grouped child unavailable)",
+      "Runtime cart names (runtimeBaseName, editRuntimeBaseName) are created-by-test prefixes; Updated_Product_Quantity is a test setting (config)",
+      "Not profiled: no profile observation exists for this test",
+      "Re-mapped to new keys (2026-11-01): allTypesCart = SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES (owner @user.userId, minBundleChildren 3, minVariantAttributes 3, minPersonalizations 2, store): savedCartWithAllTypeProduct -> name, configurableProductName -> configurableName, configProductSKU and configSku -> configurableSku, personalizationText1/2 -> configurablePersonalization1/2, groupProductName -> groupName, group_ChildProductName -> groupChildName, bundleProductName -> bundleName, bundleProductSKU and bundleSku -> bundleSku, bundle_childProductName1..3 -> bundleChild1Name..bundleChild3Name, simpleProductName -> simpleName, checkboxProductName -> simpleAddOnName, simpleProductSKU -> simpleSku (checked against the pending query). Several sources are formatted labels the migrated spec must build from outputs: 'SKU: <sku>', '<sku> - <name>' (bundleChildNSku + bundleChildNName), '<add-on group> : <add-on name>' (simpleAddOnGroupName + simpleAddOnName), '<attribute> : <value>' personalizations. LEFT WITHOUT output: variant1..3 ('Bulb Size :  Small', 'Color :  White', 'Technology :  LED') - the query returns no variant attribute names/values (only configurableVariantSku); they stay data of allTypesCart until the query returns them (or the spec drops them; it already notes atstage does not render variants). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+      "alias": "savedCart",
+      "params": {
+        "owner": "@user.userId",
+        "minSavedCarts": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES",
+      "alias": "allTypesCart",
+      "params": {
+        "owner": "@user.userId",
+        "minBundleChildren": 3,
+        "minVariantAttributes": 3,
+        "minPersonalizations": 2,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "properties",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Runtime Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:8",
+      "kind": "json",
+      "keyPath": "runtimeBaseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Edit Runtime Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:9",
+      "kind": "json",
+      "keyPath": "editRuntimeBaseName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Testim Save Cart 4",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:6",
+      "kind": "json",
+      "keyPath": "editActionCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "name"
+    },
+    {
+      "value": "Edit Saved Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:3",
+      "kind": "json",
+      "keyPath": "editSavedCartsHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Cart moved back to the cart successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:16",
+      "kind": "json",
+      "keyPath": "savedCartBackSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:4",
+      "kind": "json",
+      "keyPath": "cartPageHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Delete Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:7",
+      "kind": "json",
+      "keyPath": "deleteSaveCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "name"
+    },
+    {
+      "value": "Name already in use, enter another cart name.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:10",
+      "kind": "json",
+      "keyPath": "duplicateSavedCartValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart saved successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:12",
+      "kind": "json",
+      "keyPath": "saveCartSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:20",
+      "kind": "json",
+      "keyPath": "Updated_Product_Quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Changes saved successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:11",
+      "kind": "json",
+      "keyPath": "updateSavedCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart name is required.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:13",
+      "kind": "json",
+      "keyPath": "blankSavedCatNameValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Only alphanumeric characters are allowed.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:14",
+      "kind": "json",
+      "keyPath": "invalidSaveCartNameValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "No items are in your Saved Cart.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:15",
+      "kind": "json",
+      "keyPath": "noSavedCartItemsMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim All Product Type Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:5",
+      "kind": "json",
+      "keyPath": "savedCartWithAllTypeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "name"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:21",
+      "kind": "json",
+      "keyPath": "configurableProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "configurableName"
+    },
+    {
+      "value": "SKU: z-2510001",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:22",
+      "kind": "json",
+      "keyPath": "configProductSKU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "configurableSku"
+    },
+    {
+      "value": "z-2510001",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:23",
+      "kind": "json",
+      "keyPath": "configSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "configurableSku"
+    },
+    {
+      "value": "AdditionalInformation : TestAdditionalInformation",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:27",
+      "kind": "json",
+      "keyPath": "personalizationText1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "configurablePersonalization1"
+    },
+    {
+      "value": "DisplayText : DisplyText",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:28",
+      "kind": "json",
+      "keyPath": "personalizationText2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "configurablePersonalization2"
+    },
+    {
+      "value": "Bulb Size :  Small",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:24",
+      "kind": "json",
+      "keyPath": "variant1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart"
+    },
+    {
+      "value": "Color :  White",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:25",
+      "kind": "json",
+      "keyPath": "variant2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart"
+    },
+    {
+      "value": "Technology :  LED",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:26",
+      "kind": "json",
+      "keyPath": "variant3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart"
+    },
+    {
+      "value": "RegUI_testAutomation_GroupProduct",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:29",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "groupName"
+    },
+    {
+      "value": "Apple iPhone 15 128 GB - Pink",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:30",
+      "kind": "json",
+      "keyPath": "group_ChildProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "groupChildName"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:31",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleName"
+    },
+    {
+      "value": "SKU: z-858585",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:32",
+      "kind": "json",
+      "keyPath": "bundleProductSKU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleSku"
+    },
+    {
+      "value": "z-858585",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:33",
+      "kind": "json",
+      "keyPath": "bundleSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleSku"
+    },
+    {
+      "value": "z-2710003 - DeWalt 18-Volt XRP NiCd Extended Runtime Battery Pack 2.4Ah",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:34",
+      "kind": "json",
+      "keyPath": "bundle_childProductName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleChild1Name"
+    },
+    {
+      "value": "z-2710009 - DeWalt 12-Volt MAX XR Lithium-Ion Battery Pack 2.0Ah",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:35",
+      "kind": "json",
+      "keyPath": "bundle_childProductName2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleChild2Name"
+    },
+    {
+      "value": "z-2710010 - DeWalt FLEXVOLT 20-Volt/60-Volt MAX Lithium-Ion Battery Pack",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:36",
+      "kind": "json",
+      "keyPath": "bundle_childProductName3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "bundleChild3Name"
+    },
+    {
+      "value": "Demolition Gloves",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:37",
+      "kind": "json",
+      "keyPath": "simpleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "simpleName"
+    },
+    {
+      "value": "Checkbox : GE 6' Extension Cord",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:40",
+      "kind": "json",
+      "keyPath": "checkboxProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "simpleAddOnName"
+    },
+    {
+      "value": "SKU: z-2100010",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:38",
+      "kind": "json",
+      "keyPath": "simpleProductSKU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allTypesCart",
+      "output": "simpleSku"
+    },
+    {
+      "value": "Record deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:17",
+      "kind": "json",
+      "keyPath": "recordDeletedSuccessfully",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Record(s) deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:18",
+      "kind": "json",
+      "keyPath": "successMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-edit-saved-cart.json:19",
+      "kind": "json",
+      "keyPath": "noRecordFound",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

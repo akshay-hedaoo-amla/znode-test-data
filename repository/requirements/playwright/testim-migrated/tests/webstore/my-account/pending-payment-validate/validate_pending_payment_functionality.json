@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/pending-payment-validate.spec.ts > Webstore - My Account - Pending Payment > validate pending payment functionality",
+  "scenario": {
+    "summary": "The signed-in registered user opens Pending Payment, checks filters and columns, pages through the account's pending-payment orders (8 per page, total recorded), checks the total, sorts by pending order id and amount, checks junk filters give no records, and opens one pending-payment order's details.",
+    "steps": [
+      "Open Pending Payment; check heading, filter options and column headers",
+      "Page size defaultPageSize: footer '1 - 8 of totalPendingPayment'; next page: '9 - total of total'",
+      "Page size largePageSize: row count equals the footer total equals totalPendingPayment",
+      "Sort by PendingOrderId asc/desc: first row equals the recorded ids",
+      "Sort by PendingOrderAmount asc/desc: amounts monotonic; recorded anchors only warned",
+      "Filter Customer Name, Account Name, Pending Order Status, Pending Order Amount by invalidSearchText: 'No records found.'",
+      "Open PendingOrderNumber's details: heading, id contains DescendingPendingOrderID, status, date; total is currency (recorded total only warned)"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order"
+    ],
+    "stateChanges": [
+      "None: pending-payment orders are only read"
+    ],
+    "assertions": [
+      "Heading, filters, columns",
+      "Footer counts equal totalPendingPayment",
+      "First row after id sort equals the recorded ids",
+      "Amount columns sorted",
+      "Junk filters show NoRecordFoundMessage",
+      "Details heading, id, status 'PENDING PAYMENT', date"
+    ],
+    "evidence": [
+      "Title 'validate pending payment functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "OWNERSHIP: the pending-payment orders are the signed-in account's (tda rows: AR-01102025-0061 is ZnodeOrder ClassId 7 = ZnodeCPOrderClass ApprovalRoutings, OmsOrderStateId 190 = PENDING PAYMENT, UserId 16405, PortalId 7). They must be a need linked owner -> @user.userId",
+      "MISSING KEY: no vocabulary key covers a pending-payment order of the account. Proposed ORDER_OF_USER_PENDING_PAYMENT (entity order; ownerUserId {owner}, optional guarded param linked to @user.userId; order class ApprovalRoutings; order state PENDING PAYMENT; owner's pending-payment count between {minPendingPayments} and {maxPendingPayments}; scope store; outputs orderNumber, orderDate (MM/DD/YY as shown), total, pendingPaymentCount, firstOrderNumberAsc, firstOrderNumberDesc). Until it exists the need is left out and PendingOrderNumber (which the test opens) is kept as expected-output; with the key: PendingOrderNumber -> orderNumber, PendingOrderDate -> orderDate, totalPendingPayment -> pendingPaymentCount, Ascending/DescendingPendingOrderID -> the first ids",
+      "totalPendingPayment 10 with page size 8: the pagination step needs 9 to 16 pending-payment orders (two pages); the count, the id anchors, date and total depend on the account's data. The amount anchors and the order total are only warned on drift; DescendingPendingOrderID is asserted on the details page (the spec uses it where PendingOrderNumber is meant; both are AR-01102025-0061)",
+      "defaultPageSize, largePageSize, invalidSearchText and the sortAscending column names are config",
+      "migrate: the pending-payment need will link to the declared account; the counts and anchors depend on the data",
+      "Re-mapped to new keys (2026-11-01): pendingPayment = ORDER_OF_USER_PENDING_PAYMENT (owner @user.userId, minPendingPayments 9 so the 8-row page has a second page, maxPendingPayments 64 = largePageSize, store): totalPendingPayment -> pendingPaymentCount, Ascending/DescendingPendingOrderID -> firstOrderNumberAsc/Desc, PendingOrderNumber -> orderNumber, PendingOrderDate -> orderDate, PendingOrderTotal -> total (names from the key description, the pending_payment_order entity map and the drafting proposal). NOTE for migration: the spec opens PendingOrderNumber but asserts the receipt number against DescendingPendingOrderID (equal today); the migrated spec should assert the opened orderNumber. PendingOrderStatus stays expected-output (constant PENDING PAYMENT); the amount anchors stay expected-output (the key has no amount anchors; the spec checks the amounts are sorted). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_OF_USER_PENDING_PAYMENT",
+      "alias": "pendingPayment",
+      "params": {
+        "owner": "@user.userId",
+        "minPendingPayments": 9,
+        "maxPendingPayments": 64,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Pending Payment",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:2",
+      "kind": "json",
+      "keyPath": "PendingPaymentHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:5",
+      "kind": "json",
+      "keyPath": "defaultPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:4",
+      "kind": "json",
+      "keyPath": "totalPendingPayment",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "pendingPaymentCount"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:6",
+      "kind": "json",
+      "keyPath": "largePageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PendingOrderId",
+      "location": "testim-migrated/tests/webstore/my-account/pending-payment-validate.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AR-01102025-0050",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:7",
+      "kind": "json",
+      "keyPath": "AscendingPendingOrderID",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "firstOrderNumberAsc"
+    },
+    {
+      "value": "AR-01102025-0061",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:8",
+      "kind": "json",
+      "keyPath": "DescendingPendingOrderID",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "firstOrderNumberDesc"
+    },
+    {
+      "value": "PendingOrderAmount",
+      "location": "testim-migrated/tests/webstore/my-account/pending-payment-validate.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$60.70",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:9",
+      "kind": "json",
+      "keyPath": "AscendingPendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$14,129.00",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:10",
+      "kind": "json",
+      "keyPath": "DescendingPendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "!@#$%^&",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:16",
+      "kind": "json",
+      "keyPath": "invalidSearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:11",
+      "kind": "json",
+      "keyPath": "NoRecordFoundMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "AR-01102025-0061",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:12",
+      "kind": "json",
+      "keyPath": "PendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "orderNumber"
+    },
+    {
+      "value": "Pending order details",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:3",
+      "kind": "json",
+      "keyPath": "PendingOrderDetailsHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PENDING PAYMENT",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:13",
+      "kind": "json",
+      "keyPath": "PendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:14",
+      "kind": "json",
+      "keyPath": "PendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "orderDate"
+    },
+    {
+      "value": "$673.48",
+      "location": "testim-migrated/test-data/webstore/my-account/pending-payment-validate.json:15",
+      "kind": "json",
+      "keyPath": "PendingOrderTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pendingPayment",
+      "output": "total"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

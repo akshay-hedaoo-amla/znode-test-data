@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_INACTIVE",
+  "entity": "product",
+  "type": "simple_inactive",
+  "constraints": {
+    "type": "simple",
+    "status": "= false",
+    "publishState": "production"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Simple product with IsActive false and PIM publish state Production, in a category of the store's catalog (product_category scope; inactive products have no published storefront record). KB: Product Types; Publishing products.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

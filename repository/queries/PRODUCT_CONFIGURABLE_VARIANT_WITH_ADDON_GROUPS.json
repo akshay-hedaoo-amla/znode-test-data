@@ -1,0 +1,28 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+  "sql" : "SELECT TOP 10 pp.SKU AS parentSku, v.SKU AS sku, v.ProductName AS name, ao.s1 AS addOn1Sku, ao.g1 AS addOn1Group, ao.m1 AS addOn1Name, ao.s2 AS addOn2Sku, ao.g2 AS addOn2Group, ao.m2 AS addOn2Name, ao.s3 AS addOn3Sku, ao.g3 AS addOn3Group, ao.m3 AS addOn3Name, pz.code AS personalizationCode, pz.label AS personalizationLabel FROM dbo.ZnodePimProduct pp INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = pp.PublishStateId INNER JOIN dbo.ZnodePimProductTypeAssociation ta ON ta.PimParentProductId = pp.PimProductId INNER JOIN dbo.ZnodePimProduct v ON v.PimProductId = ta.PimProductId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store OUTER APPLY (SELECT COUNT(g.sku) AS cnt, (SELECT COUNT(DISTINCT xa.PimAddonGroupId) FROM dbo.ZnodePimAddOnProduct xa WHERE xa.PimProductId = v.PimProductId) AS groups, MAX(CASE WHEN g.rn = @n1 THEN g.sku END) AS s1, MAX(CASE WHEN g.rn = @n1 THEN g.grp END) AS g1, MAX(CASE WHEN g.rn = @n1 THEN g.nm END) AS m1, MAX(CASE WHEN g.rn = @n2 THEN g.sku END) AS s2, MAX(CASE WHEN g.rn = @n2 THEN g.grp END) AS g2, MAX(CASE WHEN g.rn = @n2 THEN g.nm END) AS m2, MAX(CASE WHEN g.rn = @n3 THEN g.sku END) AS s3, MAX(CASE WHEN g.rn = @n3 THEN g.grp END) AS g3, MAX(CASE WHEN g.rn = @n3 THEN g.nm END) AS m3 FROM (SELECT gl.AddonGroupName AS grp, ch.sku, ch.nm, ROW_NUMBER() OVER (ORDER BY gl.AddonGroupName, ch.sku) AS rn FROM dbo.ZnodePimAddOnProduct ap INNER JOIN dbo.ZnodePimAddonGroupLocale gl ON gl.PimAddonGroupId = ap.PimAddonGroupId AND gl.LocaleId = @localeId CROSS APPLY (SELECT TOP 1 ac.SKU AS sku, ac.ProductName AS nm FROM dbo.ZnodePimAddOnProductDetail d INNER JOIN dbo.ZnodePimProduct ac ON ac.PimProductId = d.PimChildProductId WHERE d.PimAddOnProductId = ap.PimAddOnProductId AND ac.IsActive = @isActive AND CHARINDEX(@sp, ac.SKU) = @zero AND (SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = ac.SKU AND pw.PortalId = po.PortalId) >= @quantityUsed ORDER BY d.DisplayOrder, ac.SKU) ch WHERE ap.PimProductId = v.PimProductId) g) ao OUTER APPLY (SELECT TOP 1 pa.AttributeCode AS code, al.AttributeName AS label FROM dbo.ZnodePimAttributeValue av INNER JOIN dbo.ZnodePimAttribute pa ON pa.PimAttributeId = av.PimAttributeId LEFT JOIN dbo.ZnodePimAttributeLocale al ON al.PimAttributeId = pa.PimAttributeId AND al.LocaleId = @localeId WHERE (av.PimProductId = v.PimProductId OR av.PimProductId = pp.PimProductId) AND pa.IsPersonalizable = @isActive ORDER BY pa.AttributeCode) pz WHERE pp.ProductType = @productType AND pp.IsActive = @isActive AND v.IsActive = @isActive AND ps.PublishStateCode = @publishState AND CHARINDEX(@sp, v.SKU) = @zero AND CHARINDEX(@sp, pp.SKU) = @zero AND (SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = v.SKU AND pw.PortalId = po.PortalId) >= @quantityUsed AND EXISTS (SELECT pr.PriceId FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId WHERE pr.SKU = v.SKU AND plo.PortalId = po.PortalId AND pr.RetailPrice > @zero AND ISNULL(pl.ActivationDate, @now) <= @now AND ISNULL(pl.ExpirationDate, @now) >= @now AND ISNULL(pr.ActivationDate, @now) <= @now AND ISNULL(pr.ExpirationDate, @now) >= @now) AND EXISTS (SELECT e.ZnodeProductId FROM dbo.ZnodePublishProductEntity e INNER JOIN dbo.ZnodePublishVersionEntity w ON w.VersionId = e.VersionId INNER JOIN dbo.ZnodePortalCatalog k ON k.PublishCatalogId = e.ZnodeCatalogId WHERE e.ZnodeProductId = pp.PimProductId AND k.PortalId = po.PortalId AND w.RevisionType = @publishState AND w.IsPublishSuccess = @isActive AND e.IsActive = @isActive AND e.IsObsolete = @false AND e.ProductIndex >= @n1) AND ao.groups = @addOnGroups AND ao.cnt = @addOnGroups AND (SELECT COUNT(DISTINCT pa2.PimAttributeId) FROM dbo.ZnodePimAttributeValue av2 INNER JOIN dbo.ZnodePimAttribute pa2 ON pa2.PimAttributeId = av2.PimAttributeId WHERE (av2.PimProductId = v.PimProductId OR av2.PimProductId = pp.PimProductId) AND pa2.IsPersonalizable = @isActive) >= @minPersonalizableAttributes ORDER BY pp.SKU, v.SKU",
+  "params" : [ "store", "quantityUsed", "addOnGroups", "minPersonalizableAttributes", "productType", "isActive", "publishState", "localeId", "sp", "zero", "false", "now", "n1", "n2", "n3" ],
+  "constants" : {
+    "productType" : "ConfigurableProduct",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "localeId" : "1",
+    "sp" : " ",
+    "zero" : "0",
+    "false" : "false",
+    "n1" : "1",
+    "n2" : "2",
+    "n3" : "3"
+  },
+  "outputs" : [ "parentSku", "sku", "name", "addOn1Sku", "addOn1Group", "addOn1Name", "addOn2Sku", "addOn2Group", "addOn2Name", "addOn3Sku", "addOn3Group", "addOn3Name", "personalizationCode", "personalizationLabel" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:6412f33c9903fd08b26584d36e8aea1d632f072203a18a0bdae8a4519e4e2eda",
+  "vocabularyFingerprint" : "sha256:17012edf4b75eeff94baeff59d998eeaf991b28892c15400e79cc1ea09e68b0a",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-02T02:57:32Z",
+  "verifiedHash" : "sha256:7669ca25d13657df03aa23edcc6a81c7b8fa4bf16334272915d39b4a2551744e"
+}

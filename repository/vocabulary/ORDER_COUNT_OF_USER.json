@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_COUNT_OF_USER",
+  "entity": "order_history",
+  "type": "count_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "orderStatusCode": "{orderStatus}",
+    "ownerOrderCount": ">= {minOrders}",
+    "ownerOrderCountCap": "<= {maxOrders}",
+    "statusOrderCount": ">= {minOrdersInStatus}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Count of the declared account's orders (class Orders) on the store, all or of one status; min/max bound all its orders, minOrdersInStatus the status. Output orderCount (of the status when given, else all). Read only. KB: Order History.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the orders: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "orderStatus": {
+      "type": "string",
+      "optional": true,
+      "description": "Order status code, normalised (ZnodeOmsOrderState.StatusCode), e.g. submitted, canceled, shipped, failed. Left out: all orders"
+    },
+    "minOrders": {
+      "type": "integer",
+      "description": "Orders (any status) the account must own on the store (at least)"
+    },
+    "maxOrders": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most orders allowed, e.g. the page size so all fit one page. Left out: no upper bound"
+    },
+    "minOrdersInStatus": {
+      "type": "integer",
+      "optional": true,
+      "description": "Orders in orderStatus the account must own (at least). Left out: no status count check"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

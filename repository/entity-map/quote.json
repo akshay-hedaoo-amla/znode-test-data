@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "entity": "quote",
+  "tables": [
+    "dbo.ZnodeOrder",
+    "dbo.ZnodeCPOrderClass",
+    "dbo.ZnodeOmsOrderState",
+    "dbo.ZnodeOrderAdditionalDetail",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser"
+  ],
+  "aliases": {
+    "ownerQuote": "dbo.ZnodeOrder",
+    "ownerQuoteState": "dbo.ZnodeOmsOrderState",
+    "statusQuote": "dbo.ZnodeOrder"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodeOrder.ClassId",
+      "to": "dbo.ZnodeCPOrderClass.CPOrderClassId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsOrderStateId",
+      "to": "dbo.ZnodeOmsOrderState.OmsOrderStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderAdditionalDetail.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "dbo.ZnodeUser.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "ownerQuote.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "ownerQuote.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "ownerQuote.OmsOrderStateId",
+      "to": "ownerQuoteState.OmsOrderStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "statusQuote.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "statusQuote.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsOrderStateId",
+      "to": "statusQuote.OmsOrderStateId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "quoteId": "dbo.ZnodeOrder.OrderId",
+    "quoteNumber": "dbo.ZnodeOrder.ClassNumber",
+    "orderClass": "dbo.ZnodeCPOrderClass.ClassCode",
+    "quoteDate": "dbo.ZnodeOrder.OrderDate",
+    "status": "dbo.ZnodeOmsOrderState.OrderStateName",
+    "statusCode": "dbo.ZnodeOmsOrderState.StatusCode",
+    "expirationDate": "dbo.ZnodeOrderAdditionalDetail.ExpirationDate",
+    "total": "dbo.ZnodeOrder.Total",
+    "revisionType": "dbo.ZnodeOrder.RevisionType",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "ownerUserId": "dbo.ZnodeOrder.UserId",
+    "owner": "dbo.AspNetZnodeUser.UserName",
+    "ownerQuoteCount": "COUNT(DISTINCT ownerQuote.OrderId)",
+    "ownerQuoteCountCap": "COUNT(DISTINCT ownerQuote.OrderId)",
+    "ownerQuoteStatusCount": "COUNT(DISTINCT ownerQuoteState.StatusCode)",
+    "statusQuoteCount": "COUNT(DISTINCT statusQuote.OrderId)",
+    "firstQuoteNumberAsc": "MIN(ownerQuote.ClassNumber)",
+    "firstQuoteNumberDesc": "MAX(ownerQuote.ClassNumber)",
+    "minQuoteTotal": "MIN(ownerQuote.Total)",
+    "maxQuoteTotal": "MAX(ownerQuote.Total)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeCPOrderClass.ClassCode": "Quotes",
+    "ownerQuote.ClassId": "6",
+    "statusQuote.ClassId": "6"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeOrder.PurchaseOrderNumber",
+    "dbo.ZnodeOrder.OrderDetail",
+    "dbo.ZnodeOrder.Custom1",
+    "dbo.ZnodeOrder.Custom2",
+    "dbo.ZnodeOrder.Custom3",
+    "dbo.ZnodeOrder.Custom4",
+    "dbo.ZnodeOrder.Custom5",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByFullName",
+    "dbo.ZnodeOrderAdditionalDetail.UserFullName",
+    "dbo.ZnodeOrderAdditionalDetail.AssignToFullName",
+    "dbo.ZnodeOrderAdditionalDetail.LastModifiedFullName",
+    "dbo.ZnodeOrderAdditionalDetail.Email",
+    "dbo.ZnodeOrderAdditionalDetail.UserPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.AccountName",
+    "dbo.ZnodeOrderAdditionalDetail.AccountPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.UserName",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByEmailId"
+  ],
+  "schemaFingerprint": "sha256:24ccb5166d232c669912e85f69595c207aeedfec50402b5df0c287ecfa9e1a43",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

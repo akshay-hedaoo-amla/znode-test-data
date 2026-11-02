@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "key": "SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES",
+  "entity": "saved_cart",
+  "type": "of_user_with_all_product_types",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "parentProductTypeCount": ">= 4",
+    "bundleChildCount": ">= {minBundleChildren}",
+    "variantAttributeCount": ">= {minVariantAttributes}",
+    "personalizationCount": ">= {minPersonalizations}",
+    "lineAddOnCount": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Saved cart of the declared account holding a configurable (personalized, N variant attributes), a grouped (one child), a bundle (N children) and a simple product with an add-on. Outputs: cart name and each product's name/SKU/values. KB: Product Types.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the saved carts: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minBundleChildren": {
+      "type": "integer",
+      "description": "Child products the bundle line must hold (3 in the edit-saved-cart spec)"
+    },
+    "minVariantAttributes": {
+      "type": "integer",
+      "description": "Configurable (variant) attributes of the configurable line, IsConfigurable true (3 in the spec)"
+    },
+    "minPersonalizations": {
+      "type": "integer",
+      "description": "Personalization values saved on the configurable line (2 in the spec)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

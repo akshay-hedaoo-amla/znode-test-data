@@ -1,0 +1,310 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ORDER_OF_USER_REORDERABLE",
+  "spec" : {
+    "file" : "specs/Commerceportal_v1.json",
+    "operations" : [ "POST /carts/items", "PUT /{classType}/update-all-details", "PUT /payments", "PUT /{classType}/{classNumber}/finalize-details", "POST /{classType}/{classNumber}/orders", "DELETE /{classType}/bulk" ]
+  },
+  "create" : {
+    "basePath" : "/commerceapi/v1",
+    "headers" : {
+      "Znode-PortalCode" : "{store}",
+      "Znode-LocaleCode" : "{localeCode}",
+      "Znode-PublishState" : "{publishState}",
+      "Znode-UserId" : "{owner}"
+    },
+    "steps" : [ {
+      "name" : "addToCart",
+      "method" : "POST",
+      "path" : "/carts/items",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.addToCart.json",
+      "captures" : {
+        "cartNumber" : "/CartNumber"
+      },
+      "undo" : {
+        "method" : "DELETE",
+        "path" : "/{cartClass}/bulk?classNumbers={cartNumber}"
+      }
+    }, {
+      "name" : "setShipping",
+      "method" : "PUT",
+      "path" : "/{cartClass}/update-all-details",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.setShipping.json"
+    }, {
+      "name" : "setPayment",
+      "method" : "PUT",
+      "path" : "/payments",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.setPayment.json"
+    }, {
+      "name" : "finalize",
+      "method" : "PUT",
+      "path" : "/{cartClass}/{cartNumber}/finalize-details"
+    }, {
+      "name" : "placeOrder",
+      "method" : "POST",
+      "path" : "/{cartClass}/{cartNumber}/orders",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.placeOrder.json",
+      "captures" : {
+        "orderNumber" : "/OrderNumber"
+      }
+    } ],
+    "id" : "{orderNumber}",
+    "inputsFromDb" : {
+      "parentSku" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "parentSku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "variantSku" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "variantName" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn1Sku" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn1Sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn1Group" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn1Group",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn1Name" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn1Name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn2Sku" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn2Sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn2Group" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn2Group",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn2Name" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn2Name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn3Sku" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn3Sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn3Group" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn3Group",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "addOn3Name" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "addOn3Name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "personalizationCode" : {
+        "key" : "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+        "output" : "personalizationCode",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : "{quantityUsed}",
+          "addOnGroups" : 3,
+          "minPersonalizableAttributes" : 1
+        }
+      },
+      "catalogCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "catalogCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "localeCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "localeCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "shippingId" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "shippingId",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "billingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "billingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "shippingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "shippingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "configurationSetCode" : {
+        "key" : "PAYMENT_CONFIGURATION_SET_COD_ON_STORE",
+        "output" : "configurationSetCode",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "cartClass" : "Carts",
+      "orderClass" : "Orders",
+      "publishState" : "Production",
+      "paymentSubTypeCode" : "COD"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "step" : "placeOrder",
+      "field" : "/PaymentDetails/PurchaseOrderNumber",
+      "format" : "TDA-{runId}-",
+      "property" : "purchaseOrderNumber"
+    },
+    "outputs" : {
+      "orderNumber" : {
+        "from" : "value",
+        "name" : "orderNumber"
+      },
+      "sku" : {
+        "from" : "value",
+        "name" : "variantSku"
+      },
+      "name" : {
+        "from" : "value",
+        "name" : "variantName"
+      },
+      "quantity" : {
+        "from" : "payload",
+        "step" : "addToCart",
+        "pointer" : "/SkuDetails/0/AddToCartChildItems/0/Quantity"
+      },
+      "addOn1Group" : {
+        "from" : "value",
+        "name" : "addOn1Group"
+      },
+      "addOn1Name" : {
+        "from" : "value",
+        "name" : "addOn1Name"
+      },
+      "addOn2Group" : {
+        "from" : "value",
+        "name" : "addOn2Group"
+      },
+      "addOn2Name" : {
+        "from" : "value",
+        "name" : "addOn2Name"
+      },
+      "addOn3Group" : {
+        "from" : "value",
+        "name" : "addOn3Group"
+      },
+      "addOn3Name" : {
+        "from" : "value",
+        "name" : "addOn3Name"
+      },
+      "personalizationLabel" : {
+        "from" : "value",
+        "name" : "personalizationCode"
+      },
+      "personalizationText" : {
+        "from" : "payload",
+        "step" : "addToCart",
+        "pointer" : "/SkuDetails/0/AddToCartChildItems/0/PersonalizedDetails/0/Value"
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "DELETE",
+    "path" : "/{orderClass}/bulk?classNumbers={id}"
+  },
+  "specFingerprint" : "sha256:2e8c9d11f845a97985f1f1aa6881fe9fbeee24618e91e99f3886a04de9d32e05",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-02T05:43:14Z",
+  "verifiedHash" : "sha256:cb6e37d65ea8c8e43d398f8ab7131b7f477763a572b87f0106511a8e96db4eb9"
+}

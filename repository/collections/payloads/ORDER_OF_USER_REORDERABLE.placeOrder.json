@@ -1,0 +1,9 @@
+{
+  "UserId": "{owner?}",
+  "SkipSentEmail": true,
+  "PaymentDetails": {
+    "PaymentSubTypeCode": "{paymentSubTypeCode}",
+    "ConfigurationSetCode": "{configurationSetCode}",
+    "PurchaseOrderNumber": "{runIdTag}{uniqueSuffix}"
+  }
+}

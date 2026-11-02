@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "key": "VOUCHER_HISTORY_OF_USER",
+  "entity": "voucher",
+  "type": "history_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "voucherCount": ">= {minVouchers}",
+    "ownerVoucherCount": "<= {maxVouchers}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "All vouchers of the store carrying the declared account's UserId, any restriction (one row per account), min..max. Outputs: voucherCount, first row asc/desc by name, start date, expiration date, amount, remaining. KB: Managing Vouchers.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId the vouchers carry (ZnodeGiftCard.UserId): link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minVouchers": {
+      "type": "integer",
+      "description": "Fewest vouchers the account must carry on the store (2 for distinct sort anchors)"
+    },
+    "maxVouchers": {
+      "type": "integer",
+      "description": "Most vouchers the account may carry on the store (64: all on one page)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); a voucher belongs to one store"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts > Webstore - My Account - Edit Profile > validate edit profile functionality",
+  "scenario": {
+    "summary": "The signed-in registered user opens Edit Profile, checks the heading, clears first and last name and checks the required-field messages, then saves valid first name, last name and phone number and checks the profile-updated toast.",
+    "steps": [
+      "Open Edit Profile (signed in through the shared storageState); check the heading",
+      "Clear First Name and Last Name; check each required-field message; submit while invalid",
+      "Fill first name, last name, phone number; submit; check 'Profile updated successfully.'"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The signed-in account's first name, last name and phone number are overwritten with the test's values"
+    ],
+    "assertions": [
+      "Edit Profile heading",
+      "First and last name required messages",
+      "Toast contains profileSuccessMessage"
+    ],
+    "evidence": [
+      "Title 'validate edit profile functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "The test needs no record besides the account: the new name and phone values are typed in by the test (created-by-test); firstNameValidation/lastNameValidation are validation messages masked only by key name; the 'First Name'/'Last Name'/'Phone Number' literals are field labels (config)",
+      "swap: no data value (nothing to replace); the spec stays as it is. The user need is only checked at pre-warm (the account is not declared or leased); to declare and lease it, use strategy migrate and add the useExisting line above (the test changes the account's profile)",
+      "Profile: no observation FOUND for this spec"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Edit Profile",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "editProfileHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "First Name",
+      "location": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts:32",
+      "kind": "literal",
+      "keyPath": "clearField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:3",
+      "kind": "json",
+      "keyPath": "firstNameValidation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Last Name",
+      "location": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts:34",
+      "kind": "literal",
+      "keyPath": "clearField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "lastNameValidation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "First Name",
+      "location": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts:41",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Last Name",
+      "location": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts:42",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Phone Number",
+      "location": "testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts:43",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Profile updated successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/edit-profile-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "profileSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

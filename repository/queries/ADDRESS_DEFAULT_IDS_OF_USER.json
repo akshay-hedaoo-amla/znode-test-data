@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+  "sql" : "SELECT TOP 10 ua.UserId AS userId, MAX(CASE WHEN a.IsDefaultBilling = @isTrue THEN a.AddressId END) AS billingAddressId, CAST(MAX(CASE WHEN a.IsDefaultShipping = @isTrue THEN a.AddressId END) AS varchar(max)) AS shippingAddressId FROM dbo.ZnodeUserAddress ua INNER JOIN dbo.ZnodeAddress a ON a.AddressId = ua.AddressId WHERE ua.UserId = @owner GROUP BY ua.UserId HAVING MAX(CASE WHEN a.IsDefaultBilling = @isTrue THEN a.AddressId END) IS NOT NULL AND MAX(CASE WHEN a.IsDefaultShipping = @isTrue THEN a.AddressId END) IS NOT NULL ORDER BY ua.UserId",
+  "params" : [ "owner", "isTrue" ],
+  "constants" : {
+    "isTrue" : "true"
+  },
+  "outputs" : [ "userId", "billingAddressId", "shippingAddressId" ],
+  "identity" : "userId",
+  "schemaFingerprint" : "sha256:3c793867d3397b31d00d9ab1b1bcdc93344a9ed34d54311add5fe2deece8b8f1",
+  "vocabularyFingerprint" : "sha256:d1996671b00f9d332db10cebef130ee90b9ffe2d0746520b3af52569d64de551",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-02T01:51:13Z",
+  "verifiedHash" : "sha256:c3e763265ffc0d1eb198f82c2f07b164b0731bc78808c6374d1a74f6e4a7d534"
+}

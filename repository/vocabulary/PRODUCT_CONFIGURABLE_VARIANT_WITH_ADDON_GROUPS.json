@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_VARIANT_WITH_ADDON_GROUPS",
+  "entity": "product",
+  "type": "configurable_variant_with_addon_groups",
+  "constraints": {
+    "parentType": "configurable",
+    "status": "active",
+    "publishState": "production",
+    "variantStatus": "active",
+    "variantInventory": ">= {quantityUsed}",
+    "variantPrice": "> 0",
+    "addOnGroupCount": "{addOnGroups}",
+    "addOnInventory": ">= {quantityUsed}",
+    "personalizableAttributeCount": ">= {minPersonalizableAttributes}",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active, priced, in-stock variant of a published configurable product with exactly addOnGroups add-on groups (one active in-stock add-on per group, at most 3) and personalizable attributes, for a collection that orders it.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code (ZnodePortal.StoreCode)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity ordered of the variant and of each add-on"
+    },
+    "addOnGroups": {
+      "type": "integer",
+      "description": "Exact number of add-on groups on the variant (1 to 3); every group gets one add-on in the order"
+    },
+    "minPersonalizableAttributes": {
+      "type": "integer",
+      "description": "Personalizable attributes the variant or its parent must have (0 or more)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

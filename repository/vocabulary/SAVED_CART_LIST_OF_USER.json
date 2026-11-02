@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "key": "SAVED_CART_LIST_OF_USER",
+  "entity": "saved_cart",
+  "type": "list_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "savedCartCount": ">= {minSavedCarts}",
+    "ownerSavedCartCount": "<= {maxSavedCarts}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "The declared account's saved-cart list on the store (one row per account), min..max carts. Outputs: savedCartCount, first name and first quantity asc/desc, a cart name not contained in another of its names. KB: Shopping Cart (Saved Carts).",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the saved carts: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minSavedCarts": {
+      "type": "integer",
+      "description": "Fewest saved carts the account must own on the store (e.g. 9 for two pages at page size 8)"
+    },
+    "maxSavedCarts": {
+      "type": "integer",
+      "description": "Most saved carts the account may own on the store (e.g. 16 for at most two pages at page size 8)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

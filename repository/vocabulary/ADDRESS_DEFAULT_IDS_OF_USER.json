@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "key": "ADDRESS_DEFAULT_IDS_OF_USER",
+  "entity": "user_address",
+  "type": "default_ids",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "isDefaultBilling": "true",
+    "isDefaultShipping": "true"
+  },
+  "scope": {},
+  "usage": "read-only",
+  "description": "The AddressIds (IDs only, never address text) of a user's default billing and default shipping addresses, so a collection can place an order for that user through the Commerce Portal API.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId of the account (link it to the declared account, @user.userId), never a username"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

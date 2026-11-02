@@ -61,7 +61,8 @@
     "lineParentProductType": "parentProduct.ProductType",
     "lineParentProductStatus": "parentProduct.IsActive",
     "linePersonalized": "IFNULL(dbo.ZnodeOrderProduct.Customization, false, true)",
-    "lineAddOnCount": "COUNT(DISTINCT addonLine.AddOnGroupName)"
+    "lineAddOnCount": "COUNT(DISTINCT addonLine.AddOnGroupName)",
+    "purchaseOrderNumber": "dbo.ZnodeOrder.PurchaseOrderNumber"
   },
   "scope": {
     "store": "dbo.ZnodePortal.StoreCode"
@@ -104,6 +105,6 @@
   "schemaFingerprint": "sha256:72ae5ec4ba41fa23ac3b4d3de8da5ae4ee9c8ce285b5cfb3ce30124ac0a01fa3",
   "scannedAt": "2026-10-29T00:00:00Z",
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
 }
