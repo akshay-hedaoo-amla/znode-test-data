@@ -39,7 +39,8 @@
       "SORT ANCHORS: Ascending/Descending OrderNumber, OrderStatus, PaymentStatus, PaymentType, OrderDate, OrderAmount are the first rows of the account's whole order history, not of one record; no key can express them. Recorded as expected-output only because a data source needs a declared alias. Data shape the test needs: at least 2 orders (ideally different statuses, payment statuses, payment types, dates and amounts) and at most 64 (page size 64 shows all). Proposal: the migrated spec keeps the monotonic checks and drops the first-row anchors (or compares them with the list it read); a count key (proposed ORDER_COUNT_OF_USER, minOrders 2, maxOrders 64) can guarantee the shape",
       "The date anchors already drifted on atstage (spec comment), which supports dropping them",
       "Recorded order numbers are kept as data only for viewOrderNumber / InvoiceMePaymentOrder (same value, output orderNumber)",
-      "Re-mapped to new keys (2026-11-01): orderHistory = ORDER_HISTORY_OF_USER_SORT_ANCHORS (owner @user.userId, minOrders 2, maxOrders 64 = largePageSize, minStatuses 2 since the status sort shows CANCELED first and SUBMITTED last, store): the 11 sort anchors -> firstOrderNumberAsc/Desc, firstOrderStatusAsc/Desc, firstPaymentStatusAsc/Desc, firstPaymentTypeDesc, firstOrderDateAsc/Desc, minOrderTotal/maxOrderTotal (checked against the pending query). UNCHANGED: the order detail values (DetailOrderStatus, PaymentType, OrderDate, detailOrderTotal) and dateFilter/dateFilterDisplay stay data of alias order without output - no key outputs them yet (proposed as outputs on ORDER_OF_USER_REORDERABLE, not done). Strategy migrate"
+      "Re-mapped to new keys (2026-11-01): orderHistory = ORDER_HISTORY_OF_USER_SORT_ANCHORS (owner @user.userId, minOrders 2, maxOrders 64 = largePageSize, minStatuses 2 since the status sort shows CANCELED first and SUBMITTED last, store): the 11 sort anchors -> firstOrderNumberAsc/Desc, firstOrderStatusAsc/Desc, firstPaymentStatusAsc/Desc, firstPaymentTypeDesc, firstOrderDateAsc/Desc, minOrderTotal/maxOrderTotal (checked against the pending query). UNCHANGED: the order detail values (DetailOrderStatus, PaymentType, OrderDate, detailOrderTotal) and dateFilter/dateFilterDisplay stay data of alias order without output - no key outputs them yet (proposed as outputs on ORDER_OF_USER_REORDERABLE, not done). Strategy migrate",
+      "2026-11-02 migration: the order is created per run, so its detail values come from the collection: status (placeOrder OrderStatusCode), payment type (paymentSubTypeCode), order date (generated today, UTC). No response returns the total: the spec checks the detail total equals the total the history list shows for that order (detailOrderTotal kept only as the recorded expected-output)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -320,7 +321,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "orderDate"
     },
     {
       "value": "10/01/25",
@@ -330,7 +332,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "orderDateDisplay"
     },
     {
       "value": "OS-01102025-00255",
@@ -371,7 +374,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "orderStatus"
     },
     {
       "value": "InvoiceMe",
@@ -381,7 +385,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "paymentType"
     },
     {
       "value": "10/01/25",
@@ -391,7 +396,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "order"
+      "alias": "order",
+      "output": "orderDateDisplay"
     },
     {
       "value": "$1,018.40",
@@ -400,8 +406,7 @@
       "keyPath": "detailOrderTotal",
       "sensitive": false,
       "profiled": false,
-      "role": "data",
-      "alias": "order"
+      "role": "expected-output"
     },
     {
       "value": "0",
@@ -416,5 +421,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

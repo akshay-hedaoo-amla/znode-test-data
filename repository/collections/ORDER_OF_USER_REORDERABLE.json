@@ -235,6 +235,14 @@
     "generated" : {
       "uniqueSuffix" : {
         "kind" : "uniqueSuffix"
+      },
+      "orderDate" : {
+        "kind" : "dateTime",
+        "format" : "yyyy-MM-dd"
+      },
+      "orderDateDisplay" : {
+        "kind" : "dateTime",
+        "format" : "MM/dd/yy"
       }
     },
     "runIdTag" : {
@@ -289,6 +297,23 @@
         "from" : "value",
         "name" : "personalizationCode"
       },
+      "orderStatus" : {
+        "from" : "response",
+        "step" : "placeOrder",
+        "pointer" : "/OrderStatusCode"
+      },
+      "paymentType" : {
+        "from" : "value",
+        "name" : "paymentSubTypeCode"
+      },
+      "orderDate" : {
+        "from" : "value",
+        "name" : "orderDate"
+      },
+      "orderDateDisplay" : {
+        "from" : "value",
+        "name" : "orderDateDisplay"
+      },
       "personalizationText" : {
         "from" : "payload",
         "step" : "addToCart",
@@ -305,6 +330,6 @@
   "approvedBy":"Akshay Hedaoo",
   "approvedAt": "2026-11-02T14:30:00Z",
   "createdAt" : "2026-11-01T00:00:00Z",
-  "lastValidated" : "2026-11-02T05:43:14Z",
-  "verifiedHash" : "sha256:cb6e37d65ea8c8e43d398f8ab7131b7f477763a572b87f0106511a8e96db4eb9"
+  "lastValidated" : "2026-11-02T09:15:49Z",
+  "verifiedHash" : "sha256:a9f5bea2fbf34b13a9ad41b60fc97ec18937564c141b455f83e9b9956fa20344"
 }
