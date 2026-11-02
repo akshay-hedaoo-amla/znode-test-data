@@ -11,3 +11,8 @@ knownFailures:
     evidence: "Baseline 2026-11-02: run without the test data agents (no TDA_HOME, the spec's own JSON data) fails the same three checks; with the agents it fails identically in normal mode (the spec's own SKUs, z-100000 preferred) and in fallback mode."
     decidedBy: "Akshay Hedaoo"
     decidedAt: "2026-11-02"
+  - testId: "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts > Webstore - My Account - Dashboard > validate dashboard functionality"
+    reason: "The dashboard's Return History card is not on the page (returnHistoryCardTitle 'Return History' not found) and a dashboard link click times out on atstage"
+    evidence: "Baseline 2026-11-02: the committed original spec run without the test data agents (no TDA_HOME, its own JSON data) fails identically; with the agents it fails the same way in normal and fallback mode."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-02"

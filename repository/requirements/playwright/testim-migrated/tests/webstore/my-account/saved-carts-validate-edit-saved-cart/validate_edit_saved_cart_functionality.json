@@ -41,7 +41,8 @@
       "MISSING KEY (proposed SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES, entity saved_cart, read-only): a saved cart of the declared account on the store holding a configurable product line with personalization values and its variant attributes, a grouped product with a child line, a bundle product with 3 child products, and a simple product with a checkbox add-on; params owner (@user.userId), store; outputs name, configurableName, configurableSku, configurablePersonalization1..2, configurableVariant1..3, groupName, groupChildName, bundleName, bundleSku, bundleChild1..3 (sku - name), simpleName, simpleSku, simpleAddOnName. Would supply savedCartWithAllTypeProduct and every product value of step 5 (configSku/bundleSku are locator args). Need left out; values kept as config/expected-output until the key exists. The spec notes atstage drift (variants not rendered, grouped child unavailable)",
       "Runtime cart names (runtimeBaseName, editRuntimeBaseName) are created-by-test prefixes; Updated_Product_Quantity is a test setting (config)",
       "Not profiled: no profile observation exists for this test",
-      "Re-mapped to new keys (2026-11-01): allTypesCart = SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES (owner @user.userId, minBundleChildren 3, minVariantAttributes 3, minPersonalizations 2, store): savedCartWithAllTypeProduct -> name, configurableProductName -> configurableName, configProductSKU and configSku -> configurableSku, personalizationText1/2 -> configurablePersonalization1/2, groupProductName -> groupName, group_ChildProductName -> groupChildName, bundleProductName -> bundleName, bundleProductSKU and bundleSku -> bundleSku, bundle_childProductName1..3 -> bundleChild1Name..bundleChild3Name, simpleProductName -> simpleName, checkboxProductName -> simpleAddOnName, simpleProductSKU -> simpleSku (checked against the pending query). Several sources are formatted labels the migrated spec must build from outputs: 'SKU: <sku>', '<sku> - <name>' (bundleChildNSku + bundleChildNName), '<add-on group> : <add-on name>' (simpleAddOnGroupName + simpleAddOnName), '<attribute> : <value>' personalizations. LEFT WITHOUT output: variant1..3 ('Bulb Size :  Small', 'Color :  White', 'Technology :  LED') - the query returns no variant attribute names/values (only configurableVariantSku); they stay data of allTypesCart until the query returns them (or the spec drops them; it already notes atstage does not render variants). Strategy migrate"
+      "Re-mapped to new keys (2026-11-01): allTypesCart = SAVED_CART_OF_USER_WITH_ALL_PRODUCT_TYPES (owner @user.userId, minBundleChildren 3, minVariantAttributes 3, minPersonalizations 2, store): savedCartWithAllTypeProduct -> name, configurableProductName -> configurableName, configProductSKU and configSku -> configurableSku, personalizationText1/2 -> configurablePersonalization1/2, groupProductName -> groupName, group_ChildProductName -> groupChildName, bundleProductName -> bundleName, bundleProductSKU and bundleSku -> bundleSku, bundle_childProductName1..3 -> bundleChild1Name..bundleChild3Name, simpleProductName -> simpleName, checkboxProductName -> simpleAddOnName, simpleProductSKU -> simpleSku (checked against the pending query). Several sources are formatted labels the migrated spec must build from outputs: 'SKU: <sku>', '<sku> - <name>' (bundleChildNSku + bundleChildNName), '<add-on group> : <add-on name>' (simpleAddOnGroupName + simpleAddOnName), '<attribute> : <value>' personalizations. LEFT WITHOUT output: variant1..3 ('Bulb Size :  Small', 'Color :  White', 'Technology :  LED') - the query returns no variant attribute names/values (only configurableVariantSku); they stay data of allTypesCart until the query returns them (or the spec drops them; it already notes atstage does not render variants). Strategy migrate",
+      "2026-11-02 live run: the saved cart page shows a configurable line by its variant (name, 'SKU: <variant>', divConfigurableProduct*<variantSku>), so the configurable name/SKU sources map to configurableVariantName / configurableVariantSku."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -241,7 +242,7 @@
       "profiled": false,
       "role": "data",
       "alias": "allTypesCart",
-      "output": "configurableName"
+      "output": "configurableVariantName"
     },
     {
       "value": "SKU: z-2510001",
@@ -252,7 +253,7 @@
       "profiled": false,
       "role": "data",
       "alias": "allTypesCart",
-      "output": "configurableSku"
+      "output": "configurableVariantSku"
     },
     {
       "value": "z-2510001",
@@ -263,7 +264,7 @@
       "profiled": false,
       "role": "data",
       "alias": "allTypesCart",
-      "output": "configurableSku"
+      "output": "configurableVariantSku"
     },
     {
       "value": "AdditionalInformation : TestAdditionalInformation",
@@ -469,5 +470,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

@@ -93,6 +93,22 @@ migrated:
     - testim-migrated/tests/webstore/my-account/wishlist-validate-functionality.spec.ts
     - testim-migrated/tests/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.spec.ts
     - testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts
+    # Phase 6 module webstore/my-account, batch 2 group 1
+    - testim-migrated/tests/webstore/my-account/saved-carts-validate-action-column-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/saved-carts-validate-edit-saved-cart.spec.ts
+    - testim-migrated/tests/webstore/my-account/voucher-history-validate-pagination-and-sorting.spec.ts
+    - testim-migrated/tests/webstore/my-account/order-history-validate-page-filter-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/order-template-validate-quantity-and-total.spec.ts
+    - testim-migrated/tests/webstore/my-account/order-templates-validate-list-page-pagination-and-sorting.spec.ts
+    - testim-migrated/tests/webstore/my-account/verify-order-template-landmarks-and-row-actions.spec.ts
+    - testim-migrated/tests/webstore/my-account/pending-orders-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/pending-payment-validate.spec.ts
+    # Phase 6 module webstore/my-account, batch 2 group 2 (order created per run by the collection)
+    - testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/order-history-validate-actions-sorting-and-button-status.spec.ts
+    # Phase 6 module webstore/my-account, batch 2 group 3 (quote-history skips until an IN REVIEW quote exists)
+    - testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/quote-history-validate-functionality.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
