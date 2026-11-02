@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_highlights",
+  "tables": [
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodePimAttributeValue",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimProductAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValueLocale",
+    "dbo.ZnodeHighlight",
+    "dbo.ZnodeHighlightLocale",
+    "dbo.ZnodeLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePimProduct.PimProductId",
+      "to": "dbo.ZnodePimAttributeValue.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeValueId",
+      "to": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValueLocale.PimAttributeDefaultValueId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeDefaultValue.AttributeDefaultValueCode",
+      "to": "dbo.ZnodeHighlight.HighlightCode",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeHighlight.HighlightId",
+      "to": "dbo.ZnodeHighlightLocale.HighlightId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeHighlightLocale.LocaleId",
+      "to": "dbo.ZnodeLocale.LocaleId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodePimProduct.SKU",
+    "type": "dbo.ZnodePimProduct.ProductType",
+    "highlightCode": "dbo.ZnodeHighlight.HighlightCode",
+    "highlightActive": "dbo.ZnodeHighlight.IsActive",
+    "highlightDisplayOrder": "dbo.ZnodeHighlight.DisplayOrder",
+    "highlightLabel": "dbo.ZnodePimAttributeDefaultValueLocale.AttributeDefaultValue",
+    "highlightName": "dbo.ZnodeHighlightLocale.Name",
+    "highlightDescription": "dbo.ZnodeHighlightLocale.Description",
+    "highlightShortDescription": "dbo.ZnodeHighlightLocale.ShortDescription",
+    "locale": "dbo.ZnodeLocale.Code"
+  },
+  "filters": {
+    "dbo.ZnodePimAttribute.AttributeCode": "Highlights"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:0c994fabc20d9e559e37630af53e2ef1c1675fe7de2a526dcb4cb1bac51489ce",
+  "scannedAt": "2026-11-02T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

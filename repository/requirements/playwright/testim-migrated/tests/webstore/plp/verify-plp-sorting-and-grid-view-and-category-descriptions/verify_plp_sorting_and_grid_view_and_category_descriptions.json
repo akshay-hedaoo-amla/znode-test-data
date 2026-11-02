@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts > PLP - Verify PLP Sorting, Grid View, and Category Descriptions > verify plp sorting and grid view and category descriptions",
+  "scenario": {
+    "summary": "Guest opens the Plumbing PLP at page size 64, checks the first product under the default sort, switches to Highest Rating, Name A-Z and Name Z-A (first product name/SKU for A-Z and Z-A, same list length as default), toggles list and grid view and checks the category short and long descriptions. Read-only.",
+    "steps": [
+      "Open Plumbing via Departments (gotoCategory('linkPlumbing')) as a guest; set page size 64.",
+      "Default sort: check the first product name.",
+      "Sort 1 (Highest Rating): list length equals the default list (first/last only logged).",
+      "Sort 5 (Name A-Z): check hdgProductName474 name and divProductSKUContainer474 SKU; same length.",
+      "Sort 6 (Name Z-A): check hdgProductName466 name; same length.",
+      "Switch to list view and back to grid view.",
+      "Check the category short and long description (<pre> blocks)."
+    ],
+    "entitiesTouched": [
+      "category",
+      "product",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "First product under the default sort is the recorded one.",
+      "Name A-Z first product is the recorded name and SKU; Name Z-A first product is the recorded name.",
+      "Each sorted list has the same length as the default list.",
+      "Category short description 'This is a short description.' and long description 'This is a long description.'."
+    ],
+    "evidence": [
+      "Title 'verify plp sorting and grid view and category descriptions' and the six step labels match the flow; guest storageState; no data file; no linked AIO cases.",
+      "Profile (atstage 2026-11-01): every value is NO_RULE (profiled false).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "CATEGORY_WITH_PRODUCTS (pending) now covers the category: need category {store, topLevel true (opened from Departments through gotoCategory), minProducts 2, maxProducts 64 (one page at size 64), withDescriptions true}; the short and long descriptions -> category.shortDescription / category.longDescription (if stored with markup, the spec compares the text content). The category link id linkPlumbing (config) is built from category.name.",
+      "CATEGORY_LISTING_SORT_ANCHORS (pending) now covers the Name sorts: need listing {store, categoryId @category.categoryId}; the Name A-Z first name and SKU -> listing.firstNameAscName / listing.firstNameAscSku, the Name Z-A first name -> listing.firstNameDescName; the test ids hdgProductName474 / divProductSKUContainer474 and hdgProductName466 (config) are built from listing.firstNameAscProductId and listing.firstNameDescProductId.",
+      "Not covered: the first product under the default sort ('Mountain Plumbing 4 Inch Round ...') stays expected-output: the default and Highest Rating orders come from the search index with no tie-break, so no key can produce them (Highest Rating is only checked by list length). The spec notes atstage drift for these values.",
+      "Sort option values 1 / 5 / 6, page size 64 and the category link id are test settings: config.",
+      "Data in code: every value is a literal in the spec: product ids 474/466 in test ids, the product names and SKU, linkPlumbing and the description texts.",
+      "migrate: no data file (no loadData), the default-sort first name cannot come from a key, and product ids are in the spec code."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "category",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 2,
+        "maxProducts": 64,
+        "topLevel": true,
+        "withDescriptions": true
+      }
+    },
+    {
+      "key": "CATEGORY_LISTING_SORT_ANCHORS",
+      "alias": "listing",
+      "params": {
+        "store": "MaxwellsHardware",
+        "categoryId": "@category.categoryId"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "linkPlumbing",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:20",
+      "kind": "literal",
+      "keyPath": "gotoCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:23",
+      "kind": "literal",
+      "keyPath": "setPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mountain Plumbing 4 Inch Round Solid Nickel Bronze Plated Grid Shower Drain",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:35",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:61",
+      "kind": "literal",
+      "keyPath": "selectSort",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:108",
+      "kind": "literal",
+      "keyPath": "selectSort",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName474",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName474",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "American Standard Astume Vortax Toilet",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "listing",
+      "output": "firstNameAscName"
+    },
+    {
+      "value": "divProductSKUContainer474",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2300014",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "listing",
+      "output": "firstNameAscSku"
+    },
+    {
+      "value": "6",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:147",
+      "kind": "literal",
+      "keyPath": "selectSort",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName466",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:152",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName466",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:153",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Reliance 50 Gallon Natural Gas Water Heater",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:153",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "listing",
+      "output": "firstNameDescName"
+    },
+    {
+      "value": "This is a short description.",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:192",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "shortDescription"
+    },
+    {
+      "value": "This is a long description.",
+      "location": "testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts:198",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "longDescription"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

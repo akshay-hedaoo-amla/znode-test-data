@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_WITH_HIGHLIGHTS",
+  "entity": "product",
+  "type": "with_highlights",
+  "constraints": {
+    "type": "{productType}",
+    "status": "active",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "highlight1Code": "= {highlight1Code}",
+    "highlight2Code": "= {highlight2Code}",
+    "highlightActive": "= true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active product of the given type published and searchable on the store, with both given highlights (Highlights attribute options) assigned and active, so PLP and Quick View show their badges. KB: Highlights; Product attributes (Highlights).",
+  "declaredParams": {
+    "productType": {
+      "type": "string",
+      "description": "Product type: simple, bundle, grouped or configurable"
+    },
+    "highlight1Code": {
+      "type": "string",
+      "description": "Highlight code (ZnodeHighlight.HighlightCode = Highlights option code), e.g. BIOCertified; outputs highlight1*"
+    },
+    "highlight2Code": {
+      "type": "string",
+      "description": "Second highlight code, e.g. WaterSenseCertified; outputs highlight2*"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts > PLP - Verify Compare Product Functionality > verify compare product functionality",
+  "scenario": {
+    "summary": "Guest searches a simple, a configurable, a bundle and a second simple product and adds each to the product comparison list (checking the added and already-added messages), opens the compare page and checks the product names, tries a grouped product as the fifth (maximum-limit message), removes a product, checks Print and removes all. Nothing is added to the cart.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState; baseURL pinned to the at webstore in the spec).",
+      "Search the simple product SKU, check its name and SKU, add it to compare (added message); add it again (already-added message), remove it and add it again.",
+      "Search the configurable product SKU, check hdgProductName666 / divProductSKUContainer666 (name, 'SKU:<parent sku>') and add it to compare.",
+      "Search the bundle SKU, check its name and divProductSKUContainer142 ('SKU:<sku>') and add it to compare.",
+      "Search the second simple SKU, check name and SKU, add it to compare and open the comparison page.",
+      "On the comparison page check paraProductName484/666/142/392 show the four names.",
+      "Search the grouped SKU, check name and divProductSKUContainer408, add to compare: maximum-limit message expected; open the comparison page.",
+      "Remove product 484, go back, reopen the comparison page, check Print and remove all items."
+    ],
+    "entitiesTouched": [
+      "product",
+      "store"
+    ],
+    "stateChanges": [
+      "Guest product-comparison list (session) filled with four products, then emptied by Remove All"
+    ],
+    "assertions": [
+      "Search results show each product's name and SKU.",
+      "Compare popup shows the added message, and the already-added message for a repeat.",
+      "Comparison page lists the names of the compared products; Print button visible.",
+      "Fifth product shows the maximum-limit message (conditional: soft fallback on the known QA compare rollback)."
+    ],
+    "evidence": [
+      "Title 'verify compare product functionality' and the ten step labels match the flow; guest storageState; no linked AIO cases.",
+      "Profile (atstage 2026-11-01): z-2430008 FOUND active SimpleProduct (MilwaukeeTool), inventory 250, storefrontProductIndex 1, but requiredAddOnCount 1 (PRODUCT_SIMPLE_IN_STOCK needs 0, so the recorded product may not pass as preferred); B-100000 FOUND active ConfigurableProduct (Philips), no own inventory, storefront index 1; z-1234579 FOUND active BundleProduct, inventory 28362; z-2100025 FOUND active SimpleProduct (Campbell), inventory 1000, but storefrontProductIndex 0 and requiredAddOnCount 1 (fails PRODUCT_SIMPLE_IN_STOCK as preferred); z-2200003 FOUND active GroupedProduct, inventory 250. 'SKU:B-100000' and 'SKU:z-1234579' are the SKU container texts (prefix + SKU), NOT_FOUND as SKUs.",
+      "Keys: nothing is added to the cart, so quantityUsed 1 and no add-ons or personalization (minAddOns 0, minPersonalizableAttributes 0). PRODUCT_CONFIGURABLE_WITH_VARIANTS minVariants 1 and variantAttributes BulbSize,Color,Technology as in the approved checkout entries for B-100000 (the test picks no variant). simple and otherSimple must be two different products (both PRODUCT_SIMPLE_IN_STOCK).",
+      "Product ids now come from outputs: simple.productId (484: the productName(484) and removeProductById(484) arguments map to it), configurable.parentProductId (666), bundle.productId (142), otherSimple.productId (392) and grouped.productId (408); the test ids built from them (hdgProductName666, divProductSKUContainer666/142/408, paraProductName<id>) stay config. Composed values stay data without output, built by the spec: parentProductSKU 'SKU:' + configurable.parentProductSku, bundleProductSKU1 'SKU:' + bundle.sku.",
+      "STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED (pending) now covers the compare switch: need compare {store} (Enable Product Comparison on the store). Not covered: the compare limit of 4 (the fifth product, grouped, gets the maximum-limit message) is a webstore constant, so no key produces it; the test keeps adding exactly four products before the grouped one.",
+      "compareMessage and validationForAlreadyAddedProduct are fixed UI messages: expected-output.",
+      "Data in code: product ids 484, 666, 142, 392 and 408 in test ids (hdgProductName666, divProductSKUContainer666/142/408), compareProductPage.productName(484/666/142/392) and removeProductById(484); the literal '484' at line 122 is the productName(484) argument; the spec comment lists the product names.",
+      "migrate: the spec imports the JSON directly (import data from ...json), not through loadData (swap rule 1), and product ids are in the spec code (swap rule 4)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "simple",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "configurable",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundle",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "otherSimple",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 13,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "grouped",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 16,
+        "required": false
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED",
+      "alias": "compare",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:2",
+      "kind": "json",
+      "keyPath": "simpleProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "simple",
+      "output": "sku"
+    },
+    {
+      "value": "Milwaukee M12 FUEL 12-Volt 1/2 in Brushless Cordless Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:3",
+      "kind": "json",
+      "keyPath": "simpleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "name"
+    },
+    {
+      "value": "The selected product has been added to your comparison list.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:4",
+      "kind": "json",
+      "keyPath": "compareMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "The selected product has already been added to your comparison list.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:5",
+      "kind": "json",
+      "keyPath": "validationForAlreadyAddedProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:6",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "configurable",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:59",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:8",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:60",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SKU:B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:7",
+      "kind": "json",
+      "keyPath": "parentProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "configurable"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:11",
+      "kind": "json",
+      "keyPath": "bundleProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundle",
+      "output": "sku"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:12",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer142",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SKU:z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:13",
+      "kind": "json",
+      "keyPath": "bundleProductSKU1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundle"
+    },
+    {
+      "value": "z-2100025",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:14",
+      "kind": "json",
+      "keyPath": "simpleProductSKU1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "otherSimple",
+      "output": "sku"
+    },
+    {
+      "value": "Campbell Chain Electro-Polish Stainless Steel Cable",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:15",
+      "kind": "json",
+      "keyPath": "simpleProductName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "otherSimple",
+      "output": "name"
+    },
+    {
+      "value": "484",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "simple",
+      "output": "productId"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:9",
+      "kind": "json",
+      "keyPath": "groupProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "grouped",
+      "output": "sku"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/plp/verify-compare-product-functionality.json:10",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "grouped",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer408",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:144",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "484",
+      "location": "testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts:173",
+      "kind": "literal",
+      "keyPath": "removeProductById",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "productId"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

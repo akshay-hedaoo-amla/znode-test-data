@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "key": "CATEGORIES_TOP_LEVEL_OF_STORE",
+  "entity": "category_listing",
+  "type": "top_level_of_store",
+  "constraints": {
+    "categoryActive": "true",
+    "publishState": "production",
+    "topLevel": "true",
+    "topLevelCategoryCount": ">= {minCategories}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "The store's active top-level categories published (PRODUCTION) in its catalog, in display order as the Departments menu lists them; at least N of them. Source: module guide PIM catalog hierarchy (display order).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minCategories": {
+      "type": "integer",
+      "description": "Fewest top-level categories the menu must show (the number of links the test checks, at most 8)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

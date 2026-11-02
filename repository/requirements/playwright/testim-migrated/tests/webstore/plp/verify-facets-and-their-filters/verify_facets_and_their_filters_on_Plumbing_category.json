@@ -1,0 +1,625 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts > PLP - Verify Facets and Their Filters > verify facets and their filters on Plumbing category",
+  "scenario": {
+    "summary": "Guest opens the Plumbing PLP, checks the Spout Type, Material Type and ToeStyle facet headings, expands them and checks facet values and product counts, filters by Spout Type = Mid Arc (3 of 3 results) and checks the three products' names, SKUs and retail prices, clears the filters, checks the first product and the Material Type values/counts, then applies ToeStyle = Carbonmax. Read-only.",
+    "steps": [
+      "Open the webstore as a guest and open Plumbing via Departments (gotoCategory('linkPlumbing')).",
+      "Check facet headings SpoutType, PlumbingPartsMaterial and ToeStyle; expand the three facets.",
+      "Check SpoutType values Mid Arc / Low Arc and their counts.",
+      "Click Mid Arc; check 'Showing 3' and 'of 3 Results'.",
+      "Check name, SKU and retail price of products 176, 177 and 178 and that product 176's details are visible.",
+      "Clear all facets; check the first product name and the Material Type heading.",
+      "Re-expand Material Type; check values PVC, Cast Iron, Nickel and their counts.",
+      "Expand ToeStyle and click Carbonmax; check the results bar is visible."
+    ],
+    "entitiesTouched": [
+      "category",
+      "product",
+      "product_attributes",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Facet headings show their labels (Spout Type, Material Type, ToeStyle).",
+      "Facet values show their labels and product counts (Mid Arc 3, Low Arc 1, PVC 9, Cast Iron 4, Nickel 1).",
+      "Filtering by Mid Arc shows 'Showing 3 ... of 3 Results' and the three matching products with name, SKU and retail price.",
+      "After Clear All the first listed product is the recorded one and the result count is no longer 'of 3'."
+    ],
+    "evidence": [
+      "Title 'verify facets and their filters on Plumbing category' and the ten step labels match the flow; guest storageState; no linked AIO cases.",
+      "All JSON data comes through loadData(FacetsDataSchema, rawData, ...) (spec line 39). toeCarbonmax/toeCarbonmaxCount are in the schema but not in the scan (unused by the spec); Carbonmax is a literal at line 196 that the scanner did not list.",
+      "Profile (atstage 2026-11-01): Z-1235102 FOUND active SimpleProduct (MountainPlumbing), inventory 4842, storefrontProductIndex 0; z-1235803 and z-1235804 FOUND active SimpleProducts, inventory 5000, storefront index 1; productName FOUND as z-1234595 (MountainPlumbing). tda rows: Faucets (ZnodeCategoryId 85, parent 83) holds products 175-183, which include 176-178.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "CATEGORY_WITH_PRODUCTS (pending) now covers the Plumbing PLP the test opens from Departments: need category {store, topLevel true, minProducts 4}; the link id linkPlumbing (config) is built from category.name.",
+      "CATEGORY_FACET_VALUES (pending) now covers the facets: need facets {store, categoryId @category.categoryId, attributeCodes SpoutType,PlumbingPartsMaterial,ToeStyle (the attribute codes the test reads, in order), minValuesPerAttribute 2, minProductsForValue 3, maxProductsForValue 3 (the test checks exactly three filtered products)}. Values are ordered by product count, highest first. Facet headings -> facet1Label..facet3Label; Mid Arc 3 / Low Arc 1 -> facet1Value1Label/Count, facet1Value2Label/Count; PVC 9, Cast Iron 4, Nickel 1 -> facet2Value1..3Label/Count; the three filtered products (first value of the first facet) -> filteredProduct1..3Name / Sku / RetailPrice (prices shown as currency), ordered by product id.",
+      "Gap (params): minValuesPerAttribute is one minimum for all three attributes, but the test reads 2 SpoutType values, 3 Material Type values and 1 ToeStyle value (Carbonmax, line 196, not scanned; facet3Value1Label / facet3Value1Code). With 2, the third Material Type value (Nickel, facet2Value3*) is not guaranteed and ToeStyle must have 2 values although the test reads one; a per-attribute minimum needs a key change (human decides).",
+      "Built by the spec from outputs, roles unchanged: 'Showing 3' and 'of 3 Results' (expected-output) from facets.filteredCount; the facet value test ids MidArc/midArc, LowArc/lowArc, PVC/pvc, CastIron/castIron, Nickel/nickel (config) from facet<N>Value<M>Code (assumes the value code is the test id; reviewer to confirm); the product test ids hdgProductName176.. / spnProductSkuValue176.. / spnRetailPrice176.. / divProductDetails176 (config) from filteredProduct1..3ProductId. The facet heading codes SpoutType, PlumbingPartsMaterial, ToeStyle are the attributeCodes param (config).",
+      "Not covered: the first product after Clear All (productName, 'Mountain Plumbing 4 Inch Round ...') stays expected-output: the default sort comes from the search index, so no key can produce it (CATEGORY_LISTING_SORT_ANCHORS gives only the Name sorts).",
+      "Data in code: product ids 176/177/178 in test ids (hdgProductName176, spnProductSkuValue176, spnRetailPrice176, divProductDetails176, ...), the category link linkPlumbing and the 'Showing 3' / 'of 3 Results' literals.",
+      "migrate: loadData is used, but the asserted counts and prices depend on the data (swap rule 3) and product ids and facet codes are in the spec code (swap rule 4).",
+      "2026-11-02: minValuesPerAttribute 2 -> 1 (user decision): one value applies to all three attributes and ToeStyle has a single value in Plumbing, so with 2 no category qualified; the test's reads of a 2nd/3rd value of an attribute are no longer guaranteed by the key."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "category",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 4,
+        "topLevel": true
+      }
+    },
+    {
+      "key": "CATEGORY_FACET_VALUES",
+      "alias": "facets",
+      "params": {
+        "store": "MaxwellsHardware",
+        "categoryId": "@category.categoryId",
+        "attributeCodes": "SpoutType,PlumbingPartsMaterial,ToeStyle",
+        "minValuesPerAttribute": 1,
+        "minProductsForValue": 3,
+        "maxProductsForValue": 3
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "linkPlumbing",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:50",
+      "kind": "literal",
+      "keyPath": "gotoCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SpoutType",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:62",
+      "kind": "literal",
+      "keyPath": "facetHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Spout Type",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:2",
+      "kind": "json",
+      "keyPath": "facetSpoutType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet1Label"
+    },
+    {
+      "value": "PlumbingPartsMaterial",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:64",
+      "kind": "literal",
+      "keyPath": "facetHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Material Type",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:3",
+      "kind": "json",
+      "keyPath": "facetMaterialType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Label"
+    },
+    {
+      "value": "ToeStyle",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "facetHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ToeStyle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:4",
+      "kind": "json",
+      "keyPath": "facetToeStyle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet3Label"
+    },
+    {
+      "value": "SpoutType",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "expandFacet",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PlumbingPartsMaterial",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:74",
+      "kind": "literal",
+      "keyPath": "expandFacet",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ToeStyle",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "expandFacet",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "MidArc",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:87",
+      "kind": "literal",
+      "keyPath": "facetValueLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mid Arc",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:5",
+      "kind": "json",
+      "keyPath": "spoutMidArc",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet1Value1Label"
+    },
+    {
+      "value": "midArc",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "facetValueCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:6",
+      "kind": "json",
+      "keyPath": "spoutMidArcCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet1Value1Count"
+    },
+    {
+      "value": "LowArc",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:90",
+      "kind": "literal",
+      "keyPath": "facetValueLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Low Arc",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:7",
+      "kind": "json",
+      "keyPath": "spoutLowArc",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet1Value2Label"
+    },
+    {
+      "value": "lowArc",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:91",
+      "kind": "literal",
+      "keyPath": "facetValueCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:8",
+      "kind": "json",
+      "keyPath": "spoutLowArcCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet1Value2Count"
+    },
+    {
+      "value": "Showing 3",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:104",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "of 3 Results",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:105",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgProductName176",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hot Water Faucet with Contemporary Round Body & Handle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:17",
+      "kind": "json",
+      "keyPath": "product176Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct1Name"
+    },
+    {
+      "value": "spnProductSkuValue176",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Z-1235102",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:18",
+      "kind": "json",
+      "keyPath": "product176SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct1Sku"
+    },
+    {
+      "value": "spnRetailPrice176",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:121",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$375.70",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:19",
+      "kind": "json",
+      "keyPath": "product176Price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct1RetailPrice"
+    },
+    {
+      "value": "divProductDetails176",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:124",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName177",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:127",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hot Water Faucet with Contemporary Square Body & Handle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:20",
+      "kind": "json",
+      "keyPath": "product177Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct2Name"
+    },
+    {
+      "value": "spnProductSkuValue177",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:128",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1235803",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:21",
+      "kind": "json",
+      "keyPath": "product177SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct2Sku"
+    },
+    {
+      "value": "spnRetailPrice177",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:129",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$442.65",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:22",
+      "kind": "json",
+      "keyPath": "product177Price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct2RetailPrice"
+    },
+    {
+      "value": "hdgProductName178",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:132",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hot Water Faucet with Modern Curved Body & Handle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:23",
+      "kind": "json",
+      "keyPath": "product178Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct3Name"
+    },
+    {
+      "value": "spnProductSkuValue178",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:133",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1235804",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:24",
+      "kind": "json",
+      "keyPath": "product178SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct3Sku"
+    },
+    {
+      "value": "spnRetailPrice178",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:134",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$392.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:25",
+      "kind": "json",
+      "keyPath": "product178Price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "filteredProduct3RetailPrice"
+    },
+    {
+      "value": "of 3 Results",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:145",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Mountain Plumbing 4 Inch Round Solid Nickel Bronze Plated Grid Shower Drain",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:26",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output"
+    },
+    {
+      "value": "PlumbingPartsMaterial",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:155",
+      "kind": "literal",
+      "keyPath": "facetHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PlumbingPartsMaterial",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:163",
+      "kind": "literal",
+      "keyPath": "expandFacet",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PVC",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:170",
+      "kind": "literal",
+      "keyPath": "facetValueLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PVC",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:9",
+      "kind": "json",
+      "keyPath": "matPVC",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value1Label"
+    },
+    {
+      "value": "pvc",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:171",
+      "kind": "literal",
+      "keyPath": "facetValueCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "9",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:10",
+      "kind": "json",
+      "keyPath": "matPVCCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value1Count"
+    },
+    {
+      "value": "CastIron",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:173",
+      "kind": "literal",
+      "keyPath": "facetValueLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Cast Iron",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:11",
+      "kind": "json",
+      "keyPath": "matCastIron",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value2Label"
+    },
+    {
+      "value": "castIron",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:174",
+      "kind": "literal",
+      "keyPath": "facetValueCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "4",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:12",
+      "kind": "json",
+      "keyPath": "matCastIronCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value2Count"
+    },
+    {
+      "value": "Nickel",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:175",
+      "kind": "literal",
+      "keyPath": "facetValueLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Nickel",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:13",
+      "kind": "json",
+      "keyPath": "matNickel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value3Label"
+    },
+    {
+      "value": "nickel",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:176",
+      "kind": "literal",
+      "keyPath": "facetValueCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/plp/verify-facets-and-their-filters.json:14",
+      "kind": "json",
+      "keyPath": "matNickelCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "facets",
+      "output": "facet2Value3Count"
+    },
+    {
+      "value": "ToeStyle",
+      "location": "testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts:193",
+      "kind": "literal",
+      "keyPath": "expandFacet",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

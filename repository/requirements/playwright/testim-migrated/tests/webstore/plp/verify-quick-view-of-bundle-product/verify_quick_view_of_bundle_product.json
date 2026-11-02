@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts > PLP - Verify Quick View of Bundle Product > verify quick view of bundle product",
+  "scenario": {
+    "summary": "Guest searches a bundle product by SKU, checks its PLP card (name, SKU, sales and retail price, inventory text, highlights, rating, image), opens Quick View and checks name, SKU, category, brand, description and the three bundle children, selects three checkbox add-ons and fills AdditionalInformation, adds to cart and checks subtotal, total, children, personalization, add-ons and item price.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the bundle SKU; assert breadcrumb, categories facet, card name, SKU, sales and retail price, 'Inventory' and 'View product details for inventory levels', highlights, rating, image.",
+      "Open Quick View; assert name, SKU, category, brand, description, highlights, rating, image, special offers heading, wishlist; close.",
+      "Reopen Quick View; assert children 139, 140, 141 (name, SKU, image, inventory).",
+      "Assert QV sales and retail price; check add-ons 124, 120, 119 and read their prices; type AdditionalInformation.",
+      "Add to Cart, go to the cart; assert 'Cart', subtotal = price + add-ons, total heading, product link, the three child SKUs, the personalization, add-ons 'Sonic Tools' and 'GE Pro', item cost."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "brand",
+      "price",
+      "product_addon",
+      "product_personalization",
+      "inventory",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Adds one bundle with three add-ons and an AdditionalInformation personalization to the guest session cart (not removed)."
+    ],
+    "assertions": [
+      "PLP card: name, SKU, sales and retail price, inventory label and text.",
+      "Quick View: name, SKU, category, brand, description, three children with SKU, image and inventory, prices.",
+      "Cart: subtotal equals price plus add-on prices, total heading, children SKUs, personalization, add-on names, item cost."
+    ],
+    "evidence": [
+      "Title 'verify quick view of bundle product' and the six step labels match the flow; guest storageState; no linked AIO cases.",
+      "Data through loadData(BundleQVDataSchema, rawData, ...) (spec line 31).",
+      "Profile: SKU z-1234579 FOUND as BundleProduct (PimProductId 142), active, PRODUCTION, brand Dewalt, inventory 28362, storefrontProductIndex 1, requiredAddOnCount 0; children z-1234582 (139), z-1234607 (140), z-1234580 (141) FOUND active SimpleProducts. tda rows: one optional add-on association, group 1 DisplayType CheckBox; add-on values 124/120/119 are add-on PimProductIds (124 = Sonic Tools flat file).",
+      "Key PRODUCT_BUNDLE_IN_STOCK: quantityUsed 1, minAddOns 1 + addOnDisplayType CheckBox (one checkbox group, three options selected), minPersonalizableAttributes 1 + personalizationAttribute AdditionalInformation (fillPersonalizationAdditionalInfo).",
+      "Outputs of PRODUCT_BUNDLE_IN_STOCK now cover: bundleProductSKU -> sku, bundleProductName -> name, sales / retail price -> salesPrice / retailPrice, description -> shortDescription (if stored with markup, the spec compares the text content), the three children's names and SKUs -> child1..3Name / child1..3Sku (key order: association display order, then id), add-on ids 124 / 120 / 119 -> addOnProductId / addOn2ProductId / addOn3ProductId (key order: display order, then id; the test selects all three, so the order only pairs names with ids).",
+      "Composed values stay data without output, built by the spec from outputs: bundleProductSKUOnQuickView 'SKU:' + sku, bundleProductAssociatedCategory 'Category:' + categoryName, bundleProductAssociatedBrand 'Brand:' + brandName, bundleProductPriceWithAddons ($551.00) = price (sales, else retail) + addOnPrice + addOn2Price + addOn3Price and bundleProductCartTotal 'YOUR TOTAL IS <that> For 1 Item', the add-on names 'Sonic Tools' / 'GE Pro' = starts of addOnName / addOn2Name / addOn3Name; test ids with 142 from productId, 139-141 from child1..3ProductId and z-1234579 from sku.",
+      "Data in code: PimProductIds 142 and 139-141 in test ids, the bundle SKU in divBundleProduct*z-1234579, add-on ids 124/120/119 and add-on names 'Sonic Tools' / 'GE Pro'; recorded as data of alias product. 'AdditionalInformation ' typed is config; the cart line 'AdditionalInformation' is expected-output.",
+      "migrate: loadData is used, but prices and the computed totals depend on the record and record ids/SKUs are in code (swap rules 3 and 4 fail)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "addOnDisplayType": "CheckBox",
+        "minPersonalizableAttributes": 1,
+        "personalizationAttribute": "AdditionalInformation"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:2",
+      "kind": "json",
+      "keyPath": "bundleProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / SEARCH",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgCategories",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:74",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:3",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "spnSalesPrice142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:6",
+      "kind": "json",
+      "keyPath": "bundleProductSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "spnRetailPrice142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$530.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:7",
+      "kind": "json",
+      "keyPath": "bundleProductRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "retailPrice"
+    },
+    {
+      "value": "divInventoryLabel142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:94",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Inventory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:94",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "divInventoryText142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "View product details for inventory levels",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "SKU:z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:11",
+      "kind": "json",
+      "keyPath": "bundleProductSKUOnQuickView",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Category:Power Tools",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:9",
+      "kind": "json",
+      "keyPath": "bundleProductAssociatedCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Brand:Dewalt",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:10",
+      "kind": "json",
+      "keyPath": "bundleProductAssociatedBrand",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Completing a wide range of applications, it also offers a 1/2\" single sleeve Ratcheting chuck which provides tight bit gripping strength. This drill has a compact, lightweight design to fit into tight areas, along with an ergonomic handle delivering comfort and control.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:5",
+      "kind": "json",
+      "keyPath": "bundlePrroductDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shortDescription"
+    },
+    {
+      "value": "divBundleProduct139",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:161",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:14",
+      "kind": "json",
+      "keyPath": "childProductName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Name"
+    },
+    {
+      "value": "paraSku139",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:162",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234582",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:15",
+      "kind": "json",
+      "keyPath": "childProductSku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Sku"
+    },
+    {
+      "value": "divBundleProduct140",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:171",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt Compact Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:16",
+      "kind": "json",
+      "keyPath": "childProductName2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child2Name"
+    },
+    {
+      "value": "paraSku140",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:172",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234607",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:17",
+      "kind": "json",
+      "keyPath": "childProductSku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "child2Sku"
+    },
+    {
+      "value": "divBundleProduct141",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:182",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:18",
+      "kind": "json",
+      "keyPath": "childProductName3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child3Name"
+    },
+    {
+      "value": "paraSku141",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:183",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-1234580",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:19",
+      "kind": "json",
+      "keyPath": "childProductSku3",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "child3Sku"
+    },
+    {
+      "value": "divSalesPrice142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:198",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "124",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:210",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnProductId"
+    },
+    {
+      "value": "120",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:212",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2ProductId"
+    },
+    {
+      "value": "119",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:214",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "AdditionalInformation ",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:220",
+      "kind": "literal",
+      "keyPath": "fillPersonalizationAdditionalInfo",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgCart",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:238",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:238",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "paraSubTotalAmount",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:242",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:250",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "YOUR TOTAL IS $551.00 For 1 Item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:13",
+      "kind": "json",
+      "keyPath": "bundleProductCartTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "linkProductName142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:257",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraChildProductDescription142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:259",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraChildProductDescription142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:260",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraChildProductDescription142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:261",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divBundleProductPersonalizationz-1234579",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:263",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:263",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "divBundleProductAddonsz-1234579",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:265",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Sonic Tools",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:265",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divBundleProductAddonsz-1234579",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:266",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "GE Pro",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:266",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraItemRowCost142",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts:269",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$551.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-bundle-product.json:12",
+      "kind": "json",
+      "keyPath": "bundleProductPriceWithAddons",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

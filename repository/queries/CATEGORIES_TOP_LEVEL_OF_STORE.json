@@ -1,0 +1,29 @@
+{
+  "schemaVersion" : 1,
+  "key" : "CATEGORIES_TOP_LEVEL_OF_STORE",
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, COUNT(t.categoryId) AS categoryCount, MAX(CASE WHEN t.position = @pos1 THEN t.name END) AS category1Name, MAX(CASE WHEN t.position = @pos1 THEN t.code END) AS category1Code, MAX(CASE WHEN t.position = @pos1 THEN t.categoryId END) AS category1Id, MAX(CASE WHEN t.position = @pos2 THEN t.name END) AS category2Name, MAX(CASE WHEN t.position = @pos2 THEN t.code END) AS category2Code, MAX(CASE WHEN t.position = @pos2 THEN t.categoryId END) AS category2Id, MAX(CASE WHEN t.position = @pos3 THEN t.name END) AS category3Name, MAX(CASE WHEN t.position = @pos3 THEN t.code END) AS category3Code, MAX(CASE WHEN t.position = @pos3 THEN t.categoryId END) AS category3Id, MAX(CASE WHEN t.position = @pos4 THEN t.name END) AS category4Name, MAX(CASE WHEN t.position = @pos4 THEN t.code END) AS category4Code, MAX(CASE WHEN t.position = @pos4 THEN t.categoryId END) AS category4Id, MAX(CASE WHEN t.position = @pos5 THEN t.name END) AS category5Name, MAX(CASE WHEN t.position = @pos5 THEN t.code END) AS category5Code, MAX(CASE WHEN t.position = @pos5 THEN t.categoryId END) AS category5Id, MAX(CASE WHEN t.position = @pos6 THEN t.name END) AS category6Name, MAX(CASE WHEN t.position = @pos6 THEN t.code END) AS category6Code, MAX(CASE WHEN t.position = @pos6 THEN t.categoryId END) AS category6Id, MAX(CASE WHEN t.position = @pos7 THEN t.name END) AS category7Name, MAX(CASE WHEN t.position = @pos7 THEN t.code END) AS category7Code, MAX(CASE WHEN t.position = @pos7 THEN t.categoryId END) AS category7Id, MAX(CASE WHEN t.position = @pos8 THEN t.name END) AS category8Name, MAX(CASE WHEN t.position = @pos8 THEN t.code END) AS category8Code, MAX(CASE WHEN t.position = @pos8 THEN t.categoryId END) AS category8Id FROM dbo.ZnodePortal p INNER JOIN (SELECT pc.PortalId AS portalId, c.ZnodeCategoryId AS categoryId, c.Name AS name, c.CategoryCode AS code, ROW_NUMBER() OVER (PARTITION BY pc.PortalId ORDER BY c.DisplayOrder, c.ZnodeCategoryId) AS position FROM dbo.ZnodePublishCategoryEntity c INNER JOIN dbo.ZnodePublishVersionEntity v ON v.VersionId = c.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = c.ZnodeCatalogId WHERE v.RevisionType = @revisionType AND v.IsPublishSuccess = @isActive AND v.LocaleId = @localeId AND c.IsActive = @isActive AND c.ZnodeParentCategoryIds IS NULL AND (c.ActivationDate IS NULL OR c.ActivationDate <= @now) AND (c.ExpirationDate IS NULL OR c.ExpirationDate >= @now)) t ON t.portalId = p.PortalId WHERE p.StoreCode = @store AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode HAVING COUNT(t.categoryId) >= @minCategories ORDER BY p.PortalId",
+  "params" : [ "pos1", "pos2", "pos3", "pos4", "pos5", "pos6", "pos7", "pos8", "revisionType", "isActive", "localeId", "now", "store", "preferred", "minCategories" ],
+  "constants" : {
+    "revisionType" : "PRODUCTION",
+    "isActive" : "true",
+    "localeId" : "1",
+    "pos1" : "1",
+    "pos2" : "2",
+    "pos3" : "3",
+    "pos4" : "4",
+    "pos5" : "5",
+    "pos6" : "6",
+    "pos7" : "7",
+    "pos8" : "8"
+  },
+  "outputs" : [ "storeCode", "categoryCount", "category1Name", "category1Code", "category1Id", "category2Name", "category2Code", "category2Id", "category3Name", "category3Code", "category3Id", "category4Name", "category4Code", "category4Id", "category5Name", "category5Code", "category5Id", "category6Name", "category6Code", "category6Id", "category7Name", "category7Code", "category7Id", "category8Name", "category8Code", "category8Id" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:02badca8e728ccc2dabe4657fb60ff862462948e3029ded5d26d5f0ed559304f",
+  "vocabularyFingerprint" : "sha256:b4a3a56b981738648a04f38bfd726a9707c23436950eaec2ce347ca3e2f4c377",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T11:39:43Z",
+  "verifiedHash" : "sha256:f5aaa1e6e7d29c8f809b218bb3d5218c8395a71c8382c90a91da497a03e2ae88"
+}

@@ -1,0 +1,493 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts > PLP - Verify Highlights for All Types of Product > verify highlights for all types of product",
+  "scenario": {
+    "summary": "Guest searches a simple, a bundle, a grouped and a configurable product and, for each, checks the WaterSense and BIO highlight badges on the PLP card and in Quick View and opens the BIO highlight page (title and description) and goes back; for the simple product also opens the WaterSense highlight page and its Back to Product link. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Simple: search the SKU, check hdgProductName484 and the highlight badges; open the WaterSense highlight (title, description), Back to Product (PDP heading), search again.",
+      "Simple: open the BIO highlight page for product 484 (title, description, Back button), go back; open Quick View and check the BIO badge.",
+      "Bundle (142): search, check name and both badges, open the BIO highlight page twice (PLP and after Quick View) and check title/description; Quick View BIO badge.",
+      "Grouped (408): search, check name and both badges, grouped Quick View BIO badge, BIO highlight page.",
+      "Configurable (666): search, check name and both badges, Quick View BIO badge, BIO highlight page."
+    ],
+    "entitiesTouched": [
+      "product",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Each product card shows the product name and the WaterSense and BIO highlight badges.",
+      "The WaterSense highlight page shows 'WaterSense EPA Certified' and the start of its description.",
+      "The BIO highlight page shows 'BIO Certified' and the start of its description, with a Back to Product button.",
+      "Quick View shows the BIO badge for every product type."
+    ],
+    "evidence": [
+      "Title 'verify highlights for all types of product' and the thirteen step labels match the flow; guest storageState; no linked AIO cases.",
+      "Profile (atstage 2026-11-01): z-2430008 FOUND active SimpleProduct (PimProductId 484), storefront index 1; z-1234579 FOUND active BundleProduct (142); z-2200003 FOUND active GroupedProduct (408); B-100000 FOUND active ConfigurableProduct (666), storefront index 1.",
+      "PRODUCT_WITH_HIGHLIGHTS (pending) now covers all four products and replaces the in-stock keys: needs simple / bundle / grouped / configurable {productType simple|bundle|grouped|configurable, highlight1Code BIOCertified, highlight2Code WaterSenseCertified, store}, each preferred on its recorded SKU (for the configurable, output sku is the parent SKU). Nothing is added to the cart, so no inventory or add-on constraint is needed. SKUs -> sku, names -> name; the highlight page titles BIO Certified -> simple.highlight1Name and WaterSense EPA Certified -> simple.highlight2Name (the same highlights on every product; the WaterSense page is opened only for the simple product).",
+      "Not covered: the highlight description starts (bioHighlightDescriptionStart, waterSenseDescriptionStart) stay expected-output: highlight1Description / highlight2Description hold HTML in the DB; the spec may compare against those outputs only if it strips the tags.",
+      "Product ids now come from outputs (productId of each need, configurable parent included): the test ids hdgProductName<id>, imgBioCertified<id>, imgWatersenseEpaCertified<id> and navigateToBioHighlights(page, <id>) are built from productId and the highlight code (config); the alt locator '[alt=\"BIO Certified undefined \"]' contains simple.highlight1Name.",
+      "Data in code: product ids 484, 142, 408, 666 in test ids (hdgProductName484, imgBioCertified142, imgWatersenseEpaCertified408, ...) and in navigateToBioHighlights(page, <id>); the highlight code BIOCertified in the URL built at line 18; comments name the SKUs and product names.",
+      "Locators '[alt=\"BIO Certified undefined \"]', btnBackToProduct and the Escape key are fixed UI: config.",
+      "migrate: the spec imports the JSON directly (import testData from ...json), not through loadData (swap rule 1); product ids are in the spec code (swap rule 4)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
+      "alias": "simple",
+      "params": {
+        "productType": "simple",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
+      "alias": "bundle",
+      "params": {
+        "productType": "bundle",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
+      "alias": "grouped",
+      "params": {
+        "productType": "grouped",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 23,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
+      "alias": "configurable",
+      "params": {
+        "productType": "configurable",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 32,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:2",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "simple",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName484",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:31",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Milwaukee M12 FUEL 12-Volt 1/2 in Brushless Cordless Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:3",
+      "kind": "json",
+      "keyPath": "simpleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "name"
+    },
+    {
+      "value": "imgBioCertified484",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:37",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "WaterSense EPA Certified",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:12",
+      "kind": "json",
+      "keyPath": "waterSenseH1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "highlight2Name"
+    },
+    {
+      "value": "WaterSense labeled products are backed by independent, third–party certification and meet EPA’s specifications for water efficiency and performance.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:13",
+      "kind": "json",
+      "keyPath": "waterSenseDescriptionStart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "BIO Certified",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:10",
+      "kind": "json",
+      "keyPath": "bioHighlightH1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simple",
+      "output": "highlight1Name"
+    },
+    {
+      "value": "In order to certify a farm, the farmer is typically required to engage in a number of new activities, in addition to normal farming operations:",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:11",
+      "kind": "json",
+      "keyPath": "bioHighlightDescriptionStart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "btnBackToProduct",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName484",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[alt=\"BIO Certified undefined \"]",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:85",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Escape",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:86",
+      "kind": "literal",
+      "keyPath": "press",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:4",
+      "kind": "json",
+      "keyPath": "bundleProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundle",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName142",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:5",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "name"
+    },
+    {
+      "value": "imgWatersenseEpaCertified142",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:97",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "imgBioCertified142",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:98",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "btnBackToProduct",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:108",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName142",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:111",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[alt=\"BIO Certified undefined \"]",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Escape",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:118",
+      "kind": "literal",
+      "keyPath": "press",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "btnBackToProduct",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:129",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName142",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:131",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:6",
+      "kind": "json",
+      "keyPath": "groupProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "grouped",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName408",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:139",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:7",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "grouped",
+      "output": "name"
+    },
+    {
+      "value": "imgWatersenseEpaCertified408",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:141",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "imgBioCertified408",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:142",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[alt=\"BIO Certified undefined \"]",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:149",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Escape",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:150",
+      "kind": "literal",
+      "keyPath": "press",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "btnBackToProduct",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:160",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName408",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:163",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:8",
+      "kind": "json",
+      "keyPath": "configProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "configurable",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:173",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-highlights-for-all-types-of-product.json:9",
+      "kind": "json",
+      "keyPath": "configProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "name"
+    },
+    {
+      "value": "imgWatersenseEpaCertified666",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:175",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "imgBioCertified666",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:176",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[alt=\"BIO Certified undefined \"]",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:182",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Escape",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:183",
+      "kind": "literal",
+      "keyPath": "press",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "btnBackToProduct",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:193",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts:196",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

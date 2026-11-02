@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_WITH_TIER_PRICE",
+  "entity": "product",
+  "type": "simple_with_tier_price",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "requiredAddOnCount": "= 0",
+    "maxQuantity": ">= {quantityUsed}",
+    "tierQuantity": "<= {quantityUsed}",
+    "tierPrice": "> 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product, searchable on the store, no required add-ons, with a price tier at or below quantityUsed on the guest's price list for the store (outputs the highest such tier, so the cart shows its price). KB: Custom Price Lists (Tier Price).",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test may set; the tier output is the highest tier quantity at or below it (the test sets tierQuantity)"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

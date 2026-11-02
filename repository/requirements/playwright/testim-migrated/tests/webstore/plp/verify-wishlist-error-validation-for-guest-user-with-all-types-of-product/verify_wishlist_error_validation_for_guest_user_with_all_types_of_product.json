@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts > PLP - Verify Wishlist Error Validation for Guest User with All Types of Product > verify wishlist error validation for guest user with all types of product",
+  "scenario": {
+    "summary": "Guest searches a simple, a configurable, a bundle and a grouped product in turn, checks each PLP card (name, SKU, price), opens its Quick View and clicks the wishlist heart; each time the toast says the guest must log in. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Simple: search sku1; check the heading and the card name, SKU, retail price (testIds ...484); open Quick View, click the heart, check the login-required toast and dismiss it.",
+      "Configurable: search the parent SKU in place; check the card (testIds ...666); Quick View, heart, toast, dismiss.",
+      "Bundle: search the bundle SKU in place; check the card (testIds ...142); Quick View, heart, toast, dismiss.",
+      "Grouped: search the grouped SKU in place; check the card (testIds ...408); grouped Quick View, heart, toast."
+    ],
+    "entitiesTouched": [
+      "product",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search results heading is visible.",
+      "Each PLP card shows the product name, 'SKU:<sku>' (SKU only for the simple card) and its price: $149.99, '$50.00 / Piece', $500.00, $500.00.",
+      "Each wishlist click shows 'Please login to add a product to your Wishlist.'"
+    ],
+    "evidence": [
+      "Title 'verify wishlist error validation for guest user with all types of product' and step labels 1) to 4) match the flow; no linked cases.",
+      "Profile and tda rows: z-2430008 active SimpleProduct (PimProductId 484, inventory 250, storefront index 1, requiredAddOnCount 1); B-100000 active ConfigurableProduct (666, parent stock NOT_FOUND); z-1234579 active BundleProduct (142, inventory 28362); z-2200003 active GroupedProduct (408, inventory 250). The 'SKU:<sku>' values are NOT_FOUND as SKUs (display text).",
+      "Needs (quantityUsed 1, nothing added to the cart): simpleProduct PRODUCT_SIMPLE_IN_STOCK (the recorded z-2430008 has a required add-on, so it does not qualify and the resolver falls back; irrelevant to the wishlist error); configurableProduct PRODUCT_CONFIGURABLE_PDP_DETAILS (replacing PRODUCT_CONFIGURABLE_WITH_VARIANTS because the card shows the parent price, which only this key returns; it does not constrain storefront search visibility, reviewer to accept); bundleProduct PRODUCT_BUNDLE_IN_STOCK; groupProduct PRODUCT_GROUPED_IN_STOCK. Each preferred on its recorded SKU.",
+      "SKU and name values are data (sku / parentProductSku and name outputs). Prices now map to outputs: price1 -> simpleProduct.retailPrice, bundleProductSalesPrice -> bundleProduct.salesPrice, groupProductSalesPrice -> groupProduct.salesPrice (reviewer to confirm the grouped card shows the parent's price). Still expected-output, built by the spec: the 'SKU:<sku>' texts ('SKU:' + parentProductSku / sku) and parentProductPrice '$50.00 / Piece' = configurableProduct.parentRetailPrice (parentSalesPrice when set) + ' / Piece' (the unit is not produced by any key).",
+      "Data in code: product ids 484, 666, 142 and 408 are in getByTestId literals (config); they come from simpleProduct.productId, configurableProduct.parentProductId, bundleProduct.productId and groupProduct.productId.",
+      "migrate: the spec imports its JSON directly (import testData from ...json), not through loadData (swap rule 1), product ids are in the spec code (rule 4) and prices depend on the products (rule 3).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+    ],
+    "confidence": "high",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "simpleProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_PDP_DETAILS",
+      "alias": "configurableProduct",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundleProduct",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 17,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "groupProduct",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 25,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:3",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "simpleProduct",
+      "output": "sku"
+    },
+    {
+      "value": "heading",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:29",
+      "kind": "literal",
+      "keyPath": "getByRole",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName484",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:33",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Milwaukee M12 FUEL 12-Volt 1/2 in Brushless Cordless Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:4",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simpleProduct",
+      "output": "name"
+    },
+    {
+      "value": "spnProductSkuValue484",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:36",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnRetailPrice484",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:39",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$149.99",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:5",
+      "kind": "json",
+      "keyPath": "price1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "simpleProduct",
+      "output": "retailPrice"
+    },
+    {
+      "value": ".Toastify__toast-body",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please login to add a product to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:2",
+      "kind": "json",
+      "keyPath": "wishlistErrorMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:6",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "configurableProduct",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:8",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurableProduct",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SKU:B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:7",
+      "kind": "json",
+      "keyPath": "parentProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output",
+      "alias": "configurableProduct"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:9",
+      "kind": "json",
+      "keyPath": "parentProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "configurableProduct"
+    },
+    {
+      "value": ".Toastify__toast-body",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:81",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:10",
+      "kind": "json",
+      "keyPath": "bundleProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundleProduct",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName142",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:93",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:11",
+      "kind": "json",
+      "keyPath": "bundleProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundleProduct",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer142",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SKU:z-1234579",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:12",
+      "kind": "json",
+      "keyPath": "bundleProductSKU1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output",
+      "alias": "bundleProduct"
+    },
+    {
+      "value": "spnSalesPrice142",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:13",
+      "kind": "json",
+      "keyPath": "bundleProductSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundleProduct",
+      "output": "salesPrice"
+    },
+    {
+      "value": ".Toastify__toast-body",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:105",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:14",
+      "kind": "json",
+      "keyPath": "groupProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "groupProduct",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:16",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "groupProduct",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SKU:z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:15",
+      "kind": "json",
+      "keyPath": "groupProductSKU1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output",
+      "alias": "groupProduct"
+    },
+    {
+      "value": "spnSalesPrice408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:121",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.json:17",
+      "kind": "json",
+      "keyPath": "groupProductSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "groupProduct",
+      "output": "salesPrice"
+    },
+    {
+      "value": ".Toastify__toast-body",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts:132",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

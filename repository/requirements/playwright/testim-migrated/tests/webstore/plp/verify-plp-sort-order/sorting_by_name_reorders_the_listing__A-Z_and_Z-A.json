@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-plp-sort-order.spec.ts > Webstore - PLP > sorting by name reorders the listing, A-Z and Z-A",
+  "scenario": {
+    "summary": "Guest opens a category PLP by its route, shows the full page (page size 32), sorts Name A-Z and Name Z-A and checks the rendered window is in ascending, then descending order and that the first product differs between the two sorts. Read-only.",
+    "steps": [
+      "Open the category route as a guest; check the heading contains the category name.",
+      "Set page size 32 and wait for at least minimumRenderedProducts product names.",
+      "Select sort 5 (Name A-Z); poll until the rendered names are in ascending order.",
+      "Select sort 6 (Name Z-A); poll until the rendered names are in descending order.",
+      "Check the first A-Z name differs from the first Z-A name."
+    ],
+    "entitiesTouched": [
+      "category",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Category heading contains the category name.",
+      "At least 2 product names render; A-Z window ascending, Z-A window descending (case-insensitive).",
+      "First product differs between A-Z and Z-A."
+    ],
+    "evidence": [
+      "Title 'sorting by name reorders the listing, A-Z and Z-A' and the step labels match the flow; guest storageState; no linked AIO cases; a Selenium gap-fill, not a Testim port (spec header).",
+      "All data comes from loadData(DataSchema, rawData, ...) (spec line 65).",
+      "Profile (atstage 2026-11-01): every value is NO_RULE (profiled false). tda rows: ZnodeCategoryId 83 is Plumbing with 32 products.",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "CATEGORY_WITH_PRODUCTS (pending) now covers the category: need category {store, minProducts 2 (minimumRenderedProducts; two names so A-Z and Z-A can differ), maxProducts 32 (the page size the test sets, so the whole listing renders)}; categoryRoute -> category.route, categoryName -> category.name.",
+      "pageSize 32, minimumRenderedProducts 2 and the sort option values 5 / 6 are test settings: config.",
+      "Data in code: none; the spec reads every value from the JSON.",
+      "Strategy kept migrate (pending review): with categoryRoute and categoryName now mapped to outputs, all five swap rules hold (loadData, every data value maps to an output, no derived assertion, no data value in code, no other file), so a reviewer may switch this entry to swap."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "category",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 2,
+        "maxProducts": 32
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/category/83",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:2",
+      "kind": "json",
+      "keyPath": "categoryRoute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "route"
+    },
+    {
+      "value": "Plumbing",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:3",
+      "kind": "json",
+      "keyPath": "categoryName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "name"
+    },
+    {
+      "value": "32",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:4",
+      "kind": "json",
+      "keyPath": "pageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:7",
+      "kind": "json",
+      "keyPath": "minimumRenderedProducts",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:5",
+      "kind": "json",
+      "keyPath": "sortAtoZ",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "6",
+      "location": "testim-migrated/test-data/webstore/plp/verify-plp-sort-order.json:6",
+      "kind": "json",
+      "keyPath": "sortZtoA",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

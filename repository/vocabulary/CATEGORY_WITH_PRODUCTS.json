@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "key": "CATEGORY_WITH_PRODUCTS",
+  "entity": "category_listing",
+  "type": "with_products",
+  "constraints": {
+    "categoryActive": "true",
+    "publishState": "production",
+    "topLevel": "{topLevel}",
+    "listedProductCount": ">= {minProducts}",
+    "listedProductCountCap": "<= {maxProducts}",
+    "subcategoryCount": ">= {minSubcategories}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active category published (PRODUCTION) in the store's catalog listing N..M active products (the PLP 'of N Results'), optionally top level, with at least K active subcategories and short/long descriptions. Source: module guide PIM category-associated-products.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minProducts": {
+      "type": "integer",
+      "description": "Fewest products the category page must list (e.g. more than a page size so a partial page shows)"
+    },
+    "maxProducts": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most products allowed (e.g. the largest page size, so all show on one page). Left out: any"
+    },
+    "minSubcategories": {
+      "type": "integer",
+      "optional": true,
+      "description": "Fewest active published child categories (the nav and PLP subcategory tiles). Left out: any"
+    },
+    "topLevel": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test opens the category from the Departments menu (no parent). Left out: any level"
+    },
+    "withDescriptions": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the category's short and long description (both must be set). Left out: any"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

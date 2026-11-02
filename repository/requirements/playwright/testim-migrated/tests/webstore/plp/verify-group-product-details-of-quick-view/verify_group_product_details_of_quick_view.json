@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts > PLP - Verify Group Product Details of Quick View > verify group product details of quick view",
+  "scenario": {
+    "summary": "Guest searches a grouped product by SKU, checks the one-result page and PLP card (name, SKU, sales and retail price), opens Quick View and checks name, SKU, category, brand, description, starting price, child table and child row, gets the quantity error on Add to Cart, enters quantity 1, DisplayText personalization and three checkbox add-ons, adds to cart and checks the cart line, child, personalization, add-on and totals.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the group SKU; assert breadcrumb, results heading, 'Showing 1 of 1 Results', categories facet and the card (hdgProductName408, SKU, sales and retail price).",
+      "Open the group Quick View; assert name, SKU, category, brand, wishlist, description, highlights, 'Starting at: $<price>', rating, the Product/Price/Quantity headers, the child row (409: name, SKU, retail price), image; close and check the inventory label.",
+      "Reopen Quick View, click Add to Cart with no quantity; assert 'Please enter the product quantity.'.",
+      "Enter quantity 1 for the child, fill DisplayText, check add-ons 512, 164, 165 and read their prices.",
+      "Add to Cart, go to the cart; assert total heading, image, product link, child name, personalization 'DisplayText : <text>', add-on 'Leviton Decora', item cost, row total, subtotal = price + add-ons, Continue Shopping."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "brand",
+      "price",
+      "product_addon",
+      "product_personalization",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Adds one unit of the grouped product's child with three add-ons and a DisplayText personalization to the guest session cart (not removed)."
+    ],
+    "assertions": [
+      "Search page shows exactly one result; card name, SKU, sales and retail price.",
+      "Quick View shows name, SKU, category, brand, description, starting price, child table and the child's name, SKU and retail price.",
+      "Add to Cart without quantity shows 'Please enter the product quantity.'.",
+      "Cart shows the group, its child, the personalization, an add-on, item cost and row total; subtotal equals base price plus add-on prices."
+    ],
+    "evidence": [
+      "Title 'verify group product details of quick view' and the seven step labels match the flow; guest storageState; no linked AIO cases.",
+      "Data through loadData(GroupProductQVDataSchema, rawData, ...) (spec line 29).",
+      "Profile: SKU z-2200003 FOUND as GroupedProduct (PimProductId 408), active, PRODUCTION, brand Speedaire, inventory 250, storefrontProductIndex 1, requiredAddOnCount 0; child z-2200004 FOUND (PimProductId 409), active, inventory 1000. tda rows: one optional add-on association, group 1 DisplayType CheckBox; add-on values 512/164/165 are add-on PimProductIds.",
+      "Key PRODUCT_GROUPED_IN_STOCK: quantityUsed 1 (child quantity 1), minAddOns 1 + addOnDisplayType CheckBox (one checkbox group, three options selected), minPersonalizableAttributes 1 + personalizationAttribute DisplayText (fillPersonalizationDisplayText).",
+      "Outputs of PRODUCT_GROUPED_IN_STOCK now cover: groupProductSKU -> sku, groupProductName -> name, the card sales and retail price -> salesPrice / retailPrice (the grouped product's own price-list row; reviewer to confirm the card shows the parent's prices: the recorded sales $500.00 is above the retail $22.48, which equals the child's retail price), description -> shortDescription (if stored with markup, the spec compares the text content), qvStartingPrice(408) -> productId, the starting price and child row price 22.48 -> child1RetailPrice (one child), child name / SKU / id 409 -> child1Name / child1Sku / child1ProductId, add-on ids 512 / 164 / 165 -> addOnProductId / addOn2ProductId / addOn3ProductId (key order: display order, then id; the test selects all three).",
+      "Composed values stay data without output, built by the spec from outputs: groupProductSKU1 'SKU:' + sku, groupProductAssociatedBrand 'Brand:' + brandName, itemPerPriceWithAddons ($26.51) = child1RetailPrice (child1SalesPrice when set) + addOnPrice + addOn2Price + addOn3Price, 'Leviton Decora' = the start of the selected add-on's name (addOnName); test ids with 408 from productId, 409 from child1ProductId and z-2200004 from child1Sku.",
+      "Not covered: groupProductAssociatedCategory ('Category:Tools') stays data without output: no key produces the Quick View category of a grouped product (decision 2026-11-02).",
+      "Data in code: PimProductIds 408 (hdgProductName408, spnProductSkuValue408, spnSalesPrice408, spnRetailPrice408, qvStartingPrice(408), qvAddToCartButton(408), linkProductName408, paraItemRowCost408, paraOrderRowTotal408) and 409 (paraGroupProductName409, qvGroupChildRow(409), spnRetailPrice409), the child SKU in divGroupedProduct*z-2200004, add-on ids 512/164/165 and the add-on name 'Leviton Decora'; recorded as data of alias product.",
+      "migrate: loadData is used, but prices, starting price and the computed subtotal depend on the record and record ids/SKUs are in code (swap rules 3 and 4 fail)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "addOnDisplayType": "CheckBox",
+        "minPersonalizableAttributes": 1,
+        "personalizationAttribute": "DisplayText"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:2",
+      "kind": "json",
+      "keyPath": "groupProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / SEARCH",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgSearchResults",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Showing 1",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:74",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "of 1 Results",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Showing 1 of 1 Results",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgCategories",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:87",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:4",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "spnProductSkuValue408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "spnSalesPrice408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:6",
+      "kind": "json",
+      "keyPath": "groupProductSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "spnRetailPrice408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:99",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$22.48",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:7",
+      "kind": "json",
+      "keyPath": "groupProductRetailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "retailPrice"
+    },
+    {
+      "value": "SKU:z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:3",
+      "kind": "json",
+      "keyPath": "groupProductSKU1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Category:Tools",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:10",
+      "kind": "json",
+      "keyPath": "groupProductAssociatedCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Brand:Speedaire",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:11",
+      "kind": "json",
+      "keyPath": "groupProductAssociatedBrand",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Easily select the right blower for you thanks to fine-structured steps of volume flows.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:5",
+      "kind": "json",
+      "keyPath": "groupPrroductDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shortDescription"
+    },
+    {
+      "value": "408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:148",
+      "kind": "literal",
+      "keyPath": "qvStartingPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "productId"
+    },
+    {
+      "value": "22.48",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:8",
+      "kind": "json",
+      "keyPath": "groupProductRetailPrice1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1RetailPrice"
+    },
+    {
+      "value": "Product",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:157",
+      "kind": "literal",
+      "keyPath": "qvGroupTableHeader",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Price",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:158",
+      "kind": "literal",
+      "keyPath": "qvGroupTableHeader",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:159",
+      "kind": "literal",
+      "keyPath": "qvGroupTableHeader",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "paraGroupProductName409",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:163",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:13",
+      "kind": "json",
+      "keyPath": "childProductName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Name"
+    },
+    {
+      "value": "409",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:168",
+      "kind": "literal",
+      "keyPath": "qvGroupChildRow",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1ProductId"
+    },
+    {
+      "value": "z-2200004",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:14",
+      "kind": "json",
+      "keyPath": "childProductSku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Sku"
+    },
+    {
+      "value": "spnRetailPrice409",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:171",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Please enter the product quantity.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:12",
+      "kind": "json",
+      "keyPath": "errorMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:221",
+      "kind": "literal",
+      "keyPath": "fill",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayTextIsEntered",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:16",
+      "kind": "json",
+      "keyPath": "displayTextValue",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:228",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnProductId"
+    },
+    {
+      "value": "164",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:233",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2ProductId"
+    },
+    {
+      "value": "165",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:238",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:274",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$26.51",
+      "location": "testim-migrated/test-data/webstore/plp/verify-group-product-details-of-quick-view.json:15",
+      "kind": "json",
+      "keyPath": "itemPerPriceWithAddons",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "linkProductName408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:281",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divGroupedProductNamez-2200004",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:289",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divGroupedProductPersonalizationz-2200004",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:291",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divGroupedProductAddonsz-2200004",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:295",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Leviton Decora",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:295",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraItemRowCost408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:298",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraOrderRowTotal408",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:303",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraSubTotalAmount",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:309",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "btnContinueShopping",
+      "location": "testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts:313",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

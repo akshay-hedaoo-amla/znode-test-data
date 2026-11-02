@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "entity": "category_facets",
+  "tables": [
+    "dbo.ZnodePublishCategoryEntity",
+    "dbo.ZnodePublishVersionEntity",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePortal",
+    "dbo.ZnodePimCategoryHierarchy",
+    "dbo.ZnodePimCategoryProduct",
+    "dbo.ZnodePublishProductEntity",
+    "dbo.ZnodePimProductTypeAssociation",
+    "dbo.ZnodePimAttributeValue",
+    "dbo.ZnodePimAttribute",
+    "dbo.ZnodePimAttributeLocale",
+    "dbo.ZnodePimFrontendProperties",
+    "dbo.ZnodePimProductAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValue",
+    "dbo.ZnodePimAttributeDefaultValueLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.VersionId",
+      "to": "dbo.ZnodePublishVersionEntity.VersionId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.ZnodeCatalogId",
+      "to": "dbo.ZnodePortalCatalog.PublishCatalogId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalCatalog.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.ZnodeCategoryId",
+      "to": "dbo.ZnodePimCategoryHierarchy.PimCategoryHierarchyId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryHierarchy.PimCategoryId",
+      "to": "dbo.ZnodePimCategoryProduct.PimCategoryId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryProduct.PimProductId",
+      "to": "dbo.ZnodePublishProductEntity.ZnodeProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryProduct.PimProductId",
+      "to": "dbo.ZnodePimProductTypeAssociation.PimParentProductId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryProduct.PimProductId",
+      "to": "dbo.ZnodePimAttributeValue.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeId",
+      "to": "dbo.ZnodePimAttribute.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimAttributeLocale.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttribute.PimAttributeId",
+      "to": "dbo.ZnodePimFrontendProperties.PimAttributeId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeValue.PimAttributeValueId",
+      "to": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimProductAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId",
+      "to": "dbo.ZnodePimAttributeDefaultValueLocale.PimAttributeDefaultValueId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "categoryId": "dbo.ZnodePublishCategoryEntity.ZnodeCategoryId",
+    "categoryCode": "dbo.ZnodePublishCategoryEntity.CategoryCode",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "facetAttributeCode": "dbo.ZnodePimAttribute.AttributeCode",
+    "facetLabel": "dbo.ZnodePimAttributeLocale.AttributeName",
+    "isFacet": "dbo.ZnodePimFrontendProperties.IsFacets",
+    "facetValueCode": "dbo.ZnodePimAttributeDefaultValue.AttributeDefaultValueCode",
+    "facetValueLabel": "dbo.ZnodePimAttributeDefaultValueLocale.AttributeDefaultValue",
+    "facetAttributeCount": "COUNT(DISTINCT dbo.ZnodePimAttribute.PimAttributeId)",
+    "facetValueCount": "COUNT(DISTINCT dbo.ZnodePimAttributeDefaultValue.PimAttributeDefaultValueId)",
+    "facetValueProductCount": "COUNT(DISTINCT dbo.ZnodePublishProductEntity.ZnodeProductId)",
+    "facetValueProductCountCap": "COUNT(DISTINCT dbo.ZnodePublishProductEntity.ZnodeProductId)",
+    "publishState": "dbo.ZnodePublishVersionEntity.RevisionType"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodePublishVersionEntity.RevisionType": "PRODUCTION",
+    "dbo.ZnodePublishVersionEntity.IsPublishSuccess": "1",
+    "dbo.ZnodePimCategoryProduct.Status": "1",
+    "dbo.ZnodePublishProductEntity.IsActive": "1",
+    "dbo.ZnodePimFrontendProperties.IsFacets": "1"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:5a2df01b320d05dc3a1a6b9ed1100c69479ef7cc18486e2c60ea419bbf7036ec",
+  "scannedAt": "2026-11-02T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

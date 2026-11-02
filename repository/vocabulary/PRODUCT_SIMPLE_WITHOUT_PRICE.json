@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_WITHOUT_PRICE",
+  "entity": "product",
+  "type": "simple_without_price",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= 1",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "activePriceOnStore": "= false"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active simple product with inventory, searchable on the store, with no active price in any price list of the store or of the store's profiles, so PLP and Quick View show 'Price is not set' and Add to Cart is disabled. KB: Custom Price Lists.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

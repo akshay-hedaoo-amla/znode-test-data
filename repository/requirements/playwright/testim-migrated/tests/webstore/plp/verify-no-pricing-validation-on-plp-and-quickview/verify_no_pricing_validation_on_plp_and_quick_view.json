@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts > PLP - Verify No Pricing Validation on PLP and Quick View > verify no pricing validation on plp and quick view",
+  "scenario": {
+    "summary": "Guest searches a simple product that has no price, checks the search heading, name and SKU on the card, opens Quick View and checks the name, the 'Price is not set for this product.' message and that Add to Cart is disabled. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState; baseURL pinned to the atstage webstore in the spec).",
+      "Search the SKU; check hdgSearchResults contains the SKU, hdgProductName992 the name, divProductSKUContainer992 the SKU.",
+      "Open Quick View; check hdgProductName shows the name and divPriceNotSet the no-price message; Add to Cart is disabled."
+    ],
+    "entitiesTouched": [
+      "product",
+      "product_price",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Search heading contains the SKU; card shows the product name and SKU.",
+      "Quick View shows the product name and 'Price is not set for this product.'.",
+      "Add to Cart is disabled."
+    ],
+    "evidence": [
+      "Title 'verify no pricing validation on plp and quick view' and the two step labels match the flow; guest storageState; no linked AIO cases.",
+      "Profile (atstage 2026-11-01): z-6546225 FOUND active SimpleProduct 'testim.NoPriceProduct' (AmericanStandard), PRODUCTION, inventory 10000, storefront index 1, requiredAddOnCount 0. tda rows dbo.ZnodePrice SKU z-6546225: 0 rows (no price in any price list).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "PRODUCT_SIMPLE_WITHOUT_PRICE (pending) now covers the need: product {store}, preferred z-6546225 (source 0); sku -> product.sku, productName -> product.name; the id 992 in the test ids hdgProductName992 / divProductSKUContainer992 (config) comes from product.productId.",
+      "priceErrorMsg is a fixed UI message: expected-output. hdgSearchResults, hdgProductName and divPriceNotSet are fixed test ids: config.",
+      "Data in code: product id 992 in test ids (hdgProductName992, divProductSKUContainer992); the spec comment names the SKU and ids 991/992; baseURL pinned to the atstage webstore (spec line 7).",
+      "migrate: the spec imports the JSON directly (import testData from ...json), not through loadData (swap rule 1), and product id 992 is in the spec code (swap rule 4)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITHOUT_PRICE",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-6546225",
+      "location": "testim-migrated/test-data/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "hdgSearchResults",
+      "location": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts:21",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName992",
+      "location": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts:25",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "testim.NoPriceProduct",
+      "location": "testim-migrated/test-data/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.json:3",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer992",
+      "location": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts:29",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgProductName",
+      "location": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts:38",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "divPriceNotSet",
+      "location": "testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts:42",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Price is not set for this product.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.json:4",
+      "kind": "json",
+      "keyPath": "priceErrorMsg",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts > PLP - Verify Details on Quick View of Simple Product > verify details on quick view of simple product",
+  "scenario": {
+    "summary": "Guest searches a simple product by SKU, checks the one-result search page and the PLP card (name, SKU, retail price), opens Quick View and checks name, SKU, category, brand, description and three tier offers, fills two personalization fields, gets the required add-on validation, checks the three checkbox add-on labels, selects them, adds to cart and checks the cart line, personalization, line total and subtotal (price + add-ons).",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the SKU; assert breadcrumb 'Home / SEARCH', 'Search results for \"<sku>\"', '1 Products', the Categories facet with the product's category (li-Drills) and the first card's name, SKU and retail price.",
+      "Open Quick View; assert name, SKU:<sku>, category, brand, description, 'Read Reviews', the 'SPECIAL PRICE OFFERS' heading and three tier rows (Buy N or more, $price/item, Save N%).",
+      "Fill the AdditionalInformation and DisplayText personalization fields.",
+      "Click Add to Cart without add-ons; assert 'In Stock', the required add-on message and the labels of add-on products 164, 165 and 512 (name + price).",
+      "Check the three add-on checkboxes, read the sales price (divSalesPrice484) and each add-on price; Add to Cart and go to the cart.",
+      "Assert cart line name, 'SKU: <sku>', both personalization lines, line total, Remove button, product image and subtotal = base price + add-on prices."
+    ],
+    "entitiesTouched": [
+      "product",
+      "category",
+      "brand",
+      "price",
+      "tier_price",
+      "product_addon",
+      "product_personalization",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Adds one unit of the product with three add-ons and two personalization values to the guest session cart (not removed by the test; guest cart is per session)."
+    ],
+    "assertions": [
+      "Search page: breadcrumb, results heading with the SKU, '1 Products', category facet; card name, SKU and retail price.",
+      "Quick View: name, SKU, category, brand, description, Read Reviews, three tier offers, 'In Stock'.",
+      "First Add to Cart without add-ons shows the required add-on message; add-on labels show name and price.",
+      "Cart: name, SKU text, personalization lines, line total, Remove, image, subtotal equals base price plus selected add-on prices."
+    ],
+    "evidence": [
+      "Title 'verify details on quick view of simple product' and the nine step labels match the flow; guest storageState; no linked AIO cases.",
+      "Data through loadData(QuickViewDataSchema, rawData, ...) (spec line 34).",
+      "Profile: SKU z-2430008 FOUND as SimpleProduct (PimProductId 484), active, PRODUCTION, brand MilwaukeeTool, inventory 250, storefrontProductIndex 1, requiredAddOnCount 1. tda rows: one add-on association (ZnodePimAddOnProduct group 1, DisplayType CheckBox, RequiredType Required); add-on values 164, 165, 512 are the add-on products' PimProductIds (Nibco couplings, Leviton wall plate); OutOfStockOptions DontTrackInventory.",
+      "Key PRODUCT_SIMPLE_WITH_REQUIRED_ADDON (minRequiredAddOns 1) because the first Add to Cart must fail with 'Add-on Checkbox is required.'; quantityUsed 1 (one unit added).",
+      "Gap (params): the key does not constrain the add-on group display type (CheckBox), the number of add-on options (3), personalizable attributes (the test fills AdditionalInformation and DisplayText) or tier prices (3 tiers asserted). A resolved product without them fails the test. Proposed extension of PRODUCT_SIMPLE_WITH_REQUIRED_ADDON: optional addOnDisplayType, minAddOnOptions, minPersonalizableAttributes/personalizationAttribute, minTierPrices (human decides; no key written).",
+      "Outputs of PRODUCT_SIMPLE_WITH_REQUIRED_ADDON now cover: sku1 -> sku, name1 -> name, price1 (card retail price) -> retailPrice, brand -> brandName, productDescription -> shortDescription (if stored with markup, the spec compares the text content), the add-on ids 164 / 165 / 512 (qvAddonLabel, checkAddon) -> addOn1ProductId / addOn2ProductId / addOn3ProductId. The key orders add-ons by display order, then id; the test selects all three, so the order only pairs each label with its id.",
+      "Composed values stay data without output, built by the spec from outputs: productSKU 'SKU:' + sku and cartSkuText 'SKU: ' + sku; the tier rows 'Buy N or more' (tier1Qty..tier3Qty), '$P/item' (tier1Price..tier3Price) and 'Save N%' (1 - tierNPrice / retailPrice, rounded); the add-on labels '<name>(+$<price>)' (addOnNName, addOnNPrice); cartTotal = retailPrice (salesPrice when set) + addOn1Price + addOn2Price + addOn3Price; divSalesPrice484 from productId.",
+      "Not covered: category 'Tools' (Quick View category) stays data without output: no key produces the Quick View category of a simple product (decision 2026-11-02; the key's categoryName is not confirmed to be what Quick View shows). The category facet test id li-Drills has no output either.",
+      "Data in code: the add-on product ids 164/165/512 (qvAddonLabel, checkAddon, add-on-value-checkbox-<id>), the PimProductId in divSalesPrice484, the category facet test id li-Drills and the product name in the cart image alt selector (spec line 269) are in the spec; recorded as data of alias product where scanned.",
+      "Personalization inputs AdditionalInformationIsEntered / DisplayTextIsEntered are test-typed text (config); the cart lines echoing them and the add-on message (contains the group name Checkbox) are expected-output.",
+      "migrate: loadData is used, but expected values depend on the record (prices, tier prices, add-on prices, computed subtotal) and record ids are in code (swap rules 3 and 4 fail)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minRequiredAddOns": 1
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:2",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:73",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / SEARCH",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:73",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgSearchResults",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "listProductsTab",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1 Products",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgCategories",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "li-Drills",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:83",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee M12 FUEL 12-Volt 1/2 in Brushless Cordless Hammerdrill",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:3",
+      "kind": "json",
+      "keyPath": "name1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "$149.99",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:4",
+      "kind": "json",
+      "keyPath": "price1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "retailPrice"
+    },
+    {
+      "value": "SKU:z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:5",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Tools",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:6",
+      "kind": "json",
+      "keyPath": "category",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Milwaukee Tool",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:7",
+      "kind": "json",
+      "keyPath": "brand",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "brandName"
+    },
+    {
+      "value": "Most Capable 12V Hammer Drill with the power to perform a wide range of applications",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:8",
+      "kind": "json",
+      "keyPath": "productDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shortDescription"
+    },
+    {
+      "value": "Read Reviews",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:126",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "SPECIAL PRICE OFFERS",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:16",
+      "kind": "json",
+      "keyPath": "hdgSpecialPriceOffers",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Buy 10 or more",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:18",
+      "kind": "json",
+      "keyPath": "tierPricing.0.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$134.99/item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:18",
+      "kind": "json",
+      "keyPath": "tierPricing.0.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Save 10%",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:18",
+      "kind": "json",
+      "keyPath": "tierPricing.0.discount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Buy 15 or more",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:19",
+      "kind": "json",
+      "keyPath": "tierPricing.1.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$127.49/item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:19",
+      "kind": "json",
+      "keyPath": "tierPricing.1.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Save 15%",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:19",
+      "kind": "json",
+      "keyPath": "tierPricing.1.discount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Buy 25 or more",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:20",
+      "kind": "json",
+      "keyPath": "tierPricing.2.quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$112.49/item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:20",
+      "kind": "json",
+      "keyPath": "tierPricing.2.price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Save 25%",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:20",
+      "kind": "json",
+      "keyPath": "tierPricing.2.discount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "AdditionalInformationIsEntered",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:9",
+      "kind": "json",
+      "keyPath": "additionalInformation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayTextIsEntered",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:10",
+      "kind": "json",
+      "keyPath": "displayText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:158",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add-on Checkbox is required.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:11",
+      "kind": "json",
+      "keyPath": "addonMsg",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "164",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:165",
+      "kind": "literal",
+      "keyPath": "qvAddonLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn1ProductId"
+    },
+    {
+      "value": "Nibco 1-1/2 in. 40S PVC Coupling(+$1.40)",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:12",
+      "kind": "json",
+      "keyPath": "addonLabel164",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "165",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:168",
+      "kind": "literal",
+      "keyPath": "qvAddonLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2ProductId"
+    },
+    {
+      "value": "Nibco 2 in. 40S PVC Coupling(+$1.25)",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:13",
+      "kind": "json",
+      "keyPath": "addonLabel165",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:172",
+      "kind": "literal",
+      "keyPath": "qvAddonLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:173",
+      "kind": "literal",
+      "keyPath": "qvAddonLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "Leviton Decora 2 Gang Wall Plate(+$1.38)",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:14",
+      "kind": "json",
+      "keyPath": "addonLabel512",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "164",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:183",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn1ProductId"
+    },
+    {
+      "value": "165",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:184",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2ProductId"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:185",
+      "kind": "literal",
+      "keyPath": "checkAddon",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "divSalesPrice484",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:188",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "SKU: z-2430008",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:24",
+      "kind": "json",
+      "keyPath": "cartSkuText",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "AdditionalInformation : AdditionalInformationIsEntered",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:22",
+      "kind": "json",
+      "keyPath": "personalizationText1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DisplayText : DisplayTextIsEntered",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:23",
+      "kind": "json",
+      "keyPath": "personalizationText2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$154.02",
+      "location": "testim-migrated/test-data/webstore/plp/verify-details-on-quick-view-of-simple-product.json:25",
+      "kind": "json",
+      "keyPath": "cartTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Remove",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:257",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "paraSubTotalAmount",
+      "location": "testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts:278",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

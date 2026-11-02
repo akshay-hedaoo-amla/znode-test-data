@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts > PLP - Quick View for Configurable Product with Variant2 (Medium+White+LED) > verify quick view of configurable product with variant2",
+  "scenario": {
+    "summary": "Guest searches a configurable parent by SKU, checks its PLP card (name, SKU, retail price), opens Quick View, picks the Medium bulb size swatch (variant 2: Medium+White+LED), checks the variant's name, SKU, description, price and stock, adds it to the cart and checks the cart total, the variant attribute rows and the line price.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the parent SKU; check the PLP card name, SKU and retail price (testIds hdgProductName666, divProductSKUContainer666, spnRetailPrice666).",
+      "Open Quick View and click the imgMedium swatch (Bulb Size Medium); wait for the variant name.",
+      "Check the Quick View name, SKU, description, sales price (divSalesPrice544) and stock status of the variant.",
+      "Add to cart from Quick View, go to the cart from the notification and check the breadcrumb 'Home / Cart'.",
+      "Check the cart total heading, the variant attribute rows (Bulb Size : Medium, Color : White, Technology : LED) and the line unit price (paraItemRowCost544); afterEach empties the cart."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "The guest cart gets one unit of the variant; afterEach removes all cart items."
+    ],
+    "assertions": [
+      "PLP card shows the parent name, SKU and retail price '$50.00 / Piece'.",
+      "Quick View shows the variant name, 'SKU:<variant SKU>', description, price '$24.99' and 'In Stock'.",
+      "Cart breadcrumb contains 'Home / Cart'; total heading 'YOUR TOTAL IS $24.99 For 1 Item'.",
+      "Cart line attributes contain 'Bulb Size : Medium', 'Color : White', 'Technology : LED'; line price '$24.99 / Piece'."
+    ],
+    "evidence": [
+      "Title 'verify quick view of configurable product with variant2' and step labels 1) to 5) match the flow; no linked cases.",
+      "Profile: B-100000 FOUND as active ConfigurableProduct, PRODUCTION, storefrontProductIndex 1, requiredAddOnCount 0 (parent stock NOT_FOUND: stock is on the variants). tda rows: B-100000 is PimProductId 666; variant z-2520007 is PimProductId 544, SimpleProduct 'Sengled BR30 Add-on Smart LED Bulb (2-Pack) - White Only', active.",
+      "Need product PRODUCT_CONFIGURABLE_WITH_VARIANTS (minVariants 2: the test reaches a second variant; quantityUsed 1: one unit added; variantAttributes BulbSize,Color,Technology as in the approved checkout/cart entries for this product family), preferred source sku. sku -> parentProductSku, parentProductName -> name, variant2ProductName -> variant2Name; variant2SKU ('SKU:' + variant2Sku) and the attribute rows ('<label> : ' + variant2Attr1..3) are composed by the migrated spec from outputs (expected-output).",
+      "Outputs now cover: the parent productId (parentProductId: test ids hdgProductName666 / divProductSKUContainer666 / spnRetailPrice666, config), variant2ProductId (divSalesPrice544 / paraItemRowCost544), variant2Sku (divConfigurableProductAttributesz-2520007) and variant2ProductPrice -> variant2Price (sales, else retail). Built by the spec from it (expected-output): 'YOUR TOTAL IS <variant2Price> For 1 Item' and '<variant2Price> / Piece'.",
+      "Not covered: the parent card price '$50.00 / Piece' stays expected-output: the parent price is an output of PRODUCT_CONFIGURABLE_PDP_DETAILS only (parentRetailPrice; PRODUCT_CONFIGURABLE_WITH_VARIANTS has no room for it), and that key takes no product param, so a second need could not be tied to this need's parent; the ' / Piece' unit is not produced by any key either. The variant description (variant2ProductDescription) has no output in PRODUCT_CONFIGURABLE_WITH_VARIANTS and stays expected-output.",
+      "DOUBT: the spec reaches variant 2 by clicking only imgMedium from the Quick View default (Small+White+LED, per spec comments); the key's variant2 is the second qualifying variant by SKU, which need not differ from the default by Bulb Size only. The migrated spec should click all three swatches of variant2 (variant2Attr1..3) instead of the hardcoded imgMedium.",
+      "Data in code: imgMedium (selectQVOption), product ids 666 and 544 and the variant SKU z-2520007 are in getByTestId literals; the attribute rows are literals.",
+      "migrate: data values are in the spec code (testIds with product ids/SKU, imgMedium) and prices, description and cart total depend on the data (swap rules 3 and 4 fail).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:3",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:49",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:4",
+      "kind": "json",
+      "keyPath": "parentProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "imgMedium",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:64",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sengled BR30 Add-on Smart LED Bulb (2-Pack) - White Only",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:6",
+      "kind": "json",
+      "keyPath": "variant2ProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Name"
+    },
+    {
+      "value": "SKU:z-2520007",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:5",
+      "kind": "json",
+      "keyPath": "variant2SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Add smart, directed lighting to your kitchen or dining table with this Sengled bulb two-pack. Control these bulbs directly via an app or smart home hub, or add an Element hub to control up to 64 bulbs together. The dimmable BR30 devices in this Sengled bulb two-pack fit most standard floodlight fixtures.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:7",
+      "kind": "json",
+      "keyPath": "variant2ProductDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "divSalesPrice544",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$24.99",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:8",
+      "kind": "json",
+      "keyPath": "variant2ProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Price"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:10",
+      "kind": "json",
+      "keyPath": "variant2Inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / Cart",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:96",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:110",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "YOUR TOTAL IS $24.99 For 1 Item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:11",
+      "kind": "json",
+      "keyPath": "hdgTotalPriceWithItems",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "divConfigurableProductAttributesz-2520007",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Bulb Size : Medium",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Color : White",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:116",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Technology : LED",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:117",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "paraItemRowCost544",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts:119",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$24.99 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:9",
+      "kind": "json",
+      "keyPath": "variant2ItemPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

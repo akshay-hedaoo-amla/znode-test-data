@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED",
+  "entity": "store_product_compare",
+  "type": "webstore_product_compare",
+  "constraints": {
+    "webstoreDomains": ">= 1",
+    "productCompareSwitches": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store that serves a webstore (as STORE_WEBSTORE_ACTIVE) with Enable Product Comparison on (an Enable_Product_Compare row in ZnodePortalFeatureMapper; the value column is unused). The 4-product limit is a webstore constant. Source: module guide store-features.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

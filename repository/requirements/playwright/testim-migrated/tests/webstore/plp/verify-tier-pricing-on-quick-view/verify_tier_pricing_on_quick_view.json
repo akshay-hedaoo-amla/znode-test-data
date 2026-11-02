@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-tier-pricing-on-quick-view.spec.ts > PLP - Verify Tier Pricing on Quick View > verify tier pricing on quick view",
+  "scenario": {
+    "summary": "Guest searches a simple product by SKU, opens Quick View, sets the tier quantity (10), adds it to the cart and checks the cart line unit price is the tier price for that quantity and the line total equals unit price x quantity.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the SKU and open Quick View on the first result.",
+      "Set the Quick View quantity to the tier quantity and add to cart; open the cart from the notification.",
+      "Check the first cart line unit price equals the tier price.",
+      "Read the line unit price, compute unit price x quantity and check the line total."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "The guest cart gets the product at the tier quantity (fresh guest context; nothing cleaned up explicitly)."
+    ],
+    "assertions": [
+      "Cart line unit price equals the tier price for the quantity ('$91.26').",
+      "Cart line total equals unit price x quantity (computed at run time from the page)."
+    ],
+    "evidence": [
+      "Title 'verify tier pricing on quick view' and step labels 1) to 4) match the flow; no linked cases.",
+      "Profile: z-1235101 FOUND as active SimpleProduct, PRODUCTION, inventory 4842, requiredAddOnCount 0, storefrontProductIndex 0 (not filtered by store). tda rows: PimProductId 175; ZnodePriceTier for z-1235101 holds tiers 10 -> 91.26, 15 -> 86.19, 25 -> 76.05 on price lists 4 and 8.",
+      "PRODUCT_SIMPLE_WITH_TIER_PRICE (pending) now covers the need: product {quantityUsed 10 (the quantity the test sets; the output tier is the highest one at or below it), store}, preferred z-1235101 (source 0; its storefrontProductIndex 0 may keep it from qualifying). sku -> product.sku, quantity -> product.tierQuantity (the spec types the tier quantity), price -> product.tierPrice (shown as currency).",
+      "The line total is computed at run time from the page (unit price x quantity); with the outputs it equals tierQuantity x tierPrice.",
+      "migrate: the asserted unit price is the tier price of the resolved product (swap rule 3).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITH_TIER_PRICE",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 10,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1235101",
+      "location": "testim-migrated/test-data/webstore/plp/verify-tier-pricing-on-quick-view.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "10",
+      "location": "testim-migrated/test-data/webstore/plp/verify-tier-pricing-on-quick-view.json:4",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "tierQuantity"
+    },
+    {
+      "value": "$91.26",
+      "location": "testim-migrated/test-data/webstore/plp/verify-tier-pricing-on-quick-view.json:3",
+      "kind": "json",
+      "keyPath": "price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "tierPrice"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}
