@@ -6,13 +6,14 @@
   "constraints": {
     "type": "simple",
     "status": "= false",
-    "publishState": "production"
+    "publishState": "production",
+    "inventory": ">= 1"
   },
   "scope": {
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Simple product with IsActive false and PIM publish state Production, in a category of the store's catalog (product_category scope; inactive products have no published storefront record). KB: Product Types; Publishing products.",
+  "description": "Simple product with IsActive false, PIM publish state Production and stock in the store (so the storefront reports it invalid, not out of stock), in a category of the store's catalog. KB: Product Types; Publishing products.",
   "declaredParams": {
     "store": {
       "type": "string",
@@ -21,5 +22,5 @@
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }
