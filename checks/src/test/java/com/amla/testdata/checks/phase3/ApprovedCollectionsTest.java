@@ -1,5 +1,6 @@
 package com.amla.testdata.checks.phase3;
 
+import com.amla.testdata.collections.CollectionSteps;
 import com.amla.testdata.collections.SpecFingerprints;
 import com.amla.testdata.queries.RepositoryData;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,8 +40,12 @@ class ApprovedCollectionsTest {
 				problems.add(key + ": never verified (run collection-verify)");
 			} else if (!c.path("specFingerprint").asText().equals(current.apply(c))) {
 				problems.add(key + ": built for another spec, or the spec file is missing (stale)");
-			} else if (data.payloadTemplate(key) == null) {
-				problems.add(key + ": payload template missing");
+			} else {
+				// Every template file the collection reads (each step's payload, undo and teardown bodies) must exist.
+				List<String> missing = CollectionSteps.templateFiles(c).stream().filter(f -> data.template(key, f) == null).toList();
+				if (!missing.isEmpty()) {
+					problems.add(key + ": payload template missing " + missing);
+				}
 			}
 		}
 		assertTrue(problems.isEmpty(), "consumable pilot keys without an approved, verified, current collection:\n" + String.join("\n", problems));
