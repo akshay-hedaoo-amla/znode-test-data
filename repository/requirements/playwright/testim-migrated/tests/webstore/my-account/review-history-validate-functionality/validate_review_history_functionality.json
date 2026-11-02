@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/review-history-validate-functionality.spec.ts > Webstore - My Account - Review History > validate review history functionality",
+  "scenario": {
+    "summary": "The signed-in registered user searches a product, opens its PDP and checks the name, writes and submits a review (best-effort when already reviewed), then checks Review History shows the review text and the product link and opens the product from it.",
+    "steps": [
+      "Search sku, open the PDP, check the product heading equals productName",
+      "Write a review (reviewText, state) and submit; toast checked best-effort (re-run: already reviewed)",
+      "Open Review History; check heading, review text and product link",
+      "Open the reviewed product from history; check the product heading"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "review"
+    ],
+    "stateChanges": [
+      "A review of the product is submitted by the signed-in account (not again when it already reviewed it)"
+    ],
+    "assertions": [
+      "PDP heading equals productName (twice)",
+      "Review History heading",
+      "Review text visible",
+      "Product link visible"
+    ],
+    "evidence": [
+      "Title 'validate review history functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "sku z-4567890 and productName: profile FOUND active published SimpleProduct (inventory, storefront index 1). Need product PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (never added to cart), preferred source sku; sku -> product.sku, productName -> product.name",
+      "DOUBT: the test relies on the review existing after submit; if a resolved product was reviewed earlier by the account with another text, the Review History text check fails. No key requires a product not yet reviewed by the account",
+      "swap: data only through loadData (sku -> product.sku, productName -> product.name), no derived assertions (the product name is itself swapped; messages and heading are fixed UI text), no data value in the spec code, no other data file. The user need is only checked at pre-warm (the account is not declared or leased); to declare and lease it, use strategy migrate and add the useExisting line above"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Auto_DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:3",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "Test Review 1",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "reviewText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Test",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "state",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Review submitted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "successMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review History",
+      "location": "testim-migrated/test-data/webstore/my-account/review-history-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "reviewHistoryHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

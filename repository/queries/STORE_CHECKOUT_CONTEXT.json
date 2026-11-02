@@ -1,0 +1,20 @@
+{
+  "schemaVersion" : 1,
+  "key" : "STORE_CHECKOUT_CONTEXT",
+  "sql" : "SELECT TOP 10 c.CatalogCode AS catalogCode, l.Code AS localeCode, s.ShippingId AS shippingId, s.ShippingCode AS shippingCode FROM dbo.ZnodePortal po INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PortalId = po.PortalId INNER JOIN dbo.ZnodePublishCatalog pub ON pub.PublishCatalogId = pc.PublishCatalogId INNER JOIN dbo.ZnodePimCatalog c ON c.PimCatalogId = pub.PimCatalogId INNER JOIN dbo.ZnodePortalLocale pl ON pl.PortalId = po.PortalId INNER JOIN dbo.ZnodeLocale l ON l.LocaleId = pl.LocaleId INNER JOIN dbo.ZnodePortalShipping psh ON psh.PortalId = po.PortalId INNER JOIN dbo.ZnodeShipping s ON s.ShippingId = psh.ShippingId INNER JOIN dbo.ZnodePublishState pst ON pst.PublishStateId = psh.PublishStateId WHERE po.StoreCode = @store AND pl.IsDefault = @isTrue AND l.IsActive = @isTrue AND s.ShippingCode = @shippingCode AND s.IsActive = @isTrue AND pst.PublishStateCode = @publishState ORDER BY c.CatalogCode, s.ShippingId",
+  "params" : [ "store", "shippingCode", "isTrue", "publishState" ],
+  "constants" : {
+    "isTrue" : "true",
+    "publishState" : "PRODUCTION"
+  },
+  "outputs" : [ "catalogCode", "localeCode", "shippingId", "shippingCode" ],
+  "identity" : "catalogCode",
+  "schemaFingerprint" : "sha256:3a699d73ebc7f9663704b5e3ff877c6a5b74e1c63ef2bffbff2880eda5e4a026",
+  "vocabularyFingerprint" : "sha256:4060f59294108e4cfa6806d4fb47b92185843e789c7c87ed30de7ea47da26c57",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T00:00:00Z",
+  "lastValidated" : "2026-11-01T16:51:02Z",
+  "verifiedHash" : "sha256:5b5e52e0ae5955ee11cab1baf3c0d044980d815d98008aef4306496bbdb69a7c"
+}

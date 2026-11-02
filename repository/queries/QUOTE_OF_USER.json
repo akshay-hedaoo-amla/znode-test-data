@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "QUOTE_OF_USER",
+  "sql" : "SELECT TOP 10 o.ClassNumber AS quoteNumber, s.OrderStateName AS status, o.OrderDate AS quoteDate, ad.ExpirationDate AS expirationDate, o.Total AS total FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId LEFT JOIN dbo.ZnodeOmsOrderState s ON s.OmsOrderStateId = o.OmsOrderStateId LEFT JOIN dbo.ZnodeOrderAdditionalDetail ad ON ad.OrderId = o.OrderId WHERE oc.ClassCode = @quoteClass AND po.StoreCode = @store AND (@owner IS NULL OR o.UserId = @owner) AND (@status IS NULL OR s.StatusCode = UPPER(@status)) AND (@preferred IS NULL OR o.ClassNumber = @preferred) ORDER BY o.ClassNumber",
+  "params" : [ "quoteClass", "store", "owner", "status", "preferred" ],
+  "constants" : {
+    "quoteClass" : "Quotes"
+  },
+  "outputs" : [ "quoteNumber", "status", "quoteDate", "expirationDate", "total" ],
+  "identity" : "quoteNumber",
+  "schemaFingerprint" : "sha256:70ad8db2bbcb92a0977acd63979dd4adb63d783f1f2c70f639735f1856e30a03",
+  "vocabularyFingerprint" : "sha256:1ee199eefa623c50a2b22fd58815e9b840213ccdba3d81b21dc62b5e190f46b6",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T15:00:00Z",
+  "lastValidated" : "2026-11-01T17:12:16Z",
+  "verifiedHash" : "sha256:01c39e9a0a06b483e5acc3490c1e0e384e5fa23dec6b1d96ec5b5567f1e1f904"
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_OBSOLETE",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND p.IsObsolete = @obsolete AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @obsolete AND pe.ProductIndex >= @minProductIndex) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params" : [ "store", "productType", "isActive", "publishState", "obsolete", "minProductIndex", "configurableType", "space", "zero", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "obsolete" : "true",
+    "publishState" : "PRODUCTION",
+    "minProductIndex" : "1",
+    "zero" : "0",
+    "space" : " ",
+    "configurableType" : "ConfigurableProduct"
+  },
+  "outputs" : [ "sku", "name", "productId" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:8fb7b5daceadf80715b5121969dc53ad5937da9937d92839683ec58ea4dc2e62",
+  "vocabularyFingerprint" : "sha256:88640d8a0bfed34d5cee9c049192932bbcf56f362d2884ce02460c159435302b",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T16:30:00Z",
+  "lastValidated" : "2026-11-01T17:15:13Z",
+  "verifiedHash" : "sha256:6741c623da58eb7d600906e139b40b7dfb89f8d49225ab0e24d2cdc79f1ae438"
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_checkout_context",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePublishCatalog",
+    "dbo.ZnodePimCatalog",
+    "dbo.ZnodePortalLocale",
+    "dbo.ZnodeLocale",
+    "dbo.ZnodePortalShipping",
+    "dbo.ZnodeShipping",
+    "dbo.ZnodePublishState"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalCatalog.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalCatalog.PublishCatalogId", "to": "dbo.ZnodePublishCatalog.PublishCatalogId", "kind": "inner" },
+    { "from": "dbo.ZnodePublishCatalog.PimCatalogId", "to": "dbo.ZnodePimCatalog.PimCatalogId", "kind": "inner" },
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalLocale.PortalId", "kind": "inner" },
+    { "from": "dbo.ZnodePortalLocale.LocaleId", "to": "dbo.ZnodeLocale.LocaleId", "kind": "inner" },
+    { "from": "dbo.ZnodePortal.PortalId", "to": "dbo.ZnodePortalShipping.PortalId", "kind": "left" },
+    { "from": "dbo.ZnodePortalShipping.ShippingId", "to": "dbo.ZnodeShipping.ShippingId", "kind": "left" },
+    { "from": "dbo.ZnodePortalShipping.PublishStateId", "to": "dbo.ZnodePublishState.PublishStateId", "kind": "left" }
+  ],
+  "properties": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "portalId": "dbo.ZnodePortal.PortalId",
+    "catalogCode": "dbo.ZnodePimCatalog.CatalogCode",
+    "catalogActive": "dbo.ZnodePimCatalog.IsActive",
+    "localeCode": "dbo.ZnodeLocale.Code",
+    "localeActive": "dbo.ZnodeLocale.IsActive",
+    "localeIsStoreDefault": "dbo.ZnodePortalLocale.IsDefault",
+    "shippingId": "dbo.ZnodeShipping.ShippingId",
+    "shippingCode": "dbo.ZnodeShipping.ShippingCode",
+    "shippingActive": "dbo.ZnodeShipping.IsActive",
+    "shippingPublishState": "dbo.ZnodePublishState.PublishStateCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:3a699d73ebc7f9663704b5e3ff877c6a5b74e1c63ef2bffbff2880eda5e4a026",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

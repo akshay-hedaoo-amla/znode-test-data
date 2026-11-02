@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ORDER_COUNT_OF_USER",
+  "sql" : "SELECT TOP 10 COUNT(DISTINCT CASE WHEN (@orderStatus IS NULL OR s.StatusCode = UPPER(@orderStatus)) THEN o.OrderId END) AS orderCount FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId LEFT JOIN dbo.ZnodeOmsOrderState s ON s.OmsOrderStateId = o.OmsOrderStateId WHERE oc.ClassCode = @orderClass AND po.StoreCode = @store AND (@owner IS NULL OR o.UserId = @owner) GROUP BY o.UserId, o.PortalId HAVING COUNT(DISTINCT o.OrderId) >= @minOrders AND (@maxOrders IS NULL OR COUNT(DISTINCT o.OrderId) <= @maxOrders) AND (@minOrdersInStatus IS NULL OR COUNT(DISTINCT CASE WHEN (@orderStatus IS NULL OR s.StatusCode = UPPER(@orderStatus)) THEN o.OrderId END) >= @minOrdersInStatus) ORDER BY MIN(o.ClassNumber)",
+  "params" : [ "orderStatus", "orderClass", "store", "owner", "minOrders", "maxOrders", "minOrdersInStatus" ],
+  "constants" : {
+    "orderClass" : "Orders"
+  },
+  "outputs" : [ "orderCount" ],
+  "identity" : "orderCount",
+  "schemaFingerprint" : "sha256:5f57c56d8f59d8085452f33e54bbe16633ba210737afdf896aaf59fd7383bac2",
+  "vocabularyFingerprint" : "sha256:dc05a806c81ef5e6fc6e64b727a459a5f53819600d96d1a6387881084b19dddc",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T15:00:00Z",
+  "lastValidated" : "2026-11-01T17:12:56Z",
+  "verifiedHash" : "sha256:381789313050ae38e2b9c83616aeccdfaae0600b502680d9b9d504da8b4386eb"
+}

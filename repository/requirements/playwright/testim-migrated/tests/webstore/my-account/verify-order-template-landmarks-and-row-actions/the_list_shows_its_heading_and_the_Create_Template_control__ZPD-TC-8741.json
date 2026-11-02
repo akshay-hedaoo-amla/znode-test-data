@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/verify-order-template-landmarks-and-row-actions.spec.ts > Webstore - My Account - Order Template > the list shows its heading and the Create Template control @ZPD-TC-8741",
+  "scenario": {
+    "summary": "The signed-in user opens Order Templates and checks the list heading and the Create Template control's text. No record is read.",
+    "steps": [
+      "Open Order Templates",
+      "Heading contains 'Order Templates'; Create Template button visible with its text"
+    ],
+    "entitiesTouched": [],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "List heading text",
+      "Create Template button visible with its text (case-insensitive)"
+    ],
+    "evidence": [
+      "Title 'the list shows its heading and the Create Template control @ZPD-TC-8741' matches the flow; data through loadData (spec line 55)",
+      "Coverage-gap spec ported from the Selenium order-template.spec.ts (not a Testim port); the scan attributes all nine case keys of the file header to every test: per title this test is ZPD-TC-8741 (and Z10-TC-8572 per the file comment)",
+      "Only fixed UI text: no data need. Runs in webstore-auth on the shared signed-in session; the account's records are not used, so no user need and nothing to migrate"
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-2635",
+    "Z10-TC-8570",
+    "Z10-TC-8572",
+    "Z10-TC-8573",
+    "Z10-TC-8610",
+    "Z10-TC-8640",
+    "ZPD-TC-8741",
+    "ZPD-TC-9178",
+    "ZPD-TC-9181"
+  ],
+  "sources": [
+    {
+      "value": "Order Templates",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:2",
+      "kind": "json",
+      "keyPath": "listHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Create Template",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:3",
+      "kind": "json",
+      "keyPath": "createTemplateButtonText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

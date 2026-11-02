@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.spec.ts > Webstore - My Account - Saved Carts > validate list page pagination, filter and sorting",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Saved Carts and checks the heading, the total number of saved carts, two-page pagination at the default page size, filtering by an existing cart name (exactly one row) and by an invalid name (no records), and sorting by name and by quantity (order plus the first row's name/quantity). Read only.",
+    "steps": [
+      "Signed in through the shared storageState (the spec's own sign-in step is commented out); open Saved Carts, check heading",
+      "Page size allItemsPageSize: rendered rows equal footer total; footer total equals expectedPaginationList",
+      "Page size defaultPageSize: page 1 prev disabled, next enabled; page 2 prev enabled, next disabled, footer 'of <total>'; back to page 1",
+      "Filter by savedCartWithAllTypeProduct: exactly one row with that name; clear",
+      "Filter by invalidSavedCartName: 'No records found.'; clear; footer visible",
+      "Sort by name asc/desc: A-Z / Z-A order, first row equals nameAscendingFirst / starts with nameDescendingFirst; recorded carts only warned",
+      "Sort by quantity asc/desc: order, first row quantity equals ascendingSavedCartQuantity / descendingSavedCartQuantity"
+    ],
+    "entitiesTouched": [
+      "user",
+      "saved_cart"
+    ],
+    "stateChanges": [
+      "None: the account's saved carts are only read"
+    ],
+    "assertions": [
+      "Saved Carts heading; rows equal footer total; total equals expectedPaginationList",
+      "Two pages at defaultPageSize (prev/next enabled state per page)",
+      "Exact-name filter gives one row; invalid filter gives 'No records found.'",
+      "Name and quantity sort order and first-row anchors"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**), signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts. That setup signs in with getMyAccountUser() (testim-migrated/src/data/credentials.ts) = loadEnvironment().myAccountUser, whose username is requireEnv('MY_ACCOUNT_USERNAME') (testim-migrated/src/config/env.ts:80; process.env, then .env.<env>, then .env). Source 0 records that credential (masked; kind properties = environment variable). On migration the test declares it before reading any owned record: await testData.useExisting('user', getMyAccountUser().username) - the same value the setup signed in with, so the declared account is the signed-in one. No spec data file holds it",
+      "LEASE NOTE: every webstore-auth spec shares this one account; declaring it leases the account per test (useExisting waits while another test holds it), so migrated my-account specs run one at a time on it (protects counts from parallel runtime carts, but lengthens the phase that must finish inside the storageState session's 1-hour token)",
+      "Title 'validate list page pagination, filter and sorting'; MAINTENANCE NOTE: seeded-data drift (expected 14, got 15) - the counts and anchors are properties of the account's saved-cart set (recorded as evidence only)",
+      "The data file also holds a username and password (read by the zod schema, used only by a commented-out sign-in step; not in the scan). The account actually used is the storageState one (source 0)",
+      "OWNERSHIP: the saved cart must belong to the signed-in (declared) account: need savedCart links owner to @user.userId (SAVED_CART_OF_USER_WITH_PRODUCTS: ZnodeOrder.UserId = @owner, class SavedCarts, store, at least one active non-add-on product, owner's saved-cart count >= minSavedCarts), so it resolves at test start when the test declares the account (testData.useExisting); strategy migrate",
+      "savedCartWithAllTypeProduct here is only filtered by name -> savedCart.name. The filter must return exactly one row: the name must not be contained in another cart name of the account (the key does not guarantee it: gap)",
+      "DATA SHAPE: two pages at defaultPageSize 8 with page 2's next disabled means the account owns 9..16 saved carts, all on one page at allItemsPageSize 64. minSavedCarts 9 expresses the lower bound; SAVED_CART_OF_USER_WITH_PRODUCTS has no upper bound (gap)",
+      "MISSING KEY (proposed SAVED_CART_LIST_OF_USER, entity saved_cart, read-only, aggregate over the account's saved carts on the store): params owner (@user.userId), store, minSavedCarts, maxSavedCarts; outputs savedCartCount, nameAscendingFirst, nameDescendingFirst, quantityAscendingFirst, quantityDescendingFirst (and a name unique among the account's carts). Would supply expectedPaginationList and the four sort anchors; until then they are expected-output. ascending/descendingSavedCartName are only warned on (expected-output)",
+      "Page sizes, the invalid filter text and the literal 0 are config",
+      "Not profiled: no profile observation exists for this test",
+      "Re-mapped to new keys (2026-11-01): savedCartList = SAVED_CART_LIST_OF_USER (owner @user.userId, minSavedCarts 9 and maxSavedCarts 16: exactly two pages at defaultPageSize 8, store) replaces need savedCart (SAVED_CART_OF_USER_WITH_PRODUCTS, minSavedCarts 9): one list record now supplies every value. expectedPaginationList -> savedCartCount, savedCartWithAllTypeProduct (the filter expects exactly one row) -> uniqueCartName, nameAscendingFirst/nameDescendingFirst -> firstNameAsc/firstNameDesc, ascending/descendingSavedCartQuantity -> firstQuantityAsc/firstQuantityDesc (output names checked against the pending query). ascending/descendingSavedCartName are only warned on and stay expected-output. Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "SAVED_CART_LIST_OF_USER",
+      "alias": "savedCartList",
+      "params": {
+        "owner": "@user.userId",
+        "minSavedCarts": 9,
+        "maxSavedCarts": 16,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "properties",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Saved Carts",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:4",
+      "kind": "json",
+      "keyPath": "savedCartsHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:7",
+      "kind": "json",
+      "keyPath": "allItemsPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "14",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:5",
+      "kind": "json",
+      "keyPath": "expectedPaginationList",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "savedCartCount"
+    },
+    {
+      "value": "8",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:6",
+      "kind": "json",
+      "keyPath": "defaultPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Testim All Product Type Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:8",
+      "kind": "json",
+      "keyPath": "savedCartWithAllTypeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "uniqueCartName"
+    },
+    {
+      "value": "!@#$%",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:9",
+      "kind": "json",
+      "keyPath": "invalidSavedCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:10",
+      "kind": "json",
+      "keyPath": "noRecordFound",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "All product save cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:15",
+      "kind": "json",
+      "keyPath": "nameAscendingFirst",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstNameAsc"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.spec.ts:162",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Testim AddOn Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:11",
+      "kind": "json",
+      "keyPath": "ascendingSavedCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim Tier Price Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:16",
+      "kind": "json",
+      "keyPath": "nameDescendingFirst",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstNameDesc"
+    },
+    {
+      "value": "Testim Save Cart 3",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:12",
+      "kind": "json",
+      "keyPath": "descendingSavedCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:13",
+      "kind": "json",
+      "keyPath": "ascendingSavedCartQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstQuantityAsc"
+    },
+    {
+      "value": "100",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.json:14",
+      "kind": "json",
+      "keyPath": "descendingSavedCartQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstQuantityDesc"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "key": "QUOTE_OF_USER",
+  "entity": "quote",
+  "type": "of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "statusCode": "{status}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Quote (order class Quotes, Q- number) of the declared account on the store, optionally in one status; the test reads its number, status, quote date, expiration date and total in Quote History. Read only. KB: Quotes; My Account Quote History.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the quote: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "status": {
+      "type": "string",
+      "optional": true,
+      "description": "Quote status code, normalised (ZnodeOmsOrderState.StatusCode): submitted, approved, canceled, expired or inreview. Left out: any status"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

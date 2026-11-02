@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/verify-order-template-landmarks-and-row-actions.spec.ts > Webstore - My Account - Order Template > each template row offers edit, move-to-cart and remove @ZPD-TC-9181 @Z10-TC-8610 @Z10-TC-8573",
+  "scenario": {
+    "summary": "The signed-in user opens Order Templates and checks that the first template row exposes edit, move-to-cart and remove controls keyed by its template id. The account must own at least one order template; nothing is changed.",
+    "steps": [
+      "Open Order Templates",
+      "At least one template row; read the first row's template id",
+      "Edit, Move To Cart and Remove icons visible for that id"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template"
+    ],
+    "stateChanges": [
+      "None: read-only"
+    ],
+    "assertions": [
+      "At least one template row",
+      "First row exposes a template id",
+      "Edit, move-to-cart and remove icons visible for it"
+    ],
+    "evidence": [
+      "Title 'each template row offers edit, move-to-cart and remove @ZPD-TC-9181 @Z10-TC-8610 @Z10-TC-8573' matches the flow",
+      "Coverage-gap spec ported from the Selenium order-template.spec.ts (not a Testim port); the scan attributes all nine case keys of the file header to every test: per title this test is ZPD-TC-9181 / Z10-TC-8610 / Z10-TC-8573",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP: the signed-in account must own at least one order template (spec: 'this account needs at least one saved order template'; verified 8 on atstage 2026-09-25). The test reads the id from the page, so no template value is in its data",
+      "MISSING KEY: proposed ORDER_TEMPLATE_OF_USER (entity order, ClassCode OrderTemplates; params owner (link @user.userId), store, minTemplates 1; output templateName/templateNumber). Need would be template {owner: @user.userId, minTemplates: 1, store}. Only the user need is recorded until the key exists",
+      "migrate: the account must be declared for the owner-linked need (nothing else in the spec changes)",
+      "Re-mapped to new keys (2026-11-01): template = ORDER_TEMPLATE_OF_USER (owner @user.userId, minTemplates 1, store): the account must own at least one template; the test reads the first row at run time, so no source value maps to it. Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_TEMPLATE_OF_USER",
+      "alias": "template",
+      "params": {
+        "owner": "@user.userId",
+        "minTemplates": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-2635",
+    "Z10-TC-8570",
+    "Z10-TC-8572",
+    "Z10-TC-8573",
+    "Z10-TC-8610",
+    "Z10-TC-8640",
+    "ZPD-TC-8741",
+    "ZPD-TC-9178",
+    "ZPD-TC-9181"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/verify-order-template-landmarks-and-row-actions.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

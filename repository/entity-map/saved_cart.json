@@ -10,21 +10,81 @@
     "dbo.AspNetUsers",
     "dbo.AspNetZnodeUser",
     "dbo.ZnodeOrderProduct",
-    "dbo.ZnodePimProduct"
+    "dbo.ZnodePimProduct",
+    "dbo.ZnodeOrderParentProductMapping",
+    "dbo.ZnodeOrderProductAttributeValue",
+    "dbo.ZnodeOrderProductPersonalisation"
   ],
   "aliases": {
-    "ownerCart": "dbo.ZnodeOrder"
+    "ownerCart": "dbo.ZnodeOrder",
+    "addonLine": "dbo.ZnodeOrderProduct"
   },
   "joins": [
-    { "from": "dbo.ZnodeOrder.ClassId", "to": "dbo.ZnodeCPOrderClass.CPOrderClassId", "kind": "inner" },
-    { "from": "dbo.ZnodeOrder.OrderId", "to": "dbo.ZnodeOrderAdditionalDetail.OrderId", "kind": "left" },
-    { "from": "dbo.ZnodeOrder.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" },
-    { "from": "dbo.ZnodeOrder.UserId", "to": "dbo.ZnodeUser.UserId", "kind": "inner" },
-    { "from": "dbo.ZnodeUser.AspNetUserId", "to": "dbo.AspNetUsers.Id", "kind": "left" },
-    { "from": "dbo.AspNetUsers.UserName", "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId", "kind": "left" },
-    { "from": "dbo.ZnodeOrder.OrderId", "to": "dbo.ZnodeOrderProduct.OrderId", "kind": "inner" },
-    { "from": "dbo.ZnodeOrderProduct.ZnodeProductId", "to": "dbo.ZnodePimProduct.PimProductId", "kind": "inner" },
-    { "from": "dbo.ZnodeOrder.UserId", "to": "ownerCart.UserId", "kind": "inner" }
+    {
+      "from": "dbo.ZnodeOrder.ClassId",
+      "to": "dbo.ZnodeCPOrderClass.CPOrderClassId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderAdditionalDetail.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "dbo.ZnodeUser.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderProduct.OrderId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrderProduct.ZnodeProductId",
+      "to": "dbo.ZnodePimProduct.PimProductId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "ownerCart.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrderProduct.OrderProductId",
+      "to": "dbo.ZnodeOrderParentProductMapping.OrderProductId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrderProduct.OrderProductId",
+      "to": "dbo.ZnodeOrderProductAttributeValue.OrderProductId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrderProduct.OrderProductId",
+      "to": "dbo.ZnodeOrderProductPersonalisation.MappingId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrderProduct.ProductChecksum",
+      "to": "addonLine.ProductChecksum",
+      "kind": "left"
+    }
   ],
   "properties": {
     "savedCartId": "dbo.ZnodeOrder.OrderId",
@@ -43,7 +103,24 @@
     "productStatus": "dbo.ZnodePimProduct.IsActive",
     "productType": "dbo.ZnodePimProduct.ProductType",
     "productCount": "COUNT(DISTINCT dbo.ZnodeOrderProduct.ZnodeProductId)",
-    "ownerSavedCartCount": "COUNT(DISTINCT ownerCart.OrderId)"
+    "ownerSavedCartCount": "COUNT(DISTINCT ownerCart.OrderId)",
+    "lineProductName": "dbo.ZnodeOrderProduct.ProductName",
+    "lineParentSku": "dbo.ZnodeOrderParentProductMapping.Sku",
+    "lineParentName": "dbo.ZnodeOrderParentProductMapping.ProductName",
+    "lineParentOrderedType": "dbo.ZnodeOrderParentProductMapping.ProductType",
+    "lineParentQuantity": "dbo.ZnodeOrderParentProductMapping.Quantity",
+    "lineAttributeCode": "dbo.ZnodeOrderProductAttributeValue.AttributeCode",
+    "lineAttributeName": "dbo.ZnodeOrderProductAttributeValue.AttributeName",
+    "lineAttributeValue": "dbo.ZnodeOrderProductAttributeValue.AttributeValue",
+    "lineAttributeIsConfigurable": "dbo.ZnodeOrderProductAttributeValue.IsConfigurable",
+    "linePersonalizeCode": "dbo.ZnodeOrderProductPersonalisation.PersonalizeCode",
+    "lineAddOnGroupName": "dbo.ZnodeOrderProduct.AddOnGroupName",
+    "savedCartCount": "COUNT(DISTINCT dbo.ZnodeOrder.OrderId)",
+    "parentProductTypeCount": "COUNT(DISTINCT dbo.ZnodeOrderParentProductMapping.ProductType)",
+    "bundleChildCount": "COUNT(DISTINCT dbo.ZnodeOrderParentProductMapping.OrderProductId)",
+    "variantAttributeCount": "COUNT(DISTINCT dbo.ZnodeOrderProductAttributeValue.AttributeCode)",
+    "personalizationCount": "COUNT(DISTINCT dbo.ZnodeOrderProductPersonalisation.PersonalizeCode)",
+    "lineAddOnCount": "COUNT(DISTINCT addonLine.AddOnGroupName)"
   },
   "scope": {
     "store": "dbo.ZnodePortal.StoreCode"
@@ -77,11 +154,24 @@
     "dbo.ZnodeOrderAdditionalDetail.UserName",
     "dbo.ZnodeOrderAdditionalDetail.CreatedByEmailId",
     "dbo.ZnodeOrderProduct.Customization",
-    "dbo.ZnodeOrderProduct.ParentDetail"
+    "dbo.ZnodeOrderProduct.ParentDetail",
+    "dbo.ZnodeOrderProductPersonalisation.PersonalizeValue",
+    "dbo.ZnodeOrderProductPersonalisation.DesignId",
+    "dbo.ZnodeOrderProductPersonalisation.ThumbnailURL",
+    "dbo.ZnodeOrderParentProductMapping.Custom1",
+    "dbo.ZnodeOrderParentProductMapping.Custom2",
+    "dbo.ZnodeOrderParentProductMapping.Custom3",
+    "dbo.ZnodeOrderParentProductMapping.Custom4",
+    "dbo.ZnodeOrderParentProductMapping.Custom5",
+    "dbo.ZnodeOrderProduct.Custom1",
+    "dbo.ZnodeOrderProduct.Custom2",
+    "dbo.ZnodeOrderProduct.Custom3",
+    "dbo.ZnodeOrderProduct.Custom4",
+    "dbo.ZnodeOrderProduct.Custom5"
   ],
-  "schemaFingerprint": "sha256:db9854e74b80901d995f0e3caf62fe6b4968466f790e41e53b3ec70f91003124",
+  "schemaFingerprint": "sha256:ddfb5d6b9765c6d4a825a828e10826394c445c148916ed6dfd5b2a39e3d79245",
   "scannedAt": "2026-10-29T00:00:00Z",
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
 }

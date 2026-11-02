@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts > Webstore - My Account - New Account journey > validate new account functionality",
+  "scenario": {
+    "summary": "Journey of the signed-in registered user through My Account: reviews a product, views the first quote, checks Review History, adds/removes wishlist items from search results and a PDP, edits the profile, creates and deletes an address, edits and moves one of the account's saved carts to the cart, saves and deletes a new saved cart, filters and sorts saved carts, logs out.",
+    "steps": [
+      "Search sku, open PDP, check product name, submit a review (toast best-effort)",
+      "Quote History: open the first quote (must exist), check its number",
+      "Review History: heading 'Review History', product link visible",
+      "Wishlist: clear, check empty; add wishlistSku from search results, check it is listed, remove, check empty",
+      "Add sku from its PDP to the wishlist, check listed, remove",
+      "Edit Profile: set first/last name and phone, check the updated toast",
+      "Address Book: create an address (prefix + timestamp), check toast; delete it, check toast",
+      "Saved Carts: open editSavedCartId's edit page (heading), back; Move To Cart (toast, cart heading); save the cart as a new runtime saved cart (toast); find it by name, delete it (toast); Tools > Delete with nothing selected (validation toast)",
+      "Saved Carts: filter by filterCartName (one row, name matches); large page size; sort name asc/desc and quantity asc/desc checking the first row",
+      "Empty the cart, log out, check the sign-in heading; afterEach clears the wishlist and deletes runtime saved carts"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "review",
+      "quote",
+      "wishlist",
+      "address",
+      "saved_cart",
+      "cart"
+    ],
+    "stateChanges": [
+      "A product review is submitted on sku by the signed-in account (not re-submitted when it already reviewed it)",
+      "Wishlist items added and removed; afterEach clears the wishlist",
+      "Profile first/last name and phone overwritten with the test's values",
+      "An address is created and deleted",
+      "Move To Cart copies the saved cart into the cart (the saved cart stays); a runtime saved cart is created and deleted; the cart is emptied",
+      "The session is logged out at the end"
+    ],
+    "assertions": [
+      "PDP heading equals the product name",
+      "First quote's number shown on its details",
+      "Review History heading and product link",
+      "Wishlist empty / has item / empty again",
+      "Profile, address, saved-cart toasts",
+      "Edit Saved Cart heading",
+      "Cart heading after Move To Cart",
+      "Filter by filterCartName gives one row with that name",
+      "First row after name and quantity sorts equals the recorded anchors",
+      "Sign-in heading after logout"
+    ],
+    "evidence": [
+      "Title 'validate new account functionality' and the step labels match the flow (a journey, not account creation: it runs on the shared signed-in account)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "sku z-4567890 and productName: profile FOUND active published SimpleProduct with inventory and storefront index 1. Need product PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (reviewed and wishlisted, never added to cart), preferred source sku; sku -> product.sku, productName -> product.name",
+      "wishlistSku z-26597945: profile FOUND active SimpleProduct (inventory 99, storefront index 1). Need wishlistProduct PRODUCT_SIMPLE_IN_STOCK quantityUsed 1, preferred source wishlistSku; wishlistSku -> wishlistProduct.sku",
+      "OWNERSHIP: editSavedCartId SC-17092025-0060 is a saved cart of the signed-in account (tda rows: ZnodeOrder ClassId 4, UserId 16405, PortalId 7). Need savedCart links owner to @user.userId (SAVED_CART_OF_USER_WITH_PRODUCTS: o.UserId = @owner, productStatus active for Move To Cart), so it resolves when the test declares the account; strategy migrate. editSavedCartId -> savedCart.savedCartNumber",
+      "filterCartName -> savedCart.name: the filter step only needs one existing saved cart of the account by name, so it reuses the resolved saved cart (its name must be unique on the account for the one-row check). minSavedCarts 2: the sort anchors come from at least two different saved carts",
+      "MISSING KEY: the Quote History step needs the signed-in account to own at least one quote (expect 'a quote exists'); it reads the first row at run time, so no value is recorded. Proposed QUOTE_OF_USER (owner @user.userId, store)",
+      "MISSING KEY: savedCartAscName/DescName and savedCartAscQty/DescQty are the first rows of the account's whole saved-cart list sorted by name and quantity, so they depend on the data; kept as expected-output. Proposed SAVED_CARTS_OF_USER_SORT_ANCHORS, or change the spec to assert the columns are sorted",
+      "DOUBT: SAVED_CART_OF_USER_WITH_PRODUCTS constrains productStatus active, not inventory or storefront visibility, which Move To Cart needs",
+      "DOUBT: the review is skipped when the account already reviewed the product (re-run); no key requires a product not yet reviewed by the account. The test also logs out of the shared storageState session at the end",
+      "Spec carries a MAINTENANCE NOTE (last run 2026-09-18 failed waiting for the cart heading, not triaged): recorded as evidence only",
+      "Schema fields wishlistProductName, emptyCartMessage and savedCartsHeading are not in the scan (not used by the test)",
+      "migrate: the saved cart need links to the declared account; the sort anchors depend on the data",
+      "Re-mapped to new keys (2026-11-01): quote = QUOTE_OF_USER (owner @user.userId, store, any status): the account must own a quote; the test reads the first row, so no source maps to it. savedCartList = SAVED_CART_LIST_OF_USER (owner @user.userId, minSavedCarts 2, maxSavedCarts 64 = LARGE_PAGE_SIZE the sorts run on, store; replaces the proposed SAVED_CARTS_OF_USER_SORT_ANCHORS): savedCartAscName/DescName -> firstNameAsc/firstNameDesc, savedCartAscQty/DescQty -> firstQuantityAsc/firstQuantityDesc (checked against the pending query). filterCartName stays savedCart.name. Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "wishlistProduct",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    },
+    {
+      "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+      "alias": "savedCart",
+      "params": {
+        "owner": "@user.userId",
+        "minSavedCarts": 2,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "QUOTE_OF_USER",
+      "alias": "quote",
+      "params": {
+        "owner": "@user.userId",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SAVED_CART_LIST_OF_USER",
+      "alias": "savedCartList",
+      "params": {
+        "owner": "@user.userId",
+        "minSavedCarts": 2,
+        "maxSavedCarts": 64,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:17",
+      "kind": "json",
+      "keyPath": "addressDisplayPrefix",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Delete Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:30",
+      "kind": "json",
+      "keyPath": "runtimeSavedCartPrefix",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Auto_DeWalt Led Work Light",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:3",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "Test Review 1",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "reviewText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Test",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "state",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Review submitted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "reviewSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review History",
+      "location": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts:105",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "No records found.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "noRecordFoundMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-26597945",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "wishlistSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "wishlistProduct",
+      "output": "sku"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "wishlistAddedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "wishlistRemovedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:13",
+      "kind": "json",
+      "keyPath": "firstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "First Name",
+      "location": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts:135",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:14",
+      "kind": "json",
+      "keyPath": "lastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Last Name",
+      "location": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts:136",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:15",
+      "kind": "json",
+      "keyPath": "phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Phone Number",
+      "location": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts:137",
+      "kind": "literal",
+      "keyPath": "setField",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Profile updated successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:16",
+      "kind": "json",
+      "keyPath": "profileSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:18",
+      "kind": "json",
+      "keyPath": "streetAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:19",
+      "kind": "json",
+      "keyPath": "addressFirstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:20",
+      "kind": "json",
+      "keyPath": "addressLastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:21",
+      "kind": "json",
+      "keyPath": "addressPhone",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:22",
+      "kind": "json",
+      "keyPath": "cityName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:23",
+      "kind": "json",
+      "keyPath": "postalCode",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:24",
+      "kind": "json",
+      "keyPath": "addressSuccessMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:25",
+      "kind": "json",
+      "keyPath": "addressDeleteMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "SC-17092025-0060",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:26",
+      "kind": "json",
+      "keyPath": "editSavedCartId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "savedCartNumber"
+    },
+    {
+      "value": "Edit Saved Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:27",
+      "kind": "json",
+      "keyPath": "editSavedCartsHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Saved Cart moved back to the cart successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:28",
+      "kind": "json",
+      "keyPath": "savedCartBackSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:29",
+      "kind": "json",
+      "keyPath": "cartHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart saved successfully.",
+      "location": "testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts:172",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Record(s) deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:32",
+      "kind": "json",
+      "keyPath": "recordsDeletedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please select at least one record to delete.",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:33",
+      "kind": "json",
+      "keyPath": "noRecordSelectedMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim All Product Type Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:34",
+      "kind": "json",
+      "keyPath": "filterCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "name"
+    },
+    {
+      "value": "All product save cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:35",
+      "kind": "json",
+      "keyPath": "savedCartAscName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstNameAsc"
+    },
+    {
+      "value": "Testim Tier Price Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:36",
+      "kind": "json",
+      "keyPath": "savedCartDescName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstNameDesc"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:37",
+      "kind": "json",
+      "keyPath": "savedCartAscQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstQuantityAsc"
+    },
+    {
+      "value": "100",
+      "location": "testim-migrated/test-data/webstore/my-account/new-account-validate-functionality.json:38",
+      "kind": "json",
+      "keyPath": "savedCartDescQty",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCartList",
+      "output": "firstQuantityDesc"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

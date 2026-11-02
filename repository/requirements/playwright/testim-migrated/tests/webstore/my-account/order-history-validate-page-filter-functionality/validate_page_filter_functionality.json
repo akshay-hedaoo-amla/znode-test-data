@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/order-history-validate-page-filter-functionality.spec.ts > Webstore - My Account - Order History > validate page filter functionality",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Order History, checks the page-size options, shows all orders on one page and checks the total, then filters by each of SUBMITTED, CANCELED, SHIPPED and FAILED and checks the number of rows (all with that status) against recorded counts.",
+    "steps": [
+      "Open Order History; Order Number header visible",
+      "Page-size options are 8/12/16/32/64",
+      "Page size 64: rendered rows equal the footer total; footer total equals totalOrder",
+      "Filter SUBMITTED, CANCELED, SHIPPED, FAILED in turn: every row has that status and the row count equals the recorded count"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order"
+    ],
+    "stateChanges": [
+      "None: the account's orders are only read"
+    ],
+    "assertions": [
+      "Page-size options '812163264' / ['8','12','16','32','64']",
+      "All orders render on one 64-row page and the total equals totalOrder (25)",
+      "Per-status counts: SUBMITTED 20, CANCELED 3, SHIPPED 1, FAILED 1"
+    ],
+    "evidence": [
+      "Title 'validate page filter functionality' matches the flow; no linked AIO cases; all JSON data through loadData (spec line 21)",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**) on the shared storageState written by testim-migrated/tests/auth.setup.ts, which signs in with getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, process.env / .env.<env>). The migrated test declares that same account at test start: await testData.useExisting('user', getMyAccountUser().username). The credential source points at that env var (no value stored). Caveat: all 20 webstore-auth specs share this one account; declaring it leases it per test, so tests that declare it run one at a time (leaseWaitMinutes 10) - reviewer to confirm that serialisation is wanted (it also prevents the template/order count collisions noted here)",
+      "OWNERSHIP + COUNTS: totalOrder and the four status counts are counts over the signed-in account's whole Order History (many rows), so they depend on the declared account. Data shape: the account owns between 1 and 64 orders (all on one 64-row page) with at least one order in each of SUBMITTED, CANCELED, SHIPPED and FAILED",
+      "MISSING KEY: no vocabulary key counts a user's orders. Proposed ORDER_COUNT_OF_USER (entity order, class Orders): params owner (integer, link @user.userId, optional for verification), store, orderStatus (string, optional: count only that status), minOrders (integer), maxOrders (integer, optional); output orderCount. Needs would be: allOrders (minOrders 1, maxOrders 64) -> totalOrder; submittedOrders/canceledOrders/shippedOrders/failedOrders (orderStatus X, minOrders 1) -> the four counts. Until it exists the counts are recorded as expected-output only because a data source needs a declared alias; the status names stay config (they are the filter values)",
+      "The user need is declared now so the owner link is ready when the key exists; strategy migrate (counts depend on the account)",
+      "Collision risk: other specs on the same account create orders (checkout, reorder); the counts drift unless the account is leased or the counts are resolved per run",
+      "Re-mapped to new keys (2026-11-01): five ORDER_COUNT_OF_USER needs, all owner @user.userId, store, maxOrders 64 (largePageSize: all orders and each status filter fit one page): allOrders (minOrders 1, no status) -> totalOrder; submittedOrders/canceledOrders/shippedOrders/failedOrders (orderStatus submitted/canceled/shipped/failed, minOrdersInStatus 1) -> submittedOrder/canceledOrder/shippedOrder/failedOrder, each output orderCount. Status names stay config (filter values); page-size options stay expected-output (fixed UI). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "allOrders",
+      "params": {
+        "owner": "@user.userId",
+        "minOrders": 1,
+        "maxOrders": 64,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "submittedOrders",
+      "params": {
+        "owner": "@user.userId",
+        "orderStatus": "submitted",
+        "minOrders": 1,
+        "maxOrders": 64,
+        "minOrdersInStatus": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "canceledOrders",
+      "params": {
+        "owner": "@user.userId",
+        "orderStatus": "canceled",
+        "minOrders": 1,
+        "maxOrders": 64,
+        "minOrdersInStatus": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "shippedOrders",
+      "params": {
+        "owner": "@user.userId",
+        "orderStatus": "shipped",
+        "minOrders": 1,
+        "maxOrders": 64,
+        "minOrdersInStatus": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "failedOrders",
+      "params": {
+        "owner": "@user.userId",
+        "orderStatus": "failed",
+        "minOrders": 1,
+        "maxOrders": 64,
+        "minOrdersInStatus": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "constant",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "812163264",
+      "location": "testim-migrated/tests/webstore/my-account/order-history-validate-page-filter-functionality.spec.ts:57",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "812163264",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:3",
+      "kind": "json",
+      "keyPath": "pageSizeOptions",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "64",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:4",
+      "kind": "json",
+      "keyPath": "largePageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "25",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:2",
+      "kind": "json",
+      "keyPath": "totalOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "allOrders",
+      "output": "orderCount"
+    },
+    {
+      "value": "SUBMITTED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:5",
+      "kind": "json",
+      "keyPath": "orderStatus1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "20",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:6",
+      "kind": "json",
+      "keyPath": "submittedOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "submittedOrders",
+      "output": "orderCount"
+    },
+    {
+      "value": "CANCELED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:7",
+      "kind": "json",
+      "keyPath": "orderStatus2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:8",
+      "kind": "json",
+      "keyPath": "canceledOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "canceledOrders",
+      "output": "orderCount"
+    },
+    {
+      "value": "SHIPPED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:9",
+      "kind": "json",
+      "keyPath": "orderStatus3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:10",
+      "kind": "json",
+      "keyPath": "shippedOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "shippedOrders",
+      "output": "orderCount"
+    },
+    {
+      "value": "FAILED",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:11",
+      "kind": "json",
+      "keyPath": "orderStatus4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-history-validate-page-filter-functionality.json:12",
+      "kind": "json",
+      "keyPath": "failedOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "failedOrders",
+      "output": "orderCount"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

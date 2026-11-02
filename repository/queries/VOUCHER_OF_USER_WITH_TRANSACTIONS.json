@@ -1,0 +1,16 @@
+{
+  "schemaVersion" : 1,
+  "key" : "VOUCHER_OF_USER_WITH_TRANSACTIONS",
+  "sql" : "SELECT TOP 10 gc.CardNumber AS voucherNumber, gc.Name AS name, gc.Amount AS amount, gc.RemainingAmount AS remainingAmount, gc.StartDate AS startDate, gc.ExpirationDate AS expirationDate, tc.cnt AS transactionCount, ft.ClassNumber AS firstTransactionOrderNumber FROM dbo.ZnodeGiftCard gc INNER JOIN dbo.ZnodePortal po ON po.PortalId = gc.PortalId CROSS APPLY (SELECT COUNT(DISTINCT h.GiftCardHistoryId) AS cnt FROM dbo.ZnodeGiftCardHistory h INNER JOIN dbo.ZnodeOrder ho ON ho.OrderId = h.OrderId WHERE h.GiftCardId = gc.GiftCardId) tc CROSS APPLY (SELECT TOP 1 fo.ClassNumber FROM dbo.ZnodeGiftCardHistory fh INNER JOIN dbo.ZnodeOrder fo ON fo.OrderId = fh.OrderId WHERE fh.GiftCardId = gc.GiftCardId ORDER BY fh.TransactionDate, fh.GiftCardHistoryId) ft WHERE po.StoreCode = @store AND (@owner IS NULL OR gc.UserId = @owner) AND tc.cnt >= @minTransactions AND (@preferred IS NULL OR gc.CardNumber = @preferred) ORDER BY gc.GiftCardId",
+  "params" : [ "store", "owner", "minTransactions", "preferred" ],
+  "outputs" : [ "voucherNumber", "name", "amount", "remainingAmount", "startDate", "expirationDate", "transactionCount", "firstTransactionOrderNumber" ],
+  "identity" : "voucherNumber",
+  "schemaFingerprint" : "sha256:dd8997ed9b4800b5c7f2152b16a06c9b21774fb92162fb00fc2629fbc1f435f3",
+  "vocabularyFingerprint" : "sha256:be6c68fbe287bab5ab37ea72ab9adb4489bdf49c634e2cfda125b82cf36d61e3",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T16:30:00Z",
+  "lastValidated" : "2026-11-01T17:13:32Z",
+  "verifiedHash" : "sha256:7fd2424452fd3fee82cbd603fa54b48b5b146f7332c4ab025297367b70ed428f"
+}

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "entity": "order_template",
+  "tables": [
+    "dbo.ZnodeOrder",
+    "dbo.ZnodeCPOrderClass",
+    "dbo.ZnodeOrderAdditionalDetail",
+    "dbo.ZnodeOrderProduct",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeUser",
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser"
+  ],
+  "aliases": {
+    "ownerTemplate": "dbo.ZnodeOrder"
+  },
+  "joins": [
+    {
+      "from": "dbo.ZnodeOrder.ClassId",
+      "to": "dbo.ZnodeCPOrderClass.CPOrderClassId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderAdditionalDetail.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderProduct.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "dbo.ZnodeUser.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.UserId",
+      "to": "ownerTemplate.UserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "ownerTemplate.PortalId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "templateId": "dbo.ZnodeOrder.OrderId",
+    "templateNumber": "dbo.ZnodeOrder.ClassNumber",
+    "templateName": "dbo.ZnodeOrderAdditionalDetail.Name",
+    "orderClass": "dbo.ZnodeCPOrderClass.ClassCode",
+    "createdDate": "dbo.ZnodeOrder.CreatedDate",
+    "modifiedDate": "dbo.ZnodeOrder.ModifiedDate",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "ownerUserId": "dbo.ZnodeOrder.UserId",
+    "owner": "dbo.AspNetZnodeUser.UserName",
+    "lineSku": "dbo.ZnodeOrderProduct.SKU",
+    "lineCount": "COUNT(DISTINCT dbo.ZnodeOrderProduct.OrderProductId)",
+    "quantity": "SUM(dbo.ZnodeOrderProduct.Quantity)",
+    "ownerTemplateCount": "COUNT(DISTINCT ownerTemplate.OrderId)",
+    "ownerTemplateCountCap": "COUNT(DISTINCT ownerTemplate.OrderId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeCPOrderClass.ClassCode": "OrderTemplates",
+    "ownerTemplate.ClassId": "5"
+  },
+  "maskedColumns": [
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.AspNetUsers.UserName",
+    "dbo.AspNetUsers.NormalizedUserName",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeOrder.PurchaseOrderNumber",
+    "dbo.ZnodeOrder.OrderDetail",
+    "dbo.ZnodeOrder.Custom1",
+    "dbo.ZnodeOrder.Custom2",
+    "dbo.ZnodeOrder.Custom3",
+    "dbo.ZnodeOrder.Custom4",
+    "dbo.ZnodeOrder.Custom5",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByFullName",
+    "dbo.ZnodeOrderAdditionalDetail.UserFullName",
+    "dbo.ZnodeOrderAdditionalDetail.AssignToFullName",
+    "dbo.ZnodeOrderAdditionalDetail.LastModifiedFullName",
+    "dbo.ZnodeOrderAdditionalDetail.Email",
+    "dbo.ZnodeOrderAdditionalDetail.UserPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.AccountName",
+    "dbo.ZnodeOrderAdditionalDetail.AccountPhoneNumber",
+    "dbo.ZnodeOrderAdditionalDetail.UserName",
+    "dbo.ZnodeOrderAdditionalDetail.CreatedByEmailId",
+    "dbo.ZnodeOrderProduct.Customization",
+    "dbo.ZnodeOrderProduct.ParentDetail",
+    "dbo.ZnodeOrderProduct.Custom1",
+    "dbo.ZnodeOrderProduct.Custom2",
+    "dbo.ZnodeOrderProduct.Custom3",
+    "dbo.ZnodeOrderProduct.Custom4",
+    "dbo.ZnodeOrderProduct.Custom5"
+  ],
+  "schemaFingerprint": "sha256:07866d385daa411b341c36e8f445ad90dead533463e581d23a99f876e16bbeb0",
+  "scannedAt": "2026-11-01T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

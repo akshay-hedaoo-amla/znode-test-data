@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts > Webstore - My Account - Order Template > validate order template functionality",
+  "scenario": {
+    "summary": "The signed-in user opens Order Templates, checks the list page controls, the empty bulk-delete message and the template-name validations, enters six SKUs that cannot be added (configurable parent, grouped, out of stock, required add-ons/personalization, obsolete, inactive) and checks each row's message, deletes a SKU row, then adds a simple in-stock product twice and checks line total = quantity x price without saving.",
+    "steps": [
+      "Open Order Templates: heading, description, Create, Delete and filter controls",
+      "Create then Back",
+      "Bulk delete with nothing selected: 'Please select at least one record to delete.'",
+      "Create form: blank and over-100-character template names show their validations",
+      "Rows 0-4: configurable parent SKU, grouped SKU, out-of-stock SKU, SKU needing add-ons/personalization, obsolete SKU each show their message (quantity stays 1 for rows 0 and 2); row 0 again with the inactive SKU (quantity 0)",
+      "Enter the configurable SKU in row 1 and delete the row: SKU cleared",
+      "Reload; set a unique template name; add the simple SKU with quantity 1, then again with quantity 2; line total = quantity x price (not saved)"
+    ],
+    "entitiesTouched": [
+      "product"
+    ],
+    "stateChanges": [
+      "None saved: the create form is filled but never saved (the template name gets a time suffix)"
+    ],
+    "assertions": [
+      "List page heading, description and controls",
+      "Validation texts for empty delete, blank name and name over 100 characters",
+      "Per-SKU row messages: invalid SKU (configurable, out of stock, inactive), product type cannot be added (grouped), mandatory personalization/add-ons, obsolete",
+      "Quantity input values 1 / 0 after invalid SKUs; SKU row cleared after Delete",
+      "Line total equals quantity x price"
+    ],
+    "evidence": [
+      "Title 'validate order template functionality' matches the flow; no linked AIO cases; all data through loadData (spec line 38); the login step is commented out (username/password fields in the JSON are unused, not scanned)",
+      "No record owned by the account is read or written (the template is never saved), so no user need: the session account does not matter here",
+      "Spec carries a MAINTENANCE NOTE (last run 2026-09-18 failed waiting for btnCancel1 to hide, not triaged): recorded as evidence only",
+      "Profile: z-100000 ConfigurableProduct active PRODUCTION (requiredAddOnCount 2); z-22001133 GroupedProduct active PRODUCTION; TestAutomation_AddonWithNoInventory SimpleProduct active PRODUCTION with no inventory row; OnePlus 13s SimpleProduct with requiredAddOnCount 3; z-12345677 SimpleProduct 'OrderTemplate_IsObsolete2' (no inventory row); z-70000 SimpleProduct status false (inactive); z-09876 SimpleProduct active, inventory 9999979",
+      "configurable: PRODUCT_CONFIGURABLE_WITH_VARIANTS (output parentProductSku); any configurable parent gives 'The entered SKU is invalid.'. variantAttributes is required by the key: 'BulbSize,Color,Technology' (as the other entries; the recorded z-100000 is a bulb) is an assumption. The recorded z-100000 has 2 required add-ons, so with minAddOns 0 it will not qualify as preferred and the resolver falls back to another configurable parent",
+      "grouped: PRODUCT_GROUPED_IN_STOCK (output sku); simple: PRODUCT_SIMPLE_IN_STOCK quantityUsed 2 (output sku)",
+      "MISSING KEYS (values recorded as expected-output only because a data source needs a declared alias; they are really product data): out-of-stock simple product (proposed PRODUCT_SIMPLE_OUT_OF_STOCK: active, PRODUCTION, storefront visible, store inventory <= 0 or none; output sku; reviewer to confirm what makes TestAutomation_AddonWithNoInventory 'invalid' - its name suggests an add-on-only product), product with required add-ons/personalization (proposed PRODUCT_SIMPLE_WITH_REQUIRED_ADDON: active simple, requiredAddOnCount >= {minRequiredAddOns} or a required personalizable attribute; output sku), obsolete product (proposed PRODUCT_SIMPLE_OBSOLETE: active, PRODUCTION, storefrontObsolete = true; output sku; same gap as the obsolete PDP entry), inactive product (proposed PRODUCT_SIMPLE_INACTIVE: IsActive false, published; output sku)",
+      "swap: data only through loadData; each data value maps to an output (parentProductSku, sku, sku); the line-total check is computed from the page, not from the data; validation messages are fixed UI text; no data value appears in the spec code. The four unkeyed SKUs stay as they are until their keys exist",
+      "Re-mapped to new keys (2026-11-01): four product needs (store MaxwellsHardware, none owner-linked): outOfStockProduct = PRODUCT_SIMPLE_OUT_OF_STOCK, requiredAddOnProduct = PRODUCT_SIMPLE_WITH_REQUIRED_ADDON (quantityUsed 1 = initialProductQuantity, minRequiredAddOns 1), obsoleteProduct = PRODUCT_SIMPLE_OBSOLETE, inactiveProduct = PRODUCT_SIMPLE_INACTIVE; outOfStockProductSku, simpleProductwithAddonsandPersonalizationSku, obsoleteProductSku, inactiveProductSku -> sku of each. Recorded SKUs preferred (not required) except the required add-on one: OnePlus 13s is not in MaxwellsHardware's catalog, so the resolved SKU will be a catalog product. swap still holds: no owner-linked need, all four are kind json via loadData with output sku, the validation messages are fixed UI text and do not name the product, no new data value appears in the spec code"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "configurable",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "grouped",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 29,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OUT_OF_STOCK",
+      "alias": "outOfStockProduct",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 11,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+      "alias": "requiredAddOnProduct",
+      "params": {
+        "quantityUsed": 1,
+        "minRequiredAddOns": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OBSOLETE",
+      "alias": "obsoleteProduct",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 15,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_INACTIVE",
+      "alias": "inactiveProduct",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 19,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "Order Templates",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:4",
+      "kind": "json",
+      "keyPath": "heading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Create a list of frequently purchased items for convenience and fast re-ordering.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:5",
+      "kind": "json",
+      "keyPath": "orderTemplateText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please select at least one record to delete.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "validationMessageFornoRecordsDeletion",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim_Test Template",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "templateName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please enter template name.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "blankTemplateNameValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Template NameTemplate NameTemplate NameTemplate NameTemplate NameTemplate NameTemplateTemplate NameTemplate Name",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "templateNameOverMaxLength",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Input value must not exceed the maximum character limit of 100.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "validateTemplateNameLength",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-100000",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "configProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "configurable",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "The entered SKU is invalid.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "configProductValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-22001133",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:13",
+      "kind": "json",
+      "keyPath": "groupProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "grouped",
+      "output": "sku"
+    },
+    {
+      "value": "This product type can not be added to the list.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:14",
+      "kind": "json",
+      "keyPath": "groupProductValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "TestAutomation_AddonWithNoInventory",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:15",
+      "kind": "json",
+      "keyPath": "outOfStockProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "outOfStockProduct",
+      "output": "sku"
+    },
+    {
+      "value": "The entered SKU is invalid.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:16",
+      "kind": "json",
+      "keyPath": "outOfStockValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "OnePlus 13s",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:17",
+      "kind": "json",
+      "keyPath": "simpleProductwithAddonsandPersonalizationSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "requiredAddOnProduct",
+      "output": "sku"
+    },
+    {
+      "value": "This product requires a mandatory personalized message/add-ons and, therefore, can not be added to the list.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:18",
+      "kind": "json",
+      "keyPath": "addonPersonalizationValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-12345677",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:19",
+      "kind": "json",
+      "keyPath": "obsoleteProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "obsoleteProduct",
+      "output": "sku"
+    },
+    {
+      "value": "The product is marked as obsolete, please try our other range of products.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:20",
+      "kind": "json",
+      "keyPath": "obsoleteProductValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:26",
+      "kind": "json",
+      "keyPath": "initialProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:188",
+      "kind": "literal",
+      "keyPath": "enterSkuForValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-70000",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:21",
+      "kind": "json",
+      "keyPath": "inactiveProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "inactiveProduct",
+      "output": "sku"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:190",
+      "kind": "literal",
+      "keyPath": "rowError",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "The entered SKU is invalid.",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:22",
+      "kind": "json",
+      "keyPath": "inactiveProductSkuValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:192",
+      "kind": "literal",
+      "keyPath": "quantityInput",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:27",
+      "kind": "json",
+      "keyPath": "zeroProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:193",
+      "kind": "literal",
+      "keyPath": "clearSkuRow",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:200",
+      "kind": "literal",
+      "keyPath": "enterSkuForValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:201",
+      "kind": "literal",
+      "keyPath": "skuInput",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:202",
+      "kind": "literal",
+      "keyPath": "cancelSkuRow",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts:203",
+      "kind": "literal",
+      "keyPath": "skuInput",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-09876",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:23",
+      "kind": "json",
+      "keyPath": "simpleProductSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:24",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/my-account/order-template-validate-functionality.json:25",
+      "kind": "json",
+      "keyPath": "newProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, rc.cnt AS requiredAddOnCount FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId CROSS APPLY (SELECT COUNT(DISTINCT rq.PimAddOnProductId) AS cnt FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) rc WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND rc.cnt >= @minRequiredAddOns AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName, p.PimProductId, rc.cnt HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
+  "params" : [ "requiredType", "productType", "isActive", "publishState", "store", "notObsolete", "minProductIndex", "minRequiredAddOns", "configurableType", "space", "zero", "preferred", "quantityUsed" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minProductIndex" : "1",
+    "requiredType" : "Required",
+    "zero" : "0",
+    "space" : " ",
+    "configurableType" : "ConfigurableProduct"
+  },
+  "outputs" : [ "sku", "name", "productId", "requiredAddOnCount" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:814434316f10c04864b4784c407e5e2237969f2922c5ef2863376f27be444e85",
+  "vocabularyFingerprint" : "sha256:00e5d78b178355a46cd243a5f34a44e99e8a7ced18d7e7dbfd0e16653126301f",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T16:30:00Z",
+  "lastValidated" : "2026-11-01T17:14:01Z",
+  "verifiedHash" : "sha256:ecd683fab356a24b895ebf32a44386316e091eead7f72da3435c30fd34e83ddb"
+}

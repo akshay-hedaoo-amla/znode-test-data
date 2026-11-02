@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "key": "VOUCHER_OF_USER_WITH_TRANSACTIONS",
+  "entity": "voucher",
+  "type": "of_user_with_transactions",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "transactionCount": ">= {minTransactions}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Voucher of the store carrying the declared account's UserId (any restriction) with at least N transactions (ZnodeGiftCardHistory). Outputs: name, amount, remainingAmount, startDate, expirationDate, firstTransactionOrderNumber. KB: Managing Vouchers.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId the vouchers carry (ZnodeGiftCard.UserId): link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minTransactions": {
+      "type": "integer",
+      "description": "Fewest redemptions (transactions linked to an order) the voucher must have"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); a voucher belongs to one store"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

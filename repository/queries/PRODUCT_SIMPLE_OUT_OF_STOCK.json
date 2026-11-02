@@ -1,0 +1,28 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_OUT_OF_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND p.OutOfStockOptions = @outOfStockOption AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND COALESCE((SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = p.SKU AND pw.PortalId = po.PortalId), @zero) <= @zero AND NOT EXISTS (SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params" : [ "store", "productType", "isActive", "publishState", "outOfStockOption", "notObsolete", "minProductIndex", "zero", "requiredType", "configurableType", "space", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minProductIndex" : "1",
+    "outOfStockOption" : "DisablePurchasing",
+    "requiredType" : "Required",
+    "zero" : "0",
+    "space" : " ",
+    "configurableType" : "ConfigurableProduct"
+  },
+  "outputs" : [ "sku", "name", "productId" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:814434316f10c04864b4784c407e5e2237969f2922c5ef2863376f27be444e85",
+  "vocabularyFingerprint" : "sha256:706ecb21edb6efc06bbdf03c55ab90367824acea62bb13876ae592a2db68ee08",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T16:30:00Z",
+  "lastValidated" : "2026-11-01T17:13:46Z",
+  "verifiedHash" : "sha256:07e3868e886c638cd1f2cb96a5e87aec88fd5ccf6ff44230659d8a4a1d774242"
+}

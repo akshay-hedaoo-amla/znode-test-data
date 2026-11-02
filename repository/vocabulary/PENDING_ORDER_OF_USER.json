@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "key": "PENDING_ORDER_OF_USER",
+  "entity": "pending_order",
+  "type": "of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "statusCode": "{status}",
+    "ownerPendingCount": ">= {minPendingOrders}",
+    "ownerPendingCountCap": "<= {maxPendingOrders}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Pending order (class ApprovalRoutings, AR- number, approval status) the declared account submitted for approval: the Pending Orders list shows the user's own requests (approver steps separate). Outputs: number, status, date, counts. Read only.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the pending order as its submitter: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "status": {
+      "type": "string",
+      "optional": true,
+      "description": "Pending order status code, normalised: pendingapproval, approved or rejected. Left out: any listed status"
+    },
+    "minPendingOrders": {
+      "type": "integer",
+      "description": "Pending orders (approval statuses) the account must own on the store (at least)"
+    },
+    "maxPendingOrders": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most pending orders allowed, e.g. the page size so all fit one page. Left out: no upper bound"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

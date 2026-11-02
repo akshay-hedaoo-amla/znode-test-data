@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/saved-carts-validate-action-column-functionality.spec.ts > Webstore - My Account - Saved Carts > validate action column functionality",
+  "scenario": {
+    "summary": "The signed-in my-account user opens Saved Carts, opens an existing saved cart's Edit page from the pencil and goes back, moves that saved cart to the cart (toast, Cart heading), saves the cart as a new uniquely named saved cart, finds and deletes that runtime cart through the confirm dialog, then clicks bulk Delete with nothing selected and checks the validation toast. The existing saved cart is only read.",
+    "steps": [
+      "Signed in through the shared storageState; open Saved Carts, check heading, show all rows",
+      "Open the Edit page of the saved cart named editActionCartName, check 'Edit Saved Cart' heading, Back",
+      "Move the saved cart named moveActionCartName to the cart; check the moved toast and the Cart heading",
+      "Save Cart panel: save as '<deleteSaveCartName> <timestamp>' (runtime cart); check the saved toast and Saved Carts heading",
+      "Filter by the runtime name, one row; select it, Delete, check confirm dialog text, confirm, check deleted toast, clear filter",
+      "Bulk Delete with no selection: check the validation toast; afterEach deletes leftover '<deleteSaveCartName> <digits>' carts"
+    ],
+    "entitiesTouched": [
+      "user",
+      "saved_cart",
+      "cart"
+    ],
+    "stateChanges": [
+      "The account's cart gets the saved cart's items (Move To Cart copies; the saved cart stays)",
+      "A runtime saved cart '<deleteSaveCartName> <timestamp>' is created and deleted by the test"
+    ],
+    "assertions": [
+      "Saved Carts / Edit Saved Cart / Cart headings",
+      "Moved-to-cart toast, cart saved toast, confirm-delete text, records deleted toast, select-a-record validation toast",
+      "Filtered list shows exactly the runtime cart, its name contains deleteSaveCartName"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS = my-account/**), signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts. That setup signs in with getMyAccountUser() (testim-migrated/src/data/credentials.ts) = loadEnvironment().myAccountUser, whose username is requireEnv('MY_ACCOUNT_USERNAME') (testim-migrated/src/config/env.ts:80; process.env, then .env.<env>, then .env). Source 0 records that credential (masked; kind properties = environment variable). On migration the test declares it before reading any owned record: await testData.useExisting('user', getMyAccountUser().username) - the same value the setup signed in with, so the declared account is the signed-in one. No spec data file holds it",
+      "LEASE NOTE: every webstore-auth spec shares this one account; declaring it leases the account per test (useExisting waits while another test holds it), so migrated my-account specs run one at a time on it (protects counts from parallel runtime carts, but lengthens the phase that must finish inside the storageState session's 1-hour token)",
+      "Title 'validate action column functionality'; editActionCartName and moveActionCartName are the same seeded saved cart ('Testim Save Cart 4') of the account: both map to savedCart.name",
+      "OWNERSHIP: the saved cart must belong to the signed-in (declared) account: need savedCart links owner to @user.userId (SAVED_CART_OF_USER_WITH_PRODUCTS: ZnodeOrder.UserId = @owner, class SavedCarts, store, at least one active non-add-on product, owner's saved-cart count >= minSavedCarts), so it resolves at test start when the test declares the account (testData.useExisting); strategy migrate",
+      "minSavedCarts 1: the test acts on one saved cart; Move To Cart needs its product active (the key's productStatus active), storefront visibility is not constrained by the key (known gap, as for the shopping-cart scroller spec)",
+      "deleteSaveCartName is the prefix of the cart the test creates and deletes itself (created-by-test), not an existing record; the afterEach cleanup deletes only '<prefix> <digits>' carts",
+      "Headings and messages are fixed UI text (expected-output); no value depends on the resolved cart beyond its name",
+      "Not profiled: no profile observation exists for this test"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "SAVED_CART_OF_USER_WITH_PRODUCTS",
+      "alias": "savedCart",
+      "params": {
+        "owner": "@user.userId",
+        "minSavedCarts": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "kind": "properties",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Delete Save Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:7",
+      "kind": "json",
+      "keyPath": "deleteSaveCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Saved Carts",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:2",
+      "kind": "json",
+      "keyPath": "savedCartsHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim Save Cart 4",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:5",
+      "kind": "json",
+      "keyPath": "editActionCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "name"
+    },
+    {
+      "value": "Edit Saved Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:3",
+      "kind": "json",
+      "keyPath": "editSavedCartsHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Testim Save Cart 4",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:6",
+      "kind": "json",
+      "keyPath": "moveActionCartName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "savedCart",
+      "output": "name"
+    },
+    {
+      "value": "Saved Cart moved back to the cart successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:8",
+      "kind": "json",
+      "keyPath": "savedCartBackSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:4",
+      "kind": "json",
+      "keyPath": "cartPageHeadingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart saved successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:9",
+      "kind": "json",
+      "keyPath": "saveCartSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Confirm Delete?Are you sure you want to delete the selected record?OkCancel",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:10",
+      "kind": "json",
+      "keyPath": "confirmDeletePopupSavedCartMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Record(s) deleted successfully.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:11",
+      "kind": "json",
+      "keyPath": "successMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please select at least one record to delete.",
+      "location": "testim-migrated/test-data/webstore/my-account/saved-carts-validate-action-column-functionality.json:12",
+      "kind": "json",
+      "keyPath": "noRecordSelectedDeletePopup",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

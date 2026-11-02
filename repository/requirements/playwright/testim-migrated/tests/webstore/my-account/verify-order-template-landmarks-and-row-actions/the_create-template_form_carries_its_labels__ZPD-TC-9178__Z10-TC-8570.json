@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/verify-order-template-landmarks-and-row-actions.spec.ts > Webstore - My Account - Order Template > the create-template form carries its labels @ZPD-TC-9178 @Z10-TC-8570",
+  "scenario": {
+    "summary": "The signed-in user opens the Create Template form and checks its heading, template-name label, Add Row and Add To Template controls. Nothing is saved.",
+    "steps": [
+      "Open Order Templates; click Create Template",
+      "Form heading, Template Name label, Add Row and Add To Template visible with their texts"
+    ],
+    "entitiesTouched": [],
+    "stateChanges": [
+      "None: the form is not filled or saved"
+    ],
+    "assertions": [
+      "Create Template heading",
+      "Template Name label",
+      "Add Row and Add To Template controls and texts"
+    ],
+    "evidence": [
+      "Title 'the create-template form carries its labels @ZPD-TC-9178 @Z10-TC-8570' matches the flow; data through loadData (spec line 55)",
+      "Coverage-gap spec ported from the Selenium order-template.spec.ts (not a Testim port); the scan attributes all nine case keys of the file header to every test: per title this test is ZPD-TC-9178 / Z10-TC-8570",
+      "Only fixed UI text: no data need, no user need, nothing to migrate"
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-2635",
+    "Z10-TC-8570",
+    "Z10-TC-8572",
+    "Z10-TC-8573",
+    "Z10-TC-8610",
+    "Z10-TC-8640",
+    "ZPD-TC-8741",
+    "ZPD-TC-9178",
+    "ZPD-TC-9181"
+  ],
+  "sources": [
+    {
+      "value": "Create Template",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:4",
+      "kind": "json",
+      "keyPath": "createTemplateHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Template Name",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:5",
+      "kind": "json",
+      "keyPath": "templateNameLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add Row",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:6",
+      "kind": "json",
+      "keyPath": "addRowText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add To Template",
+      "location": "testim-migrated/test-data/webstore/my-account/verify-order-template-landmarks-and-row-actions.json:7",
+      "kind": "json",
+      "keyPath": "addToTemplateText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

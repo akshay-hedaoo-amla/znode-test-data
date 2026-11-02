@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_CHECKOUT_CONTEXT",
+  "entity": "store_checkout_context",
+  "type": "checkout_context",
+  "constraints": {
+    "localeIsStoreDefault": "true",
+    "localeActive": "true",
+    "shippingCode": "{shippingCode}",
+    "shippingActive": "true",
+    "shippingPublishState": "production"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "A store's catalog code, default locale code and the ShippingId of an active, published shipping method (by code): the context the Commerce Portal API needs to create a cart and set its shipping when a collection places an order.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code (ZnodePortal.StoreCode)"
+    },
+    "shippingCode": {
+      "type": "string",
+      "description": "ZnodeShipping.ShippingCode of the shipping method the order uses"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

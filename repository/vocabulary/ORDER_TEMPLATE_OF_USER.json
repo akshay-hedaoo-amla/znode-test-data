@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_TEMPLATE_OF_USER",
+  "entity": "order_template",
+  "type": "of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "lineCount": ">= 1",
+    "ownerTemplateCount": ">= {minTemplates}",
+    "ownerTemplateCountCap": "<= {maxTemplates}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Order template (order class OrderTemplates, OT- number) with at least one line, of the declared account that owns between min and max templates on the store. Outputs: templateName, templateNumber, quantity, templateCount. Read only. KB: Order Templates.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the order template: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minTemplates": {
+      "type": "integer",
+      "description": "Order templates the account must own on the store (at least)"
+    },
+    "maxTemplates": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most templates allowed, e.g. the page size so all fit one page. Left out: no upper bound"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

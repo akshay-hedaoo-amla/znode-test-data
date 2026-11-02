@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts > Webstore - My Account - Dashboard > validate dashboard functionality",
+  "scenario": {
+    "summary": "The signed-in registered user opens the My Account dashboard, checks the summary cards and address headings, follows each View all link, opens one of the account's orders from the dashboard order table, sorts that table by six columns checking the first row each way, then reorders the order and empties the cart.",
+    "steps": [
+      "Open Dashboard; check My Profile, Order History, Return History, Address Information, shipping and billing address headings",
+      "View all: profile (Edit Profile heading), order history (column header), address (Address Book heading), return orders (Return History heading); back to dashboard each time",
+      "Open order orderDetailNumber's details; check its number and the details heading",
+      "Sort the dashboard order table by OrderNumber, OrderStatus, PaymentStatus, PaymentType (desc only), OrderDate, OrderAmount; check the first row ascending and descending",
+      "Reorder order orderDetailNumber; check the cart heading; empty the cart"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order",
+      "cart"
+    ],
+    "stateChanges": [
+      "Reorder copies the order's lines to the signed-in user's cart; the cart is emptied again",
+      "The order itself is only read"
+    ],
+    "assertions": [
+      "Dashboard card and address headings",
+      "View-all targets show their headings",
+      "Order details show orderDetailNumber",
+      "First row of each sort equals the recorded anchors (order number, status, payment status, payment type desc 'PurchaseOrder', date, amount)",
+      "Cart heading visible after Reorder"
+    ],
+    "evidence": [
+      "Title 'validate dashboard functionality' and the step labels match the flow",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts, AUTH_SPECS my-account/**) signed in through the shared storageState written by testim-migrated/tests/auth.setup.ts, whose account is getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80, set in the git-ignored .env.<env>, not in the test's JSON). Source 0 records that credential (masked). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (the same account as the session)",
+      "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
+      "OWNERSHIP: orderDetailNumber OS-01102025-00254 is an Orders-class order of the signed-in account (tda rows: ZnodeOrder UserId 16405, PortalId 7, three active SimpleProduct lines, quantity 1). Need order links owner to @user.userId (ORDER_OF_USER_REORDERABLE: o.UserId = @owner), so it resolves when the test declares the account; strategy migrate. orderDetailNumber -> order.orderNumber",
+      "ORDER_OF_USER_REORDERABLE params: productType simple (the recorded order's lines are simple), quantityUsed 1 (order line quantity), minAddOns 0, minPersonalizableAttributes 0: the test only checks the cart heading after Reorder. That key is pending_approval and being reworked on this branch; re-check these params against its final declaredParams",
+      "DOUBT: the order must be among the rows the dashboard order table shows (recent orders); the key does not constrain recency",
+      "MISSING KEY: the sort anchors (Ascending/Descending order number, status, payment status, date, amount, and the literal 'PurchaseOrder' payment type desc, which the scan does not list) are the first rows of the account's whole order list, so they depend on the data. No key outputs them; kept as expected-output. Proposed ORDER_HISTORY_OF_USER_SORT_ANCHORS, or change the spec to assert the column is sorted (as pending-payment does for amounts). The schema field DescendingPaymentType is not in the scan",
+      "The 'profile', 'order history', 'address', 'return orders' clickViewAll arguments and the sortAscending column names are config; the masked shipping/billing/address-book headings are fixed UI text masked only by key name",
+      "migrate: the order need links to the declared account; the sort anchors depend on the data",
+      "Re-mapped to new keys (2026-11-01): orderHistory = ORDER_HISTORY_OF_USER_SORT_ANCHORS (owner @user.userId, minOrders 2, maxOrders 64, minStatuses 2, store): the 10 dashboard sort anchors -> firstOrderNumberAsc/Desc, firstOrderStatusAsc/Desc, firstPaymentStatusAsc/Desc, firstOrderDateAsc/Desc, minOrderTotal/maxOrderTotal (checked against the pending query). maxOrders 64 assumes the dashboard order table sorts over all the account's orders (its anchors equal the Order History ones today); not checked against the dashboard table's page size. The PurchaseOrder payment-type literal is not a scanned source (firstPaymentTypeDesc would supply it). Strategy migrate"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_OF_USER_REORDERABLE",
+      "alias": "order",
+      "params": {
+        "owner": "@user.userId",
+        "productType": "simple",
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ORDER_HISTORY_OF_USER_SORT_ANCHORS",
+      "alias": "orderHistory",
+      "params": {
+        "owner": "@user.userId",
+        "minOrders": 2,
+        "maxOrders": 64,
+        "minStatuses": 2,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "My Profile",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:44",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order History",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:45",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Return History",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:46",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Address Information",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:6",
+      "kind": "json",
+      "keyPath": "shippingAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:7",
+      "kind": "json",
+      "keyPath": "billingAddress",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "profile",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:54",
+      "kind": "literal",
+      "keyPath": "clickViewAll",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Edit Profile",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:8",
+      "kind": "json",
+      "keyPath": "editProfileHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "order history",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:58",
+      "kind": "literal",
+      "keyPath": "clickViewAll",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "address",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:62",
+      "kind": "literal",
+      "keyPath": "clickViewAll",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:9",
+      "kind": "json",
+      "keyPath": "addressBookHeading",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "return orders",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:66",
+      "kind": "literal",
+      "keyPath": "clickViewAll",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Return History",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:10",
+      "kind": "json",
+      "keyPath": "returnHistoryHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "OS-01102025-00254",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:11",
+      "kind": "json",
+      "keyPath": "orderDetailNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "order",
+      "output": "orderNumber"
+    },
+    {
+      "value": "OrderNumber",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OS-01102025-00254",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:12",
+      "kind": "json",
+      "keyPath": "AscendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderNumberAsc"
+    },
+    {
+      "value": "OS-26092025-00253",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:13",
+      "kind": "json",
+      "keyPath": "DescendingOrderNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderNumberDesc"
+    },
+    {
+      "value": "OrderStatus",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:87",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "CANCELED",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:14",
+      "kind": "json",
+      "keyPath": "AscendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderStatusAsc"
+    },
+    {
+      "value": "SUBMITTED",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:15",
+      "kind": "json",
+      "keyPath": "DescendingOrderStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderStatusDesc"
+    },
+    {
+      "value": "PaymentStatus",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:92",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "captured",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:16",
+      "kind": "json",
+      "keyPath": "AscendingPaymentStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstPaymentStatusAsc"
+    },
+    {
+      "value": "pending",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:17",
+      "kind": "json",
+      "keyPath": "DescendingPaymentStatus",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstPaymentStatusDesc"
+    },
+    {
+      "value": "PaymentType",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:97",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "OrderDate",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:101",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "09/17/25",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:19",
+      "kind": "json",
+      "keyPath": "AscendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderDateAsc"
+    },
+    {
+      "value": "10/01/25",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:20",
+      "kind": "json",
+      "keyPath": "DescendingOrderDate",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "firstOrderDateDesc"
+    },
+    {
+      "value": "OrderAmount",
+      "location": "testim-migrated/tests/webstore/my-account/dashboard-validate-functionality.spec.ts:106",
+      "kind": "literal",
+      "keyPath": "sortAscending",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$0.00",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:21",
+      "kind": "json",
+      "keyPath": "AscendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "minOrderTotal"
+    },
+    {
+      "value": "$3,793.16",
+      "location": "testim-migrated/test-data/webstore/my-account/dashboard-validate-functionality.json:22",
+      "kind": "json",
+      "keyPath": "DescendingOrderAmount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "orderHistory",
+      "output": "maxOrderTotal"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}

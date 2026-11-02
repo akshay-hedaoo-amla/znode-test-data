@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ORDER_HISTORY_OF_USER_SORT_ANCHORS",
+  "sql" : "SELECT TOP 10 MIN(o.ClassNumber) AS firstOrderNumberAsc, MAX(o.ClassNumber) AS firstOrderNumberDesc, MIN(s.OrderStateName) AS firstOrderStatusAsc, MAX(s.OrderStateName) AS firstOrderStatusDesc, MIN(ps.Name) AS firstPaymentStatusAsc, MAX(ps.Name) AS firstPaymentStatusDesc, MAX(pd.ConfigurationSetCode) AS firstPaymentTypeDesc, MIN(o.OrderDate) AS firstOrderDateAsc, MAX(o.OrderDate) AS firstOrderDateDesc, MIN(o.Total) AS minOrderTotal, MAX(o.Total) AS maxOrderTotal FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId INNER JOIN dbo.ZnodePortal po ON po.PortalId = o.PortalId LEFT JOIN dbo.ZnodeOmsOrderState s ON s.OmsOrderStateId = o.OmsOrderStateId LEFT JOIN dbo.ZnodeOmsPaymentState ps ON ps.OmsPaymentStateId = o.OmsPaymentStateId LEFT JOIN dbo.ZnodeOrderPaymentDetail pd ON pd.OrderId = o.OrderId WHERE oc.ClassCode = @orderClass AND po.StoreCode = @store AND (@owner IS NULL OR o.UserId = @owner) GROUP BY o.UserId, o.PortalId HAVING COUNT(DISTINCT o.OrderId) >= @minOrders AND COUNT(DISTINCT o.OrderId) <= @maxOrders AND (@minStatuses IS NULL OR COUNT(DISTINCT s.StatusCode) >= @minStatuses) ORDER BY MIN(o.ClassNumber)",
+  "params" : [ "orderClass", "store", "owner", "minOrders", "maxOrders", "minStatuses" ],
+  "constants" : {
+    "orderClass" : "Orders"
+  },
+  "outputs" : [ "firstOrderNumberAsc", "firstOrderNumberDesc", "firstOrderStatusAsc", "firstOrderStatusDesc", "firstPaymentStatusAsc", "firstPaymentStatusDesc", "firstPaymentTypeDesc", "firstOrderDateAsc", "firstOrderDateDesc", "minOrderTotal", "maxOrderTotal" ],
+  "identity" : "firstOrderNumberAsc",
+  "schemaFingerprint" : "sha256:84d1c94a359e16c44d6abd4560957defc57c9e3078b53902fd1a2077c842e52d",
+  "vocabularyFingerprint" : "sha256:8d6ff8faa6403c54d003f5093822123ed29fed2efed5ffac1707e2d9036a5477",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z",
+  "createdAt" : "2026-11-01T15:00:00Z",
+  "lastValidated" : "2026-11-01T17:15:07Z",
+  "verifiedHash" : "sha256:f6b11d03dcfb8ae11cd38a4c9e2dab9ed6f9827c15eaede3edca1f55d5ec8a80"
+}

@@ -6,13 +6,49 @@
     "dbo.ZnodePortal",
     "dbo.ZnodeUser",
     "dbo.AspNetUsers",
-    "dbo.AspNetZnodeUser"
+    "dbo.AspNetZnodeUser",
+    "dbo.ZnodeGiftCardHistory",
+    "dbo.ZnodeOrder"
   ],
+  "aliases": {
+    "ownerVoucher": "dbo.ZnodeGiftCard"
+  },
   "joins": [
-    { "from": "dbo.ZnodeGiftCard.PortalId", "to": "dbo.ZnodePortal.PortalId", "kind": "inner" },
-    { "from": "dbo.ZnodeGiftCard.UserId", "to": "dbo.ZnodeUser.UserId", "kind": "left" },
-    { "from": "dbo.ZnodeUser.AspNetUserId", "to": "dbo.AspNetUsers.Id", "kind": "left" },
-    { "from": "dbo.AspNetUsers.UserName", "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId", "kind": "left" }
+    {
+      "from": "dbo.ZnodeGiftCard.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeGiftCard.UserId",
+      "to": "dbo.ZnodeUser.UserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGiftCard.GiftCardId",
+      "to": "dbo.ZnodeGiftCardHistory.GiftCardId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGiftCardHistory.OrderId",
+      "to": "dbo.ZnodeOrder.OrderId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGiftCard.UserId",
+      "to": "ownerVoucher.UserId",
+      "kind": "left"
+    }
   ],
   "properties": {
     "name": "dbo.ZnodeGiftCard.Name",
@@ -25,7 +61,14 @@
     "isReferralCommission": "dbo.ZnodeGiftCard.IsReferralCommission",
     "store": "dbo.ZnodePortal.StoreCode",
     "ownerUserId": "dbo.ZnodeGiftCard.UserId",
-    "owner": "dbo.AspNetZnodeUser.UserName"
+    "owner": "dbo.AspNetZnodeUser.UserName",
+    "voucherCount": "COUNT(DISTINCT dbo.ZnodeGiftCard.GiftCardId)",
+    "ownerVoucherCount": "COUNT(DISTINCT ownerVoucher.GiftCardId)",
+    "transactionDate": "dbo.ZnodeGiftCardHistory.TransactionDate",
+    "transactionAmount": "dbo.ZnodeGiftCardHistory.TransactionAmount",
+    "transactionRemainingAmount": "dbo.ZnodeGiftCardHistory.RemainingAmount",
+    "transactionOrderNumber": "dbo.ZnodeOrder.ClassNumber",
+    "transactionCount": "COUNT(DISTINCT dbo.ZnodeGiftCardHistory.GiftCardHistoryId)"
   },
   "scope": {
     "store": "dbo.ZnodePortal.StoreCode"
@@ -49,9 +92,21 @@
     "dbo.ZnodeUser.Custom2",
     "dbo.ZnodeUser.Custom3",
     "dbo.ZnodeUser.Custom4",
-    "dbo.ZnodeUser.Custom5"
+    "dbo.ZnodeUser.Custom5",
+    "dbo.ZnodeGiftCard.GiftCardId",
+    "dbo.ZnodeGiftCard.CardNumber",
+    "dbo.ZnodeGiftCardHistory.GiftCardId",
+    "dbo.ZnodeGiftCardHistory.GiftCardHistoryId",
+    "dbo.ZnodeGiftCardHistory.Notes",
+    "dbo.ZnodeOrder.PurchaseOrderNumber",
+    "dbo.ZnodeOrder.OrderDetail",
+    "dbo.ZnodeOrder.Custom1",
+    "dbo.ZnodeOrder.Custom2",
+    "dbo.ZnodeOrder.Custom3",
+    "dbo.ZnodeOrder.Custom4",
+    "dbo.ZnodeOrder.Custom5"
   ],
-  "schemaFingerprint": "sha256:5abaab7365a0338f319d9b5d6583c70e2b2f6ca59a0153589bd38b4fe0924730",
+  "schemaFingerprint": "sha256:6779adfc7e99dc80ffd38669867d1e3a81c3735392a91050757979c4986ece9a",
   "scannedAt": "2026-11-01T00:00:00Z",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",

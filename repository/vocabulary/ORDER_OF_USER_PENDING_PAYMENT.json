@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_OF_USER_PENDING_PAYMENT",
+  "entity": "pending_payment_order",
+  "type": "of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "statusCode": "pendingpayment",
+    "ownerPendingPaymentCount": ">= {minPendingPayments}",
+    "ownerPendingPaymentCountCap": "<= {maxPendingPayments}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Order of the declared account in state PENDING PAYMENT (class ApprovalRoutings, AR- number), the account owning between min and max such orders on the store. Outputs: orderNumber, orderDate, total, pendingPaymentCount, first number asc/desc. Read only.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account that owns the pending-payment order: link it to the test's declared account (@user.userId), never a username. Left out (verification only): any owner"
+    },
+    "minPendingPayments": {
+      "type": "integer",
+      "description": "Pending-payment orders the account must own on the store (at least; 9 for a second 8-row page)"
+    },
+    "maxPendingPayments": {
+      "type": "integer",
+      "optional": true,
+      "description": "Most pending-payment orders allowed, e.g. the page size so all fit one page. Left out: no upper bound"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-01T14:30:00Z"
+}
