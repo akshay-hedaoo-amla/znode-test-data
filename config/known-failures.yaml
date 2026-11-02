@@ -5,4 +5,9 @@
 # 2026-10-28: the two estimate-shipping tests were listed here after each failed once on atstage when run alone (no
 # shipping option for the US zip), then removed the same day: both PASSED in the clean origin/dev baseline of the 23
 # stage-1 specs (2 workers). They are intermittent, not pre-existing failures (see docs/memory.md).
-knownFailures: []
+knownFailures:
+  - testId: "testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts > Webstore - My Account - Order Template > validate order template functionality"
+    reason: "Order template SKU validation differs from the recording on atstage: row 0 (configurable parent SKU) shows no validation error where 'The entered SKU is invalid.' was recorded; row 2 (out-of-stock product) shows 'This product is out of stock.' where 'The entered SKU is invalid.' was recorded; then a page wait times out"
+    evidence: "Baseline 2026-11-02: run without the test data agents (no TDA_HOME, the spec's own JSON data) fails the same three checks; with the agents it fails identically in normal mode (the spec's own SKUs, z-100000 preferred) and in fallback mode."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-02"

@@ -30,7 +30,8 @@
       "Store MaxwellsHardware: webstore-auth uses testimEnv.web.baseUrl (WEB_BASE_URL, default webstore-z10-at), the store every migrated webstore spec runs on; the account's recorded records (orders, saved carts) are on PortalId 7 = MaxwellsHardware (tda rows)",
       "sku z-4567890 and productName: profile FOUND active published SimpleProduct (inventory, storefront index 1). Need product PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (never added to cart), preferred source sku; sku -> product.sku, productName -> product.name",
       "DOUBT: the test relies on the review existing after submit; if a resolved product was reviewed earlier by the account with another text, the Review History text check fails. No key requires a product not yet reviewed by the account",
-      "swap: data only through loadData (sku -> product.sku, productName -> product.name), no derived assertions (the product name is itself swapped; messages and heading are fixed UI text), no data value in the spec code, no other data file. The user need is only checked at pre-warm (the account is not declared or leased); to declare and lease it, use strategy migrate and add the useExisting line above"
+      "swap: data only through loadData (sku -> product.sku, productName -> product.name), no derived assertions (the product name is itself swapped; messages and heading are fixed UI text), no data value in the spec code, no other data file. The user need is only checked at pre-warm (the account is not declared or leased); to declare and lease it, use strategy migrate and add the useExisting line above",
+      "2026-11-02 fallback run: on a product whose first tab is not Reviews the 'Write a review' button is not rendered (it lives in the Reviews tab, active only after Read Reviews / #readRating; storefront ProductTabSection.tsx). Fixed in the framework page object (ProductReviewPage.openWriteReview opens Reviews first); the need stays PRODUCT_SIMPLE_IN_STOCK (a brief move to a with-review key was reverted: having a review is not the rule)."
     ],
     "confidence": "high"
   },
@@ -132,5 +133,5 @@
   "strategy": "swap",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

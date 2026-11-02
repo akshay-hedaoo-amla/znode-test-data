@@ -89,6 +89,10 @@ migrated:
     - testim-migrated/tests/webstore/checkout/verify-shipping-promotion-and-coupon-cap.spec.ts
     - testim-migrated/tests/webstore/checkout/z10-28100-profile-shipping.spec.ts
     - testim-migrated/tests/webstore/checkout/z10-28102-order-receipt-discount.spec.ts
+    # Phase 6 module webstore/my-account, batch 1 (owned records resolve after testData.useExisting)
+    - testim-migrated/tests/webstore/my-account/wishlist-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/saved-carts-validate-pagination-filter-and-sorting.spec.ts
+    - testim-migrated/tests/webstore/my-account/voucher-history-validate-history-and-details.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
@@ -112,3 +116,8 @@ swapped:
     - testim-migrated/tests/webstore/checkout/verify-simple-product-checkout-page-coupon-and-voucher-code-functionality-for-guest-user.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-voucher-discount-calculation-and-removal.spec.ts
     - testim-migrated/tests/webstore/checkout/verify-voucher-for-all-users.spec.ts
+    # Phase 6 module webstore/my-account, batch 1 (requirements approved; swap: spec and JSON kept, values swapped at load)
+    - testim-migrated/tests/webstore/my-account/address-book-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts
+    - testim-migrated/tests/webstore/my-account/review-history-validate-functionality.spec.ts

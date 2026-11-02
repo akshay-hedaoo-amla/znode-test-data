@@ -35,22 +35,18 @@
       "grouped: PRODUCT_GROUPED_IN_STOCK (output sku); simple: PRODUCT_SIMPLE_IN_STOCK quantityUsed 2 (output sku)",
       "MISSING KEYS (values recorded as expected-output only because a data source needs a declared alias; they are really product data): out-of-stock simple product (proposed PRODUCT_SIMPLE_OUT_OF_STOCK: active, PRODUCTION, storefront visible, store inventory <= 0 or none; output sku; reviewer to confirm what makes TestAutomation_AddonWithNoInventory 'invalid' - its name suggests an add-on-only product), product with required add-ons/personalization (proposed PRODUCT_SIMPLE_WITH_REQUIRED_ADDON: active simple, requiredAddOnCount >= {minRequiredAddOns} or a required personalizable attribute; output sku), obsolete product (proposed PRODUCT_SIMPLE_OBSOLETE: active, PRODUCTION, storefrontObsolete = true; output sku; same gap as the obsolete PDP entry), inactive product (proposed PRODUCT_SIMPLE_INACTIVE: IsActive false, published; output sku)",
       "swap: data only through loadData; each data value maps to an output (parentProductSku, sku, sku); the line-total check is computed from the page, not from the data; validation messages are fixed UI text; no data value appears in the spec code. The four unkeyed SKUs stay as they are until their keys exist",
-      "Re-mapped to new keys (2026-11-01): four product needs (store MaxwellsHardware, none owner-linked): outOfStockProduct = PRODUCT_SIMPLE_OUT_OF_STOCK, requiredAddOnProduct = PRODUCT_SIMPLE_WITH_REQUIRED_ADDON (quantityUsed 1 = initialProductQuantity, minRequiredAddOns 1), obsoleteProduct = PRODUCT_SIMPLE_OBSOLETE, inactiveProduct = PRODUCT_SIMPLE_INACTIVE; outOfStockProductSku, simpleProductwithAddonsandPersonalizationSku, obsoleteProductSku, inactiveProductSku -> sku of each. Recorded SKUs preferred (not required) except the required add-on one: OnePlus 13s is not in MaxwellsHardware's catalog, so the resolved SKU will be a catalog product. swap still holds: no owner-linked need, all four are kind json via loadData with output sku, the validation messages are fixed UI text and do not name the product, no new data value appears in the spec code"
+      "Re-mapped to new keys (2026-11-01): four product needs (store MaxwellsHardware, none owner-linked): outOfStockProduct = PRODUCT_SIMPLE_OUT_OF_STOCK, requiredAddOnProduct = PRODUCT_SIMPLE_WITH_REQUIRED_ADDON (quantityUsed 1 = initialProductQuantity, minRequiredAddOns 1), obsoleteProduct = PRODUCT_SIMPLE_OBSOLETE, inactiveProduct = PRODUCT_SIMPLE_INACTIVE; outOfStockProductSku, simpleProductwithAddonsandPersonalizationSku, obsoleteProductSku, inactiveProductSku -> sku of each. Recorded SKUs preferred (not required) except the required add-on one: OnePlus 13s is not in MaxwellsHardware's catalog, so the resolved SKU will be a catalog product. swap still holds: no owner-linked need, all four are kind json via loadData with output sku, the validation messages are fixed UI text and do not name the product, no new data value appears in the spec code",
+      "2026-11-02 live run: a configurable parent gives 'The entered SKU is invalid.' only when the parent SKU itself has stock in the store; a parent without its own inventory (B-100000) gives 'This product is out of stock.' The need moved from PRODUCT_CONFIGURABLE_WITH_VARIANTS to PRODUCT_CONFIGURABLE_PARENT_IN_STOCK (output parentProductSku); the recorded z-100000 qualifies."
     ],
     "confidence": "medium",
     "needsReview": true
   },
   "requires": [
     {
-      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "key": "PRODUCT_CONFIGURABLE_PARENT_IN_STOCK",
       "alias": "configurable",
       "params": {
-        "quantityUsed": 1,
-        "minVariants": 1,
-        "minAddOns": 0,
-        "minPersonalizableAttributes": 0,
-        "store": "MaxwellsHardware",
-        "variantAttributes": "BulbSize,Color,Technology"
+        "store": "MaxwellsHardware"
       },
       "preferred": {
         "source": 7,
@@ -434,5 +430,5 @@
   "strategy": "swap",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

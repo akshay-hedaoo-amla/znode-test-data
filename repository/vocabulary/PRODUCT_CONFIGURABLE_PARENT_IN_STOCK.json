@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_PARENT_IN_STOCK",
+  "entity": "product",
+  "type": "configurable",
+  "constraints": {
+    "type": "configurable",
+    "status": "active",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "inventory": ">= 1"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active configurable parent published to the store with stock on the parent SKU itself in the store's warehouses. Entering it in an order template row gives 'The entered SKU is invalid.'; a parent without its own stock gives 'out of stock'. KB: Product Types.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}
