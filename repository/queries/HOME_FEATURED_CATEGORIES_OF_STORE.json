@@ -1,0 +1,30 @@
+{
+  "schemaVersion" : 1,
+  "key" : "HOME_FEATURED_CATEGORIES_OF_STORE",
+  "sql" : "SELECT TOP 1 p.StoreCode AS storeCode, p.PortalId AS portalId, MAX(f.widgetsKey) AS widgetKey, COUNT(f.categoryId) AS categoryCount, MAX(CASE WHEN f.position = @pos1 THEN f.name END) AS category1Name, MAX(CASE WHEN f.position = @pos1 THEN f.categoryId END) AS category1Id, MAX(CASE WHEN f.position = @pos1 THEN f.categoryCode END) AS category1Code, MAX(CASE WHEN f.position = @pos2 THEN f.name END) AS category2Name, MAX(CASE WHEN f.position = @pos2 THEN f.categoryId END) AS category2Id, MAX(CASE WHEN f.position = @pos2 THEN f.categoryCode END) AS category2Code, MAX(CASE WHEN f.position = @pos3 THEN f.name END) AS category3Name, MAX(CASE WHEN f.position = @pos3 THEN f.categoryId END) AS category3Id, MAX(CASE WHEN f.position = @pos3 THEN f.categoryCode END) AS category3Code, MAX(CASE WHEN f.position = @pos4 THEN f.name END) AS category4Name, MAX(CASE WHEN f.position = @pos4 THEN f.categoryId END) AS category4Id, MAX(CASE WHEN f.position = @pos4 THEN f.categoryCode END) AS category4Code, MAX(CASE WHEN f.position = @pos5 THEN f.name END) AS category5Name, MAX(CASE WHEN f.position = @pos5 THEN f.categoryId END) AS category5Id, MAX(CASE WHEN f.position = @pos5 THEN f.categoryCode END) AS category5Code, MAX(CASE WHEN f.openEligible = @pos1 AND f.openRank = @pos1 THEN f.name END) AS openCategoryName, MAX(CASE WHEN f.openEligible = @pos1 AND f.openRank = @pos1 THEN f.categoryId END) AS openCategoryId, MAX(CASE WHEN f.openEligible = @pos1 AND f.openRank = @pos1 THEN f.productCount END) AS openCategoryProductCount FROM dbo.ZnodePortal p INNER JOIN (SELECT e.portalId, e.widgetsKey, e.categoryId, e.categoryCode, e.name, e.productCount, e.position, CASE WHEN e.position > @pos1 THEN e.openEligible ELSE @zero END AS openEligible, ROW_NUMBER() OVER (PARTITION BY e.portalId, CASE WHEN e.position > @pos1 THEN e.openEligible ELSE @zero END ORDER BY e.position) AS openRank FROM (SELECT k.portalId, k.widgetsKey, k.categoryId, k.categoryCode, k.name, k.productCount, ROW_NUMBER() OVER (PARTITION BY k.portalId ORDER BY k.displayOrder, k.widgetRowId) AS position, CASE WHEN (@minProducts IS NULL OR k.productCount >= @minProducts) THEN @pos1 ELSE @zero END AS openEligible FROM (SELECT w.PortalId AS portalId, w.WidgetsKey AS widgetsKey, w.CategoryCode AS categoryCode, cat.categoryId AS categoryId, cat.name AS name, pr.productCount AS productCount, w.DisplayOrder AS displayOrder, w.PublishWidgetCategoryEntityId AS widgetRowId, DENSE_RANK() OVER (PARTITION BY w.PortalId ORDER BY CHARINDEX(w.WidgetsKey, pp.PageJSON), w.WidgetsKey) AS widgetRank FROM dbo.ZnodePublishWidgetCategoryEntity w INNER JOIN dbo.ZnodePublishWebstoreEntity ws ON ws.VersionId = w.VersionId AND ws.PortalId = w.PortalId INNER JOIN dbo.ZnodeCMSPortalProfilePageMapper pm ON pm.PortalId = w.PortalId INNER JOIN dbo.ZnodeCMSPortalPages pp ON pp.CMSPortalPageId = pm.CMSPortalPageId CROSS APPLY (SELECT TOP 1 c.ZnodeCategoryId AS categoryId, c.Name AS name, c.VersionId AS versionId FROM dbo.ZnodePublishCategoryEntity c INNER JOIN dbo.ZnodePublishVersionEntity v ON v.VersionId = c.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = c.ZnodeCatalogId WHERE c.CategoryCode = w.CategoryCode AND pc.PortalId = w.PortalId AND c.LocaleId = @localeId AND c.IsActive = @isActive AND v.RevisionType = @publishState AND v.IsPublishSuccess = @isActive AND v.LocaleId = @localeId AND (c.ActivationDate IS NULL OR c.ActivationDate <= @now) AND (c.ExpirationDate IS NULL OR c.ExpirationDate >= @now) ORDER BY c.PublishCategoryEntityId DESC) cat OUTER APPLY (SELECT COUNT(DISTINCT pe.ZnodeProductId) AS productCount FROM dbo.ZnodePimCategoryHierarchy ph INNER JOIN dbo.ZnodePimCategoryProduct cp ON cp.PimCategoryId = ph.PimCategoryId INNER JOIN dbo.ZnodePublishProductEntity pe ON pe.ZnodeProductId = cp.PimProductId WHERE ph.PimCategoryHierarchyId = cat.categoryId AND pe.VersionId = cat.versionId AND cp.Status = @isActive AND pe.IsActive = @isActive AND CHARINDEX(CONCAT(@comma, ph.PimCategoryHierarchyId, @comma), CONCAT(@comma, pe.ZnodeCategoryIds, @comma)) > @zero) pr WHERE ws.PublishState = @publishState AND ws.LocaleId = @localeId AND w.TypeOFMapping = @portalMapping AND w.MappingId = w.PortalId AND pm.PageCode = @homePageCode AND pm.ProfileId IS NULL AND CHARINDEX(w.WidgetsKey, pp.PageJSON) > @zero) k WHERE k.widgetRank = @pos1) e) f ON f.portalId = p.PortalId WHERE p.StoreCode = @store GROUP BY p.PortalId, p.StoreCode HAVING (@minCategories IS NULL OR COUNT(f.categoryId) >= @minCategories) AND (@minProducts IS NULL OR MAX(CASE WHEN f.openEligible = @pos1 THEN f.productCount END) >= @minProducts) ORDER BY p.PortalId",
+  "params" : [ "pos1", "pos2", "pos3", "pos4", "pos5", "minProducts", "zero", "localeId", "isActive", "publishState", "now", "comma", "portalMapping", "homePageCode", "store", "minCategories" ],
+  "constants" : {
+    "localeId" : "1",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "portalMapping" : "PortalMapping",
+    "homePageCode" : "home",
+    "zero" : "0",
+    "comma" : ",",
+    "pos1" : "1",
+    "pos2" : "2",
+    "pos3" : "3",
+    "pos4" : "4",
+    "pos5" : "5"
+  },
+  "outputs" : [ "storeCode", "portalId", "widgetKey", "categoryCount", "category1Name", "category1Id", "category1Code", "category2Name", "category2Id", "category2Code", "category3Name", "category3Id", "category3Code", "category4Name", "category4Id", "category4Code", "category5Name", "category5Id", "category5Code", "openCategoryName", "openCategoryId", "openCategoryProductCount" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:7cad1af65e54f77d98e2ef6470450c91b4afb9eaed78a249a6b685d3a13427a0",
+  "vocabularyFingerprint" : "sha256:9b28dcf63b544942c0cc4f54ed100b26aa8dd038d0ceca45d87809dbc0fcfef0",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z",
+  "createdAt" : "2026-11-03T00:00:00Z",
+  "lastValidated" : "2026-11-03T12:37:04Z",
+  "verifiedHash" : "sha256:974f391d7a6b5e93a9914baf7cdbbcf3ac755392fb805a7c3420c9aa2a8585e7"
+}

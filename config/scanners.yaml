@@ -156,6 +156,14 @@ migrated:
     - testim-migrated/tests/webstore/quick-order/verify-add-multiple-item-sku-validation-for-guest-user.spec.ts
     - testim-migrated/tests/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.spec.ts
     - testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts
+    # Phase 6 module webstore/home-page (2026-11-03; CMS banner/ticker/footer/phone texts checked structurally)
+    - testim-migrated/tests/webstore/home-page/validate-featured-products-visibility-count-and-navigation.spec.ts
+    - testim-migrated/tests/webstore/home-page/validate-footer-links-and-contact-information-functionality.spec.ts
+    - testim-migrated/tests/webstore/home-page/validate-menu-navigation-and-brand-listings-functionality.spec.ts
+    - testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts
+    - testim-migrated/tests/webstore/home-page/verify-header-components-and-quick-order.spec.ts
+    - testim-migrated/tests/webstore/home-page/verify-home-page-banner-sliders.spec.ts
+    - testim-migrated/tests/webstore/home-page/verify-track-order-functionality.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy

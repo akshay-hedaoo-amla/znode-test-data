@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/verify-header-components-and-quick-order.spec.ts > Webstore - Home Page > verify header components, navigation and quick order",
+  "scenario": {
+    "summary": "A registered user signs in from the header (submit button reads 'Sign In'), checks the header components (logo, search, Quick Order, Track Order, Departments, cart), searches a product SKU in the header search and sees a result, opens the Quick Order fly-out and types the SKU into row 0, checks the Track Order link text and opens the order lookup form, opens the Departments menu and reaches the cart page.",
+    "steps": [
+      "Open Home as a guest; Sign In; type the account's username and password; submit button contains 'Sign In'; submit; greeting shown",
+      "Header components visible: logo, search input, Quick Order link, Track Order link, Departments, cart link",
+      "Header search for the product SKU; first search result visible",
+      "Logo -> Home; open the Quick Order fly-out; type the SKU into row 0; the field holds the SKU",
+      "Logo -> Home; Track Order link contains 'Track Order'; open the track-order form; order number input visible",
+      "Logo -> Home; Departments visible and clicked; open the cart page; cart heading or empty-cart message visible"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Signs the account in (new session); nothing is added to the cart (the quick-order row is not submitted)"
+    ],
+    "assertions": [
+      "Sign-in submit button contains 'Sign In' (fixed UI text)",
+      "Header components visible",
+      "First header search result visible for the SKU",
+      "Quick Order row 0 input has the typed SKU",
+      "Track Order link contains 'Track Order' (fixed UI text); order number input visible",
+      "Cart heading or empty-cart message visible"
+    ],
+    "evidence": [
+      "Title 'verify header components, navigation and quick order' and the step labels match the flow; no linked cases, no AIO file.",
+      "DECLARED ACCOUNT: the spec opts out of the shared session (test.use storageState empty) and signs in with username/password from its own JSON (credential sources, masked). USER_WEBSTORE_REGISTERED {store} preferred.required true on the username source; the migrated test declares it with await testData.useExisting('user', data.username) before signing in (same pattern as the approved quick-order retail entries).",
+      "Store MaxwellsHardware: the webstore every migrated webstore spec runs on (testimEnv.web.baseUrl), same store as the approved quick-order/pdp entries.",
+      "sku z-1234579: profile FOUND, a BundleProduct ('DeWalt 3-Tool Combo Kit Bundle', inventory 28362, storefront index 1). Used for the header search (first result visible) and typed into Quick Order row 0 (value checked, not submitted). product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, maxPersonalizableAttributes 0 (Quick Order rejects personalizable products, as in the quick-order module), store}. The storefront index constraint (>= 1) keeps it searchable. No preferred: the recorded bundle does not qualify for a simple-product key. REVIEW: PRODUCT_BUNDLE_IN_STOCK with preferred z-1234579 would keep the recorded product, but Quick Order acceptance of a bundle SKU is not needed by this test and a simple product is the safer entry point.",
+      "The two literal '0' values are the Quick Order row index (config); profile NOT_FOUND for them as products is noise. '/' is the home path (config).",
+      "migrate: the JSON is read with a raw import and an 'as HeaderData' cast, not loadData (swap rule 1 fails); the account is declared with testData.useExisting."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "maxPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/home-page/verify-header-components-and-quick-order.spec.ts:43",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-header-components-and-quick-order.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-header-components-and-quick-order.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-header-components-and-quick-order.json:5",
+      "kind": "json",
+      "keyPath": "signInText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-header-components-and-quick-order.json:4",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/home-page/verify-header-components-and-quick-order.spec.ts:74",
+      "kind": "literal",
+      "keyPath": "enterSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/home-page/verify-header-components-and-quick-order.spec.ts:75",
+      "kind": "literal",
+      "keyPath": "skuInput",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Track Order",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-header-components-and-quick-order.json:6",
+      "kind": "json",
+      "keyPath": "trackOrderText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

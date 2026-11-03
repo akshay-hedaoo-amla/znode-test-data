@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "entity": "home_featured_categories",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodeCMSPortalProfilePageMapper",
+    "dbo.ZnodeCMSPortalPages",
+    "dbo.ZnodePublishWebstoreEntity",
+    "dbo.ZnodePublishWidgetCategoryEntity",
+    "dbo.ZnodePublishCategoryEntity",
+    "dbo.ZnodePublishVersionEntity",
+    "dbo.ZnodePortalCatalog",
+    "dbo.ZnodePimCategoryHierarchy",
+    "dbo.ZnodePimCategoryProduct",
+    "dbo.ZnodePublishProductEntity"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePortal.PortalId",
+      "to": "dbo.ZnodeCMSPortalProfilePageMapper.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeCMSPortalProfilePageMapper.CMSPortalPageId",
+      "to": "dbo.ZnodeCMSPortalPages.CMSPortalPageId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortal.PortalId",
+      "to": "dbo.ZnodePublishWidgetCategoryEntity.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishWidgetCategoryEntity.VersionId",
+      "to": "dbo.ZnodePublishWebstoreEntity.VersionId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishWidgetCategoryEntity.CategoryCode",
+      "to": "dbo.ZnodePublishCategoryEntity.CategoryCode",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.VersionId",
+      "to": "dbo.ZnodePublishVersionEntity.VersionId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.ZnodeCatalogId",
+      "to": "dbo.ZnodePortalCatalog.PublishCatalogId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePublishCategoryEntity.ZnodeCategoryId",
+      "to": "dbo.ZnodePimCategoryHierarchy.PimCategoryHierarchyId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryHierarchy.PimCategoryId",
+      "to": "dbo.ZnodePimCategoryProduct.PimCategoryId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePimCategoryProduct.PimProductId",
+      "to": "dbo.ZnodePublishProductEntity.ZnodeProductId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "store": "dbo.ZnodePortal.StoreCode",
+    "code": "dbo.ZnodePortal.StoreCode",
+    "homePageCode": "dbo.ZnodeCMSPortalProfilePageMapper.PageCode",
+    "widgetsKey": "dbo.ZnodePublishWidgetCategoryEntity.WidgetsKey",
+    "typeOfMapping": "dbo.ZnodePublishWidgetCategoryEntity.TypeOFMapping",
+    "displayOrder": "dbo.ZnodePublishWidgetCategoryEntity.DisplayOrder",
+    "featuredCategoryCode": "dbo.ZnodePublishWidgetCategoryEntity.CategoryCode",
+    "featuredCategoryCount": "COUNT(DISTINCT dbo.ZnodePublishWidgetCategoryEntity.CategoryCode)",
+    "categoryId": "dbo.ZnodePublishCategoryEntity.ZnodeCategoryId",
+    "categoryName": "dbo.ZnodePublishCategoryEntity.Name",
+    "categoryActive": "dbo.ZnodePublishCategoryEntity.IsActive",
+    "listedProductCount": "COUNT(DISTINCT dbo.ZnodePublishProductEntity.ZnodeProductId)",
+    "webstorePublishState": "dbo.ZnodePublishWebstoreEntity.PublishState",
+    "publishState": "dbo.ZnodePublishVersionEntity.RevisionType"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeCMSPortalProfilePageMapper.PageCode": "home",
+    "dbo.ZnodePublishWidgetCategoryEntity.TypeOFMapping": "PortalMapping",
+    "dbo.ZnodePublishWebstoreEntity.PublishState": "PRODUCTION",
+    "dbo.ZnodePublishWebstoreEntity.LocaleId": "1",
+    "dbo.ZnodePublishVersionEntity.RevisionType": "PRODUCTION",
+    "dbo.ZnodePublishVersionEntity.IsPublishSuccess": "1",
+    "dbo.ZnodePublishCategoryEntity.LocaleId": "1",
+    "dbo.ZnodePublishCategoryEntity.IsActive": "1",
+    "dbo.ZnodePimCategoryProduct.Status": "1",
+    "dbo.ZnodePublishProductEntity.IsActive": "1"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:7cad1af65e54f77d98e2ef6470450c91b4afb9eaed78a249a6b685d3a13427a0",
+  "scannedAt": "2026-11-03T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

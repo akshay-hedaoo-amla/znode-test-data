@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/verify-track-order-functionality.spec.ts > Webstore - Home Page > verify track order functionality",
+  "scenario": {
+    "summary": "The signed-in registered user (shared session) searches a simple product by SKU and checks the first result name, adds 5 to the cart, opens the cart and checkout (Sub Total label; COD radio disabled), then opens Order History, takes the first SUBMITTED order on the list (else the first row), tracks it on the Track Order page by order number and the account e-mail, and checks the receipt order number, total, Cancel and Print buttons.",
+    "steps": [
+      "Open the webstore signed in (shared storageState); header greeting contains 'Hello,'",
+      "Search the product SKU; first result name equals the product name",
+      "Open the product; set quantity 5; Add to Cart; fly-out link reads 'View Cart & Checkout'; open the cart",
+      "Proceed to checkout; 'Sub Total' label; COD radio disabled",
+      "Order History list: pick the first SUBMITTED order (else row 0)",
+      "Track Order with that order number and the account e-mail; receipt order number and total equal the history row; 'Cancel' and 'Print' buttons"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "order"
+    ],
+    "stateChanges": [
+      "Adds 5 of the product to the signed-in account's cart and does not empty it (left for later runs)",
+      "No order is placed: the recorded flow placed a COD order and tracked it; the migrated spec tracks an existing SUBMITTED order of the account instead (the order is only read)"
+    ],
+    "assertions": [
+      "Greeting contains 'Hello,' (fixed UI text)",
+      "First search result name equals the product name",
+      "Add-to-cart fly-out 'View Cart & Checkout', checkout 'Sub Total' (fixed UI text)",
+      "COD radio disabled (env drift: auto-applied vouchers make the amount due $0.00, per the spec comment)",
+      "Track receipt shows the tracked order's number and the total shown in Order History; 'Cancel' and 'Print' buttons (fixed UI text)"
+    ],
+    "evidence": [
+      "Title 'verify track order functionality' matches the subject (track order); the cart/checkout steps are kept from the recording but no order is placed (spec header comment: COD and Place Order are blocked on this account by auto-applied vouchers; the spec tracks an existing SUBMITTED order read from Order History at run time). The comment is evidence, not an instruction.",
+      "DECLARED ACCOUNT: the spec runs in the webstore-auth project (playwright.testim-webstore.config.ts AUTH_SPECS lists home-page/verify-track-order-functionality, storageState myAccountTest) signed in as getMyAccountUser() (src/data/credentials.ts) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80), also typed as the e-mail on the Track Order form. Source 0 records that credential (masked; the scan lists getMyAccountUser as step 1 but not its value). The test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (same pattern as the approved my-account dashboard entry).",
+      "Store MaxwellsHardware: the webstore every migrated webstore spec runs on; the account's orders are on PortalId 7 = MaxwellsHardware (my-account entries).",
+      "sku8 z-2410001: profile FOUND active SimpleProduct 'Black + Decker 20 Volt Cordless Reciprocating Saw', inventory 250, storefront index 0 (quick-order entry: DontTrackInventory, Min 1 / Max 100). product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 5, minMaxQuantity 5, store}; sku8 -> product.sku, sku8Name1 -> product.name (the first search result name). Preferred sku8 not required: it fails storefrontProductIndex >= 1 and falls back (same as the quick-order retail entry). productQuantity 5 is config.",
+      "Order to track: order = ORDER_COUNT_OF_USER {owner @user.userId, orderStatus submitted, minOrders 1, minOrdersInStatus 1, store}: guarantees the declared account owns at least one SUBMITTED order (class Orders) on the store, the precondition of step 5. No source maps to it: order number and total are read from the Order History page at run time (not recorded values). An order the test placed itself would be created-by-test, not a need; this spec places none. REVIEW: (a) the spec only looks at Order History page 1, the key does not check that a submitted order is on page 1 (falls back to row 0, whose receipt may not show Cancel); (b) alternative: ORDER_OF_USER_REORDERABLE {owner @user.userId, productType simple, quantityUsed 1, minAddOns 0, minPersonalizableAttributes 0, store} gives a concrete orderNumber the migrated spec could track directly (creates an order when none exists), but its status is not constrained to SUBMITTED, which the Cancel button needs.",
+      "Cart side effect: the 5 items stay in the shared account's cart (the spec never empties it); other specs of the same account may see them.",
+      "'Hello,', 'View Cart & Checkout', 'Sub Total', 'Cancel', 'Print' are fixed UI texts (expected-output).",
+      "migrate: the account is declared with testData.useExisting and the order need links to it (@user.userId); data values sku8/sku8Name1 alone would satisfy the swap rules (loadData, outputs sku/name)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "minMaxQuantity": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "order",
+      "params": {
+        "owner": "@user.userId",
+        "orderStatus": "submitted",
+        "minOrders": 1,
+        "minOrdersInStatus": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/home-page/verify-track-order-functionality.spec.ts:44",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2410001",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:2",
+      "kind": "json",
+      "keyPath": "sku8",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Black + Decker 20 Volt Cordless Reciprocating Saw",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:3",
+      "kind": "json",
+      "keyPath": "sku8Name1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:4",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "View Cart & Checkout",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:5",
+      "kind": "json",
+      "keyPath": "cartPopup",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Sub Total",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:6",
+      "kind": "json",
+      "keyPath": "subTotalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cancel",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:7",
+      "kind": "json",
+      "keyPath": "cancelText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Print",
+      "location": "testim-migrated/test-data/webstore/home-page/verify-track-order-functionality.json:8",
+      "kind": "json",
+      "keyPath": "print",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
