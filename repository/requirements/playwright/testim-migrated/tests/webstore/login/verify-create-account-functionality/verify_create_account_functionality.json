@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/login/verify-create-account-functionality.spec.ts > Webstore - Login > verify create account functionality",
+  "scenario": {
+    "summary": "Guest registers a new webstore account with a run-unique e-mail as username and e-mail, checks the automatic sign-in, logs out, then signs in again with the new account and checks the 'Hello,' greeting.",
+    "steps": [
+      "Open '/' as a guest (storageState empty)",
+      "Header Sign In; check the Create An Account button text; open /signup",
+      "Fill username and e-mail with the generated address, password and retype password; Create Account; greeting visible (auto sign-in)",
+      "Log out; Sign In link visible; sign in with the new e-mail and password; greeting contains 'Hello,'"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "Creates a NEW registered webstore account (username = e-mail = qatestaccount<Date.now()>@yopmail.com) on the store per run; the webstore has no self-serve delete and the test does no cleanup, so one account is left per run (spec note). Not torn down by TDA (created by the UI, no ledger undo)"
+    ],
+    "assertions": [
+      "Create An Account button has text createAccountButtonText",
+      "Greeting visible after account creation (auto sign-in)",
+      "Sign In link visible after log out",
+      "Greeting contains 'Hello,' after signing in with the new account"
+    ],
+    "evidence": [
+      "Title 'verify create account functionality' and the step labels (Create a new account, Log out then sign in with the new account) match the flow",
+      "No need: the account is created by the test (created-by-test), not found in the environment. The new username/e-mail is NOT a recorded literal: the spec builds it at run time as `qatestaccount${Date.now()}@yopmail.com` (template literal, not in the scan), unique per run; it is used for the username and e-mail fields and for the second sign-in",
+      "Source 2 (keyPath password, masked by key name) is the password the test SETS on the new account (create password, retype password) and then signs in with: it belongs to the created account, not to an existing one -> created-by-test (no alias; not a credential of any environment account). Value stays masked. It is a fixed recorded literal; the migrated or swapped spec may keep it (it must satisfy the store's password policy)",
+      "Source 1 'Create An Account' is the asserted button text (expected-output); source 3 'Hello,' the asserted greeting prefix (expected-output); source 0 '/' the start URL (config)",
+      "Store MaxwellsHardware: the spec runs on env.web.baseUrl (WEB_BASE_URL, webstore-z10-at), the store every migrated webstore spec runs on (same store as the approved my-account, quick-order and home-page entries)",
+      "swap: no data value (nothing to replace); the spec can stay as it is. No account is declared or leased (the test signs in only with the account it creates)",
+      "REVIEW: each run leaves a new registered account on MaxwellsHardware (yopmail address); cleanup would need an admin-side delete, out of TDA scope today",
+      "Profile: every value NO_RULE or SENSITIVE (no observation FOUND); profiled false"
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/login/verify-create-account-functionality.spec.ts:31",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Create An Account",
+      "location": "testim-migrated/test-data/webstore/login/create-account.json:3",
+      "kind": "json",
+      "keyPath": "createAccountButtonText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/create-account.json:2",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/login/verify-create-account-functionality.spec.ts:56",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

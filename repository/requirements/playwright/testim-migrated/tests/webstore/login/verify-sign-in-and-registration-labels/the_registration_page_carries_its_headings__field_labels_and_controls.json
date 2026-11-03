@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/login/verify-sign-in-and-registration-labels.spec.ts > Webstore - Login > the registration page carries its headings, field labels and controls",
+  "scenario": {
+    "summary": "Guest opens /signup and checks the three headings, the username, e-mail, password and confirm-password labels and the Create Account, Cancel and Login Now controls, then clicks Login Now and checks the sign-in form. Read-only, no account is created.",
+    "steps": [
+      "Open /signup as a guest (storageState empty)",
+      "Check the Create An Account, Register for an account and Already have an account? headings",
+      "Check the username, e-mail address, password and confirm-password labels",
+      "Check the Create Account, Cancel and Login Now button texts",
+      "Click Login Now; check the username input is visible and the Sign In heading"
+    ],
+    "entitiesTouched": [],
+    "stateChanges": [
+      "None (guest, read-only; the registration form is never submitted)"
+    ],
+    "assertions": [
+      "createAccountHeading, registerForAccountHeading, alreadyHaveAccountHeading contain signUp.heading / registerForAccountHeading / alreadyHaveAccountHeading",
+      "createUsernameLabel, createEmailAddressLabel, passwordLabel, createConfirmPasswordLabel contain the signUp labels",
+      "createAccountSubmitButton, signupCancelButton, loginNowButton contain the signUp button texts",
+      "After Login Now: usernameInput visible, signInHeading contains signIn.heading"
+    ],
+    "evidence": [
+      "Title and step labels match the flow; linked cases ZPD-TC-9152..9155 (scan, shared by the describe)",
+      "UI text only: every value is a heading, field label or button text asserted with toContainText -> expected-output; '/signup' is the start URL (config). No record of the environment is read, so no need",
+      "Masked labels, not credentials: source 4 (signUp.usernameLabel), source 5 (signUp.emailAddressLabel), source 6 (signUp.passwordLabel) and source 7 (signUp.confirmPasswordLabel) are masked only because the key contains 'username'/'email'/'password'; the spec asserts them with toContainText on the sign-up field labels (lblUserName, lblEmail, lblPassword, lblConfirmPassword) and never types them -> expected-output. Values stay masked",
+      "Store: no test.use baseURL; the spec runs on the project's default webstore baseURL (the same webstore as the other login specs). It reads no record, so no store param is needed",
+      "swap: no data value (nothing to replace, no need); the spec can stay as it is",
+      "Profile: every value NO_RULE or SENSITIVE (no observation FOUND); profiled false"
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9152",
+    "ZPD-TC-9153",
+    "ZPD-TC-9154",
+    "ZPD-TC-9155"
+  ],
+  "sources": [
+    {
+      "value": "/signup",
+      "location": "testim-migrated/tests/webstore/login/verify-sign-in-and-registration-labels.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Create An Account",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:11",
+      "kind": "json",
+      "keyPath": "signUp.heading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Register for an account",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:12",
+      "kind": "json",
+      "keyPath": "signUp.registerForAccountHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Already have an account?",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:13",
+      "kind": "json",
+      "keyPath": "signUp.alreadyHaveAccountHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:14",
+      "kind": "json",
+      "keyPath": "signUp.usernameLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:15",
+      "kind": "json",
+      "keyPath": "signUp.emailAddressLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:16",
+      "kind": "json",
+      "keyPath": "signUp.passwordLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:17",
+      "kind": "json",
+      "keyPath": "signUp.confirmPasswordLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Create Account",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:18",
+      "kind": "json",
+      "keyPath": "signUp.createAccountButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cancel",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:19",
+      "kind": "json",
+      "keyPath": "signUp.cancelButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Login Now",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:20",
+      "kind": "json",
+      "keyPath": "signUp.loginNowButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:3",
+      "kind": "json",
+      "keyPath": "signIn.heading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
