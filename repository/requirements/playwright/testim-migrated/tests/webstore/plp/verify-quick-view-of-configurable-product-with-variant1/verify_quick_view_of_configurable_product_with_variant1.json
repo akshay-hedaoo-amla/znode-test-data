@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts > PLP - Quick View for Configurable Product with Variant1 (Small+White+LED) > verify quick view of configurable product with variant1",
+  "scenario": {
+    "summary": "Guest searches a configurable parent by SKU, checks the PLP card (name, SKU, price) and search page, opens Quick View and selects the default variant's swatches (size, color, technology), checks the variant's name, SKU, description, price, special offers and stock, adds it to cart and checks the cart total and item price.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the parent SKU; assert card name (hdgProductName666), SKU, retail price, breadcrumb and results heading.",
+      "Open Quick View; select imgSmall, imgWhite, imgLED (the default variant); assert the variant name and the 'Technology' attribute label.",
+      "Assert variant name, SKU, description, sales price (divSalesPrice532), 'SPECIAL PRICE OFFERS' and stock status.",
+      "Add to Cart, go to the cart; assert 'Home / Cart', 'YOUR TOTAL IS ...' and the item price (paraItemRowCost532)."
+    ],
+    "entitiesTouched": [
+      "product",
+      "product_variants",
+      "price",
+      "tier_price",
+      "inventory",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Adds one unit of the default variant to the guest session cart (not removed)."
+    ],
+    "assertions": [
+      "PLP card: parent name, SKU and price; search page headings.",
+      "Quick View: default variant name, SKU, description, sales price, special offers heading, stock status.",
+      "Cart: total heading and item price."
+    ],
+    "evidence": [
+      "Title 'verify quick view of configurable product with variant1' and describe 'Variant1 (Small+White+LED)' match the flow; guest storageState; no linked AIO cases.",
+      "Data through loadData(Variant1DataSchema, rawData, ...) (spec line 23).",
+      "Profile: parent B-100000 FOUND as ConfigurableProduct (PimProductId 666), active, PRODUCTION, brand Philips, storefrontProductIndex 1. tda rows: variant z-2510001 is PimProductId 532 (EcoSmart LED bulb, active).",
+      "Key PRODUCT_CONFIGURABLE_PDP_DETAILS (quantityUsed 1): Quick View opens on the default (first) variant, and the key returns parentProductSku, variantSku, variantName, shortDescription, price, tier1-3, inStockMessage and swatches for that variant (same key as the pdp variant1 entry).",
+      "Outputs of PRODUCT_CONFIGURABLE_PDP_DETAILS now cover: sku -> parentProductSku, parentProductName -> name, variant1ProductName -> variantName, variant1ProductDescription -> shortDescription (if stored with markup, the spec compares the text content), variant1ProductPrice -> price (guest price of the variant: sales, else retail), variant1Inventory -> inStockMessage (the store in-stock message); test ids with 666 from parentProductId and 532 from variantProductId.",
+      "Composed values stay data without output, built by the spec from outputs: parentProductPrice '$50.00 / Piece' = parentRetailPrice (parentSalesPrice when set) + ' / Piece', variant1SKU 'SKU:' + variantSku, hdgTotalPriceWithItems 'YOUR TOTAL IS <price> For 1 Item', variant1ItemPrice '<price> / Piece'. The ' / Piece' unit is not produced by any key (the spec keeps it as a constant).",
+      "Not covered: the swatch ids imgSmall / imgWhite / imgLED and the attribute test id 'divTechnology ' with label 'Technology' stay data without output: the key's variant is the first in-stock variant by SKU, which is not guaranteed to be the Quick View default variant, and no key produces the default variant (swatches is one encoded list).",
+      "Data in code: PimProductIds 666 and 532 in test ids, the swatch ids imgSmall / imgWhite / imgLED and the attribute test id 'divTechnology ' with label 'Technology'; recorded as data of alias pdp.",
+      "migrate: loadData is used, but prices and the cart total depend on the record and record ids and swatch values are in code (swap rules 3 and 4 fail).",
+      "2026-11-02 fix: pdp need passes minTiers 1: the spec checks the SPECIAL PRICE OFFERS heading, so the parent or the variant needs at least one tier price on the variant's price list."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_PDP_DETAILS",
+      "alias": "pdp",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minTiers": 1
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:3",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:50",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:4",
+      "kind": "json",
+      "keyPath": "parentProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / SEARCH",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgSearchResults",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:54",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "imgSmall",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "imgWhite",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:69",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "imgLED",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:6",
+      "kind": "json",
+      "keyPath": "variant1ProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp",
+      "output": "variantName"
+    },
+    {
+      "value": "divTechnology ",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "Technology",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "SKU:z-2510001",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:5",
+      "kind": "json",
+      "keyPath": "variant1SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "The EcoSmart Daylight Dimmable LED Bulb is a flood light bulb compatible with your indoor recessed cans or track light fixtures. Ideal for use in kitchens, living rooms, dining rooms, offices or bedrooms, it is a perfect replacement for your traditional incandescent, CFL or Halogen lamps. It only uses 13-Watt and lasts for more than 10 years.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:7",
+      "kind": "json",
+      "keyPath": "variant1ProductDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp",
+      "output": "shortDescription"
+    },
+    {
+      "value": "divSalesPrice532",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:91",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "$46.84",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:8",
+      "kind": "json",
+      "keyPath": "variant1ProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp",
+      "output": "price"
+    },
+    {
+      "value": "SPECIAL PRICE OFFERS",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:10",
+      "kind": "json",
+      "keyPath": "variant1Inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp",
+      "output": "inStockMessage"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / Cart",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:128",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "YOUR TOTAL IS $46.84 For 1 Item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:11",
+      "kind": "json",
+      "keyPath": "hdgTotalPriceWithItems",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "paraItemRowCost532",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts:129",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    },
+    {
+      "value": "$46.84 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.json:9",
+      "kind": "json",
+      "keyPath": "variant1ItemPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pdp"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

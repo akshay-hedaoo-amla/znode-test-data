@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_ON_SALE_IN_STOCK",
+  "entity": "product",
+  "type": "simple_on_sale",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "requiredAddOnCount": "= 0",
+    "maxQuantity": ">= {quantityUsed}",
+    "salesPrice": "> 0",
+    "salesBelowRetail": "= true",
+    "discountedForProfile": "!= {profile}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active in-stock simple product, searchable on the store, no required add-ons, whose active price for the profile has a sales price above zero and below the retail price, and that no automatic promotion discounts for it. KB: Custom Price Lists; Product Types.",
+  "declaredParams": {
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test adds to cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Profile name the test shops as (e.g. Anonymous for a guest): its price lists on the store come first, then the store's; no automatic promotion for it may discount the product"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

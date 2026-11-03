@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts > PLP - Wishlist Detail for Retail User from Quick View (Group Product) > verify wishlist detail for retail user on quick view for group product",
+  "scenario": {
+    "summary": "A registered user signs in with the test's own account, clears the wishlist, searches a grouped product by SKU and checks its PLP card, adds it to the wishlist from the grouped Quick View (toast), finds it on the Wishlist page, searches again and removes it from the wishlist from Quick View (toast).",
+    "steps": [
+      "Guest context; open the webstore, sign in from the header with username/password; check the greeting contains 'Hello,'.",
+      "Clear the wishlist; search the grouped SKU; check the PLP card name, SKU (divProductSKUContainer408) and sales price (spnSalesPrice408).",
+      "Open the grouped Quick View and click the wishlist heart; check the 'added' toast.",
+      "Open the Wishlist page; check the product link with the grouped product name is visible.",
+      "Search the SKU again and repeat the PLP card checks.",
+      "Open the grouped Quick View and click the heart again; check the 'removed' toast. afterEach clears the wishlist."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "wishlist",
+      "store"
+    ],
+    "stateChanges": [
+      "The declared account's wishlist is cleared at start (and in afterEach), the product is added from Quick View and removed again (wishlist ends empty)."
+    ],
+    "assertions": [
+      "Header greeting contains 'Hello,'.",
+      "PLP card shows the grouped product name, SKU and sales price '$500.00' (twice).",
+      "Toast 'Product added to your Wishlist.'; Wishlist page lists the grouped product name.",
+      "Toast 'Product removed from your Wishlist.'"
+    ],
+    "evidence": [
+      "Title 'verify wishlist detail for retail user on quick view for group product' and step labels 0) to 5) match the flow; no linked cases.",
+      "DECLARED ACCOUNT: the spec opts out of the shared session (test.use storageState empty) and signs in from the header with username/password from its own JSON (credential sources, masked in the scan, profile SENSITIVE). USER_WEBSTORE_REGISTERED preferred.required true on the username source; the migrated test declares it with testData.useExisting('user', data.username) before signing in.",
+      "Profile: z-2200003 FOUND as active GroupedProduct, PRODUCTION, inventory 250, storefrontProductIndex 1, requiredAddOnCount 0: meets PRODUCT_GROUPED_IN_STOCK (quantityUsed 1: only wishlisted). tda rows: PimProductId 408.",
+      "groupProductSKU -> product.sku, groupProductName -> product.name, groupProductSalesPrice ($500.00, spnSalesPrice408) -> product.salesPrice (now an output: the grouped product's own price-list row; reviewer to confirm the card shows the parent's price rather than a child's).",
+      "Data in code: product id 408 in getByTestId literals divProductSKUContainer408 and spnSalesPrice408 (product.productId covers it in the migrated spec).",
+      "migrate: product id in spec code (swap rule 4) and the asserted sales price depends on the product (rule 3).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": true,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": true,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2200003",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:4",
+      "kind": "json",
+      "keyPath": "groupProductSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:6",
+      "kind": "json",
+      "keyPath": "groupProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts:62",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnSalesPrice408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$500.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:7",
+      "kind": "json",
+      "keyPath": "groupProductSalesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:8",
+      "kind": "json",
+      "keyPath": "wishlistMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "divProductSKUContainer408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnSalesPrice408",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.json:9",
+      "kind": "json",
+      "keyPath": "productRemovedFromWishlist",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

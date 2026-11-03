@@ -1,0 +1,27 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_WITHOUT_PRICE",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND COALESCE((SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = p.SKU AND pw.PortalId = po.PortalId), @zero) >= @minStock AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND NOT EXISTS (SELECT pr.PriceId FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId WHERE pr.SKU = p.SKU AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) AND (EXISTS (SELECT plo.PriceListPortalId FROM dbo.ZnodePriceListPortal plo WHERE plo.PriceListId = pl.PriceListId AND plo.PortalId = po.PortalId) OR EXISTS (SELECT plf.PriceListProfileId FROM dbo.ZnodePriceListProfile plf INNER JOIN dbo.ZnodePortalProfile ppf ON ppf.PortalProfileID = plf.PortalProfileId WHERE plf.PriceListId = pl.PriceListId AND ppf.PortalId = po.PortalId))) AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params" : [ "store", "productType", "isActive", "publishState", "notObsolete", "minProductIndex", "zero", "minStock", "configurableType", "space", "now", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minProductIndex" : "1",
+    "configurableType" : "ConfigurableProduct",
+    "space" : " ",
+    "zero" : "0",
+    "minStock" : "1"
+  },
+  "outputs" : [ "sku", "name", "productId" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:99fd5000386cb3f0648443dd2417bf76436c4461800e672269073dcba85001f8",
+  "vocabularyFingerprint" : "sha256:6231791aded9d91eaefb9cbb8e7c59e3ade4f08ee91f0806e032455f7a31be01",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T11:40:33Z",
+  "verifiedHash" : "sha256:83b53466d718680e9bab8aed4ed2f9d960220ecfe114616e74843b5ddffb9e07"
+}

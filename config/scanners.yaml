@@ -109,6 +109,30 @@ migrated:
     # Phase 6 module webstore/my-account, batch 2 group 3 (quote-history skips until an IN REVIEW quote exists)
     - testim-migrated/tests/webstore/my-account/new-account-validate-functionality.spec.ts
     - testim-migrated/tests/webstore/my-account/quote-history-validate-functionality.spec.ts
+    # Phase 6 module webstore/plp (core 0.15.0; requirements, keys and queries approved 2026-11-02)
+    - testim-migrated/tests/webstore/plp/verify-categories-paginations-and-breadcrumbs.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-compare-product-functionality.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-details-on-quick-view-of-simple-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-facets-and-their-filters.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-group-product-details-of-quick-view.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-highlights-for-all-types-of-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-no-pricing-validation-on-plp-and-quickview.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-obsolete-product-and-replacement-products-on-plp-and-quick-view.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-out-of-stock-validation-on-plp-and-quickview.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-plp-sort-order.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-plp-sorting-and-grid-view-and-category-descriptions.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-quick-view-of-bundle-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant1.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-tier-pricing-on-quick-view.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-from-quick-view-for-bundle-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-from-quick-view-for-simple-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts
+    - testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy

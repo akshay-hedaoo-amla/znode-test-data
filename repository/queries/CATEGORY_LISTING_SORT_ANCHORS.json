@@ -1,0 +1,23 @@
+{
+  "schemaVersion" : 1,
+  "key" : "CATEGORY_LISTING_SORT_ANCHORS",
+  "sql" : "SELECT TOP 1 c.ZnodeCategoryId AS categoryId, a.Name AS firstNameAscName, a.SKU AS firstNameAscSku, a.ZnodeProductId AS firstNameAscProductId, z.Name AS firstNameDescName, z.SKU AS firstNameDescSku, z.ZnodeProductId AS firstNameDescProductId FROM dbo.ZnodePublishCategoryEntity c INNER JOIN dbo.ZnodePublishVersionEntity v ON v.VersionId = c.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = c.ZnodeCatalogId INNER JOIN dbo.ZnodePortal p ON p.PortalId = pc.PortalId INNER JOIN dbo.ZnodePimCategoryHierarchy h ON h.PimCategoryHierarchyId = c.ZnodeCategoryId INNER JOIN dbo.ZnodePimCategoryProduct acp ON acp.PimCategoryId = h.PimCategoryId INNER JOIN dbo.ZnodePublishProductEntity a ON a.ZnodeProductId = acp.PimProductId AND a.VersionId = c.VersionId INNER JOIN dbo.ZnodePimCategoryProduct zcp ON zcp.PimCategoryId = h.PimCategoryId INNER JOIN dbo.ZnodePublishProductEntity z ON z.ZnodeProductId = zcp.PimProductId AND z.VersionId = c.VersionId WHERE v.RevisionType = @revisionType AND v.IsPublishSuccess = @isActive AND v.LocaleId = @localeId AND c.IsActive = @isActive AND p.StoreCode = @store AND c.ZnodeCategoryId = @categoryId AND acp.Status = @isActive AND zcp.Status = @isActive AND a.IsActive = @isActive AND z.IsActive = @isActive AND CHARINDEX(CONCAT(@comma, c.ZnodeCategoryId, @comma), CONCAT(@comma, a.ZnodeCategoryIds, @comma)) > @zero AND CHARINDEX(CONCAT(@comma, c.ZnodeCategoryId, @comma), CONCAT(@comma, z.ZnodeCategoryIds, @comma)) > @zero AND a.Name < z.Name ORDER BY a.Name, a.ZnodeProductId, z.Name DESC, z.ZnodeProductId DESC",
+  "params" : [ "revisionType", "isActive", "localeId", "store", "categoryId", "comma", "zero" ],
+  "constants" : {
+    "revisionType" : "PRODUCTION",
+    "isActive" : "true",
+    "localeId" : "1",
+    "comma" : ",",
+    "zero" : "0"
+  },
+  "outputs" : [ "categoryId", "firstNameAscName", "firstNameAscSku", "firstNameAscProductId", "firstNameDescName", "firstNameDescSku", "firstNameDescProductId" ],
+  "identity" : "categoryId",
+  "schemaFingerprint" : "sha256:f2a2baab205b4adfa7453b4ffc4587ed4c4296c1a31b3ec2894bde89d10f917c",
+  "vocabularyFingerprint" : "sha256:72e88d71dcbd5730ec3503f14fba74c07a69f02d3a7cec21e73a5c917bd70707",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T11:39:49Z",
+  "verifiedHash" : "sha256:2e5f9982d0646f8f64d5b8a9982479f5a279fe34979d81e0ed618c8027841133"
+}

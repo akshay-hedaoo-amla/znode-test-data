@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts > PLP - Verify Inventory Details on Quick View > verify inventory details on quick view",
+  "scenario": {
+    "summary": "Guest searches a simple product by SKU, checks the total-inventory block on its PLP card, opens Quick View and checks 'In Stock' and the in-stock quantity, opens the inventory details modal and checks a warehouse row, then closes the modal. Read-only.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the SKU; assert the card's total inventory block (divTotalInventory175) is visible.",
+      "Open Quick View; assert 'In Stock' and the in-stock quantity.",
+      "Open the inventory details link; assert the warehouse name (paraWarehouseName8) and location row (divLocWarehouse0).",
+      "Close the inventory details modal."
+    ],
+    "entitiesTouched": [
+      "product",
+      "inventory",
+      "warehouse",
+      "store"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "PLP card total inventory visible.",
+      "Quick View shows 'In Stock' and an in-stock quantity.",
+      "Inventory details modal lists warehouse 8 and a location row."
+    ],
+    "evidence": [
+      "Title 'verify inventory details on quick view' and the four step labels match the flow; guest storageState; no linked AIO cases.",
+      "Data read by a raw JSON import (spec line 2: import testData from '...json'), not loadData; only the SKU is used.",
+      "Profile: SKU z-1235101 FOUND as SimpleProduct (PimProductId 175), active, PRODUCTION, brand MountainPlumbing, inventory 4842, OutOfStockOptions DisablePurchasing, requiredAddOnCount 0, but storefrontProductIndex 0 (the key needs >= 1, so the recorded product may not pass as preferred).",
+      "Key PRODUCT_SIMPLE_IN_STOCK; quantityUsed 1 (nothing is added; the card and Quick View must show the product in stock).",
+      "sku -> product.sku; the PimProductId in divTotalInventory175 comes from product.productId. None of the new keys covers the gap below.",
+      "Gap (params): the test needs inventory that is tracked and shown per warehouse (quantity text, inventory details link, a row for warehouse id 8). PRODUCT_SIMPLE_IN_STOCK does not constrain OutOfStockOptions (a DontTrackInventory product may show no quantity or details) or the warehouse. Proposed: optional param on PRODUCT_SIMPLE_IN_STOCK (e.g. trackInventory) and a warehouseId output (human decides; no key written).",
+      "Data in code: PimProductId 175 (divTotalInventory175) and warehouse id 8 (paraWarehouseName8) are in the spec; 175 recorded as data of alias product, warehouse 8 as config (store warehouse, not a product output).",
+      "Spec TODO comments (volatile counts asserted only as visible) are evidence only.",
+      "migrate: raw JSON import, not loadData (swap rule 1 fails), and the product id is in code (rule 4).",
+      "2026-11-02 fix: product need passes outOfStockOption DisablePurchasing (tracked inventory), so Quick View shows In Stock with a quantity (paraInStockQuantity); a DontTrackInventory product shows none."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "outOfStockOption": "DisablePurchasing"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1235101",
+      "location": "testim-migrated/test-data/webstore/plp/verify-inventory-details-on-quick-view.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "divTotalInventory175",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:17",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divInStock",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:29",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:29",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "paraInStockQuantity",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:32",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "paraWarehouseName8",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "divLocWarehouse0",
+      "location": "testim-migrated/tests/webstore/plp/verify-inventory-details-on-quick-view.spec.ts:56",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

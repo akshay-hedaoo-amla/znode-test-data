@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "CATEGORY_LISTING_SORT_ANCHORS",
+  "entity": "category_listing",
+  "type": "listing_sort_anchors",
+  "constraints": {
+    "categoryId": "{categoryId}",
+    "publishState": "production",
+    "listedProductCount": ">= 2"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "For a category of the store, the first product of its PLP under Name A-Z and Name Z-A (published active listed products). Default and Highest Rating order come from the search index with no tie-break, so they are not given. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "categoryId": {
+      "type": "integer",
+      "description": "Category the test opens (ZnodePublishCategoryEntity.ZnodeCategoryId, the /category/<id> route): link it to @category.categoryId"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

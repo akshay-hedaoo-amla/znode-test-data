@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts > PLP - Verify Sales and Retail Price for Simple Product > verify sales and retail price for simple product",
+  "scenario": {
+    "summary": "Guest searches a simple product, checks its name, SKU, sales price and retail price on the PLP card and in Quick View, sets quantity 2, adds it to the cart from Quick View and checks the cart row total and the 'YOUR TOTAL IS ... For 1 Item' heading (2 x sales price). The guest cart is emptied in afterEach.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the SKU; check hdgProductName141, divProductSKUContainer141, spnSalesPrice141, spnRetailPrice141.",
+      "Open Quick View; check the name and the sales and retail prices inside divSalesPrice141.",
+      "Set quantity 2, Add to Cart from Quick View, go to the cart from the notification.",
+      "Check hdgTotalPriceWithItems and paraOrderRowTotal141.",
+      "afterEach: Remove All Items from the cart."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Guest cart filled with the simple product (quantity 2); emptied by afterEach (Remove All Items)"
+    ],
+    "assertions": [
+      "Card and Quick View show the product name, SKU, sales price ($54.00) and retail price ($59.00).",
+      "Cart row total equals quantity x sales price ($108.00).",
+      "Total heading reads 'YOUR TOTAL IS $108.00 For 1 Item'."
+    ],
+    "evidence": [
+      "Title 'verify sales and retail price for simple product' and the four step labels match the flow; guest storageState; no linked AIO cases.",
+      "All data comes from loadData(PriceDataSchema, rawData, ...) (spec line 199).",
+      "Profile (atstage 2026-11-01): z-1234580 FOUND active SimpleProduct 'DeWalt 1/4 Impact Driver' (Dewalt), inventory 21748, requiredAddOnCount 0, but storefrontProductIndex 0 (PRODUCT_SIMPLE_ON_SALE_IN_STOCK needs >= 1, so it may not pass as preferred). tda rows dbo.ZnodePrice SKU z-1234580: price lists 4 and 8 hold SalesPrice 54 / RetailPrice 59; list 5 holds an expired 12.99.",
+      "PRODUCT_SIMPLE_ON_SALE_IN_STOCK (pending) now covers the need and replaces PRODUCT_SIMPLE_IN_STOCK (a fallback from that key may have no sales price): product {quantityUsed 2 (the Quick View quantity), store, profile Anonymous (guest; no automatic promotion for it may discount the product)}, preferred z-1234580 (source 0); sku -> product.sku, productName -> product.name, salesPrice -> product.salesPrice, retailPrice -> product.retailPrice (shown as currency).",
+      "rowTotal ($108.00) and hdgTotalPriceWithItems ('YOUR TOTAL IS $108.00 For 1 Item') stay expected-output, computed by the spec as quantity (2) x product.salesPrice.",
+      "Data in code: product id 141 in test ids (hdgProductName141, divProductSKUContainer141, spnSalesPrice141, spnRetailPrice141, divSalesPrice141, paraOrderRowTotal141); step label '1) Search z-1234580 ...' names the SKU. The id 141 comes from product.productId.",
+      "migrate: loadData is used, but the asserted totals are computed from the prices (swap rule 3) and product id 141 is in the spec code (swap rule 4)."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_ON_SALE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware",
+        "profile": "Anonymous"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234580",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "hdgProductName141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:46",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 1/4 Impact Driver",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:3",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnSalesPrice141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:49",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$54.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:4",
+      "kind": "json",
+      "keyPath": "salesPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "spnRetailPrice141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:50",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$59.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:5",
+      "kind": "json",
+      "keyPath": "retailPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "retailPrice"
+    },
+    {
+      "value": "divSalesPrice141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:6",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "YOUR TOTAL IS $108.00 For 1 Item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:8",
+      "kind": "json",
+      "keyPath": "hdgTotalPriceWithItems",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "paraOrderRowTotal141",
+      "location": "testim-migrated/tests/webstore/plp/verify-sales-retail-price-for-simple-product.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$108.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-sales-retail-price-for-simple-product.json:7",
+      "kind": "json",
+      "keyPath": "rowTotal",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

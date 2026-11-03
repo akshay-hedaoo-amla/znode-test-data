@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK",
+  "entity": "product",
+  "type": "replacement_of_product",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "requiredAddOnCount": "= 0",
+    "price": "> 0",
+    "linkType": "productsuggestions",
+    "linkedFrom": "= {product}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active, priced, in-stock simple product published on the store, no required add-ons, linked to the given product as a replacement (ZnodePimLinkProductDetail, link attribute ProductSuggestions). KB: Product Types; Product attributes (Obsolete, Product Suggestions).",
+  "declaredParams": {
+    "product": {
+      "type": "integer",
+      "description": "PimProductId of the product it replaces (e.g. @product.productId of PRODUCT_SIMPLE_OBSOLETE)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test adds to cart"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

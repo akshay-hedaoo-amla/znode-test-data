@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entity": "store_product_compare",
+  "tables": [
+    "dbo.ZnodePortal",
+    "dbo.ZnodeDomain",
+    "dbo.ZnodePortalFeatureMapper",
+    "dbo.ZnodePortalFeature"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodePortal.PortalId",
+      "to": "dbo.ZnodeDomain.PortalId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortal.PortalId",
+      "to": "dbo.ZnodePortalFeatureMapper.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodePortalFeatureMapper.PortalFeatureId",
+      "to": "dbo.ZnodePortalFeature.PortalFeatureId",
+      "kind": "inner"
+    }
+  ],
+  "properties": {
+    "code": "dbo.ZnodePortal.StoreCode",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "webstoreDomains": "COUNT(DISTINCT dbo.ZnodeDomain.DomainId)",
+    "productCompareSwitches": "COUNT(DISTINCT dbo.ZnodePortalFeatureMapper.PortalFeatureMapperId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "filters": {
+    "dbo.ZnodeDomain.ApplicationType": "WebStore",
+    "dbo.ZnodeDomain.IsActive": "1",
+    "dbo.ZnodePortalFeature.PortalFeatureName": "Enable_Product_Compare"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeDomain.ApiKey"
+  ],
+  "schemaFingerprint": "sha256:5d53aeb11819dde16b0f017e23e38b562b99d489fa66ce8d44e5f3aa7cef2f89",
+  "scannedAt": "2026-11-02T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

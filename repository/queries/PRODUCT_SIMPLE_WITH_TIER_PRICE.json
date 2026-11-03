@@ -1,0 +1,33 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_WITH_TIER_PRICE",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, tr.Quantity AS tierQuantity, tr.Price AS tierPrice, gp.price AS price FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store LEFT JOIN dbo.ZnodePortalProfile anon ON anon.PortalId = po.PortalId AND anon.IsDefaultAnonymousProfile = @anonymousProfile CROSS APPLY (SELECT TOP 1 pl.PriceListId, pr.SalesPrice, pr.RetailPrice, COALESCE(pr.SalesPrice, pr.RetailPrice) AS price FROM dbo.ZnodePriceList pl INNER JOIN dbo.ZnodePrice pr ON pr.PriceListId = pl.PriceListId LEFT JOIN dbo.ZnodePriceListProfile plf ON plf.PriceListId = pl.PriceListId AND plf.PortalProfileId = anon.PortalProfileID LEFT JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId AND plo.PortalId = po.PortalId WHERE pr.SKU = p.SKU AND (plf.PriceListProfileId IS NOT NULL OR plo.PriceListPortalId IS NOT NULL) AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY CASE WHEN plf.PriceListProfileId IS NOT NULL THEN @profileListRank ELSE @storeListRank END, plf.Precedence, plo.Precedence, pl.PriceListId, pr.PriceId) gp CROSS APPLY (SELECT TOP 1 t.Quantity, t.Price FROM dbo.ZnodePriceTier t WHERE t.PriceListId = gp.PriceListId AND t.SKU = p.SKU AND t.Quantity <= @quantityUsed ORDER BY t.Quantity DESC, t.PriceTierId) tr OUTER APPLY (SELECT TOP 1 mav.AttributeValue AS val FROM dbo.ZnodePimAttributeValue mpv INNER JOIN dbo.ZnodePimAttribute mpa ON mpa.PimAttributeId = mpv.PimAttributeId INNER JOIN dbo.ZnodePimAttributeValueLocale mav ON mav.PimAttributeValueId = mpv.PimAttributeValueId INNER JOIN dbo.ZnodeLocale mlo ON mlo.LocaleId = mav.LocaleId WHERE mpv.PimProductId = p.PimProductId AND mpa.AttributeCode = @maxQuantityCode AND mlo.IsDefault = @defaultLocale ORDER BY mpv.PimAttributeValueId, mav.ZnodePimAttributeValueLocaleId) mq WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND COALESCE((SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = p.SKU AND pw.PortalId = po.PortalId), @zero) >= @quantityUsed AND NOT EXISTS (SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND (TRY_CAST(mq.val AS FLOAT) IS NULL OR TRY_CAST(mq.val AS FLOAT) >= @quantityUsed) AND tr.Price > @minPrice AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params" : [ "store", "anonymousProfile", "now", "profileListRank", "storeListRank", "quantityUsed", "maxQuantityCode", "defaultLocale", "productType", "isActive", "publishState", "notObsolete", "minProductIndex", "zero", "requiredType", "configurableType", "space", "minPrice", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minProductIndex" : "1",
+    "configurableType" : "ConfigurableProduct",
+    "space" : " ",
+    "zero" : "0",
+    "profileListRank" : "1",
+    "storeListRank" : "2",
+    "maxQuantityCode" : "MaximumQuantity",
+    "defaultLocale" : "true",
+    "requiredType" : "Required",
+    "minPrice" : "0",
+    "anonymousProfile" : "true"
+  },
+  "outputs" : [ "sku", "name", "productId", "tierQuantity", "tierPrice", "price" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:15b940391003073b0fe660247e4ac9bfe8fadde7b6baf2be91847f640e32de34",
+  "vocabularyFingerprint" : "sha256:904fc60065c6a186f536b13b15aca24e7d1cd56a0b4663fb741b4c23f6803d8c",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T11:40:38Z",
+  "verifiedHash" : "sha256:f3ed8ed155e984381bcc43492e5443d13884c0b9ed71f4fd489bec5cd95e7936"
+}

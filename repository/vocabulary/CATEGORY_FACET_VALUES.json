@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "key": "CATEGORY_FACET_VALUES",
+  "entity": "category_facets",
+  "type": "facet_values",
+  "constraints": {
+    "categoryId": "{categoryId}",
+    "publishState": "production",
+    "isFacet": "true",
+    "facetAttributeCode": "{attributeCodes}",
+    "facetValueCount": ">= {minValuesPerAttribute}",
+    "facetValueProductCount": ">= {minProductsForValue}",
+    "facetValueProductCountCap": "<= {maxProductsForValue}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Facets of a category PLP: for each listed facet attribute (IsFacets) its label and values with product counts in the category (a parent also counts via an active child priced above 0 and in stock on the store), and the products of the first value of the first attribute. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "categoryId": {
+      "type": "integer",
+      "description": "Category the test opens (ZnodePublishCategoryEntity.ZnodeCategoryId): link it to @category.categoryId"
+    },
+    "attributeCodes": {
+      "type": "string",
+      "description": "Comma-separated facet attribute codes in the order the test reads them (ZnodePimAttribute.AttributeCode, e.g. SpoutType,PlumbingPartsMaterial,ToeStyle); at most 3"
+    },
+    "minValuesPerAttribute": {
+      "type": "integer",
+      "description": "Fewest values with products in the category each listed attribute must have (the values the test reads, at most 3)"
+    },
+    "minProductsForValue": {
+      "type": "integer",
+      "description": "Fewest products the first value of the first attribute must filter the PLP to"
+    },
+    "maxProductsForValue": {
+      "type": "integer",
+      "description": "Most products that filter may show (the filtered products the test checks, at most 3)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

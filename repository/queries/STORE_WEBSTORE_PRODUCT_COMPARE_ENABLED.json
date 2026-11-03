@@ -1,0 +1,22 @@
+{
+  "schemaVersion" : 1,
+  "key" : "STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED",
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId FROM dbo.ZnodePortal p INNER JOIN dbo.ZnodeDomain d ON d.PortalId = p.PortalId INNER JOIN dbo.ZnodePortalFeatureMapper fm ON fm.PortalId = p.PortalId INNER JOIN dbo.ZnodePortalFeature f ON f.PortalFeatureId = fm.PortalFeatureId WHERE d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND f.PortalFeatureName = @compareFeature AND p.StoreCode = @store AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode, p.StoreName HAVING COUNT(DISTINCT d.DomainId) >= @minWebstoreDomains ORDER BY p.PortalId",
+  "params" : [ "applicationType", "domainActive", "compareFeature", "store", "preferred", "minWebstoreDomains" ],
+  "constants" : {
+    "applicationType" : "WebStore",
+    "domainActive" : "1",
+    "compareFeature" : "Enable_Product_Compare",
+    "minWebstoreDomains" : "1"
+  },
+  "outputs" : [ "storeCode", "name", "portalId" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:5d53aeb11819dde16b0f017e23e38b562b99d489fa66ce8d44e5f3aa7cef2f89",
+  "vocabularyFingerprint" : "sha256:c56f1cde9fcdf9fe7d7beb6caab53f98e97f9ad7ad5493c84743611c65213334",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T11:39:57Z",
+  "verifiedHash" : "sha256:c02f87d727f963357ebbfe39df2f513e59f9841cb7f7aaf3623b9627a6bbff3e"
+}

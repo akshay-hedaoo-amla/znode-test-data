@@ -8,7 +8,8 @@
     "isActive": "true",
     "publishState": "production",
     "activeVariantCount": ">= 1",
-    "variantInventory": ">= {quantityUsed}"
+    "variantInventory": ">= {quantityUsed}",
+    "priceTierCount": ">= {minTiers}"
   },
   "scope": {
     "store": "{store}"
@@ -23,9 +24,14 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minTiers": {
+      "type": "integer",
+      "description": "Optional: the parent or the variant must have at least this many tier prices on the price list the variant is priced from (e.g. 1 when the test checks SPECIAL PRICE OFFERS); left out = any",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-23T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

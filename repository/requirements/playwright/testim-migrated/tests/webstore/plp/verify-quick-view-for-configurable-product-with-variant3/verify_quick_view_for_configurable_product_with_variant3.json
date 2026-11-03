@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts > PLP - Quick View for Configurable Product with Variant3 (Medium+White+Halogen) > verify quick view for configurable product with variant3",
+  "scenario": {
+    "summary": "Guest searches a configurable parent by SKU, checks the PLP card (name, SKU, price), opens Quick View (default variant SKU shown), selects another bulb size and technology to switch to a different variant, checks that variant's name, SKU, description, price and stock, adds it to cart and checks the cart total, the three variant attribute lines and the item price.",
+    "steps": [
+      "Open the webstore as a guest (empty storageState).",
+      "Search the parent SKU; assert card name (hdgProductName666), SKU and retail price.",
+      "Open Quick View; select Medium (asserts the default variant SKU SKU:z-2510001 is still shown) then Halogen; assert the new variant name.",
+      "Assert the selected variant's SKU, name, description, sales price (divSalesPrice669) and stock status.",
+      "Add to Cart, go to the cart; assert 'Home / Cart', 'YOUR TOTAL IS ...', attribute lines Bulb Size / Color / Technology and the item price."
+    ],
+    "entitiesTouched": [
+      "product",
+      "product_variants",
+      "price",
+      "inventory",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Adds one unit of the selected variant to the guest session cart (not removed)."
+    ],
+    "assertions": [
+      "PLP card: parent name, SKU and price.",
+      "Quick View switches from the default variant to the selected variant: SKU, name, description, price, 'In Stock'.",
+      "Cart: total heading, attribute values of the variant, item price."
+    ],
+    "evidence": [
+      "Title 'verify quick view for configurable product with variant3' and describe 'Variant3 (Medium+White+Halogen)' match the flow; guest storageState; no linked AIO cases.",
+      "Data through loadData(Variant3DataSchema, rawData, ...) (spec line 23).",
+      "Profile: parent B-100000 FOUND as ConfigurableProduct (PimProductId 666), active, PRODUCTION, brand Philips, storefrontProductIndex 1. tda rows: variant z-2510011 is PimProductId 669 (EcoSmart halogen, active); the default variant z-2510001 is PimProductId 532.",
+      "Key PRODUCT_CONFIGURABLE_WITH_VARIANTS: quantityUsed 1; minVariants 2 because the test sees the default variant first and then selects a different one (variant1Sku = default, variant2Sku = the selected one); minAddOns 0, minPersonalizableAttributes 0; variantAttributes BulbSize,Color,Technology (cart shows all three attributes; same value as the checkout configurable entries).",
+      "Outputs now cover: sku -> parentProductSku, parentProductName -> name, the selected variant's name -> variant2Name and price -> variant2Price (sales, else retail); test ids with 666 from parentProductId, 669 from variant2ProductId and z-2510011 from variant2Sku. Composed values stay data without output, built by the spec: variant3SKU 'SKU:' + variant2Sku, the attribute lines '<label> : ' + variant2Attr1..3, the swatch ids imgMedium / imgHalogen from variant2Attr1..3, hdgTotalPriceWithItems 'YOUR TOTAL IS <variant2Price> For 1 Item', variant3ItemPrice '<variant2Price> / Piece'.",
+      "Not covered: the parent card price '$50.00 / Piece' stays expected-output: the parent price is an output of PRODUCT_CONFIGURABLE_PDP_DETAILS only (parentRetailPrice; PRODUCT_CONFIGURABLE_WITH_VARIANTS has no room for it), and that key takes no product param, so a second need could not be tied to this need's parent; the ' / Piece' unit is not produced by any key either. Also not covered: the variant description (variant3ProductDescription), which has no output in this key, and the default variant (the 'SKU:z-2510001' shown before switching): variant1Sku is the first variant by SKU, not guaranteed to be the Quick View default, and no key produces the default variant. 'In Stock' stays as recorded.",
+      "Data in code: PimProductIds 666 and 669 in test ids, the default variant SKU literal 'SKU:z-2510001' (spec line 68), the swatch ids imgMedium / imgHalogen, the variant SKU in divConfigurableProductAttributesz-2510011 and the attribute lines 'Bulb Size : Medium', 'Color : White', 'Technology : Halogen'; recorded as data of alias product.",
+      "migrate: loadData is used, but prices and the cart total depend on the record and record ids, SKUs and attribute values are in code (swap rules 3 and 4 fail)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minVariants": 2,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:3",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:49",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:4",
+      "kind": "json",
+      "keyPath": "parentProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "imgMedium",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "SKU:z-2510001",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "imgHalogen",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:69",
+      "kind": "literal",
+      "keyPath": "selectQVOption",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "EcoSmart 100-Watt A19 Halogen Light Bulb (16-Pack)",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:6",
+      "kind": "json",
+      "keyPath": "variant3ProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Name"
+    },
+    {
+      "value": "SKU:z-2510011",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:5",
+      "kind": "json",
+      "keyPath": "variant3SKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "These 72-Watt bulbs are for use in household applications and table lamps. They are ideal replacement for a standard incandescent 100-Watt bulbs. They give off 1200-Lumen of soft white light and use 28% less energy compared with a standard 100-Watt A19 incandescent bulb.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:7",
+      "kind": "json",
+      "keyPath": "variant3ProductDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divSalesPrice669",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$50.00",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:8",
+      "kind": "json",
+      "keyPath": "variant3ProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Price"
+    },
+    {
+      "value": "In Stock",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:10",
+      "kind": "json",
+      "keyPath": "variant3Inventory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "linkBreadcrumbPathCategory",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Home / Cart",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:103",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgTotalPriceWithItems",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:116",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "YOUR TOTAL IS $50.00 For 1 Item",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:11",
+      "kind": "json",
+      "keyPath": "hdgTotalPriceWithItems",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "divConfigurableProductAttributesz-2510011",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Bulb Size : Medium",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:121",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Color : White",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Technology : Halogen",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:123",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "paraItemRowCost669",
+      "location": "testim-migrated/tests/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.spec.ts:125",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-for-configurable-product-with-variant3.json:9",
+      "kind": "json",
+      "keyPath": "variant3ItemPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

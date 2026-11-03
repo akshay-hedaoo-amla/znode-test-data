@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts > PLP - Wishlist Details for Retail User from Quick View (Configurable Product) > verify wishlist details for retail user from quick view for configurable product",
+  "scenario": {
+    "summary": "A registered user signs in with the test's own account, clears the wishlist, searches a configurable parent by SKU and checks its PLP card, adds it to the wishlist from Quick View (toast), finds the parent on the Wishlist page, searches again and removes it from the wishlist from Quick View (toast).",
+    "steps": [
+      "Guest context; open the webstore, sign in from the header with username/password; check the greeting contains 'Hello,'.",
+      "Clear the wishlist; search the parent SKU; check the PLP card name (hdgProductName666), SKU (divProductSKUContainer666) and retail price (spnRetailPrice666).",
+      "Open Quick View and click the first wishlist heart; check the 'added' toast.",
+      "Open the Wishlist page; check the product link with the parent name is visible.",
+      "Search the SKU again and repeat the PLP card checks.",
+      "Open Quick View and click the heart again; check the 'removed' toast. afterEach clears the wishlist."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "wishlist",
+      "store"
+    ],
+    "stateChanges": [
+      "The declared account's wishlist is cleared at start (and in afterEach), the product is added from Quick View and removed again (wishlist ends empty)."
+    ],
+    "assertions": [
+      "Header greeting contains 'Hello,'.",
+      "PLP card shows the parent name, SKU and retail price '$50.00 / Piece' (twice).",
+      "Toast 'Product added to your Wishlist.'; Wishlist page lists the parent name.",
+      "Toast 'Product removed from your Wishlist.'"
+    ],
+    "evidence": [
+      "Title 'verify wishlist details for retail user from quick view for configurable product' and step labels 0) to 6) match the flow; no linked cases.",
+      "DECLARED ACCOUNT: the spec opts out of the shared session (test.use storageState empty) and signs in from the header with username/password from its own JSON (credential sources, masked in the scan, profile SENSITIVE). USER_WEBSTORE_REGISTERED preferred.required true on the username source; the migrated test declares it with testData.useExisting('user', data.username) before signing in.",
+      "Profile: B-100000 FOUND as active ConfigurableProduct, PRODUCTION, storefrontProductIndex 1, requiredAddOnCount 0; parent stock NOT_FOUND (stock is on the variants), so PRODUCT_CONFIGURABLE_PARENT_IN_STOCK (stock on the parent SKU) would exclude it. tda rows: PimProductId 666.",
+      "Need product PRODUCT_CONFIGURABLE_PDP_DETAILS (quantityUsed 1: only wishlisted), replacing PRODUCT_CONFIGURABLE_WITH_VARIANTS because the test needs the parent price, which only this key returns (parentRetailPrice / parentSalesPrice); preferred B-100000 (source 3). sku -> parentProductSku, parentProductName -> name; the test ids hdgProductName666 / divProductSKUContainer666 / spnRetailPrice666 (config) come from parentProductId. Note for the reviewer: this key does not constrain storefront search visibility (storefrontProductIndex) as PRODUCT_CONFIGURABLE_WITH_VARIANTS did, and the test finds the product by search. Spec comments: the Quick View heart clicked belongs to the default variant (532) but the wishlist lists the parent (666).",
+      "parentProductPrice '$50.00 / Piece' stays expected-output, built by the spec as parentRetailPrice (parentSalesPrice when set) + ' / Piece'; the ' / Piece' unit is not produced by any key.",
+      "migrate: parent product id in spec code (swap rule 4) and the asserted retail price depends on the product (rule 3).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_PDP_DETAILS",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": true,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": true,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "B-100000",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:4",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:60",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Philips Base B22 9-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:6",
+      "kind": "json",
+      "keyPath": "parentProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:64",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$50.00 / Piece",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:7",
+      "kind": "json",
+      "keyPath": "parentProductPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:8",
+      "kind": "json",
+      "keyPath": "wishlistMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "hdgProductName666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "divProductSKUContainer666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:115",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "spnRetailPrice666",
+      "location": "testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts:116",
+      "kind": "literal",
+      "keyPath": "getByTestId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "testim-migrated/test-data/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.json:9",
+      "kind": "json",
+      "keyPath": "productRemovedFromWishlist",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, gp.price AS price FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store INNER JOIN dbo.ZnodePimLinkProductDetail lk ON lk.PimProductId = p.PimProductId INNER JOIN dbo.ZnodePimAttribute la ON la.PimAttributeId = lk.PimAttributeId LEFT JOIN dbo.ZnodePortalProfile anon ON anon.PortalId = po.PortalId AND anon.IsDefaultAnonymousProfile = @anonymousProfile CROSS APPLY (SELECT TOP 1 pl.PriceListId, pr.SalesPrice, pr.RetailPrice, COALESCE(pr.SalesPrice, pr.RetailPrice) AS price FROM dbo.ZnodePriceList pl INNER JOIN dbo.ZnodePrice pr ON pr.PriceListId = pl.PriceListId LEFT JOIN dbo.ZnodePriceListProfile plf ON plf.PriceListId = pl.PriceListId AND plf.PortalProfileId = anon.PortalProfileID LEFT JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId AND plo.PortalId = po.PortalId WHERE pr.SKU = p.SKU AND (plf.PriceListProfileId IS NOT NULL OR plo.PriceListPortalId IS NOT NULL) AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY CASE WHEN plf.PriceListProfileId IS NOT NULL THEN @profileListRank ELSE @storeListRank END, plf.Precedence, plo.Precedence, pl.PriceListId, pr.PriceId) gp WHERE lk.PimParentProductId = @product AND la.AttributeCode = @linkCode AND p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND p.IsObsolete = @notObsolete AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete) AND COALESCE((SELECT SUM(i.Quantity) FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = p.SKU AND pw.PortalId = po.PortalId), @zero) >= @quantityUsed AND NOT EXISTS (SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND CHARINDEX(@space, p.SKU) = @zero AND gp.price > @minPrice AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY lk.DisplayOrder, p.SKU",
+  "params" : [ "store", "anonymousProfile", "now", "profileListRank", "storeListRank", "product", "linkCode", "productType", "isActive", "publishState", "notObsolete", "zero", "quantityUsed", "requiredType", "configurableType", "space", "minPrice", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "configurableType" : "ConfigurableProduct",
+    "space" : " ",
+    "zero" : "0",
+    "profileListRank" : "1",
+    "storeListRank" : "2",
+    "requiredType" : "Required",
+    "minPrice" : "0",
+    "anonymousProfile" : "true",
+    "linkCode" : "ProductSuggestions"
+  },
+  "outputs" : [ "sku", "name", "productId", "price" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:86002de510ff419755b8332a54ab4907049f3fc4919bf5abf0c296ca2e9e8150",
+  "vocabularyFingerprint" : "sha256:d03489bcce50f7553acde91172c576c923494ff30488a3448948ff1bc4679695",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z",
+  "createdAt" : "2026-11-02T00:00:00Z",
+  "lastValidated" : "2026-11-02T12:13:49Z",
+  "verifiedHash" : "sha256:38d7815c78b5ec3db0473032d6178be535515cb7d381e5e42dfcb5a5af115bba"
+}
