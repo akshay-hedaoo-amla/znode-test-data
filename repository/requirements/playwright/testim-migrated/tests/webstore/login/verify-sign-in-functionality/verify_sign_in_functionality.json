@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/login/verify-sign-in-functionality.spec.ts > Webstore - Login > verify sign in functionality",
+  "scenario": {
+    "summary": "Guest opens the webstore, signs in from the header with a registered account's username and password, checks the 'Hello,' greeting, logs out and checks the Sign In link is back.",
+    "steps": [
+      "Open '/' as a guest (storageState empty)",
+      "Header Sign In; sign in with the account's username and password; greeting visible and contains 'Hello,'",
+      "Log out; Sign In link visible again"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None in the data: a successful sign-in of the declared account (session only; the account's failed-attempt counter, if any, is reset by the successful sign-in)"
+    ],
+    "assertions": [
+      "Header greeting visible and contains 'Hello,' after sign-in",
+      "Sign In link visible after log out"
+    ],
+    "evidence": [
+      "Title 'verify sign in functionality' and the step labels (Sign in from the header, Log out) match the flow",
+      "DECLARED ACCOUNT: the spec opts out of the shared session (test.use storageState empty) and signs in with loginPage.login(data.username, data.password) read through loadData from login/sign-in.json. Source 1 (keyPath username, masked by key name) and source 2 (keyPath password, masked by key name) are typed into the sign-in form (scan usedBy steps 2/4), so both are real credentials: role credential, alias user. user -> USER_WEBSTORE_REGISTERED {store}, preferred.required true on the username source 1; the migrated test declares it with await testData.useExisting('user', data.username) before signing in (same pattern as the approved quick-order retail and home-page header entries)",
+      "Store MaxwellsHardware: the spec runs on env.web.baseUrl (WEB_BASE_URL, webstore-z10-at), the store every migrated webstore spec runs on (same store as the approved my-account, quick-order and home-page entries)",
+      "'Hello,' (source 3) is the asserted greeting prefix (expected-output); '/' (source 0) is the start URL (config)",
+      "migrate: no data value to swap; the account is declared and leased through testData.useExisting (credentials keep coming from the spec's JSON, approved credential exception). Alternative: swap (spec unchanged), but then the account is only checked at pre-warm, not declared or leased",
+      "The spec logs the username to the console (console.log signed in as data.username); not a data issue, noted for the spec review",
+      "Profile: every value NO_RULE or SENSITIVE (no observation FOUND); profiled false"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/login/verify-sign-in-functionality.spec.ts:29",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/sign-in.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/sign-in.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/login/verify-sign-in-functionality.spec.ts:36",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

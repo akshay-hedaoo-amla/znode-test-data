@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/login/verify-sign-in-and-registration-labels.spec.ts > Webstore - Login > the sign-in page carries its headings, field labels and controls @ZPD-TC-9152 @ZPD-TC-9153 @ZPD-TC-9154 @ZPD-TC-9155",
+  "scenario": {
+    "summary": "Guest opens /login and checks the sign-in page heading, the username and password field labels, the Remember Me option, the two input fields and the Sign In and Create An Account controls. Read-only, nothing submitted.",
+    "steps": [
+      "Open /login as a guest (storageState empty)",
+      "Check the Sign In heading and the username and password labels",
+      "Check Remember Me is visible with its label",
+      "Check the username and password inputs are visible and the Sign In and Create An Account button texts"
+    ],
+    "entitiesTouched": [],
+    "stateChanges": [
+      "None (guest, read-only; nothing is submitted)"
+    ],
+    "assertions": [
+      "signInHeading contains signIn.heading",
+      "usernameLabel contains signIn.usernameLabel; passwordLabel contains signIn.passwordLabel",
+      "rememberMeLabel visible and contains signIn.rememberMeLabel",
+      "usernameInput and passwordInput visible",
+      "signInButton contains signIn.signInButton; createAccountButton contains signIn.createAnAccountButton"
+    ],
+    "evidence": [
+      "Title and step labels match the flow; linked cases ZPD-TC-9152..9155 from the title tags",
+      "UI text only: every value is a heading, field label or button text asserted with toContainText -> expected-output; '/login' is the start URL (config). No record of the environment is read, so no need",
+      "Masked labels, not credentials: source 2 (keyPath signIn.usernameLabel) and source 3 (keyPath signIn.passwordLabel) are masked only because the key contains 'username'/'password'; the spec asserts them with toContainText on loginPage.usernameLabel (lblUsername) and loginPage.passwordLabel (lblPassword), field labels, and never types them -> expected-output. Values stay masked",
+      "Store: no test.use baseURL; the spec runs on the project's default webstore baseURL (the same webstore as the other login specs). It reads no record, so no store param is needed",
+      "swap: no data value (nothing to replace, no need); the spec can stay as it is",
+      "Profile: every value NO_RULE or SENSITIVE (no observation FOUND); profiled false"
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9152",
+    "ZPD-TC-9153",
+    "ZPD-TC-9154",
+    "ZPD-TC-9155"
+  ],
+  "sources": [
+    {
+      "value": "/login",
+      "location": "testim-migrated/tests/webstore/login/verify-sign-in-and-registration-labels.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:3",
+      "kind": "json",
+      "keyPath": "signIn.heading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:4",
+      "kind": "json",
+      "keyPath": "signIn.usernameLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:5",
+      "kind": "json",
+      "keyPath": "signIn.passwordLabel",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Remember Me",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:6",
+      "kind": "json",
+      "keyPath": "signIn.rememberMeLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:7",
+      "kind": "json",
+      "keyPath": "signIn.signInButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Create An Account",
+      "location": "testim-migrated/test-data/webstore/login/verify-sign-in-and-registration-labels.json:8",
+      "kind": "json",
+      "keyPath": "signIn.createAnAccountButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

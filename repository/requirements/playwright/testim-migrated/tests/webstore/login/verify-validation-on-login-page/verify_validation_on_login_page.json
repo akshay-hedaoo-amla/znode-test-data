@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/login/verify-validation-on-login-page.spec.ts > Webstore - Login > verify validation on login page",
+  "scenario": {
+    "summary": "Guest opens the sign-in panel and checks its validations: empty submit (required username and password messages), focusing the empty username, a registered username with a wrong password, and a non-existent username with a password.",
+    "steps": [
+      "Open '/' as a guest (storageState empty); header Sign In",
+      "Click Sign In with both fields empty; check the required-username and required-password messages",
+      "Click the empty username field; check the sign-in error text",
+      "Fill the account's username and a wrong password (invalidPassword); Sign In; check the sign-in error",
+      "Fill a non-existent username (invalidUserName) and the password; Sign In; check 'The entered Username or Password does not exist.' (SignInValidationMessage)"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "One failed sign-in attempt (wrong password) against the declared account per run: it may count toward a failed-attempt lockout (not checked; usually reset by the next successful sign-in, which other specs of the shared account do); repeated runs without a successful sign-in could lock the shared account (REVIEW)",
+      "The non-existent-username attempt touches no account"
+    ],
+    "assertions": [
+      "requiredUsernameError has text wrongPasswordErrorMessage (empty submit)",
+      "requiredPasswordError has text emptyPasswordBoxErrorMessage (empty submit)",
+      "signInError has text emptyUsernameBoxErrorMessage (empty username focused)",
+      "signInError has text wrongUsernameErrorMessage (registered username + wrong password)",
+      "signInError has text SignInValidationMessage (non-existent username)"
+    ],
+    "evidence": [
+      "Title 'verify validation on login page' and the step labels match the flow",
+      "DECLARED ACCOUNT: source 4 (keyPath username, masked by key name) is typed into the sign-in username field in the step 'Valid username + wrong password' (usedBy step 8), so it is a registered account's username: role credential, alias user, preferred.required true. Source 8 (keyPath password, masked by key name) is typed with the non-existent username in the step 'Non-existent username + valid password' (usedBy step 13): by its name and the step label it is the account's real password -> credential, alias user (kept in the spec's JSON; the check would pass with any password, the migrated spec may keep reading it). user -> USER_WEBSTORE_REGISTERED {store}; the migrated test declares it with await testData.useExisting('user', data.username) before its first sign-in attempt",
+      "Invalid values the test types (config, never a real account): source 5 (keyPath invalidPassword, masked by key name) is the wrong password typed with the registered username; source 7 (keyPath invalidUserName, masked by key name) is the non-existent username. Both are fixed recorded literals; the migrated spec should generate the non-existent username per run (e.g. a unique run-tagged name that is never registered) and may generate the wrong password; no key is needed",
+      "Masked validation messages, not credentials (masked only because the key contains 'password'/'username'): source 1 wrongPasswordErrorMessage, source 2 emptyPasswordBoxErrorMessage, source 3 emptyUsernameBoxErrorMessage, source 6 wrongUsernameErrorMessage -> expected-output (each is the expected text of a toHaveText on a validation locator). Source 9 SignInValidationMessage is unmasked UI text -> expected-output. Values stay masked",
+      "REVIEW (spec naming, not data): the JSON key names do not match where they are asserted: wrongPasswordErrorMessage is asserted on the required-USERNAME error after the empty submit, emptyUsernameBoxErrorMessage after focusing the empty username, wrongUsernameErrorMessage after a registered username with a WRONG PASSWORD. Roles are set by use, not by name",
+      "Store MaxwellsHardware: the spec runs on env.web.baseUrl (WEB_BASE_URL, webstore-z10-at), the store every migrated webstore spec runs on (same store as the approved my-account, quick-order and home-page entries)",
+      "'/' (source 0) is the start URL (config)",
+      "migrate: no data value to swap; the account is declared and leased through testData.useExisting (the wrong-password attempt counts against that account, so it should be the leased account). Alternative: swap (spec unchanged), account only checked at pre-warm",
+      "Profile: every value NO_RULE or SENSITIVE (no observation FOUND); profiled false"
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/login/verify-validation-on-login-page.spec.ts:35",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:4",
+      "kind": "json",
+      "keyPath": "wrongPasswordErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:8",
+      "kind": "json",
+      "keyPath": "emptyPasswordBoxErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:9",
+      "kind": "json",
+      "keyPath": "emptyUsernameBoxErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:7",
+      "kind": "json",
+      "keyPath": "invalidPassword",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:5",
+      "kind": "json",
+      "keyPath": "wrongUsernameErrorMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:6",
+      "kind": "json",
+      "keyPath": "invalidUserName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "The entered Username or Password does not exist.",
+      "location": "testim-migrated/test-data/webstore/login/login-validation.json:10",
+      "kind": "json",
+      "keyPath": "SignInValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
