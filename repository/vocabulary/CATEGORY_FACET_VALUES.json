@@ -16,7 +16,7 @@
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Facets of a category PLP: for each listed facet attribute (IsFacets) its label and values with product counts in the category (a parent counts via its children), and the products of the first value of the first attribute. Read only.",
+  "description": "Facets of a category PLP: for each listed facet attribute (IsFacets) its label and values with product counts in the category (a parent also counts via an active child priced above 0 and in stock on the store), and the products of the first value of the first attribute. Read only.",
   "declaredParams": {
     "store": {
       "type": "string",

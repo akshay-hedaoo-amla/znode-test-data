@@ -27,7 +27,8 @@
       "Key PRODUCT_SIMPLE_OUT_OF_STOCK (store).",
       "sku -> product.sku, productName -> product.name, productPrice ($100.00, the card retail price) -> product.retailPrice (now an output); the PimProductId in the test ids comes from product.productId. Still a gap (constraint): PRODUCT_SIMPLE_OUT_OF_STOCK does not require a price above zero, so a resolved product may show no retail price; the spec should skip the price check when retailPrice is empty, or the key needs a price constraint (human decides).",
       "Data in code: PimProductId 993 (hdgProductName993, divProductSKUContainer993, spnRetailPrice993, valOutofstocktext993); recorded as data of alias product.",
-      "migrate: raw JSON import (swap rule 1 fails), the price is asserted (rule 3) and the product id is in code (rule 4)."
+      "migrate: raw JSON import (swap rule 1 fails), the price is asserted (rule 3) and the product id is in code (rule 4).",
+      "2026-11-02 fix: product need passes priceAbove 0, so the resolved out-of-stock product has a retail price above 0 on the store's price lists and the card price check (spnRetailPrice<productId>) always runs."
     ],
     "confidence": "high",
     "needsReview": false
@@ -37,7 +38,8 @@
       "key": "PRODUCT_SIMPLE_OUT_OF_STOCK",
       "alias": "product",
       "params": {
-        "store": "MaxwellsHardware"
+        "store": "MaxwellsHardware",
+        "priceAbove": 0
       },
       "preferred": {
         "source": 0,

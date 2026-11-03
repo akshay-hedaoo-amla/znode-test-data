@@ -32,7 +32,8 @@
       "Gap (params): the test needs inventory that is tracked and shown per warehouse (quantity text, inventory details link, a row for warehouse id 8). PRODUCT_SIMPLE_IN_STOCK does not constrain OutOfStockOptions (a DontTrackInventory product may show no quantity or details) or the warehouse. Proposed: optional param on PRODUCT_SIMPLE_IN_STOCK (e.g. trackInventory) and a warehouseId output (human decides; no key written).",
       "Data in code: PimProductId 175 (divTotalInventory175) and warehouse id 8 (paraWarehouseName8) are in the spec; 175 recorded as data of alias product, warehouse 8 as config (store warehouse, not a product output).",
       "Spec TODO comments (volatile counts asserted only as visible) are evidence only.",
-      "migrate: raw JSON import, not loadData (swap rule 1 fails), and the product id is in code (rule 4)."
+      "migrate: raw JSON import, not loadData (swap rule 1 fails), and the product id is in code (rule 4).",
+      "2026-11-02 fix: product need passes outOfStockOption DisablePurchasing (tracked inventory), so Quick View shows In Stock with a quantity (paraInStockQuantity); a DontTrackInventory product shows none."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -43,7 +44,8 @@
       "alias": "product",
       "params": {
         "store": "MaxwellsHardware",
-        "quantityUsed": 1
+        "quantityUsed": 1,
+        "outOfStockOption": "DisablePurchasing"
       },
       "preferred": {
         "source": 0,

@@ -31,11 +31,12 @@
       "Profile: B-100000 FOUND as active ConfigurableProduct, PRODUCTION, storefrontProductIndex 1, requiredAddOnCount 0 (parent stock NOT_FOUND: stock is on the variants). tda rows: B-100000 is PimProductId 666; variant z-2520007 is PimProductId 544, SimpleProduct 'Sengled BR30 Add-on Smart LED Bulb (2-Pack) - White Only', active.",
       "Need product PRODUCT_CONFIGURABLE_WITH_VARIANTS (minVariants 2: the test reaches a second variant; quantityUsed 1: one unit added; variantAttributes BulbSize,Color,Technology as in the approved checkout/cart entries for this product family), preferred source sku. sku -> parentProductSku, parentProductName -> name, variant2ProductName -> variant2Name; variant2SKU ('SKU:' + variant2Sku) and the attribute rows ('<label> : ' + variant2Attr1..3) are composed by the migrated spec from outputs (expected-output).",
       "Outputs now cover: the parent productId (parentProductId: test ids hdgProductName666 / divProductSKUContainer666 / spnRetailPrice666, config), variant2ProductId (divSalesPrice544 / paraItemRowCost544), variant2Sku (divConfigurableProductAttributesz-2520007) and variant2ProductPrice -> variant2Price (sales, else retail). Built by the spec from it (expected-output): 'YOUR TOTAL IS <variant2Price> For 1 Item' and '<variant2Price> / Piece'.",
-      "Not covered: the parent card price '$50.00 / Piece' stays expected-output: the parent price is an output of PRODUCT_CONFIGURABLE_PDP_DETAILS only (parentRetailPrice; PRODUCT_CONFIGURABLE_WITH_VARIANTS has no room for it), and that key takes no product param, so a second need could not be tied to this need's parent; the ' / Piece' unit is not produced by any key either. The variant description (variant2ProductDescription) has no output in PRODUCT_CONFIGURABLE_WITH_VARIANTS and stays expected-output.",
+      "Not covered: the parent card price '$50.00 / Piece' stays expected-output: the parent price is an output of PRODUCT_CONFIGURABLE_PDP_DETAILS only (parentRetailPrice; PRODUCT_CONFIGURABLE_WITH_VARIANTS has no room for it), and that key takes no product param, so a second need could not be tied to this need's parent; the ' / Piece' unit is not produced by any key either.",
       "DOUBT: the spec reaches variant 2 by clicking only imgMedium from the Quick View default (Small+White+LED, per spec comments); the key's variant2 is the second qualifying variant by SKU, which need not differ from the default by Bulb Size only. The migrated spec should click all three swatches of variant2 (variant2Attr1..3) instead of the hardcoded imgMedium.",
       "Data in code: imgMedium (selectQVOption), product ids 666 and 544 and the variant SKU z-2520007 are in getByTestId literals; the attribute rows are literals.",
       "migrate: data values are in the spec code (testIds with product ids/SKU, imgMedium) and prices, description and cart total depend on the data (swap rules 3 and 4 fail).",
-      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan."
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (as in the approved shopping-cart, checkout and PDP entries); not named in the scan.",
+      "2026-11-02 fix: the variant description is now a structural check (the spec asserts the Quick View description is not empty and no longer reads variant2ProductDescription), so its source is removed: no expected-output value and no data mapping remain for it."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -146,16 +147,6 @@
       "keyPath": "variant2SKU",
       "sensitive": false,
       "profiled": true,
-      "role": "expected-output",
-      "alias": "product"
-    },
-    {
-      "value": "Add smart, directed lighting to your kitchen or dining table with this Sengled bulb two-pack. Control these bulbs directly via an app or smart home hub, or add an Element hub to control up to 64 bulbs together. The dimmable BR30 devices in this Sengled bulb two-pack fit most standard floodlight fixtures.",
-      "location": "testim-migrated/test-data/webstore/plp/verify-quick-view-of-configurable-product-with-variant2.json:7",
-      "kind": "json",
-      "keyPath": "variant2ProductDescription",
-      "sensitive": false,
-      "profiled": false,
       "role": "expected-output",
       "alias": "product"
     },

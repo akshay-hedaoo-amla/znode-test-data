@@ -37,7 +37,8 @@
       "Composed values stay data without output, built by the spec from outputs: parentProductPrice '$50.00 / Piece' = parentRetailPrice (parentSalesPrice when set) + ' / Piece', variant1SKU 'SKU:' + variantSku, hdgTotalPriceWithItems 'YOUR TOTAL IS <price> For 1 Item', variant1ItemPrice '<price> / Piece'. The ' / Piece' unit is not produced by any key (the spec keeps it as a constant).",
       "Not covered: the swatch ids imgSmall / imgWhite / imgLED and the attribute test id 'divTechnology ' with label 'Technology' stay data without output: the key's variant is the first in-stock variant by SKU, which is not guaranteed to be the Quick View default variant, and no key produces the default variant (swatches is one encoded list).",
       "Data in code: PimProductIds 666 and 532 in test ids, the swatch ids imgSmall / imgWhite / imgLED and the attribute test id 'divTechnology ' with label 'Technology'; recorded as data of alias pdp.",
-      "migrate: loadData is used, but prices and the cart total depend on the record and record ids and swatch values are in code (swap rules 3 and 4 fail)."
+      "migrate: loadData is used, but prices and the cart total depend on the record and record ids and swatch values are in code (swap rules 3 and 4 fail).",
+      "2026-11-02 fix: pdp need passes minTiers 1: the spec checks the SPECIAL PRICE OFFERS heading, so the parent or the variant needs at least one tier price on the variant's price list."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -48,7 +49,8 @@
       "alias": "pdp",
       "params": {
         "store": "MaxwellsHardware",
-        "quantityUsed": 1
+        "quantityUsed": 1,
+        "minTiers": 1
       },
       "preferred": {
         "source": 0,

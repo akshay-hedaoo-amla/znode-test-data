@@ -44,7 +44,8 @@
       "Not covered: category 'Tools' (Quick View category) stays data without output: no key produces the Quick View category of a simple product (decision 2026-11-02; the key's categoryName is not confirmed to be what Quick View shows). The category facet test id li-Drills has no output either.",
       "Data in code: the add-on product ids 164/165/512 (qvAddonLabel, checkAddon, add-on-value-checkbox-<id>), the PimProductId in divSalesPrice484, the category facet test id li-Drills and the product name in the cart image alt selector (spec line 269) are in the spec; recorded as data of alias product where scanned.",
       "Personalization inputs AdditionalInformationIsEntered / DisplayTextIsEntered are test-typed text (config); the cart lines echoing them and the add-on message (contains the group name Checkbox) are expected-output.",
-      "migrate: loadData is used, but expected values depend on the record (prices, tier prices, add-on prices, computed subtotal) and record ids are in code (swap rules 3 and 4 fail)."
+      "migrate: loadData is used, but expected values depend on the record (prices, tier prices, add-on prices, computed subtotal) and record ids are in code (swap rules 3 and 4 fail).",
+      "2026-11-02 fix: product need passes personalizationAttribute DisplayText (the spec types into #AdditionalInformation and #DisplayText; the key takes one code, so AdditionalInformation is not constrained). The category facet test id li-Drills maps to the new output categoryCode (published category code of the categoryName category; storefront facet test id li-<CategoryCode>)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -56,7 +57,8 @@
       "params": {
         "store": "MaxwellsHardware",
         "quantityUsed": 1,
-        "minRequiredAddOns": 1
+        "minRequiredAddOns": 1,
+        "personalizationAttribute": "DisplayText"
       },
       "preferred": {
         "source": 0,
@@ -139,7 +141,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryCode"
     },
     {
       "value": "Milwaukee M12 FUEL 12-Volt 1/2 in Brushless Cordless Hammerdrill",

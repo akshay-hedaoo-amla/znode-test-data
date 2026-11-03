@@ -17,7 +17,8 @@
     "categoryId": "= {inCategoryId}",
     "notCategoryId": "!= {notInCategoryId}",
     "maxQuantity": ">= {minMaxQuantity}",
-    "discountedForProfile": "!= {notDiscountedForProfile}"
+    "discountedForProfile": "!= {notDiscountedForProfile}",
+    "outOfStockOption": "= {outOfStockOption}"
   },
   "scope": {
     "store": "{store}"
@@ -57,9 +58,14 @@
       "type": "string",
       "description": "Optional: profile name the test shops as (e.g. Anonymous); no active automatic product/category promotion of the store for that profile (or all profiles) may discount the product",
       "optional": true
+    },
+    "outOfStockOption": {
+      "type": "string",
+      "description": "Optional: stored out-of-stock option the product must have (ZnodePimProduct.OutOfStockOptions), e.g. DisablePurchasing when the test reads the tracked stock quantity; left out = any option",
+      "optional": true
     }
   },
   "status": "approved",
   "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

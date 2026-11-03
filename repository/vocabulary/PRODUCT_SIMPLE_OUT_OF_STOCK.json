@@ -12,7 +12,8 @@
     "storefrontProductIndex": ">= 1",
     "inventory": "<= 0",
     "outOfStockOption": "= disablepurchasing",
-    "requiredAddOnCount": "= 0"
+    "requiredAddOnCount": "= 0",
+    "retailPrice": "> {priceAbove}"
   },
   "scope": {
     "store": "{store}"
@@ -23,9 +24,14 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "priceAbove": {
+      "type": "number",
+      "description": "Optional: the retail price on the store's price lists (the retailPrice output) must be above this, e.g. 0 when the test checks the card price; left out = priced or not",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
 }

@@ -11,7 +11,8 @@
     "storefrontObsolete": "= false",
     "storefrontProductIndex": ">= 1",
     "inventory": ">= {quantityUsed}",
-    "requiredAddOnCount": ">= {minRequiredAddOns}"
+    "requiredAddOnCount": ">= {minRequiredAddOns}",
+    "personalizableAttributeCode": "{personalizationAttribute}"
   },
   "scope": {
     "store": "{store}"
@@ -30,9 +31,14 @@
     "minRequiredAddOns": {
       "type": "integer",
       "description": "Minimum number of required add-on associations the product must have (1 or more)"
+    },
+    "personalizationAttribute": {
+      "type": "string",
+      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode with IsPersonalizable, e.g. DisplayText); left out = any product",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-02T14:30:00Z"
 }
