@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts > Webstore - Quick Order > pasting a zero quantity is rejected",
+  "scenario": {
+    "summary": "Guest pastes a valid SKU with quantity 0 on the Paste Multiple tab; the alert shows the 'couldn't be added' message for 1 SKU and Add to Cart stays disabled.",
+    "steps": [
+      "Go to '/'; open the Paste Multiple tab",
+      "Paste '<sku> 0'",
+      "Check the alert contains the 1-SKU 'couldn't be added to the Quick List…' message and Add to Cart is disabled"
+    ],
+    "entitiesTouched": [
+      "product",
+      "quick_list"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Alert contains the below-minimum (1 SKU couldn't be added…) message",
+      "Add to Cart disabled"
+    ],
+    "evidence": [
+      "Coverage-gap spec ported from the Selenium paste-guest suite (spec header comment); guest storageState; serial describe; no linked cases.",
+      "pasteProduct -> PRODUCT_SIMPLE_IN_STOCK quantityUsed 1, store MaxwellsHardware: the SKU must be a valid sellable simple product so that only the zero quantity makes the row fail; preferred validSku z-2460001 (profile: active SimpleProduct 'Black + Decker 6.5 in Corded Angle Grinder', inventory 250, no required add-on, but storefrontProductIndex 0, so it fails the key and the resolver falls back). validSku -> sku.",
+      "The pasted quantity 0 is a spec literal in the paste text (`${validSku} 0`), not a scanned value: config.",
+      "migrate: the module is migrated together (CSV specs); the SKU is only used inside the paste template string, so swap would also work for this test alone.",
+      "belowMinimumQuantityMessage is expected-output (verbatim message, '1 SKU' count fixed by the test)."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "pasteProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2460001",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.json:2",
+      "kind": "json",
+      "keyPath": "validSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pasteProduct",
+      "output": "sku"
+    },
+    {
+      "value": "1 SKU couldn't be added to the Quick List because the SKU is either invalid or entered with incorrect formatting, such as a space between the SKU and quantity.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.json:8",
+      "kind": "json",
+      "keyPath": "belowMinimumQuantityMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

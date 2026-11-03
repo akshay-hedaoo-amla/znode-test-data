@@ -18,7 +18,8 @@
     "notCategoryId": "!= {notInCategoryId}",
     "maxQuantity": ">= {minMaxQuantity}",
     "discountedForProfile": "!= {notDiscountedForProfile}",
-    "outOfStockOption": "= {outOfStockOption}"
+    "outOfStockOption": "= {outOfStockOption}",
+    "personalizableAttributeCount": "<= {maxPersonalizableAttributes}"
   },
   "scope": {
     "store": "{store}"
@@ -63,9 +64,14 @@
       "type": "string",
       "description": "Optional: stored out-of-stock option the product must have (ZnodePimProduct.OutOfStockOptions), e.g. DisablePurchasing when the test reads the tracked stock quantity; left out = any option",
       "optional": true
+    },
+    "maxPersonalizableAttributes": {
+      "type": "integer",
+      "description": "Optional: at most this many personalizable attributes on the product; 0 for flows that reject personalization (Quick Order); left out = any",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-11-02T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

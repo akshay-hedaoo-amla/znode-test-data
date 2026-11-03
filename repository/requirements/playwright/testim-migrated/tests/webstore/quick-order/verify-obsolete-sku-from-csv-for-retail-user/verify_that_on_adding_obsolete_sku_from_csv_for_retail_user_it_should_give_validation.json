@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.spec.ts > Webstore - Quick Order > verify that on adding obsolete sku from csv for retail user it should give validation",
+  "scenario": {
+    "summary": "A retail user signs in with the test's own account, opens Paste Multiple on the quick order pad and uploads a CSV with one valid SKU and one obsolete SKU; the alert reports 1 product added and the other invalid.",
+    "steps": [
+      "Guest storageState; open the login page and sign in with username/password from the test data",
+      "Open the quick order Paste Multiple tab; upload the CSV (one valid + one obsolete SKU)",
+      "Check the alert contains '1 Product was added to your 'Quick List'.' and 'invalid'"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "quick_list"
+    ],
+    "stateChanges": [
+      "The signed-in account's Quick List gets the valid CSV product (nothing ordered)"
+    ],
+    "assertions": [
+      "Alert contains '1 Product was added to your 'Quick List'.'",
+      "Alert contains 'invalid' (the obsolete row is rejected)"
+    ],
+    "evidence": [
+      "Title 'verify that on adding obsolete sku from csv for retail user it should give validation'; the step comment says 'one valid + one invalid SKU'. Title and comment together: the invalid row is the obsolete SKU. The fixture was not opened (policy), so this is an inference: confidence medium, needs review.",
+      "The spec comment says the export's manual obsolete-SKU entry step (obsoleteSku -> obsoleteMessage) is not reproducible on this build and is skipped; its JSON keys (obsoleteSku, obsoleteSkuName, obsoleteMessage, uploadInvalidSkuCSVValidation, csvFile) are not in the scan (unused in code or read at module level), so they have no sources here.",
+      "DECLARED ACCOUNT: the spec opts out of the shared session and signs in with username/password from its own JSON (credential sources, masked). user -> USER_WEBSTORE_REGISTERED store MaxwellsHardware, preferred.required true on the username source; the migrated test declares it with testData.useExisting('user', data.username) before signing in (as the my-account requirements).",
+      "CSV DESIGN (fixture not opened): two rows, valid first then obsolete. csvValidProduct -> PRODUCT_SIMPLE_IN_STOCK quantityUsed 1 (assumed 1 per row), store MaxwellsHardware; obsoleteProduct -> PRODUCT_SIMPLE_OBSOLETE store MaxwellsHardware (active, published, PIM and storefront obsolete: the storefront knows the SKU but rejects it). No scan source holds the recorded SKUs, so no preferred. The migrated spec writes the CSV at run time from csvValidProduct.sku and obsoleteProduct.sku (same columns as the fixture).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on (WEB_BASE_URL webstore-z10-at).",
+      "migrate: data carried by an uploaded CSV; account declared through useExisting.",
+      "Messages are expected-output ('1 Product was added…' from JSON, 'invalid' a spec literal)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "csvValidProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OBSOLETE",
+      "alias": "obsoleteProduct",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "1 Product was added to your 'Quick List'.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "oneProductAddedFragment",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "invalid",
+      "location": "testim-migrated/tests/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

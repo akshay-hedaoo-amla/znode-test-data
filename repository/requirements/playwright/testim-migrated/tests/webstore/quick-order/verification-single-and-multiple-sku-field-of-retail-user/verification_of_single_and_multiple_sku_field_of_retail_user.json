@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.spec.ts > Webstore - Quick Order > verification of single and multiple sku field of retail user",
+  "scenario": {
+    "summary": "A registered user (own credentials) first submits the forgot-password form, signs in, then uses Quick Order: adds one SKU with quantity 5 from the fly-out, adds two SKU rows (quantities 3 and 5) from Add Multiple Items, and pastes two SKUs with quantities; each submit lands on the cart, which is cleared.",
+    "steps": [
+      "Guest storageState; open /forgot-password, check the heading 'Create Your Password', submit forgotPasswordEmail, check the reset-link alert.",
+      "Sign in with username/password from the test data; header greeting contains 'Hello,'.",
+      "Quick Order fly-out: type the single product SKU, pick the suggestion, quantity productQuantity (5), Add to Cart; cart heading 'Cart' and 'Remove all items' link; clear the cart.",
+      "Add Multiple Items: row 0 = first-row product (suggestion '<name> | <sku>'), row 1 = pasted simple product (suggestion '<name> | <sku>'); quantities 3 and 5; cancel empty rows 4, 3, 2; Add to Cart; 'Cart'; clear the cart.",
+      "Paste Multiple: '<sku>, 10\\n<variant sku>, 5'; toast '2 Products were added to your 'Quick List'.'; clear the cart."
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "A password reset link is requested for forgotPasswordEmail (e-mail sent; the password is not changed).",
+      "The declared account's cart receives the single product (qty 5), the two row products (3, 5) and the two pasted products (10, 5); it is cleared after each step (no order placed)."
+    ],
+    "assertions": [
+      "Forgot-password heading 'Create Your Password' and the reset-link alert",
+      "Header greeting contains 'Hello,'",
+      "Cart heading equals 'Cart' after each Add to Cart; 'Remove all items' link text",
+      "Row suggestions contain '<product name> | <sku>'",
+      "Paste Multiple toast contains '2 Products were added to your 'Quick List'.'"
+    ],
+    "evidence": [
+      "Title 'verification of single and multiple sku field of retail user' and the step labels match the flow; no linked cases, no AIO file.",
+      "DECLARED ACCOUNT: the spec opts out of the shared session (test.use storageState empty) and signs in with username/password from its own JSON (credential sources). USER_WEBSTORE_REGISTERED {store} preferred.required true on the username source; the migrated test declares it with await testData.useExisting('user', data.username) before signing in. Quick-order cart lines go to the account's cart and are cleared after each step.",
+      "forgotPasswordEmail (masked by the scanner as a password key) is the e-mail typed into the forgot-password form before sign-in: role credential, alias user (an account identifier the test keeps reading from its own JSON). REVIEW: masked, so it is not confirmed that it is the same account as username; if it is, the migrated spec could type the declared account's userName instead. Submitting the form requests a reset link (e-mail) for that account; the password is not changed.",
+      "'/forgot-password' (page path) is config; 'Create Your Password' (forgot-password heading) and 'Hello,' (header greeting prefix) are expected-output (fixed UI text). 'Remove all items' is the cart link text (expected-output).",
+      "Store MaxwellsHardware: the webstore every migrated webstore spec runs on (testimEnv.web.baseUrl, webstore-z10-at); same store as the approved pdp/plp/my-account entries.",
+      "Suggestion texts are recorded as '<name> | <sku>' (e.g. 'American Standard Gold 95v Furnace | z-1234570'): role data of the product need; the migrated spec builds `${p.name} | ${p.sku}` from the need outputs (name, sku). Names can themselves contain ' | ' (z-1234575 'Daikin FHQ-CB | Multi-Split Air Conditioning Unit').",
+      "sku8 z-2410001: profile FOUND active SimpleProduct, inventory 250, storefront index 0 (tda rows: DontTrackInventory, Min 1 / Max 100). Single SKU in the Quick Order fly-out with productQuantity 5 (config): singleProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 5, minMaxQuantity 5, store}, preferred sku8 (falls back: index 0). The test checks only the cart heading and cart count, not the name.",
+      "sku1 z-2460005: profile FOUND active simple, inventory 250, storefront index 1 (Min 1 / Max 100). Row 0 with quantity 3 (spec literal): firstRowProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 3, minMaxQuantity 3, store}, preferred sku1; sku1 -> firstRowProduct.sku, bosch120voltText -> '<name> | <sku>'.",
+      "sku9 z-2430004: profile FOUND active simple, inventory 250, storefront index 1 (Min 1 / Max 100). Row 1 with quantity 5 (spec literal) and paste line 1 with quantity 10: one need pastedProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 10, minMaxQuantity 10, store}, preferred sku9; sku9 -> pastedProduct.sku, sku9Name -> '<name> | <sku>'.",
+      "pasteMultipleProductList 'z-2430004, 10\\nz-2510001, 5' is built from needs: line 1 = pastedProduct.sku with quantity 10, line 2 = pastedVariant.variant1Sku with quantity 5 (quantities are config, kept in the spec or data). The success message '2 Products were added to your 'Quick List'.' is expected-output: fixed UI text whose count equals the number of pasted lines (2).",
+      "z-2510001 (PimProductId 532, SimpleProduct, DontTrackInventory, Min 1 / Max 100, tda rows) is the default variant of configurable B-100004 (approved checkout / saved-cart entries). Need pastedVariant = PRODUCT_CONFIGURABLE_WITH_VARIANTS {quantityUsed 5, minVariants 1, minAddOns 0, minPersonalizableAttributes 0, variantAttributes BulbSize,Color,Technology (the value the approved entries use for B-100004; the test picks no attributes, the param is required)} -> output variant1Sku. No preferred: the recorded variant SKU only appears inside the paste-list string, not as its own source. REVIEW: the key does not check that the variant itself allows quantity 5 (MaximumQuantity) or that quick order accepts a variant SKU; the recording shows it does for z-2510001.",
+      "Distinct records: singleProduct, firstRowProduct and pastedProduct are separate PRODUCT_SIMPLE_IN_STOCK needs (distinct SKUs); the two rows must differ anyway, or the duplicate-SKU error would block the submit.",
+      "Row quantities 3 and 5 and the cancelled rows 4, 3, 2 are spec literals (config), not scanned values.",
+      "migrate: suggestion texts ('<name> | <sku>') and the paste list ('<sku>, <qty>\\n<sku>, <qty>') combine several outputs, so they map to no single output (swap rule 2 fails)."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "singleProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 5,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 5
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "firstRowProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 3,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 3
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "pastedProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 10,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 10
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "pastedVariant",
+      "params": {
+        "quantityUsed": 5,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/forgot-password",
+      "location": "testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.spec.ts:46",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Create Your Password",
+      "location": "testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:4",
+      "kind": "json",
+      "keyPath": "forgotPasswordEmail",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hello,",
+      "location": "testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.spec.ts:59",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2410001",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:5",
+      "kind": "json",
+      "keyPath": "sku8",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "singleProduct"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:10",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:13",
+      "kind": "json",
+      "keyPath": "cart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Remove all items",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:14",
+      "kind": "json",
+      "keyPath": "removeAllItemsText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2460005",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:6",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "firstRowProduct"
+    },
+    {
+      "value": "Bosch 120-Volt 10 Amp 4-1/2 In Corded Angle Grinder | z-2460005",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:8",
+      "kind": "json",
+      "keyPath": "bosch120voltText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "firstRowProduct"
+    },
+    {
+      "value": "z-2430004",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:7",
+      "kind": "json",
+      "keyPath": "sku9",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "pastedProduct"
+    },
+    {
+      "value": "Bosch Cordless Brushless 18-Volt 2 tool Hammer Drill and Impact Driver Kit | z-2430004",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:9",
+      "kind": "json",
+      "keyPath": "sku9Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pastedProduct"
+    },
+    {
+      "value": "z-2430004, 10\nz-2510001, 5",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:11",
+      "kind": "json",
+      "keyPath": "pasteMultipleProductList",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pastedProduct"
+    },
+    {
+      "value": "2 Products were added to your 'Quick List'.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.json:12",
+      "kind": "json",
+      "keyPath": "twoProductsSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

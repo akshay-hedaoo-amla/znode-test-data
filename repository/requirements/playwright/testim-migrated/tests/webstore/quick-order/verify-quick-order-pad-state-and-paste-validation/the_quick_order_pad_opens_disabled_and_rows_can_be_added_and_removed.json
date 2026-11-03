@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts > Webstore - Quick Order > the quick order pad opens disabled and rows can be added and removed",
+  "scenario": {
+    "summary": "Guest opens the multi-row quick order pad: Add to Cart is disabled, row 0 quantity defaults to 0 and there are 5 rows; adding 2 rows gives 7, removing the last row twice returns to 5. No test data from the environment.",
+    "steps": [
+      "Go to '/'; open the multi-row quick order pad",
+      "Check Add to Cart is disabled, row 0 quantity is the default (0) and the remove-row count is 5",
+      "Click Add Row twice; check the row count is 7",
+      "Remove the last row twice; check the row count is 5 again"
+    ],
+    "entitiesTouched": [
+      "quick_list"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Add to Cart disabled",
+      "Default quantity '0'",
+      "Initial row count 5",
+      "Row count 5 + 2 after adding",
+      "Row count back to 5 after removing"
+    ],
+    "evidence": [
+      "Coverage-gap spec ported from the Selenium paste-guest suite (spec header comment); guest storageState; serial describe; no linked cases.",
+      "No record data: defaultQuantity 0, initialRowCount 5 and rowsToAdd 2 are UI constants (config); '/' is navigation (config). requires is empty.",
+      "migrate (default; nothing to resolve). The spec can keep its JSON for these constants."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts:84",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.json:5",
+      "kind": "json",
+      "keyPath": "defaultQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.json:6",
+      "kind": "json",
+      "keyPath": "initialRowCount",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.json:7",
+      "kind": "json",
+      "keyPath": "rowsToAdd",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
