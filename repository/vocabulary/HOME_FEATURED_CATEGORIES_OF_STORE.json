@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "HOME_FEATURED_CATEGORIES_OF_STORE",
+  "entity": "home_featured_categories",
+  "type": "home_featured_categories",
+  "constraints": {
+    "publishState": "production",
+    "webstorePublishState": "production",
+    "categoryActive": "true",
+    "featuredCategoryCount": ">= {minCategories}",
+    "listedProductCount": ">= {minProducts}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store whose published home page shows a Category List widget (PortalMapping) with at least N active categories, in display order, plus the first of them after the first listing at least M products on its PLP (counted as CATEGORY_WITH_PRODUCTS).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); the resolved store must be this store"
+    },
+    "minCategories": {
+      "type": "integer",
+      "optional": true,
+      "description": "Fewest active categories the home page category widget must show. Left out: any"
+    },
+    "minProducts": {
+      "type": "integer",
+      "optional": true,
+      "description": "Fewest products the opened category (openCategory*: first featured category after the first) must list, e.g. above the PLP page size. Left out: any count"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

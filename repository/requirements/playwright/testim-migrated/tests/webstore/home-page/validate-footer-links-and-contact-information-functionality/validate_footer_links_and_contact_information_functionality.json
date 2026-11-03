@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/validate-footer-links-and-contact-information-functionality.spec.ts > Webstore - Home Page > validate footer links and contact information functionality",
+  "scenario": {
+    "summary": "Guest opens the home page, checks the footer Customer Support heading and the store's support phone number, the Help heading and a Help column link, the Store Info heading and its '404' and \"About Maxwell's Hardware\" links, opens the About page, checks and opens its 'Circular Saws' link, then returns home by the logo and checks the Featured Product heading. Read-only.",
+    "steps": [
+      "Open the webstore home as a guest (empty storageState); scroll to Customer Support.",
+      "Check hdgCustomerSupport is visible and the support phone span shows the store phone (masked).",
+      "Check hdgHelp and the Help column link (linkAutoContentpage) are visible.",
+      "Scroll to the footer; check hdgStoreInfo, link404 text '404' and the About link text \"About Maxwell's Hardware\".",
+      "Click the About link; check the 'Circular Saws' link text; click it.",
+      "Click the logo; check the Featured Product heading is visible."
+    ],
+    "entitiesTouched": [
+      "store",
+      "cms_content_page"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Customer Support heading visible; support phone text equals the store's phone (masked).",
+      "Help heading and a Help column link visible.",
+      "Store Info heading visible; footer links read '404' and \"About Maxwell's Hardware\".",
+      "On the About page a link reads 'Circular Saws'.",
+      "Back on home, the Featured Product heading is visible."
+    ],
+    "evidence": [
+      "Title 'validate footer links and contact information functionality' and the four step labels match the flow; guest storageState; data file read through loadData; no linked AIO cases.",
+      "Profile (2026-11-01): phoneNumber SENSITIVE (masked, not looked up); the page names are NO_RULE (profiled false).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "MISSING KEY STORE_SUPPORT_PHONE_OF_STORE: the customer-support phone the webstore footer shows. Params: store. Outputs: storeCode, supportPhone. Candidate source: dbo.ZnodePortal.CustomerServicePhoneNumber (or SalesPhoneNumber) by StoreCode; if the footer renders it from CMS content instead: dbo.ZnodePublishTextWidgetEntity.Text or dbo.ZnodeCMSContentBlock (+ dbo.ZnodeCMSContentBlockWidget) for the footer area. Not checked: the value is masked in the scan and was not looked up (ZnodePortal rows also carry contact data). The output is store contact data, not customer data, but it must stay masked in scans and reports. Replaces phoneNumber (<masked:phone>).",
+      "MISSING KEY STORE_FOOTER_CONTENT_LINKS_OF_STORE: the link names in the footer's Store Info column, in display order, and a link shown on one of those pages. Params: store, minLinks (2). Outputs: link1Name, link1Url, link2Name, link2Url, ... and childLinkName / childLinkUrl (a link on link2's page: 'Circular Saws' on the About page). Candidate sources (no entity map covers them, so tda rows cannot read them; describe only): content pages dbo.ZnodePublishContentPageConfigEntity (PageName, PageTitle, PortalId, IsActive, ActivationDate, ExpirationDate, LocaleId, VersionId) / dbo.ZnodeCMSContentPages (PageName, PortalId, IsActive, IsPublished) + dbo.ZnodeCMSContentPagesLocale.PageTitle, grouped by dbo.ZnodeCMSContentPageGroup / dbo.ZnodeCMSContentPageGroupLocale.Name ('Store Info') via dbo.ZnodeCMSContentPageGroupMapping; or link widgets dbo.ZnodePublishWidgetTitleEntity (Title, Url, TitleCode, DisplayOrder, PortalId, MappingId, WidgetsKey, IsActive) / dbo.ZnodeCMSWidgetTitleConfiguration + dbo.ZnodeCMSWidgetTitleConfigurationLocale (Title, Url, DisplayOrder). Open: which of the two holds the footer column, and where 'Circular Saws' comes from (a link widget on the About content page, or a category link). Replaces pageName1 ('404'), pageName2 (\"About Maxwell's Hardware\"), pageName3 ('Circular Saws').",
+      "Needs left out until those keys exist; the values are kept as expected-output.",
+      "Data in code: the page object locates the phone by a test id that embeds the phone number (supportPhone, getByTestId('spn+<digits>')) and the links by test ids built from their names (link404, linkAboutMaxwell'SHardware, linkCircularSaws).",
+      "migrate: swap rules fail: the phone and the page names also appear in page-object selectors, and no key exists yet for them."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "<masked:phone>",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-footer-links-and-contact-information-functionality.json:2",
+      "kind": "json",
+      "keyPath": "phoneNumber",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "404",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-footer-links-and-contact-information-functionality.json:3",
+      "kind": "json",
+      "keyPath": "pageName1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "About Maxwell's Hardware",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-footer-links-and-contact-information-functionality.json:4",
+      "kind": "json",
+      "keyPath": "pageName2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Circular Saws",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-footer-links-and-contact-information-functionality.json:5",
+      "kind": "json",
+      "keyPath": "pageName3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+  "entity": "home_featured_products",
+  "type": "home_featured_products",
+  "constraints": {
+    "publishState": "production",
+    "webstorePublishState": "production",
+    "productActive": "true",
+    "featuredProductCount": ">= {minProducts}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store whose published home page (Page Builder page 'home') shows a Product List widget (PortalMapping) with at least N active products; outputs them in widget display order. Source: published CMS widget tables.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); the resolved store must be this store"
+    },
+    "minProducts": {
+      "type": "integer",
+      "optional": true,
+      "description": "Fewest active products the home page product widget must show (e.g. the number of cards the test checks). Left out: any"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

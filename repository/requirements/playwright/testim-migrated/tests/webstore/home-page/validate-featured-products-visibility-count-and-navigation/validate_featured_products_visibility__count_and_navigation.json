@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/validate-featured-products-visibility-count-and-navigation.spec.ts > Webstore - Home Page > validate featured products visibility, count and navigation",
+  "scenario": {
+    "summary": "Guest opens the home page, checks the 'Featured Product' heading and that each of the four featured product cards (by SKU, in widget order) is visible, checks the Featured Categories heading and the five featured category names, opens the Plumbing featured category and checks its heading, the default 'Showing 16 of 32 Results' summary, then sets page size 12 and checks 'Showing 12 of 32 Results' and that the scrolled product count is unchanged. Read-only.",
+    "steps": [
+      "Open the webstore home as a guest (empty storageState) and scroll to Featured Products.",
+      "Check heading hdgFeaturedProduct has 'Featured Product'.",
+      "For each SKU in featuredProductList check the card [id$='-<sku>'] is visible.",
+      "Scroll to Featured Categories; check the heading and each name in featuredCategoriesList (p[data-test-selector^='txtCategoryName']); check the 'Electrical' label text.",
+      "Open the 'Plumbing' featured category card; check the category heading.",
+      "Check hdgShowingResults 'Showing 16 of 32 Results'; count all products by scrolling.",
+      "Set page size 12; check 'Showing 12 of 32 Results'; count again and compare with the first count."
+    ],
+    "entitiesTouched": [
+      "store",
+      "cms_widget",
+      "product",
+      "category"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Featured Product heading text is 'Featured Product' (fixed UI text).",
+      "Each featured product SKU card is visible (4 SKUs).",
+      "Featured Categories heading and each of the 5 featured category names are visible; the Electrical label reads 'Electrical'.",
+      "The opened category's heading is its name (Plumbing).",
+      "'Showing 16 of 32 Results' at the default page size and 'Showing 12 of 32 Results' at page size 12 (32 = products listed in the category).",
+      "Scrolled product count after the page-size change equals the count before."
+    ],
+    "evidence": [
+      "Title 'validate featured products visibility, count and navigation' and the five step labels match the flow; guest storageState; data file read through loadData; no linked AIO cases.",
+      "Profile (2026-11-01): every value is NO_RULE (profiled false).",
+      "Store MaxwellsHardware: the store every migrated webstore spec runs on; not named in the scan.",
+      "tda rows dbo.ZnodePublishCategoryEntity: Electrical (177) and Padlocks (179, parent 119) are categories of catalog Maxwell's Hardware; Padlocks and Faucets are subcategories, so the featured categories are not the Departments (top-level) list and CATEGORIES_TOP_LEVEL_OF_STORE does not fit. Plumbing (83) lists 32 products (approved plp entry), matching 'of 32 Results'.",
+      "featured -> HOME_FEATURED_PRODUCTS_OF_STORE {store, minProducts 4}: the products of the first Product List widget (PortalMapping, MappingId = PortalId) that the store's published home page (ZnodeCMSPortalProfilePageMapper PageCode home, default profile -> ZnodeCMSPortalPages.PageJSON) references, in the PRODUCTION locale-1 webstore version (ZnodePublishWebstoreEntity), active in the store's PRODUCTION catalog, by DisplayOrder. featuredProductList.0..3 -> product1Sku..product4Sku.",
+      "featuredCategories -> HOME_FEATURED_CATEGORIES_OF_STORE {store, minCategories 5, minProducts 17}: the categories of the first Category List widget the home page references (same version rules), active in the store's PRODUCTION catalog, by DisplayOrder. featuredCategoriesList.0..4 -> category1Name..category5Name; the 'Electrical' literal (line 52) and electricalText -> category1Name; the 'Plumbing' literal (line 57) and pubmbingText -> openCategoryName (first featured category, in display order, listing >= 17 products, counted as CATEGORY_WITH_PRODUCTS counts productCount; 17 = more than the default page size 16, so 'Showing 16 of N' is a partial page).",
+      "atstage check (2026-11-03, read-only readiness probes): featured = z-25100011, z-26597945, z-4567890, z-09876 (widget 666-a7f3f2e5..., the only Product List widget the home page references; two other PortalMapping widgets of the store hold the same SKUs). featuredCategories = Electrical, Plumbing, Faucets, Tools, Padlocks (widget 1992-8d8b80a5...). openCategory resolves to Electrical (id 177, 43 products), NOT the recorded Plumbing (83, 32): Electrical is first in display order and already lists >= 17 products. The migrated spec opens openCategoryName and builds 'Showing 16 of 43 Results' / 'Showing 12 of 43 Results'; reproducing Plumbing would need another param (e.g. maxProducts) - review point.",
+      "Composed values stay expected-output, built by the spec from outputs once migrated: 'Showing 16 of M Results' and 'Showing 12 of M Results' (M = featuredCategories.openCategoryProductCount; 16 is the store's default PLP page size, dbo.ZnodePortalPageSetting.IsDefault / dbo.ZnodePageSetting.PageValue; 12 is the page-size option the test selects: config). 'Featured Product' is fixed widget heading text.",
+      "migrate: swap rules fail: 'Electrical' and 'Plumbing' are literals in the spec code (lines 52 and 57) and the pagination texts depend on the opened category's product count (openCategoryProductCount); the spec reads featured.* and featuredCategories.* from testData."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+      "alias": "featured",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 4
+      }
+    },
+    {
+      "key": "HOME_FEATURED_CATEGORIES_OF_STORE",
+      "alias": "featuredCategories",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minCategories": 5,
+        "minProducts": 17
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "Featured Product",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:2",
+      "kind": "json",
+      "keyPath": "featuredProductText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-25100011",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:3",
+      "kind": "json",
+      "keyPath": "featuredProductList.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featured",
+      "output": "product1Sku"
+    },
+    {
+      "value": "z-26597945",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:3",
+      "kind": "json",
+      "keyPath": "featuredProductList.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featured",
+      "output": "product2Sku"
+    },
+    {
+      "value": "z-4567890",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:3",
+      "kind": "json",
+      "keyPath": "featuredProductList.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featured",
+      "output": "product3Sku"
+    },
+    {
+      "value": "z-09876",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:3",
+      "kind": "json",
+      "keyPath": "featuredProductList.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featured",
+      "output": "product4Sku"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:4",
+      "kind": "json",
+      "keyPath": "featuredCategoriesList.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category1Name"
+    },
+    {
+      "value": "Plumbing",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:4",
+      "kind": "json",
+      "keyPath": "featuredCategoriesList.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category2Name"
+    },
+    {
+      "value": "Faucets",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:4",
+      "kind": "json",
+      "keyPath": "featuredCategoriesList.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category3Name"
+    },
+    {
+      "value": "Tools",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:4",
+      "kind": "json",
+      "keyPath": "featuredCategoriesList.3",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category4Name"
+    },
+    {
+      "value": "Padlocks",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:4",
+      "kind": "json",
+      "keyPath": "featuredCategoriesList.4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category5Name"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/tests/webstore/home-page/validate-featured-products-visibility-count-and-navigation.spec.ts:52",
+      "kind": "literal",
+      "keyPath": "featuredCategoryName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category1Name"
+    },
+    {
+      "value": "Electrical",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:5",
+      "kind": "json",
+      "keyPath": "electricalText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "category1Name"
+    },
+    {
+      "value": "Plumbing",
+      "location": "testim-migrated/tests/webstore/home-page/validate-featured-products-visibility-count-and-navigation.spec.ts:57",
+      "kind": "literal",
+      "keyPath": "openFeaturedCategory",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "openCategoryName"
+    },
+    {
+      "value": "Plumbing",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:6",
+      "kind": "json",
+      "keyPath": "pubmbingText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "featuredCategories",
+      "output": "openCategoryName"
+    },
+    {
+      "value": "Showing 16 of 32 Results",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:7",
+      "kind": "json",
+      "keyPath": "peginationText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "12",
+      "location": "testim-migrated/tests/webstore/home-page/validate-featured-products-visibility-count-and-navigation.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "setPageSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Showing 12 of 32 Results",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-featured-products-visibility-count-and-navigation.json:8",
+      "kind": "json",
+      "keyPath": "peginationText2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

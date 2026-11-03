@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts > Webstore - Home Page > validate visibility and functionality of homepage banners and slider navigation",
+  "scenario": {
+    "summary": "A guest opens the home page, searches a product SKU in the header search and returns home by the logo, then checks the hero banner carousel: banner 1 title, promo title and button text, next arrow to banner 2 (subtitle, Shop Now button, thumbnail slide item 2), previous arrow back to banner 1 (slide item 1), thumbnail 2 (slide item 2), and the header promo ticker text.",
+    "steps": [
+      "Open Home as a guest; search icon visible; search the product SKU in the header search (no result assertion); click the logo back to Home",
+      "Banner 1: main title, promo title and button text",
+      "Next arrow: banner 2 subtitle and button text; selected thumbnail is slide item 2",
+      "Previous arrow: banner 1 visible; selected thumbnail is slide item 1",
+      "Click thumbnail 2: selected thumbnail is slide item 2; header ticker text"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cms_slider_banner",
+      "cms_header_ticker"
+    ],
+    "stateChanges": [
+      "None: guest session, read only"
+    ],
+    "assertions": [
+      "Search icon and banner 1 heading visible",
+      "Banner 1 main title, promo title and button text equal the store CMS banner content",
+      "Banner 2 subtitle and button text equal the store CMS banner content",
+      "Selected carousel thumbnail aria-label is 'slide item 2' / 'slide item 1' / 'slide item 2' (fixed UI labels)",
+      "Header ticker text equals the store header ticker content"
+    ],
+    "evidence": [
+      "Title 'validate visibility and functionality of homepage banners and slider navigation' and the step labels match the flow; no linked cases, no AIO file.",
+      "Guest: test.use storageState empty; no sign-in. Store MaxwellsHardware: the webstore every migrated webstore spec runs on (testimEnv.web.baseUrl), same store as the approved pdp/plp/quick-order entries.",
+      "sku z-1234579: profile FOUND, but it is a BundleProduct ('DeWalt 3-Tool Combo Kit Bundle', inventory 28362, storefront index 1). The test only types it into the header search and presses Enter (homePage.searchProduct waits for /search/ and asserts nothing about results), so any searchable product does: product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store}, consistent with the header-components spec. No preferred: the recorded bundle does not qualify for a simple-product key. REVIEW: PRODUCT_BUNDLE_IN_STOCK {quantityUsed 1, minAddOns 0, minPersonalizableAttributes 0, store} with preferred z-1234579 would keep the recorded product.",
+      "MISSING KEY HOME_PAGE_BANNER_SLIDER_OF_STORE: the hero carousel texts are store CMS content, no vocabulary key outputs them. Proposed outputs: bannerCount, banner1PromoTitle ('Register Now', .promo-title strong) and banner1Heading ('THE WAIT IS OVER FOR CORDLESS WOODWORKING', 2nd <p> strong of divDescription0), both inside the rich-text dbo.ZnodeCMSSliderBannerLocale.Description of the first banner (or .Title; not confirmed), banner1ButtonLabel (ZnodeCMSSliderBannerLocale.ButtonLabelName, \"LEARN ABOUT DEWALT'S NEW LINE\"), banner2Subtitle (second banner Description/Title span, 'Budget-saving deals on everyday products.') and banner2ButtonLabel (ButtonLabelName, 'Shop Now'). Params: store (ZnodePortal.StoreCode), minBanners 2 (the test goes to slide 2 by arrow and by thumbnail), locale (ZnodeCMSSliderBannerLocale.LocaleId, default locale). Source: dbo.ZnodeCMSWidgetSliderBanner (CMSSliderId, CMSWidgetsId, WidgetsKey, CMSMappingId, TypeOFMapping) for the Banner Slider widget instance on the store home page (dbo.ZnodeCMSContentPages PortalId / PageCode / PageJSON, or the portal mapping) -> dbo.ZnodeCMSSlider (IsPublished, PublishStateId) -> dbo.ZnodeCMSSliderBanner (BannerSequence order, ActivationDate/ExpirationDate active now) -> dbo.ZnodeCMSSliderBannerLocale (Title, Description, ButtonLabelName). None of these tables is in an entity map (tda rows -> TABLE_NOT_ALLOWED), so the mapping of each recorded text to Title vs Description was NOT checked: needs an entity map (e.g. cms_slider_banner) and a rows check first. Texts embedded in HTML Description would need HTML stripping in SQL (brittle). Alternative: assert structure only (banner 1 and 2 have non-empty title/button) instead of a key. Replaces the recorded firstBannerTitle, registerNowText, firstBannerText, secondBannerTitle, shopNowText.",
+      "MISSING KEY HEADER_TICKER_TEXT_OF_STORE: the header promo ticker (data-test-selector divTickerText, 'Save 20% during the holidays! Enter Holidays2021 at checkout.') is the text attribute of the Ticker Znode widget in the store header Page Builder canvas. The KB documents no table or endpoint for it (z10 CMS notes: 'Ticker widget (header) - documented in the KB, no endpoint'); its text is most likely stored in PageJSON (dbo.ZnodeCMSContentPages.PageJSON of the store header page, PortalId / PageCode, or dbo.ZnodeCMSContentBlockLocale.PageJSON via dbo.ZnodeCMSContentBlockPortal.PortalId), possibly a portal message (dbo.ZnodeCMSPortalMessage PortalId -> dbo.ZnodeCMSMessageKey.MessageKey -> dbo.ZnodeCMSMessage.Message, LocaleId, PublishStateId). Not confirmed: these tables are not in an entity map (TABLE_NOT_ALLOWED). Proposed output tickerText, params store, locale. Extracting it from PageJSON needs JSON_VALUE over an opaque component tree. Alternative: assert the ticker is visible and non-empty. Replaces the recorded ticker text (named secondBannerText in the first banner spec's JSON). The text also embeds a coupon code (Holidays2021): the key should not be tied to a promotion; the test only reads the text.",
+      "Banner texts and the ticker text are kept as expected-output until the keys exist (the need is left out). The JSON names are misleading: secondBannerText is the header ticker, firstBannerText the banner 1 button label.",
+      "'slide item 1'/'slide item 2' are the carousel thumbnails' fixed aria-labels (expected-output); banner index 0 and thumbnail 2 are config. They assume at least 2 banners in the slider (minBanners 2 in the proposed key).",
+      "The spec MAINTENANCE NOTE (last atstage run failed waiting for the banner 0 heading locator) is recorded as evidence only; not triaged here.",
+      "swap: every data value (sku) is kind json read through loadData (BannerDataSchema), maps to product.sku, appears in no selector or literal call argument, and no assertion depends on the product (the banner/ticker texts are CMS content independent of it). Once the banner/ticker keys exist their JSON values would also swap. Same need as the sibling spec verify-home-page-banner-sliders, which has to migrate (literals in code)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:2",
+      "kind": "json",
+      "keyPath": "sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "THE WAIT IS OVER FOR CORDLESS WOODWORKING",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:4",
+      "kind": "json",
+      "keyPath": "firstBannerTitle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Register Now",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:3",
+      "kind": "json",
+      "keyPath": "registerNowText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "LEARN ABOUT DEWALT'S NEW LINE",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:5",
+      "kind": "json",
+      "keyPath": "firstBannerText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Budget-saving deals on everyday products.",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:6",
+      "kind": "json",
+      "keyPath": "secondBannerTitle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shop Now",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:8",
+      "kind": "json",
+      "keyPath": "shopNowText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "slide item 2",
+      "location": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts:59",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "banner",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "slide item 1",
+      "location": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts:66",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "clickThumbnail",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "slide item 2",
+      "location": "testim-migrated/tests/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.spec.ts:72",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Save 20% during the holidays! Enter Holidays2021 at checkout.",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-visibility-and-functionality-of-homepage-banners-and-slider-navigation.json:7",
+      "kind": "json",
+      "keyPath": "secondBannerText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "swap",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

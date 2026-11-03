@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/home-page/validate-menu-navigation-and-brand-listings-functionality.spec.ts > Webstore - Home Page > validate menu navigation and brand listings functionality",
+  "scenario": {
+    "summary": "Guest opens the home page, opens SHOP BRANDS, checks the brand list page-size options are 10/20/30 and that the number of brand rows equals the selected page size, goes to the next page and checks brands are listed, then opens Departments, returns home by the logo and checks the Featured Product heading. Read-only.",
+    "steps": [
+      "Open the webstore home as a guest (empty storageState); click linkShopBrands; wait for the brand list.",
+      "Read the #PageSize option values and check they concatenate to '102030'.",
+      "Read the selected page size and check the brand row count equals it.",
+      "Go to the next page (svgRightArrow); check the first brand link is visible and the count is > 0.",
+      "Check Departments (btnDepartment) is visible, click it, click the logo; check the Featured Product heading."
+    ],
+    "entitiesTouched": [
+      "store",
+      "brand"
+    ],
+    "stateChanges": [],
+    "assertions": [
+      "Brand list page-size options are 10, 20, 30 ('102030').",
+      "Brand rows on page 1 equal the selected page size (a full first page).",
+      "Page 2 lists at least one brand.",
+      "Departments nav visible; Featured Product heading visible back on home."
+    ],
+    "evidence": [
+      "Title 'validate menu navigation and brand listings functionality' and the four step labels match the flow; guest storageState; data file read through loadData; no linked AIO cases.",
+      "Profile (2026-11-01): both values NO_RULE (profiled false).",
+      "Only two scanned values: '102030' (page-size options, fixed brand-list UI setting: expected-output) and 0 (toBeGreaterThan threshold: config). No brand name, SKU or category is read from test data, so the test has no data sources and no needs.",
+      "Environment precondition not covered by a key: the store must list more active brands than the selected (default) brand page size, so page 1 is full and a page 2 exists. MISSING KEY BRANDS_OF_STORE_PAGINATED (precondition only, replaces no recorded value). Params: store, minBrands (selected page size + 1; 11 at the default 10). Outputs: storeCode, brandCount. Source: dbo.ZnodePortalBrand (PortalId, BrandId, DisplayOrder) joined to dbo.ZnodeBrandDetails (IsActive, BrandCode), dbo.ZnodeBrandDetailLocale.BrandName and dbo.ZnodePortal.StoreCode (brand and brand_products entity maps). Not checked: whether the brand list counts only brands with active products. A reviewer may decide this precondition does not need a key.",
+      "Page-size options: the brand list's 10/20/30 differ from the PLP's store page settings (dbo.ZnodePortalPageSetting / dbo.ZnodePageSetting: 8/12/16/32/64), so they are treated as fixed UI text.",
+      "No strategy: no data sources, so nothing to swap or migrate; the spec can run as it is."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "102030",
+      "location": "testim-migrated/test-data/webstore/home-page/validate-menu-navigation-and-brand-listings-functionality.json:2",
+      "kind": "json",
+      "keyPath": "pageSizeOptions",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/home-page/validate-menu-navigation-and-brand-listings-functionality.spec.ts:47",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
