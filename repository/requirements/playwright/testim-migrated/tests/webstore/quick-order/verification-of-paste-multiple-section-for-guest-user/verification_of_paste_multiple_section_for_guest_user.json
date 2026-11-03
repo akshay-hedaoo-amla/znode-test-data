@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.spec.ts > Webstore - Quick Order > verification of paste multiple section for guest user",
+  "scenario": {
+    "summary": "Guest uses Quick Order: pastes two SKUs with quantities (Paste Multiple) and gets the 2-products toast; enters the same SKU in two rows and gets the duplicate error; submits five SKU rows (simple and bundle products) to the cart; a product with a required add-on is rejected; a quantity above the product maximum is rejected.",
+    "steps": [
+      "Guest session (empty storageState); open Quick Order > Add Multiple Items > Paste Multiple.",
+      "Paste '<sku>, 10\\n<variant sku>, 5' and add; toast '2 Products were added to your 'Quick List'.'; clear the cart.",
+      "Multiple rows: type the duplicate product SKU in row 0 and row 1 (suggestion '<name> | <sku>' each time); 'The product already exists.'; Add to Cart; cart heading 'Cart' and the cart line shows the product name; clear the cart.",
+      "Multiple rows 0-4: four simple products and one bundle product, each checked by its suggestion text; Add to Cart; 'Cart'; clear the cart.",
+      "Row 0: product with a required add-on; suggestion text; the mandatory personalization/add-on error is shown; clear row 0.",
+      "Row 0: product with a maximum quantity; suggestion text; set quantity to maximum + 1 (101 recorded); the quantity range error is shown."
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart",
+      "store"
+    ],
+    "stateChanges": [
+      "Guest session cart receives the pasted products, the duplicate-check product and the five row products; it is cleared after each step (no order placed)."
+    ],
+    "assertions": [
+      "Paste Multiple toast contains '2 Products were added to your 'Quick List'.'",
+      "Each row suggestion contains '<product name> | <sku>'",
+      "Duplicate SKU error 'The product already exists.' is visible",
+      "Cart heading equals 'Cart'; the cart line contains the duplicate-check product name",
+      "Required add-on product: 'This product requires a mandatory personalized message/add-ons and, therefore, can not be added to the list.' is visible",
+      "Quantity above the maximum: 'Selected quantity should be in between 1 to 100' (min to max of the product) is visible"
+    ],
+    "evidence": [
+      "Title 'verification of paste multiple section for guest user' and step labels 1) to 5) match the flow; no linked cases, no AIO file.",
+      "Store MaxwellsHardware: the webstore every migrated webstore spec runs on (testimEnv.web.baseUrl, webstore-z10-at); same store as the approved pdp/plp/my-account entries.",
+      "Suggestion texts are recorded as '<name> | <sku>' (e.g. 'American Standard Gold 95v Furnace | z-1234570'): role data of the product need; the migrated spec builds `${p.name} | ${p.sku}` from the need outputs (name, sku). Names can themselves contain ' | ' (z-1234575 'Daikin FHQ-CB | Multi-Split Air Conditioning Unit').",
+      "pasteMultipleProductList 'z-2430004, 10\\nz-2510001, 5' is built from needs: line 1 = pastedProduct.sku with quantity 10, line 2 = pastedVariant.variant1Sku with quantity 5 (quantities are config, kept in the spec or data). The success message '2 Products were added to your 'Quick List'.' is expected-output: fixed UI text whose count equals the number of pasted lines (2).",
+      "z-2430004 (paste line 1, qty 10): tda rows SimpleProduct, DontTrackInventory, Min 1 / Max 100; in this test it is not a separate source (only inside the paste list), so pastedProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 10, minMaxQuantity 10, store} has no preferred.",
+      "z-2510001 (PimProductId 532, SimpleProduct, DontTrackInventory, Min 1 / Max 100, tda rows) is the default variant of configurable B-100004 (approved checkout / saved-cart entries). Need pastedVariant = PRODUCT_CONFIGURABLE_WITH_VARIANTS {quantityUsed 5, minVariants 1, minAddOns 0, minPersonalizableAttributes 0, variantAttributes BulbSize,Color,Technology (the value the approved entries use for B-100004; the test picks no attributes, the param is required)} -> output variant1Sku. No preferred: the recorded variant SKU only appears inside the paste-list string, not as its own source. REVIEW: the key does not check that the variant itself allows quantity 5 (MaximumQuantity) or that quick order accepts a variant SKU; the recording shows it does for z-2510001.",
+      "sku1 z-2460005: profile FOUND active SimpleProduct, inventory 250, storefront index 1, requiredAddOnCount 0 (tda rows: Min 1 / Max 100). Need duplicateProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store}, preferred sku1: typed in rows 0 and 1, the second is rejected ('The product already exists.'), one unit goes to the cart. bosch120voltText -> '<name> | <sku>', bosch120voltText2 (cart line) -> duplicateProduct.name.",
+      "Five rows (sku2..sku6, default quantity 1): rowProduct1..3 and rowProduct4 = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store}, preferred sku2, sku3, sku4, sku6 (profile FOUND active simple, inventory 453, 4998, 235, 999931, requiredAddOnCount 0); skuN -> alias.sku, skuNName -> '<name> | <sku>'.",
+      "sku5 z-858585: profile FOUND active BundleProduct, storefront index 1, requiredAddOnCount 0 (no own inventory row; bundle stock is the children). Need bundleProduct = PRODUCT_BUNDLE_IN_STOCK {quantityUsed 1, minAddOns 0, minPersonalizableAttributes 0, store}, preferred sku5. sku5 -> bundleProduct.sku, sku5Name -> '<name> | <sku>'.",
+      "Recorded row products z-1234570, z-2420004, z-1234567 (and z-2470006, z-2410001) have storefront index 0 in the profile, so they do not qualify as preferred for keys that require index >= 1; the resolver falls back to an indexed product (stricter than the recording: the quick-order autocomplete found them anyway). REVIEW: the suggestion assertion reads the first suggestion; a resolved SKU that is a prefix of other SKUs could show another product first.",
+      "sku7 z-2470006: profile FOUND active SimpleProduct, inventory 250, requiredAddOnCount 1 (tda rows: ZnodePimAddOnProduct PimAddOnProductId 4, group 3, RequiredType Required), storefront index 0. Quick order rejects it with 'This product requires a mandatory personalized message/add-ons ...'. Need requiredAddOnProduct = PRODUCT_SIMPLE_WITH_REQUIRED_ADDON {quantityUsed 1, minRequiredAddOns 1, store} (personalizationAttribute left out: the message covers add-ons too). Preferred sku7 (falls back: the key needs storefront index >= 1, recorded index 0). sku7 -> requiredAddOnProduct.sku, sku7Name -> '<name> | <sku>'. The message is expected-output (fixed UI text).",
+      "sku8 z-2410001: profile FOUND active SimpleProduct, inventory 250, storefront index 0; tda rows: OutOfStockOptions DontTrackInventory, MinimumQuantity 1, MaximumQuantity 100. The test sets quantity 101 (spec literal) and expects 'Selected quantity should be in between 1 to 100': the 100 is the product's MaximumQuantity, 101 = MaximumQuantity + 1. Need maxQuantityProduct = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store, minMaxQuantity 1 (a numeric MaximumQuantity exists), outOfStockOption DontTrackInventory (as recorded, so the stock check cannot pre-empt the range message)}; the migrated spec types maxQuantityProduct.maxQuantity + 1 and builds the message from maxQuantity. Preferred sku8 (falls back: storefront index 0). No new key needed for 'max quantity 100': the existing output maxQuantity carries it.",
+      "MISSING OUTPUT PRODUCT_SIMPLE_IN_STOCK.minQuantity: the message lower bound '1' is the product's MinimumQuantity attribute (required PIM attribute 22, value 1 on the recorded product); the key returns maxQuantity but not minQuantity. Proposal: add output minQuantity (MinimumQuantity attribute value, same OUTER APPLY as maxQuantity with code MinimumQuantity), so quantityExceedingMessage is built as 'Selected quantity should be in between {minQuantity} to {maxQuantity}'. Until then the spec would keep the literal 1 (fallback products may differ).",
+      "Distinct records: every product alias is a separate need; the PRODUCT_SIMPLE_IN_STOCK aliases resolve to different SKUs (identity sku), which the steps need anyway (duplicate-check product must differ from the five-row products, which must differ from each other).",
+      "Literal 101 (setQuantity, spec code) is not a scanned value; it becomes maxQuantityProduct.maxQuantity + 1 in the migrated spec.",
+      "migrate: suggestion texts and the paste list combine several outputs ('<name> | <sku>', '<sku>, <qty>\\n<sku>, <qty>'), so they map to no single output; the quantity-exceeding message and the spec literal 101 depend on the product's MaximumQuantity; the spec imports the JSON directly (import rawData ... then loadData). Swap rules 2 and 3 fail."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "pastedProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 10,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 10
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "pastedVariant",
+      "params": {
+        "quantityUsed": 5,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "duplicateProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "rowProduct1",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "rowProduct2",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "rowProduct3",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 11,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundleProduct",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 13,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "rowProduct4",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 15,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+      "alias": "requiredAddOnProduct",
+      "params": {
+        "quantityUsed": 1,
+        "minRequiredAddOns": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 17,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "maxQuantityProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 1,
+        "outOfStockOption": "DontTrackInventory"
+      },
+      "preferred": {
+        "source": 20,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "z-2430004, 10\nz-2510001, 5",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:2",
+      "kind": "json",
+      "keyPath": "pasteMultipleProductList",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "pastedProduct"
+    },
+    {
+      "value": "2 Products were added to your 'Quick List'.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:3",
+      "kind": "json",
+      "keyPath": "twoProductsSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2460005",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:4",
+      "kind": "json",
+      "keyPath": "sku1",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "duplicateProduct"
+    },
+    {
+      "value": "Bosch 120-Volt 10 Amp 4-1/2 In Corded Angle Grinder | z-2460005",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:12",
+      "kind": "json",
+      "keyPath": "bosch120voltText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "duplicateProduct"
+    },
+    {
+      "value": "The product already exists.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:23",
+      "kind": "json",
+      "keyPath": "duplicateProductValidation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Cart",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:24",
+      "kind": "json",
+      "keyPath": "cart",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Bosch 120-Volt 10 Amp 4-1/2 In Corded Angle Grinder",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:13",
+      "kind": "json",
+      "keyPath": "bosch120voltText2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "duplicateProduct"
+    },
+    {
+      "value": "z-1234570",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:5",
+      "kind": "json",
+      "keyPath": "sku2",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "rowProduct1"
+    },
+    {
+      "value": "American Standard Gold 95v Furnace | z-1234570",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:14",
+      "kind": "json",
+      "keyPath": "sku2Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "rowProduct1"
+    },
+    {
+      "value": "z-1234575",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:6",
+      "kind": "json",
+      "keyPath": "sku3",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "rowProduct2"
+    },
+    {
+      "value": "Daikin FHQ-CB | Multi-Split Air Conditioning Unit | z-1234575",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:15",
+      "kind": "json",
+      "keyPath": "sku3Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "rowProduct2"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:7",
+      "kind": "json",
+      "keyPath": "sku4",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "rowProduct3"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander | z-2420004",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:16",
+      "kind": "json",
+      "keyPath": "sku4Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "rowProduct3"
+    },
+    {
+      "value": "z-858585",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:8",
+      "kind": "json",
+      "keyPath": "sku5",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "bundleProduct"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle | z-858585",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:17",
+      "kind": "json",
+      "keyPath": "sku5Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundleProduct"
+    },
+    {
+      "value": "z-1234567",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:9",
+      "kind": "json",
+      "keyPath": "sku6",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "rowProduct4"
+    },
+    {
+      "value": "DeWalt Cordless Propane Radiant Heater | z-1234567",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:18",
+      "kind": "json",
+      "keyPath": "sku6Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "rowProduct4"
+    },
+    {
+      "value": "z-2470006",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:10",
+      "kind": "json",
+      "keyPath": "sku7",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "requiredAddOnProduct"
+    },
+    {
+      "value": "Bosch 18-Volt 6-1/2 in Cordless Cicular Saw Kit | z-2470006",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:19",
+      "kind": "json",
+      "keyPath": "sku7Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "requiredAddOnProduct"
+    },
+    {
+      "value": "This product requires a mandatory personalized message/add-ons and, therefore, can not be added to the list.",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:21",
+      "kind": "json",
+      "keyPath": "personalizationValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2410001",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:11",
+      "kind": "json",
+      "keyPath": "sku8",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "maxQuantityProduct"
+    },
+    {
+      "value": "Black + Decker 20 Volt Cordless Reciprocating Saw | z-2410001",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:20",
+      "kind": "json",
+      "keyPath": "sku8Name",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "maxQuantityProduct"
+    },
+    {
+      "value": "Selected quantity should be in between 1 to 100",
+      "location": "testim-migrated/test-data/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.json:22",
+      "kind": "json",
+      "keyPath": "quantityExceedingMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

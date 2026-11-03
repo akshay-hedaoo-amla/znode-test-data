@@ -147,6 +147,15 @@ migrated:
     - testim-migrated/tests/webstore/pdp/verify-obsolete-product-details-on-pdp.spec.ts
     - testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts
     - testim-migrated/tests/webstore/pdp/verify-simple-product-details-on-pdp.spec.ts
+    # Phase 6 module webstore/quick-order (2026-11-03; CSV fixtures written at run time from resolved records)
+    - testim-migrated/tests/webstore/quick-order/verification-of-paste-multiple-section-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verification-of-paste-multiple-section-of-retail-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verification-of-upload-csv-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verification-single-and-multiple-sku-field-of-retail-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verify-add-multiple-item-sku-validation-for-guest-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verify-obsolete-sku-from-csv-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/quick-order/verify-quick-order-pad-state-and-paste-validation.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
