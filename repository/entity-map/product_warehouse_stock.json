@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entity": "product_warehouse_stock",
+  "tables": [
+    "dbo.ZnodeInventory",
+    "dbo.ZnodeWarehouse",
+    "dbo.ZnodePortalWarehouse",
+    "dbo.ZnodePortalAlternateWarehouse",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeInventory.WarehouseId",
+      "to": "dbo.ZnodeWarehouse.WarehouseId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeWarehouse.WarehouseId",
+      "to": "dbo.ZnodePortalAlternateWarehouse.WarehouseId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortalAlternateWarehouse.PortalWarehouseId",
+      "to": "dbo.ZnodePortalWarehouse.PortalWarehouseId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortalWarehouse.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "sku": "dbo.ZnodeInventory.SKU",
+    "warehouseName": "dbo.ZnodeWarehouse.WarehouseName",
+    "warehouseCode": "dbo.ZnodeWarehouse.WarehouseCode",
+    "quantity": "dbo.ZnodeInventory.Quantity",
+    "alternatePrecedence": "dbo.ZnodePortalAlternateWarehouse.Precedence"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:7a0273a87e59efbe8cd928c038d005ef48a3159944e6b1057897545bf092ab2d",
+  "scannedAt": "2026-11-03T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

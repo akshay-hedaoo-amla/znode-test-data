@@ -3,7 +3,7 @@
   "framework": "playwright",
   "testId": "testim-migrated/tests/webstore/pdp/verify-obsolete-product-details-on-pdp.spec.ts > Webstore - PDP > verify obsolete product details on pdp",
   "scenario": {
-    "summary": "Guest searches the webstore for an obsolete product by SKU, opens its PDP and validates the header, highlights, rating, inventory section, the obsolete message, action buttons, the Reviews tab and the Replacement Product Suggestions cards (name, SKU, inventory per location). Read-only. No vocabulary key covers an obsolete product or its replacement, so no need is declared.",
+    "summary": "Guest searches the webstore for an obsolete product by SKU, opens its PDP and validates the header, highlights, rating, inventory section, the obsolete message, action buttons, the Reviews tab and the Replacement Product Suggestions cards (name, SKU, inventory per location). Read-only. Needs: the obsolete product (PRODUCT_SIMPLE_OBSOLETE) and its linked replacement (PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK).",
     "steps": [
       "Open the webstore as a guest (empty storageState).",
       "Search for the obsolete product SKU and open the first result.",
@@ -32,12 +32,40 @@
       "Profile: SKU z-1238988 FOUND as SimpleProduct 'testim.ObsoleteProduct', active, PRODUCTION, no brand, inventory 5, storefrontProductIndex 1; replacement z-2200019 FOUND as active SimpleProduct (Toro), inventory 250.",
       "Missing key: no vocabulary key describes an obsolete product (all product keys require storefrontObsolete = false) or a replacement product linked to it. The need is left out; the product values are recorded as expected-output only because a data source needs a declared alias. They are really data of the obsolete product (alias product) and its linked replacement; re-map them once a key exists.",
       "Data in code: highlight selectors imgFreeShipping / imgWatersenseEpaCertified are product highlights (gated by isHighlightPresent); the replacement inventory texts embed a warehouse name and quantities.",
-      "migrate: expected values depend on the recorded product (name, category, replacement product name/SKU and its per-location inventory), and no key exists to swap from."
+      "migrate: expected values depend on the recorded product (name, category, replacement product name/SKU and its per-location inventory), and no key exists to swap from.",
+      "Remap 2026-11-03: New needs: product -> PRODUCT_SIMPLE_OBSOLETE {store}, preferred z-1238988; replacement -> PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK {product @product.productId, quantityUsed 1, store}, preferred z-2200019 (as the plp obsolete requirement). Supersedes the missing-key line.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name, replacementProducts.0.productSKU -> replacement.sku, replacementProducts.0.productName -> replacement.name (were expected-output; now role data).",
+      "Remap 2026-11-03: Not produced: productCategory ('AutomationTest_Category') stays expected-output (PRODUCT_SIMPLE_OBSOLETE returns no category); replacementProducts.0.inventoryDetails.0..1 ('25 Milwaukee, Wisconsin', '250 All Locations') stay expected-output: no key returns the replacement's per-warehouse stock."
     ],
     "confidence": "low",
     "needsReview": true
   },
-  "requires": [],
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_OBSOLETE",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK",
+      "alias": "replacement",
+      "params": {
+        "product": "@product.productId",
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    }
+  ],
   "linkedCases": [],
   "sources": [
     {
@@ -47,7 +75,9 @@
       "keyPath": "productSKU",
       "sensitive": false,
       "profiled": true,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "AutomationTest_Category",
@@ -65,7 +95,9 @@
       "keyPath": "productName",
       "sensitive": false,
       "profiled": true,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "true",
@@ -101,7 +133,9 @@
       "keyPath": "replacementProducts.0.productName",
       "sensitive": false,
       "profiled": true,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "replacement",
+      "output": "name"
     },
     {
       "value": "z-2200019",
@@ -110,7 +144,9 @@
       "keyPath": "replacementProducts.0.productSKU",
       "sensitive": false,
       "profiled": true,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "replacement",
+      "output": "sku"
     },
     {
       "value": "25 Milwaukee, Wisconsin",
@@ -143,5 +179,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

@@ -32,7 +32,11 @@
       "Missing key: the test needs a product whose Frequently Bought and You May Also Like lists hold products with retail/sales prices and three tier prices. No vocabulary key covers a product with related (linked) products or tier prices; that need is left out. PRODUCT_BUNDLE_IN_STOCK covers only the main product, with today's record as the preferred one. The related products' names and SKUs are recorded as data of alias product (they follow from the main product's links); their prices, tiers, categories and inventory are expected-output derived from them.",
       "youMayAlsoLike.1.inventory (empty string, json line 41) is not listed in sources: a source value must not be empty.",
       "strategy migrate: loadData is used, but prices, tier prices and discounts asserted in Quick View depend on the data (swap rule 3) and the related-product values map to no key output (swap rule 2).",
-      "No linked AIO cases."
+      "No linked AIO cases.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name.",
+      "Remap 2026-11-03: New needs frequentlyBought / youMayAlsoLike -> PRODUCT_LINKED_PRODUCTS {product @product.productId, linkType FrequentlyBought | YouMayAlsoLike, store, minLinked 2 | 3 (the cards the test walks through)}: the related products now come from the resolved product's own links (first three in PDP display order), so they stay consistent when the resolver falls back from the recorded product. Supersedes the GAP / missing-key lines on related products.",
+      "Remap 2026-11-03: Quick View cards: name, SKU, category, retail and sales price of frequentlyBoughtProducts.0..1 / youMayAlsoLike.0..2 -> frequentlyBought / youMayAlsoLike linkedNName, linkedNSku, linkedNCategory, linkedNRetailPrice, linkedNSalesPrice (category, retail and sales price were expected-output; now role data).",
+      "Remap 2026-11-03: Not produced: the linked products' tier offers (specialOffer.buyQtyN / offerPriceN / offerDiscountN) and the 'In Stock' texts stay expected-output: PRODUCT_LINKED_PRODUCTS returns no tier prices or stock message (linkedNQuantity is the stock count)."
     ],
     "confidence": "low",
     "needsReview": true
@@ -51,6 +55,26 @@
         "source": 0,
         "required": false
       }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "frequentlyBought",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "FrequentlyBought",
+        "store": "MaxwellsHardware",
+        "minLinked": 2
+      }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "youMayAlsoLike",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "YouMayAlsoLike",
+        "store": "MaxwellsHardware",
+        "minLinked": 3
+      }
     }
   ],
   "linkedCases": [],
@@ -63,7 +87,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -82,7 +107,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "0",
@@ -119,7 +145,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234606",
@@ -129,7 +156,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Sku"
     },
     {
       "value": "Electrical",
@@ -138,7 +166,9 @@
       "keyPath": "frequentlyBoughtProducts.0.productCategory",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked1Category"
     },
     {
       "value": "$25.00",
@@ -147,7 +177,9 @@
       "keyPath": "frequentlyBoughtProducts.0.productRetailPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked1RetailPrice"
     },
     {
       "value": "$23.00",
@@ -156,7 +188,9 @@
       "keyPath": "frequentlyBoughtProducts.0.productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked1SalesPrice"
     },
     {
       "value": "In Stock",
@@ -256,7 +290,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234605",
@@ -266,7 +301,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Sku"
     },
     {
       "value": "Electrical",
@@ -275,7 +311,9 @@
       "keyPath": "frequentlyBoughtProducts.1.productCategory",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked2Category"
     },
     {
       "value": "$12.00",
@@ -284,7 +322,9 @@
       "keyPath": "frequentlyBoughtProducts.1.productRetailPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked2RetailPrice"
     },
     {
       "value": "$11.00",
@@ -293,7 +333,9 @@
       "keyPath": "frequentlyBoughtProducts.1.productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "frequentlyBought",
+      "output": "linked2SalesPrice"
     },
     {
       "value": "In Stock",
@@ -420,7 +462,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234602",
@@ -430,7 +473,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Sku"
     },
     {
       "value": "Electrical",
@@ -439,7 +483,9 @@
       "keyPath": "youMayAlsoLike.0.productCategory",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked1Category"
     },
     {
       "value": "$8.00",
@@ -448,7 +494,9 @@
       "keyPath": "youMayAlsoLike.0.productRetailPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked1RetailPrice"
     },
     {
       "value": "$7.00",
@@ -457,7 +505,9 @@
       "keyPath": "youMayAlsoLike.0.productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked1SalesPrice"
     },
     {
       "value": "In Stock",
@@ -557,7 +607,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234603",
@@ -567,7 +618,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Sku"
     },
     {
       "value": "Electrical",
@@ -576,7 +628,9 @@
       "keyPath": "youMayAlsoLike.1.productCategory",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked2Category"
     },
     {
       "value": "$18.00",
@@ -585,7 +639,9 @@
       "keyPath": "youMayAlsoLike.1.productRetailPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked2RetailPrice"
     },
     {
       "value": "$17.00",
@@ -594,7 +650,9 @@
       "keyPath": "youMayAlsoLike.1.productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked2SalesPrice"
     },
     {
       "value": "10",
@@ -676,7 +734,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Name"
     },
     {
       "value": "z-1234604",
@@ -686,7 +745,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Sku"
     },
     {
       "value": "Electrical",
@@ -695,7 +755,9 @@
       "keyPath": "youMayAlsoLike.2.productCategory",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked3Category"
     },
     {
       "value": "$180.00",
@@ -704,7 +766,9 @@
       "keyPath": "youMayAlsoLike.2.productRetailPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked3RetailPrice"
     },
     {
       "value": "$170.00",
@@ -713,7 +777,9 @@
       "keyPath": "youMayAlsoLike.2.productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "youMayAlsoLike",
+      "output": "linked3SalesPrice"
     },
     {
       "value": "In Stock",
@@ -809,5 +875,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

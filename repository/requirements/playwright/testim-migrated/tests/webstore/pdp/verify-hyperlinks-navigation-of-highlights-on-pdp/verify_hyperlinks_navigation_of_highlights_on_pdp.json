@@ -32,20 +32,23 @@
       "waterSenseH1 and waterSenseDescriptionStart are highlight content the test asserts: role expected-output.",
       "strategy migrate: the spec reads its data with `rawData as HighlightData` (line 14), not loadData (swap rule 1); productCategory also has no output.",
       "Data in code: spec comments at lines 17 and 44 name the product (z-1234579, DeWalt bundle, Home/Tools/...) and line 64/70 use data.backToProductText in a locator hasText; backToProductText and highlightTitles are in the spec interface but not in the scan values.",
-      "No linked AIO cases."
+      "No linked AIO cases.",
+      "Remap 2026-11-03: Need product moved to PRODUCT_WITH_HIGHLIGHTS {productType bundle (the recorded z-1234579 is a bundle), highlight1Code BIOCertified, highlight2Code WaterSenseCertified, store}, as the plp highlights requirement; preferred stays on the recorded SKU. Nothing is added to the cart, so no stock constraint. Supersedes the missing-key line.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name; waterSenseH1 ('WaterSense EPA Certified', was expected-output) -> product.highlight2Name, role data. The badge ids use product.productId and the highlight codes.",
+      "Remap 2026-11-03: Not produced: productCategory (breadcrumb) stays role data without output: PRODUCT_WITH_HIGHLIGHTS returns no category (the spec reads product.categoryName, which this key lacks: add categoryName/categoryPath to the key or drop the breadcrumb check). waterSenseDescriptionStart stays expected-output (highlight2Description holds HTML). The Free Shipping badge is not constrained by the key."
     ],
     "confidence": "low",
     "needsReview": true
   },
   "requires": [
     {
-      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
       "alias": "product",
       "params": {
-        "store": "MaxwellsHardware",
-        "quantityUsed": 1,
-        "minAddOns": 0,
-        "minPersonalizableAttributes": 0
+        "productType": "bundle",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "store": "MaxwellsHardware"
       },
       "preferred": {
         "source": 0,
@@ -63,7 +66,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -92,7 +96,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "WaterSense EPA Certified",
@@ -101,7 +106,9 @@
       "keyPath": "waterSenseH1",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "product",
+      "output": "highlight2Name"
     },
     {
       "value": "WaterSense labeled products are backed by independent",
@@ -116,5 +123,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

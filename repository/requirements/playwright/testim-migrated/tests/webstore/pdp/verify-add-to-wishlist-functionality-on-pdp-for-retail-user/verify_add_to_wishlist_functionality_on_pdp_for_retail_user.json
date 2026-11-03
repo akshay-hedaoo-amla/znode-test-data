@@ -34,7 +34,8 @@
       "productSalesPrice ($500.00) is the asserted wishlist price of the product; PRODUCT_BUNDLE_IN_STOCK returns price, but which price the wishlist shows for a bundle (sales vs retail) is not confirmed.",
       "migrate: the asserted sales price ($500.00) depends on the product data, so swap is not allowed.",
       "Spec carries a MAINTENANCE NOTE: last run 2026-09-18 failed waiting for the 'Remove from Wishlist' tooltip, not triaged (evidence only).",
-      "No data value appears in the spec code; the spec reads the JSON through loadData."
+      "No data value appears in the spec code; the spec reads the JSON through loadData.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name; productSalesPrice ($500.00, was expected-output) -> product.salesPrice, role data (the wishlist shows the sales price, else retailPrice, as the spec reads it)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -105,7 +106,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -160,7 +162,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "$500.00",
@@ -169,8 +172,9 @@
       "keyPath": "productSalesPrice",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output",
-      "alias": "product"
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
     },
     {
       "value": "Product removed from your Wishlist.",
@@ -185,5 +189,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

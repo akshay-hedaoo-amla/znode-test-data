@@ -34,7 +34,8 @@
       "Missing key: the test expects a guest review to show on the PDP right after submit, so the store must publish reviews without manual approval (review moderation setting). No vocabulary key covers a store with that review setting; the need is left out.",
       "Missing output: the breadcrumb asserts productCategory (Tools / Power Tools); PRODUCT_BUNDLE_IN_STOCK has no category name/path output (outputs: sku, name, productId, price, addOnProductId, addOnName).",
       "strategy migrate: loadData is used, but productCategory (a data value in the breadcrumb assertion) maps to no output of PRODUCT_BUNDLE_IN_STOCK, so swap rule 2 fails.",
-      "No linked AIO cases."
+      "No linked AIO cases.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name, productCategory -> product.categoryPath (new output). Supersedes the missing-output line on the breadcrumb."
     ],
     "confidence": "low",
     "needsReview": true
@@ -65,7 +66,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Tools / Power Tools",
@@ -75,7 +77,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "DeWalt 3-Tool Combo Kit Bundle",
@@ -85,7 +88,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Product Review",
@@ -244,5 +248,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }
