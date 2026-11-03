@@ -35,7 +35,11 @@
       "GAP: the test needs a product that has 2 Frequently Bought Together and 3 You May Also Like associated products (and its category path for the breadcrumb). No vocabulary key covers related-product associations, and PRODUCT_BUNDLE_IN_STOCK returns no category path or related products. If the resolver falls back from the recorded bundle, the related-product values no longer belong to it.",
       "Related products, category path and expectedCartCount are kept as values of the product need (alias product) only because no key supplies them; they must come from a key once one exists.",
       "migrate: productCategory and the related-product values map to no output of PRODUCT_BUNDLE_IN_STOCK, and expectedCartCount (6) is derived from the number of related products in the data.",
-      "No data value appears in the spec code; the spec reads the JSON through loadData."
+      "No data value appears in the spec code; the spec reads the JSON through loadData.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name, productCategory (breadcrumb 'Tools / Power Tools') -> product.categoryPath (new output, ' / '-joined path).",
+      "Remap 2026-11-03: New needs frequentlyBought / youMayAlsoLike -> PRODUCT_LINKED_PRODUCTS {product @product.productId, linkType FrequentlyBought | YouMayAlsoLike, store, minLinked 2 | 3 (the cards the test walks through)}: the related products now come from the resolved product's own links (first three in PDP display order), so they stay consistent when the resolver falls back from the recorded product. Supersedes the GAP / missing-key lines on related products.",
+      "Remap 2026-11-03: frequentlyBoughtProducts.0..1 and youMayAlsoLike.0..2 names / SKUs -> frequentlyBought / youMayAlsoLike linkedNName / linkedNSku. PRODUCT_LINKED_PRODUCTS does not require the linked products to be in stock (linkedNQuantity is their stock on the store); the test adds each one to the cart.",
+      "Remap 2026-11-03: expectedCartCount (6) stays config: it is 1 + the cards added (2 + 3, the minLinked values); the spec may compute it."
     ],
     "confidence": "low",
     "needsReview": true
@@ -54,6 +58,26 @@
         "source": 0,
         "required": false
       }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "frequentlyBought",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "FrequentlyBought",
+        "store": "MaxwellsHardware",
+        "minLinked": 2
+      }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "youMayAlsoLike",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "YouMayAlsoLike",
+        "store": "MaxwellsHardware",
+        "minLinked": 3
+      }
     }
   ],
   "linkedCases": [],
@@ -66,7 +90,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -85,7 +110,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "DeWalt 3-Tool Combo Kit Bundle",
@@ -95,7 +121,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Add to Cart",
@@ -132,7 +159,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234606",
@@ -142,7 +170,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Sku"
     },
     {
       "value": "1",
@@ -161,7 +190,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234605",
@@ -171,7 +201,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Sku"
     },
     {
       "value": "1",
@@ -190,7 +221,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234602",
@@ -200,7 +232,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Sku"
     },
     {
       "value": "1",
@@ -219,7 +252,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234603",
@@ -229,7 +263,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Sku"
     },
     {
       "value": "1",
@@ -248,7 +283,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Name"
     },
     {
       "value": "z-1234604",
@@ -258,7 +294,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Sku"
     },
     {
       "value": "1",
@@ -282,5 +319,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

@@ -36,7 +36,12 @@
       "Spec line 24 searches data.parentProductSKU; line 31 calls validateConfigurableVariant(productDetailPage, data.productVariant) (configurable-pdp.helper.ts:90-193).",
       "Profile: parent SKU b-100000 FOUND as ConfigurableProduct, active, store MaxwellsHardware (2 rows matched; first row used). Its observed name/brand (Philips Base B22 9-Watt Bulb / Philips) do not match the asserted variant (Ecosmart LED bulb z-2510001).",
       "Profile: variant SKU z-2510001 FOUND as SimpleProduct, active, inventory 100, store MaxwellsHardware; related products all FOUND as active SimpleProducts on MaxwellsHardware.",
-      "No add-to-cart, checkout or admin action; no linked AIO cases."
+      "No add-to-cart, checkout or admin action; no linked AIO cases.",
+      "Remap 2026-11-03: parentProductSKU -> pdp.parentProductSku; the swatch labels (sizeLable, colorLable, techologyLable) and swatch tokens (productSize, productColor, productTechnology = 'img' + value) -> pdp.swatches ('Label=Value|...', display order) of the described variant.",
+      "Remap 2026-11-03: Variant details -> pdp: productName variantName, productSKU variantSku, productCategory category, productBrand brand, productShortDescription shortDescription, productPrice price (guest price), inventory inStockMessage, productDetails details, productSpecifications specifications, productShippingInfo shippingInfo, productAdditionalInfo additionalInfo.",
+      "Remap 2026-11-03: Tier offers productVariant.specialOffer.buyQty1..3 / offerPrice1..3 -> pdp.tier1..3Qty / tier1..3Price (tiers by quantity).",
+      "Remap 2026-11-03: Related products: the variant specs read only names and SKUs, which pdp.frequentlyBought / pdp.youMayAlsoLike ('SKU:Name|...', parent links in display order) already return, so no PRODUCT_LINKED_PRODUCTS need is added.",
+      "Remap 2026-11-03: Not produced: the presence flags isSpecialOfferPresent, isInventorySectionDisplayed, isFrequentlyBoughtProductsPresent, isYouMayAlsoLikePresent stay config (the spec can derive them from tier1Qty / inventory / list outputs being set)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -65,7 +70,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "parentProductSku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -84,7 +90,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "Color",
@@ -94,7 +101,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "Technology",
@@ -104,7 +112,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgSmall",
@@ -114,7 +123,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgWhite",
@@ -124,7 +134,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgLED",
@@ -134,7 +145,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
@@ -144,7 +156,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "variantName"
     },
     {
       "value": "z-2510001",
@@ -154,7 +167,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "variantSku"
     },
     {
       "value": "Electrical",
@@ -164,7 +178,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "category"
     },
     {
       "value": "Ecosmart Water Heaters",
@@ -174,7 +189,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "brand"
     },
     {
       "value": "The EcoSmart Daylight Dimmable LED Bulb is a flood light bulb compatible with your indoor recessed cans or track light fixtures.",
@@ -184,7 +200,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "shortDescription"
     },
     {
       "value": "$46.84",
@@ -194,7 +211,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "price"
     },
     {
       "value": "true",
@@ -213,7 +231,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier1Qty"
     },
     {
       "value": "15",
@@ -223,7 +242,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier2Qty"
     },
     {
       "value": "25",
@@ -233,7 +253,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier3Qty"
     },
     {
       "value": "42.16",
@@ -243,7 +264,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier1Price"
     },
     {
       "value": "39.81",
@@ -253,7 +275,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier2Price"
     },
     {
       "value": "35.13",
@@ -263,7 +286,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier3Price"
     },
     {
       "value": "In Stock",
@@ -273,7 +297,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inStockMessage"
     },
     {
       "value": "false",
@@ -292,7 +317,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "details"
     },
     {
       "value": "Actual Color Temperature (K): 5000",
@@ -302,7 +328,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "specifications"
     },
     {
       "value": "All orders are processed within 2-3 business days",
@@ -312,7 +339,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "shippingInfo"
     },
     {
       "value": "CAUTION: Before removing or installing components of a device",
@@ -322,7 +350,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "additionalInfo"
     },
     {
       "value": "true",
@@ -341,7 +370,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "z-2410001",
@@ -351,7 +381,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "DeWalt Cordless Propane Radiant Heater",
@@ -361,7 +392,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "z-1234567",
@@ -371,7 +403,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "true",
@@ -390,7 +423,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2460001",
@@ -400,7 +434,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
@@ -410,7 +445,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2420004",
@@ -420,7 +456,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "Bosch 18-Volt 6-1/2 in Cordless Cicular Saw Kit",
@@ -430,7 +467,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2470006",
@@ -440,10 +478,11 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     }
   ],
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-26T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

@@ -41,7 +41,16 @@
       "Params: minAddOns 1 + addOnDisplayType CheckBox because the PDP must show one checkbox add-on group (data.addOnOptionType Checkbox, three options); minPersonalizableAttributes 1 + personalizationAttribute AdditionalInformation because the PDP must show that personalisation field (data.personalisationLabel, page object personalisationInput is #AdditionalInformation). The test selects nothing.",
       "Gap: PRODUCT_BUNDLE_IN_STOCK returns only sku, name, productId, price, addOnProductId, addOnName. The asserted category, brand, short description, retail/sales price, tier offers, add-on option labels, child-product table, tab texts and related products have no output; a migrated spec cannot get them from this key (a bundle PDP-details key like PRODUCT_CONFIGURABLE_PDP_DETAILS would be needed).",
       "Data in code: page object hardcodes the personalisation input #AdditionalInformation (= data.personalisationLabel), the add-on group test id lblAddOnGroupCheckbox (group name Checkbox) and the highlight selectors imgFreeShipping / imgWatersenseEpaCertified / imgBioCertified (product highlights, not in the JSON).",
-      "migrate: data only through loadData, but expected values depend on the recorded bundle (retail/sales prices, tier prices and discounts, add-on option labels with prices, child-product list, descriptions, related products), and #AdditionalInformation is also in code."
+      "migrate: data only through loadData, but expected values depend on the recorded bundle (retail/sales prices, tier prices and discounts, add-on option labels with prices, child-product list, descriptions, related products), and #AdditionalInformation is also in code.",
+      "Remap 2026-11-03: Header and tabs -> product: productSKU sku, productName name, productCategory categoryPath, productBrand brandName, productShortDescription shortDescription, productRetailPrice retailPrice, productSalesPrice salesPrice, personalisationLabel personalizationCode, addOnOptionType addOnGroupName (group label, test id lblAddOnGroup<name>), inventory inStockMessage, productDetails details, productShippingInfo shippingInfo (HTML in the DB: compare text). Supersedes the Gap line on PRODUCT_BUNDLE_IN_STOCK outputs.",
+      "Remap 2026-11-03: Tier offers specialOffer.buyQty1..3 / offerPrice1..3 -> product.tier1..3Qty / tier1..3Price (tiers by quantity).",
+      "Remap 2026-11-03: Not produced: specialOffer.offerDiscount1..3 (percent saved) stay role data without output: they are derived from the price and the tier price, so the spec should compute them (round((price - tierNPrice) / price * 100)).",
+      "Remap 2026-11-03: addOnOptions.0..2 ('<name>(+$<price>)') -> product.addOnName / addOn2Name / addOn3Name with addOnPrice / addOn2Price / addOn3Price for the price part (add-ons in display order).",
+      "Remap 2026-11-03: bundleProductDetails.0..2 -> product.child1..3*: productName childNName, productSKU childNSku, productQty childNBundleQty, productWarehouseName childNInventory (first entry of 'warehouse=qty|...'), productInventory inStockMessage (the store's in-stock text). Children in display order.",
+      "Remap 2026-11-03: Not produced: bundleProductDetails.N.productWarehouseAddress (masked warehouse address) stays role data without output; no key returns warehouse addresses.",
+      "Remap 2026-11-03: productSpecifications.0..3 -> product.specifications (one HTML value; the four list items are its lines).",
+      "Remap 2026-11-03: New needs frequentlyBought / youMayAlsoLike -> PRODUCT_LINKED_PRODUCTS {product @product.productId, linkType FrequentlyBought | YouMayAlsoLike, store, minLinked 2 | 3 (the cards the test walks through)}: the related products now come from the resolved product's own links (first three in PDP display order), so they stay consistent when the resolver falls back from the recorded product. Supersedes the GAP / missing-key lines on related products.",
+      "Remap 2026-11-03: frequentlyBoughtProducts.0..1 / youMayAlsoLike.0..2 name, SKU, retail and sales price -> frequentlyBought / youMayAlsoLike linkedNName, linkedNSku, linkedNRetailPrice, linkedNSalesPrice (guest prices on the store)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -62,6 +71,26 @@
         "source": 0,
         "required": false
       }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "frequentlyBought",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "FrequentlyBought",
+        "store": "MaxwellsHardware",
+        "minLinked": 2
+      }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "youMayAlsoLike",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "YouMayAlsoLike",
+        "store": "MaxwellsHardware",
+        "minLinked": 3
+      }
     }
   ],
   "linkedCases": [],
@@ -74,7 +103,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -93,7 +123,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "DeWalt 3-Tool Combo Kit Bundle",
@@ -103,7 +134,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Dewalt",
@@ -113,7 +145,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "brandName"
     },
     {
       "value": "Completing a wide range of applications, it also offers a 1/2\" single sleeve Ratcheting chuck which provides tight bit gripping strength. This drill has a compact, lightweight design to fit into tight areas, along with an ergonomic handle delivering comfort and control.",
@@ -123,7 +156,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shortDescription"
     },
     {
       "value": "$530.00",
@@ -133,7 +167,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "retailPrice"
     },
     {
       "value": "$500.00",
@@ -143,7 +178,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "salesPrice"
     },
     {
       "value": "10",
@@ -153,7 +189,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Qty"
     },
     {
       "value": "15",
@@ -163,7 +200,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Qty"
     },
     {
       "value": "25",
@@ -173,7 +211,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Qty"
     },
     {
       "value": "477.00",
@@ -183,7 +222,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Price"
     },
     {
       "value": "450.50",
@@ -193,7 +233,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Price"
     },
     {
       "value": "397.50",
@@ -203,7 +244,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Price"
     },
     {
       "value": "5",
@@ -243,7 +285,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "personalizationCode"
     },
     {
       "value": "Add-on options",
@@ -262,7 +305,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOnGroupName"
     },
     {
       "value": "Sonic Tools Flat file 8 in.(+$17.00)",
@@ -272,7 +316,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOnName"
     },
     {
       "value": "GE Pro 8-Outlet Surge Protector(+$23.00)",
@@ -282,7 +327,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn2Name"
     },
     {
       "value": "GE Pro 6-Outlet Surge Protector(+$11.00)",
@@ -292,7 +338,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn3Name"
     },
     {
       "value": "In Stock",
@@ -302,7 +349,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "Included Products",
@@ -330,7 +378,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Name"
     },
     {
       "value": "z-1234582",
@@ -340,7 +389,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -350,7 +400,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Inventory"
     },
     {
       "value": "In Stock",
@@ -360,7 +411,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -380,7 +432,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1BundleQty"
     },
     {
       "value": "DeWalt Compact Hammerdrill",
@@ -390,7 +443,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Name"
     },
     {
       "value": "z-1234607",
@@ -400,7 +454,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -410,7 +465,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Inventory"
     },
     {
       "value": "In Stock",
@@ -420,7 +476,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -440,7 +497,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2BundleQty"
     },
     {
       "value": "DeWalt 1/4 Impact Driver",
@@ -450,7 +508,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Name"
     },
     {
       "value": "z-1234580",
@@ -460,7 +519,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -470,7 +530,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Inventory"
     },
     {
       "value": "In Stock",
@@ -480,7 +541,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -500,7 +562,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3BundleQty"
     },
     {
       "value": "SKU:",
@@ -528,7 +591,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "details"
     },
     {
       "value": "DCF899 - 20V MAX* Lithium Ion 1/2\" High Torque Impact Wrench",
@@ -538,7 +602,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "DCL040 - 20V MAX* LED Work Light",
@@ -548,7 +613,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "Charger",
@@ -558,7 +624,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "Contractor Bag",
@@ -568,7 +635,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "All orders are processed within 2-3 business days",
@@ -578,7 +646,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shippingInfo"
     },
     {
       "value": "Frequently Bought",
@@ -597,7 +666,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234606",
@@ -607,7 +677,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1Sku"
     },
     {
       "value": "$25.00",
@@ -617,7 +688,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1RetailPrice"
     },
     {
       "value": "$23.00",
@@ -627,7 +699,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked1SalesPrice"
     },
     {
       "value": "GE Pro 6-Outlet Surge Protector",
@@ -637,7 +710,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234605",
@@ -647,7 +721,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2Sku"
     },
     {
       "value": "$12.00",
@@ -657,7 +732,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2RetailPrice"
     },
     {
       "value": "$11.00",
@@ -667,7 +743,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "frequentlyBought",
+      "output": "linked2SalesPrice"
     },
     {
       "value": "Read Reviews",
@@ -695,7 +772,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Name"
     },
     {
       "value": "z-1234602",
@@ -705,7 +783,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1Sku"
     },
     {
       "value": "$8.00",
@@ -715,7 +794,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1RetailPrice"
     },
     {
       "value": "$7.00",
@@ -725,7 +805,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked1SalesPrice"
     },
     {
       "value": "GE 9' Extension Cord",
@@ -735,7 +816,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Name"
     },
     {
       "value": "z-1234603",
@@ -745,7 +827,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2Sku"
     },
     {
       "value": "$18.00",
@@ -755,7 +838,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2RetailPrice"
     },
     {
       "value": "$17.00",
@@ -765,7 +849,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked2SalesPrice"
     },
     {
       "value": "GE 12' Extension Cord",
@@ -775,7 +860,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Name"
     },
     {
       "value": "z-1234604",
@@ -785,7 +871,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3Sku"
     },
     {
       "value": "$180.00",
@@ -795,7 +882,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3RetailPrice"
     },
     {
       "value": "$170.00",
@@ -805,7 +893,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "youMayAlsoLike",
+      "output": "linked3SalesPrice"
     },
     {
       "value": "Read Reviews",
@@ -820,5 +909,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

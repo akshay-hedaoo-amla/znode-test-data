@@ -33,7 +33,11 @@
       "Key PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK because the PDP must show a checkbox add-on group (data.addOnOptionType Checkbox, three options); addOnDisplayType CheckBox. The test selects no add-on; quantityUsed 1.",
       "Gap: PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK returns only sku, name, addOnProductId, addOnName, price. The asserted category, brand, short description, tier offers, all add-on option labels and tab texts have no output.",
       "Data in code: page object test id lblAddOnGroupCheckbox carries the add-on group name (Checkbox).",
-      "migrate: data only through loadData, but expected values depend on the recorded product (retail price, tier prices, add-on option names, descriptions, specification text)."
+      "migrate: data only through loadData, but expected values depend on the recorded product (retail price, tier prices, add-on option names, descriptions, specification text).",
+      "Remap 2026-11-03: Header and tabs -> product: productSKU sku, productName name, productBrand brandName, productShortDescription shortDescription, productPrice price, addOnOptionType addOnGroupName, inventory inStockMessage, productDetails details, productSpecifications specifications, productShippingInfo shippingInfo. Supersedes the Gap line.",
+      "Remap 2026-11-03: Tier offers specialOffer.buyQty1..3 / offerPrice1..3 -> product.tier1..3Qty / tier1..3Price (tiers by quantity).",
+      "Remap 2026-11-03: addOnOptions.0..2 -> product.addOn1Name..addOn3Name (display order; ties broken by product id, which may not match the PDP: the spec should check that each option is present, not its position).",
+      "Remap 2026-11-03: Not produced: productCategory ('Tools', the recorded breadcrumb) stays role data without output: categoryPath returns 'Electrical' for z-2420004 (first category by display order), which is not what the PDP breadcrumb showed."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -63,7 +67,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Tools",
@@ -83,7 +88,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Black + Decker",
@@ -93,7 +99,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "brandName"
     },
     {
       "value": "A compact design gives the BDERO600 5 in. random orbit sander the ability to sand in tight spaces.",
@@ -103,7 +110,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shortDescription"
     },
     {
       "value": "$29.00",
@@ -113,7 +121,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "price"
     },
     {
       "value": "10",
@@ -123,7 +132,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Qty"
     },
     {
       "value": "15",
@@ -133,7 +143,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Qty"
     },
     {
       "value": "25",
@@ -143,7 +154,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Qty"
     },
     {
       "value": "26.10",
@@ -153,7 +165,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Price"
     },
     {
       "value": "24.65",
@@ -163,7 +176,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Price"
     },
     {
       "value": "21.75",
@@ -173,7 +187,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Price"
     },
     {
       "value": "Add-on options",
@@ -192,7 +207,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOnGroupName"
     },
     {
       "value": "DeWalt FLEXVOLT 6 in. x 0.045 in. x 7/8 in. Cutting Wheel Type 1",
@@ -202,7 +218,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn1Name"
     },
     {
       "value": "Master Lock Python Vinyl Coated Steel Adjustable Locking Cable",
@@ -212,7 +229,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn2Name"
     },
     {
       "value": "Diablo 4-1/2 in. x 5-1/2 in. 60-Grit Clamp-On Sanding Sheet",
@@ -222,7 +240,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn3Name"
     },
     {
       "value": "In Stock",
@@ -232,7 +251,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "A compact design gives the BDERO600 5 in. random orbit sander the ability to sand in tight spaces.",
@@ -242,7 +262,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "details"
     },
     {
       "value": "Amperage (amps): 2.4",
@@ -252,7 +273,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "All orders are processed within 2-3 business days",
@@ -262,11 +284,12 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shippingInfo"
     }
   ],
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

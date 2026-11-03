@@ -15,7 +15,7 @@
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Published active configurable product with an active in-stock variant, plus its guest PDP for the first variant by SKU: text attributes, guest price, parent category/brand/links. KB: Product Detail Page; Custom Price Lists (precedence); Frequently Bought; You May Also Like; Managing Inventory.",
+  "description": "Published active configurable product with an active in-stock variant, plus its guest PDP for the Nth eligible variant by SKU (first if not given): text attributes, guest price, inventory, parent category path/brand/links. KB: Product Detail Page; Custom Price Lists; Managing Inventory.",
   "declaredParams": {
     "quantityUsed": {
       "type": "integer",
@@ -29,9 +29,14 @@
       "type": "integer",
       "description": "Optional: the parent or the variant must have at least this many tier prices on the price list the variant is priced from (e.g. 1 when the test checks SPECIAL PRICE OFFERS); left out = any",
       "optional": true
+    },
+    "variantRank": {
+      "type": "integer",
+      "description": "Optional: which eligible variant (active, inventory >= quantityUsed on the store) to describe, 1-based in SKU order; left out = the first, as before",
+      "optional": true
     }
   },
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-11-02T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

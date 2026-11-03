@@ -133,6 +133,20 @@ migrated:
     - testim-migrated/tests/webstore/plp/verify-wishlist-detail-for-retail-user-on-quick-view-for-group-product.spec.ts
     - testim-migrated/tests/webstore/plp/verify-wishlist-details-for-retail-user-from-quick-view-for-configurable-product.spec.ts
     - testim-migrated/tests/webstore/plp/verify-wishlist-error-validation-for-guest-user-with-all-types-of-product.spec.ts
+    # Phase 6 module webstore/pdp (requirements approved earlier; migrated 2026-11-03)
+    - testim-migrated/tests/webstore/pdp/verify-add-to-cart-functionality-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-add-to-wishlist-functionality-on-pdp-for-retail-user.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-brand-hyperlink-navigation-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-bundle-product-details-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-category-hyperlink-navigation-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-configurable-product-details-on-pdp-variant2.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-group-product-details-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-hyperlink-read-review-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-email-a-friend-see-more-power-tools-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-hyperlinks-navigation-of-highlights-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-obsolete-product-details-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-quick-view-functionality-on-pdp.spec.ts
+    - testim-migrated/tests/webstore/pdp/verify-simple-product-details-on-pdp.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy

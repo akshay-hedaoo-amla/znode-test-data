@@ -27,7 +27,8 @@
       "Profile: z-1234579 FOUND as active BundleProduct, PRODUCTION, inventory 28362, storefrontProductIndex 1: meets PRODUCT_BUNDLE_IN_STOCK. categoryPath and categoryLeaf: no profiling rule.",
       "GAP: the core data of this test is the product's category (leaf name and full path as the storefront shows it). No vocabulary key returns a category name or path (PRODUCT_SIMPLE_IN_STOCK returns only categoryId; PRODUCT_BUNDLE_IN_STOCK none). categoryPath and categoryLeaf are kept under the product need only because they belong to that product.",
       "migrate: categoryPath and categoryLeaf map to no output of the product key.",
-      "No data value appears in the spec code; the spec reads the JSON through loadData."
+      "No data value appears in the spec code; the spec reads the JSON through loadData.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name, categoryPath -> product.categoryPath (new output), categoryLeaf -> product.categoryName. Supersedes the GAP line on category name and path."
     ],
     "confidence": "low",
     "needsReview": true
@@ -58,7 +59,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -77,7 +79,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "DeWalt 3-Tool Combo Kit Bundle",
@@ -87,7 +90,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Power Tools",
@@ -97,11 +101,12 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryName"
     }
   ],
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

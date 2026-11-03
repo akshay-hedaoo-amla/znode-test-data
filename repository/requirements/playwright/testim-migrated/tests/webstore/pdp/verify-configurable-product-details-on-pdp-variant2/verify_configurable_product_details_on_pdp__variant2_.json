@@ -42,7 +42,17 @@
       "Same key and params as the approved twin variant1 (PRODUCT_CONFIGURABLE_PDP_DETAILS, store MaxwellsHardware, quantityUsed 1).",
       "Gap: PRODUCT_CONFIGURABLE_PDP_DETAILS returns the first variant by SKU, so it cannot supply a distinct second variant; and it has no outputs for the inventory section (default/all-location quantities, warehouse names and addresses of the Inventory Check modal) that this variant asserts.",
       "Data in code: configurable-pdp.helper.ts lines 91-93 hardcode the attribute group names 'Bulb Size', 'Color', 'Technology' (= productVariant.sizeLable/colorLable/techologyLable).",
-      "migrate: data only through loadData, but expected values depend on the recorded variant (retail and tier prices, descriptions, warehouse quantities and names, related products) and the attribute labels are also in the helper code."
+      "migrate: data only through loadData, but expected values depend on the recorded variant (retail and tier prices, descriptions, warehouse quantities and names, related products) and the attribute labels are also in the helper code.",
+      "Remap 2026-11-03: Need pdp: variantRank 4 added. The recorded variant z-2510006 is the 4th eligible variant (active, inventory >= quantityUsed on the store) of B-100000 by SKU, so one record now describes the parent (parentProductSku, category, links) and the second variant. Supersedes the Gap line on 'first variant by SKU' and inventory-section outputs.",
+      "Remap 2026-11-03: One alias, not a separate default-variant alias: the spec today reads the default variant's swatches only to skip clicking already-selected values. A second need for the default variant cannot be tied to the same parent (the key has no parent param and preferred must be a source of its own alias), so the two records could come from different parents. Spec change to propose: click each swatch of pdp.swatches unless the page shows it selected.",
+      "Remap 2026-11-03: parentProductSKU -> pdp.parentProductSku; the swatch labels (sizeLable, colorLable, techologyLable) and swatch tokens (productSize, productColor, productTechnology = 'img' + value) -> pdp.swatches ('Label=Value|...', display order) of the described variant.",
+      "Remap 2026-11-03: Variant details -> pdp: productName variantName, productSKU variantSku, productCategory category, productShortDescription shortDescription, productPrice price (guest price), inventory inStockMessage (text 'In Stock (1000)' = inStockMessage + ' (' + allLocationsQty + ')'), productDetails details, productSpecifications specifications, productShippingInfo shippingInfo, productAdditionalInfo additionalInfo.",
+      "Remap 2026-11-03: Tier offers productVariant.specialOffer.buyQty1..3 / offerPrice1..3 -> pdp.tier1..3Qty / tier1..3Price (tiers by quantity).",
+      "Remap 2026-11-03: Related products: the variant specs read only names and SKUs, which pdp.frequentlyBought / pdp.youMayAlsoLike ('SKU:Name|...', parent links in display order) already return, so no PRODUCT_LINKED_PRODUCTS need is added.",
+      "Remap 2026-11-03: Not produced: the presence flags isSpecialOfferPresent, isInventorySectionDisplayed, isFrequentlyBoughtProductsPresent, isYouMayAlsoLikePresent stay config (the spec can derive them from tier1Qty / inventory / list outputs being set).",
+      "Remap 2026-11-03: Inventory section -> pdp: defaultWarehouseInventoryQty (both places) defaultWarehouseQty, defaultWarehouseName (both) defaultWarehouseName, allLocationWarehouseInventoryQty allLocationsQty; otherLocationsWarehouse.0..8 quantity and name -> inventoryList ('warehouse=qty|...': the store's default warehouse first, then the alternate warehouses by precedence).",
+      "Remap 2026-11-03: Not produced: the warehouse addresses (inventoryDetails.defaultWarehouseAddress, otherLocationsWarehouse.N.otherLocationWarehouseAddress, masked) stay role data without output; allLocationWarehouse ('All Locations') is a fixed UI label kept as recorded (role data, no output).",
+      "Remap 2026-11-03: Still unlisted: productVariant.productBrand (json:14) is an empty string in the data file, so it cannot be a source (value minLength 1); check-hardcoded reports it. pdp.brand returns the variant's brand (NULL for z-2510006)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -53,7 +63,8 @@
       "alias": "pdp",
       "params": {
         "store": "MaxwellsHardware",
-        "quantityUsed": 1
+        "quantityUsed": 1,
+        "variantRank": 4
       },
       "preferred": {
         "source": 0,
@@ -71,7 +82,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "parentProductSku"
     },
     {
       "value": "Showing 1 of 1 Results",
@@ -90,7 +102,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "Color",
@@ -100,7 +113,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "Technology",
@@ -110,7 +124,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgSmall",
@@ -120,7 +135,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgYellow",
@@ -130,7 +146,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "imgLED",
@@ -140,7 +157,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "swatches"
     },
     {
       "value": "EcoSmart 100-Watt Equivalent A19 Non-Dimmable LED Light Bulb Daylight (16-Pack)",
@@ -150,7 +168,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "variantName"
     },
     {
       "value": "z-2510006",
@@ -160,7 +179,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "variantSku"
     },
     {
       "value": "Electrical",
@@ -170,7 +190,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "category"
     },
     {
       "value": "Daylight color temperature provides stimulating, cool light. Ideal for indoor/covered outdoor use.",
@@ -180,7 +201,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "shortDescription"
     },
     {
       "value": "$15.54",
@@ -190,7 +212,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "price"
     },
     {
       "value": "true",
@@ -209,7 +232,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier1Qty"
     },
     {
       "value": "15",
@@ -219,7 +243,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier2Qty"
     },
     {
       "value": "25",
@@ -229,7 +254,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier3Qty"
     },
     {
       "value": "13.99",
@@ -239,7 +265,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier1Price"
     },
     {
       "value": "13.21",
@@ -249,7 +276,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier2Price"
     },
     {
       "value": "11.66",
@@ -259,7 +287,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "tier3Price"
     },
     {
       "value": "In Stock (1000)",
@@ -269,7 +298,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inStockMessage"
     },
     {
       "value": "true",
@@ -288,7 +318,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "defaultWarehouseQty"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -298,7 +329,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "defaultWarehouseName"
     },
     {
       "value": "1000",
@@ -308,7 +340,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "allLocationsQty"
     },
     {
       "value": "All Locations",
@@ -328,7 +361,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "defaultWarehouseQty"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -338,7 +372,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "defaultWarehouseName"
     },
     {
       "value": "<masked:address>",
@@ -358,7 +393,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Denver, Colorado",
@@ -368,7 +404,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -388,7 +425,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Albany, New York",
@@ -398,7 +436,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -418,7 +457,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Portland, Oregon",
@@ -428,7 +468,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -448,7 +489,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Charleston, South Carolina",
@@ -458,7 +500,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -478,7 +521,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Orlando, Florida",
@@ -488,7 +532,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -508,7 +553,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Dallas, Texas",
@@ -518,7 +564,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -538,7 +585,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Phoenix, Arizona",
@@ -548,7 +596,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -568,7 +617,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "San Jose, California",
@@ -578,7 +628,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -598,7 +649,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "Nashville, Tennessee",
@@ -608,7 +660,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "inventoryList"
     },
     {
       "value": "<masked:address>",
@@ -628,7 +681,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "details"
     },
     {
       "value": "Actual Color Temperature (K): 5000",
@@ -638,7 +692,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "specifications"
     },
     {
       "value": "All orders are processed within 2-3 business days",
@@ -648,7 +703,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "shippingInfo"
     },
     {
       "value": "CAUTION: Before removing or installing components of a device",
@@ -658,7 +714,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "additionalInfo"
     },
     {
       "value": "true",
@@ -677,7 +734,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "z-2410001",
@@ -687,7 +745,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "DeWalt Cordless Propane Radiant Heater",
@@ -697,7 +756,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "z-1234567",
@@ -707,7 +767,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "frequentlyBought"
     },
     {
       "value": "true",
@@ -726,7 +787,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2460001",
@@ -736,7 +798,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
@@ -746,7 +809,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2420004",
@@ -756,7 +820,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "Bosch 18-Volt 6-1/2 in Cordless Cicular Saw Kit",
@@ -766,7 +831,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     },
     {
       "value": "z-2470006",
@@ -776,11 +842,12 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "pdp"
+      "alias": "pdp",
+      "output": "youMayAlsoLike"
     }
   ],
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

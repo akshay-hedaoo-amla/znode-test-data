@@ -37,7 +37,16 @@
       "selectAddOnOptions.0 'Select' is the dropdown placeholder text (expected-output), not product data.",
       "Gap: PRODUCT_GROUPED_IN_STOCK returns only sku, name, productId, price, addOnProductId, addOnName, child1Sku. The asserted category, brand, short description, starting price, tier offers, child table (four children with prices), add-on option labels and tab texts have no output.",
       "Data in code: page object test ids lblAddOnGroupCheckbox and lblAddOnGroupSelectAddOn carry the add-on group names (Checkbox, Select Add-on); highlight selectors imgFreeShipping / imgWatersenseEpaCertified are product highlights not in the JSON.",
-      "migrate: data only through loadData, but expected values depend on the recorded product (starting price, tier prices and discounts, child prices, add-on option labels with prices, descriptions), and the add-on group names are in page-object selectors."
+      "migrate: data only through loadData, but expected values depend on the recorded product (starting price, tier prices and discounts, child prices, add-on option labels with prices, descriptions), and the add-on group names are in page-object selectors.",
+      "Remap 2026-11-03: Header and tabs -> product: productSKU sku, productName name, productCategory categoryPath, productBrand brandName, productShortDescription shortDescription, startingPrice startingPrice ('Starting at: $' + amount), addOnOptionType ('Checkbox *', required group) addOnGroupName, productDetails details, productShippingInfo shippingInfo. Supersedes the Gap line on PRODUCT_GROUPED_IN_STOCK outputs.",
+      "Remap 2026-11-03: Tier offers specialOffer.buyQty1..3 / offerPrice1..3 -> product.tier1..3Qty / tier1..3Price (tiers by quantity).",
+      "Remap 2026-11-03: Not produced: specialOffer.offerDiscount1..3 (percent saved) stay role data without output: they are derived from the price and the tier price, so the spec should compute them (round((price - tierNPrice) / price * 100)).",
+      "Remap 2026-11-03: groupProductDetails.0..3 -> product.child1..4*: productName childNName, productSKU childNSku, productPrice childNSalesPrice (shown price: sales, else childNRetailPrice), productWarehouseName childNInventory (first entry of 'warehouse=qty|...'), productInventory inStockMessage. The recorded rows are not in SKU order; if the PDP order differs from the key's child order, the spec should check each child row by SKU (presence), not by position.",
+      "Remap 2026-11-03: Not produced: groupProductDetails.N.productWarehouseAddress (masked) stays role data without output.",
+      "Remap 2026-11-03: addOnOptions.0..2 ('<name>(+$<price>)') -> product.addOnName / addOn2Name / addOn3Name with the addOn*Price outputs.",
+      "Remap 2026-11-03: Not produced: addOnOptions.3 (fourth checkbox option) stays role data without output: the key returns three add-ons; the spec should check the first three (or presence), not the full list.",
+      "Remap 2026-11-03: Dropdown add-on group: selectAddOnOptions.1..2 ('<name>(+$<price>)') -> product.selectAddOn1Name / selectAddOn2Name with selectAddOn1Price / selectAddOn2Price; the group label 'Select Add-on *' (was expected-output) -> product.selectAddOnGroupName, role data (' *' marks the required group). selectAddOnOptions.0 'Select' stays expected-output (placeholder).",
+      "Remap 2026-11-03: productSpecifications.0..4 ('<label> - <value>' lines) -> product.specifications (one HTML value; the five lines are its items)."
     ],
     "confidence": "medium",
     "needsReview": true
@@ -69,7 +78,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Plumbing / Plumbing Parts & Repair",
@@ -79,7 +89,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "Nibco 40S PVC Coupling Group",
@@ -89,7 +100,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Nibco",
@@ -99,7 +111,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "brandName"
     },
     {
       "value": "Connects PVC piping in drain, waste and vent piping systems.",
@@ -109,7 +122,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shortDescription"
     },
     {
       "value": "Starting at: $1.25",
@@ -119,7 +133,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "startingPrice"
     },
     {
       "value": "10",
@@ -129,7 +144,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Qty"
     },
     {
       "value": "15",
@@ -139,7 +155,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Qty"
     },
     {
       "value": "25",
@@ -149,7 +166,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Qty"
     },
     {
       "value": "66.60",
@@ -159,7 +177,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier1Price"
     },
     {
       "value": "62.90",
@@ -169,7 +188,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier2Price"
     },
     {
       "value": "55.50",
@@ -179,7 +199,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "tier3Price"
     },
     {
       "value": "3",
@@ -246,7 +267,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Name"
     },
     {
       "value": "z-1234614",
@@ -256,7 +278,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -266,7 +289,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1Inventory"
     },
     {
       "value": "In Stock",
@@ -276,7 +300,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -296,7 +321,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child1SalesPrice"
     },
     {
       "value": "Nibco 1-1/2 in. 40S PVC Coupling",
@@ -306,7 +332,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Name"
     },
     {
       "value": "z-1234612",
@@ -316,7 +343,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -326,7 +354,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2Inventory"
     },
     {
       "value": "In Stock",
@@ -336,7 +365,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -356,7 +386,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child2SalesPrice"
     },
     {
       "value": "Nibco 1-1/4 in. 40S PVC Coupling",
@@ -366,7 +397,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Name"
     },
     {
       "value": "z-1234611",
@@ -376,7 +408,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -386,7 +419,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3Inventory"
     },
     {
       "value": "In Stock",
@@ -396,7 +430,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -416,7 +451,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child3SalesPrice"
     },
     {
       "value": "Nibco 2 in. 40S PVC Coupling",
@@ -426,7 +462,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child4Name"
     },
     {
       "value": "z-1234613",
@@ -436,7 +473,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child4Sku"
     },
     {
       "value": "Milwaukee, Wisconsin",
@@ -446,7 +484,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child4Inventory"
     },
     {
       "value": "In Stock",
@@ -456,7 +495,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "inStockMessage"
     },
     {
       "value": "<masked:address>",
@@ -476,7 +516,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "child4SalesPrice"
     },
     {
       "value": "SKU:",
@@ -513,7 +554,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOnGroupName"
     },
     {
       "value": "GE 6' Extension Cord(+$7.00)",
@@ -523,7 +565,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOnName"
     },
     {
       "value": "GE 9' Extension Cord(+$17.00)",
@@ -533,7 +576,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn2Name"
     },
     {
       "value": "Mountain Plumbing 4 Inch Round Solid Nickel Bronze Plated Grid Shower Drain(+$200.00)",
@@ -543,7 +587,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "addOn3Name"
     },
     {
       "value": "Mountain Plumbing 10 Inch Traditional Round Rain Head(+$28.00)",
@@ -562,7 +607,9 @@
       "keyPath": "expected",
       "sensitive": false,
       "profiled": false,
-      "role": "expected-output"
+      "role": "data",
+      "alias": "product",
+      "output": "selectAddOnGroupName"
     },
     {
       "value": "Select",
@@ -581,7 +628,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "selectAddOn1Name"
     },
     {
       "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)(+$46.84)",
@@ -591,7 +639,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "selectAddOn2Name"
     },
     {
       "value": "Use the NIBCO PVC DWV Coupling to connect PVC piping lengths in drain, waste and vent piping systems.",
@@ -601,7 +650,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "details"
     },
     {
       "value": "Brand - NIBCO",
@@ -611,7 +661,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "Additional Information - Lead-Free",
@@ -621,7 +672,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "Application - Cold Water Pressure",
@@ -631,7 +683,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "End Connection - Slip x Slip",
@@ -641,7 +694,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "Manufacturer Part Number - L00227Y",
@@ -651,7 +705,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "specifications"
     },
     {
       "value": "All orders are processed within 2-3 business days",
@@ -661,11 +716,12 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "shippingInfo"
     }
   ],
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }

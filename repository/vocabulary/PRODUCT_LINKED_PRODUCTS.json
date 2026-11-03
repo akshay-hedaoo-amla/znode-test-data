@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_LINKED_PRODUCTS",
+  "entity": "product",
+  "type": "linked_products",
+  "constraints": {
+    "linkedFrom": "= {product}",
+    "linkType": "{linkType}",
+    "linkedCount": ">= {minLinked}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "The active products linked to a given product under one link attribute (FrequentlyBought, YouMayAlsoLike), first three in PDP display order with guest prices, category and stock on the store. KB: Product Detail Page; Frequently Bought; You May Also Like.",
+  "declaredParams": {
+    "product": {
+      "type": "integer",
+      "description": "PimProductId of the product whose PDP shows the links (e.g. @product.productId)"
+    },
+    "linkType": {
+      "type": "string",
+      "description": "Link attribute code (ZnodePimAttribute.AttributeCode of a Link attribute): FrequentlyBought or YouMayAlsoLike"
+    },
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); prices, category and stock are for this store"
+    },
+    "minLinked": {
+      "type": "integer",
+      "description": "Optional: at least this many active linked products (e.g. how many cards the test walks through); left out = at least one",
+      "optional": true
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

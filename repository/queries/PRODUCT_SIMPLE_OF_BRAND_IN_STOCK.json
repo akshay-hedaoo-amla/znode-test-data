@@ -1,19 +1,26 @@
 {
   "schemaVersion" : 1,
   "key" : "PRODUCT_SIMPLE_OF_BRAND_IN_STOCK",
-  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.Brand AS brand FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId WHERE p.ProductType = @productType AND p.IsActive = @isActive AND p.Brand = @brand AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName, p.Brand HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
-  "params" : [ "productType", "isActive", "brand", "publishState", "store", "quantityUsed", "preferred" ],
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.Brand AS brand, MAX(cpt.val) AS categoryPath FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodeInventory i ON i.SKU = p.SKU INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId INNER JOIN dbo.ZnodePortal po ON po.PortalId = pw.PortalId OUTER APPLY (SELECT TOP 1 CONCAT_WS(@pathSep, g4.Name, g3.Name, g2.Name, g1.Name) AS val FROM dbo.ZnodePublishProductEntity ke INNER JOIN dbo.ZnodePublishVersionEntity kv ON kv.VersionId = ke.VersionId INNER JOIN dbo.ZnodePortalCatalog kc ON kc.PublishCatalogId = ke.ZnodeCatalogId INNER JOIN dbo.ZnodePublishCategoryEntity g1 ON g1.VersionId = ke.VersionId AND g1.ZnodeCatalogId = ke.ZnodeCatalogId AND g1.LocaleId = ke.LocaleId AND g1.Name = ke.CategoryName AND CHARINDEX(CONCAT(@comma, g1.ZnodeCategoryId, @comma), CONCAT(@comma, ke.ZnodeCategoryIds, @comma)) > @zero LEFT JOIN dbo.ZnodePimCategoryHierarchy h1 ON h1.PimCategoryHierarchyId = g1.ZnodeCategoryId LEFT JOIN dbo.ZnodePublishCategoryEntity g2 ON g2.VersionId = g1.VersionId AND g2.LocaleId = g1.LocaleId AND g2.ZnodeCatalogId = g1.ZnodeCatalogId AND g2.ZnodeCategoryId = h1.ParentPimCategoryHierarchyId LEFT JOIN dbo.ZnodePimCategoryHierarchy h2 ON h2.PimCategoryHierarchyId = g2.ZnodeCategoryId LEFT JOIN dbo.ZnodePublishCategoryEntity g3 ON g3.VersionId = g2.VersionId AND g3.LocaleId = g2.LocaleId AND g3.ZnodeCatalogId = g2.ZnodeCatalogId AND g3.ZnodeCategoryId = h2.ParentPimCategoryHierarchyId LEFT JOIN dbo.ZnodePimCategoryHierarchy h3 ON h3.PimCategoryHierarchyId = g3.ZnodeCategoryId LEFT JOIN dbo.ZnodePublishCategoryEntity g4 ON g4.VersionId = g3.VersionId AND g4.LocaleId = g3.LocaleId AND g4.ZnodeCatalogId = g3.ZnodeCatalogId AND g4.ZnodeCategoryId = h3.ParentPimCategoryHierarchyId WHERE ke.ZnodeProductId = p.PimProductId AND kc.PortalId = po.PortalId AND kv.RevisionType = @publishState AND kv.IsPublishSuccess = @isActive AND ke.IsActive = @isActive AND ke.IsObsolete = @notObsolete AND ke.LocaleId = @localeId ORDER BY ke.VersionId DESC, ke.ProductIndex, ke.PublishProductEntityId, g1.ZnodeCategoryId) cpt WHERE p.ProductType = @productType AND p.IsActive = @isActive AND p.Brand = @brand AND ps.PublishStateCode = @publishState AND po.StoreCode = @store AND (@preferred IS NULL OR p.SKU = @preferred) GROUP BY p.SKU, p.ProductName, p.Brand HAVING SUM(i.Quantity) >= @quantityUsed ORDER BY p.SKU",
+  "params" : [ "productType", "isActive", "brand", "publishState", "store", "quantityUsed", "preferred", "notObsolete", "localeId", "zero", "comma", "pathSep" ],
   "constants" : {
     "productType" : "SimpleProduct",
     "isActive" : "true",
-    "publishState" : "PRODUCTION"
+    "publishState" : "PRODUCTION",
+    "notObsolete" : "false",
+    "localeId" : "1",
+    "zero" : "0",
+    "comma" : ",",
+    "pathSep" : " / "
   },
-  "outputs" : [ "sku", "name", "brand" ],
+  "outputs" : [ "sku", "name", "brand", "categoryPath" ],
   "identity" : "sku",
-  "schemaFingerprint" : "sha256:e4cac0be8c90d63b19450617a946bde3fe8e0567a8838afe212de948a398e791",
-  "status" : "approved",
-  "approvedBy" : "Akshay Hedaoo",
-  "approvedAt" : "2026-10-23T14:30:00Z",
+  "schemaFingerprint" : "sha256:5e9d7bd31a869c58d3dd12e695a9e91316e2f4d66745160db9d6cdf5abcada39",
+  "vocabularyFingerprint" : "sha256:194407bef2c3c940f977aeec038206bc4226458fac4ac4940a172bdb7494828a",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z",
   "createdAt" : "2026-10-22T00:00:00Z",
-  "lastValidated" : "2026-10-26T14:59:49Z"
+  "lastValidated" : "2026-11-03T07:30:42Z",
+  "verifiedHash" : "sha256:2dd516b548e52e0a8b55d1ad77bae7302d4b97011b37580c648f180012e1d06f"
 }

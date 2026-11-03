@@ -35,7 +35,8 @@
       "receiverEmail (masked) is a recipient address the test types, not an environment record: role config. The masked literal at spec line 58 is the label text \"Friend's Email Address\" (masked by the email key-name rule): role expected-output, kept masked.",
       "The send step needs the store to have outgoing email configured; that is environment configuration, not a vocabulary key.",
       "strategy migrate: loadData is used, but productCategory and seeMoreCategory (data values in assertions) map to no output of PRODUCT_BUNDLE_IN_STOCK, so swap rule 2 fails.",
-      "No linked AIO cases."
+      "No linked AIO cases.",
+      "Remap 2026-11-03: productSKU -> product.sku, productName -> product.name, productCategory -> product.categoryPath (new output), seeMoreCategory -> product.categoryName. Supersedes the missing-output line."
     ],
     "confidence": "low",
     "needsReview": true
@@ -97,7 +98,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "sku"
     },
     {
       "value": "Tools / Power Tools",
@@ -107,7 +109,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryPath"
     },
     {
       "value": "DeWalt 3-Tool Combo Kit Bundle",
@@ -117,7 +120,8 @@
       "sensitive": false,
       "profiled": true,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "name"
     },
     {
       "value": "Power Tools",
@@ -127,7 +131,8 @@
       "sensitive": false,
       "profiled": false,
       "role": "data",
-      "alias": "product"
+      "alias": "product",
+      "output": "categoryName"
     },
     {
       "value": "email a friend",
@@ -187,5 +192,5 @@
   "strategy": "migrate",
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-01T14:30:00Z"
+  "approvedAt": "2026-11-03T14:30:00Z"
 }
