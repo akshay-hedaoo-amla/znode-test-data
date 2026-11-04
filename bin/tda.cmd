@@ -16,7 +16,7 @@ if "%~1"=="" (
   echo usage: tda ^<command^> [args] 1>&2
   exit /b 2
 )
-for %%c in (prewarm resolve use release release-test teardown run-id metrics) do (
+for %%c in (ping prewarm resolve use release release-test teardown run-id metrics) do (
   if /i "%~1"=="%%c" (
     "%JAVA%" -jar "%JAR%" %*
     exit /b %ERRORLEVEL%

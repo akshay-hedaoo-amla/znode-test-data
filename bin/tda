@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 # tda: one command for the test data agents. Runs on the test data home (TDA_HOME, else the working directory).
-#   resolver commands (prewarm, resolve, use, release, release-test, teardown, run-id, metrics) -> TdaCli
+#   resolver commands (ping, prewarm, resolve, use, release, release-test, teardown, run-id, metrics) -> TdaCli
 #   everything else (snapshot, describe, rows, profile, drift, query-status, query-verify, spec-scan,
-#   collection-status, collection-verify, restamp, maintain, console-data, validate)            -> ProfilerCli
+#   collection-status, collection-verify, readiness, restamp, maintain, console-data, validate, schema, check-hardcoded, requirement-path) -> ProfilerCli
 # The jar is TDA_CLI_JAR, else .tda/tda-cli.jar (the release named by tda.version in pom.xml: mvn -q initialize).
 # TDA_HOME defaults to this repository.
 # The resolver and the profiler are two main classes of one jar: the resolver never loads profiler code.
@@ -16,7 +16,7 @@ if [ ! -f "$jar" ]; then
 fi
 java_cmd=${JAVA_HOME:+"$JAVA_HOME/bin/"}java
 case "$1" in
-  prewarm|resolve|use|release|release-test|teardown|run-id|metrics)
+  ping|prewarm|resolve|use|release|release-test|teardown|run-id|metrics)
     exec "$java_cmd" -jar "$jar" "$@" ;;
   ""|-h|--help)
     echo "usage: tda <command> [args]  (see the comments at the top of $0)" >&2
