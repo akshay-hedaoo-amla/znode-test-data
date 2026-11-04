@@ -4,7 +4,7 @@ Znode test data: the data repository of the test data agents for the Znode autom
 `znode10-integration-ui-automation-1`, Playwright in `znode10-playwright-automation-integration`). It holds the
 project's vocabulary, requirements, entity maps, queries and API collections (`repository/`), its config, the exported
 API specs and its exit checks. The code (resolver, CLI, scanners, adapters, agents) is the released test data agents
-(`akshay-hedaoo-amla/automation-testdata-generator`), version `tda.version` in `pom.xml`.
+(`MRRSoft/znode10-automation-testdata-generator`), version `tda.version` in `pom.xml`.
 
 ## Read first, every session
 
@@ -71,4 +71,4 @@ Java 17, Maven 3.9. Reading the released packages needs a GitHub token with `rea
 
 Frameworks run with `TDA_HOME` set to this repository; the Selenium framework depends on
 `com.amla.testdata:adapter-selenium-testng:<tda.version>`, the Playwright framework on
-`@akshay-hedaoo-amla/tda-playwright-adapter@<tda.version>`.
+`@mrrsoft/tda-playwright-adapter@<tda.version>`.
