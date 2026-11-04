@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/order/verify-quote-request-page-details.spec.ts > Webstore - Quote > the quote request page opens from the cart with its details and address controls @ZPD-TC-9722 @ZPD-TC-9723 @ZPD-TC-9724 @ZPD-TC-9725",
+  "scenario": {
+    "summary": "Signed in as the shared registered account (storageState), the test empties the cart, adds a simple product (quantity 2), opens the cart, checks Request Quote is visible and clicks it, lands on /quote and checks the page heading, breadcrumb, in-hands date selector, the shipping address, billing address, shipping method and quote summary headings, the Add New and edit address controls, and the Submit Quote button (not clicked); it empties the cart at the end. No quote or order is created.",
+    "steps": [
+      "Open the webstore (shared session); empty the cart",
+      "Add the product (addProductOfAnyType, quantity 2); open the cart",
+      "Request Quote visible; click it; URL matches /quote (ZPD-TC-9722)",
+      "Quote heading and breadcrumb (ZPD-TC-9725); date selector visible",
+      "Shipping address, billing address, shipping method and quote summary headings",
+      "First Add New address and first edit address controls visible (ZPD-TC-9723, ZPD-TC-9724)",
+      "Submit Quote visible with its label (not clicked); empty the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product",
+      "cart",
+      "address"
+    ],
+    "stateChanges": [
+      "Shared account's cart emptied at the start, the product added (quantity 2), cart emptied again at the end (best effort: empty() errors are swallowed)",
+      "No quote, order or address is created (Submit Quote and the address controls are not clicked)"
+    ],
+    "assertions": [
+      "Request Quote visible on the cart; URL /quote",
+      "Quote heading, breadcrumb, shipping address / billing address / shipping method / quote summary headings and Submit Quote label contain the expected texts (case-insensitive)",
+      "Date selector, first Add New address, first edit address and Submit Quote visible"
+    ],
+    "evidence": [
+      "Title and flow agree. Spec header (data): read-only gap fill; Request Quote does not render for a guest, so the spec uses the shared signed-in session; Submit Quote deliberately not clicked.",
+      "DECLARED ACCOUNT: the spec never calls getMyAccountUser; its session is the shared myAccountTest storageState written by testim-migrated/tests/auth.setup.ts for getMyAccountUser() = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80). Source 0 records that credential (masked; not in the scan, added as in the approved address-book and track-order entries). The migrated test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step.",
+      "SESSION / PROJECT: the order/ folder is in SELENIUM_GAP_SPECS of playwright.stability.config.ts (storageState myAccountTest), but NOT in AUTH_SPECS of playwright.testim-webstore.config.ts, so in the testim-webstore suite it runs in webstore-guest without a session (Order History / Request Quote would not be reachable). REVIEW: the migration should add order/ to AUTH_SPECS (framework change, proposed, not made).",
+      "Store: store = STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED {store MaxwellsHardware}: Request Quote renders only when Enable Quote Requests From Web Store = Yes (as in the approved shopping-cart request-quote entry; it includes the active-webstore condition).",
+      "Product: productSku z-2420004 (profile FOUND: active PRODUCTION SimpleProduct 'Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander', inventory 235, requiredAddOnCount 0, storefrontProductIndex 0 not filtered by store). product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 2, store}; productSku -> product.sku. Preferred source 2 not required (storefront index 0: it may fall back, as in the checkout guest shipping-address entry). quantity '2' is config.",
+      "Address: the edit control (btnEditAddress, 'edit on an existing address card', ZPD-TC-9724) only renders when the account already has an address. address = ADDRESS_DEFAULT_IDS_OF_USER {owner @user.userId}: the account has a default billing and a default shipping address (IDs only, no address text). No source maps to it (the spec never reads the address). REVIEW: whether any saved address (not only defaults) is enough for the edit control.",
+      "Headings: 'Quote Request', 'QUOTE', 'Shipping Method', 'Quote Summary', 'Submit Quote' are fixed UI text (expected-output); shippingAddressHeading and billingAddressHeading are masked only because their keys contain 'address' (labels, kept masked), expected-output.",
+      "Literal '/' (page.goto) is config (route).",
+      "Cart side effect: the shared account's cart is emptied at start and end; parallel specs of the same account may see a changing cart.",
+      "migrate: the address need links to the declared account (@user.userId), so the account must be declared with testData.useExisting. Without the address need the data alone would satisfy swap (productSku only through loadData, output sku, no derived assertions, the SKU is not in spec code)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED",
+      "alias": "store",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "ADDRESS_DEFAULT_IDS_OF_USER",
+      "alias": "address",
+      "params": {
+        "owner": "@user.userId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9722",
+    "ZPD-TC-9723",
+    "ZPD-TC-9724",
+    "ZPD-TC-9725",
+    "ZPD-TC-9726",
+    "ZPD-TC-9727"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/order/verify-quote-request-page-details.spec.ts:77",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:2",
+      "kind": "json",
+      "keyPath": "productSku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:3",
+      "kind": "json",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Quote Request",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:4",
+      "kind": "json",
+      "keyPath": "quoteHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "QUOTE",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:9",
+      "kind": "json",
+      "keyPath": "breadcrumb",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:6",
+      "kind": "json",
+      "keyPath": "shippingAddressHeading",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:7",
+      "kind": "json",
+      "keyPath": "billingAddressHeading",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:8",
+      "kind": "json",
+      "keyPath": "shippingMethodHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quote Summary",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:5",
+      "kind": "json",
+      "keyPath": "quoteSummaryHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Submit Quote",
+      "location": "testim-migrated/test-data/webstore/order/verify-quote-request-page-details.json:10",
+      "kind": "json",
+      "keyPath": "submitQuoteButton",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

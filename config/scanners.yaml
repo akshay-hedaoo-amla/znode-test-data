@@ -175,6 +175,9 @@ migrated:
     - testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts
     - testim-migrated/tests/webstore/order-receipt/validate-group-products-in-order-receipt.spec.ts
     - testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts
+    # Phase 6 module webstore/order (2026-11-04; Create Return present is a known failure)
+    - testim-migrated/tests/webstore/order/verify-create-return-availability.spec.ts
+    - testim-migrated/tests/webstore/order/verify-quote-request-page-details.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
