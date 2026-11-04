@@ -1,0 +1,97 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PROMOTION_AMOUNT_OFF_PRODUCT",
+  "spec" : {
+    "file" : "specs/znode-core-api-v1.json",
+    "operations" : [ "POST /Promotion/Create", "POST /Promotion/Delete" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/Promotion/Create",
+    "payloadTemplate" : "payloads/PROMOTION_AMOUNT_OFF_PRODUCT.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "profileId" : {
+        "key" : "PROFILE_OF_STORE",
+        "output" : "profileId",
+        "params" : {
+          "store" : "{store}",
+          "profile" : "{profile}"
+        },
+        "when" : {
+          "param" : "allProfiles",
+          "equals" : "false"
+        }
+      }
+    },
+    "constants" : {
+      "promotionTypeId" : 6,
+      "classType" : "CART",
+      "className" : "ZnodeCartPromotionAmountOffProduct",
+      "displayOrder" : 99,
+      "couponRequired" : false,
+      "uniqueCoupon" : false,
+      "promotionMessage" : "Promotion Applied Successfully"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "startDate" : {
+        "kind" : "dateTime",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      },
+      "endDate" : {
+        "kind" : "dateTime",
+        "offset" : "P1D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      }
+    },
+    "runIdTag" : {
+      "field" : "/PromoCode",
+      "format" : "TDA-{runId}-",
+      "property" : "promoCode"
+    },
+    "idPointer" : "/Promotion/PromotionId",
+    "outputs" : {
+      "promoCode" : {
+        "from" : "payload",
+        "pointer" : "/PromoCode"
+      },
+      "name" : {
+        "from" : "payload",
+        "pointer" : "/Name"
+      },
+      "discountAmount" : {
+        "from" : "payload",
+        "pointer" : "/Discount"
+      },
+      "orderMinimum" : {
+        "from" : "payload",
+        "pointer" : "/OrderMinimum"
+      },
+      "minimumQuantity" : {
+        "from" : "payload",
+        "pointer" : "/QuantityMinimum"
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/Promotion/Delete",
+    "bodyTemplate" : "payloads/PROMOTION_AMOUNT_OFF_PRODUCT.teardown.json"
+  },
+  "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z",
+  "createdAt" : "2026-11-04T00:00:00Z",
+  "lastValidated" : "2026-11-04T06:52:07Z",
+  "verifiedHash" : "sha256:9c070705168173cb2d5012f0f8b2bae02c305f962013f5e01d54f4ccaf41dc25"
+}
