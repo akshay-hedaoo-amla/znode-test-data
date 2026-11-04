@@ -170,6 +170,11 @@ migrated:
     - testim-migrated/tests/webstore/login/verify-sign-in-and-registration-labels.spec.ts
     - testim-migrated/tests/webstore/login/verify-sign-in-functionality.spec.ts
     - testim-migrated/tests/webstore/login/verify-validation-on-login-page.spec.ts
+    # Phase 6 module webstore/order-receipt (2026-11-03; each test places a COD order)
+    - testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts
+    - testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts
+    - testim-migrated/tests/webstore/order-receipt/validate-group-products-in-order-receipt.spec.ts
+    - testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts
   selenium: []   # Phase 6 wave 2
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy

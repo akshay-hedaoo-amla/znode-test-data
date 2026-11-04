@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts > Webstore - Order Receipt > validate configurable products in order receipt",
+  "scenario": {
+    "summary": "A registered retail user signs in with the test's own account, empties the cart, adds two variants of a configurable product (variant 1 x2 and variant 2 x1, each picked by Bulb Size / Color / Technology, with DisplayText personalization and a radio add-on), checks out with Custom Flat Rate shipping and COD and places the order, then checks the receipt sections, both variant lines (quantity x item price == total price), totals and Reorder/Print; reorders to checkout without placing it.",
+    "steps": [
+      "Open the webstore logged out, click Sign In, sign in with the dedicated account (masked credentials from the test data), empty the cart and check the empty-cart message",
+      "Search the configurable parent SKU; result name equals searchResultName; open the PDP; heading equals productHeading; attribute groups Bulb Size / Color / Technology, DisplayText label and 'Add-on options' heading shown",
+      "Select variant 1 (varient1BulbSize / Technology / Color swatches), type displayText, quantity varient1ProductQuantity (2), pick radio add-on addOnRadioId; add to cart",
+      "Re-open the PDP; select variant 2 (Medium / Yellow / Halogen), displayText, quantity 1, the same radio add-on; add to cart",
+      "Open the cart",
+      "Proceed to checkout from the cart; select Ship Complete + Custom Flat Rate (FLAT); select COD; place the order",
+      "Receipt: thank-you banner and #OS- order number message; Details, Billing To, Shipping To sections",
+      "Receipt totals: subtotal + shipping + handling + tax - discounts == order total",
+      "Receipt: Reorder, Print and Continue Shopping controls; click Reorder, proceed to checkout, pick FLAT shipping, check the Payment Method heading, select COD (no second order is placed)",
+      "Log out"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "shipping",
+      "payment",
+      "order"
+    ],
+    "stateChanges": [
+      "Declared account's cart emptied at the start (cartPage.empty)",
+      "A new COD order with Custom Flat Rate shipping is placed on the declared account by the test (created-by-test; OS-<date>-<n>); it is not deleted afterwards and stays in the account's order history; inventory of the ordered items is reserved/decremented by the ordered quantity",
+      "If the account has active vouchers, the webstore checkout may auto-apply them and the order spends voucher balance (not restored)",
+      "Reorder from the receipt puts the ordered items back into the account's cart and opens checkout (shipping + COD selected) without placing a second order; the cart is left filled (the next run empties it)"
+    ],
+    "assertions": [
+      "Sign-in button text 'Sign In'; greeting matches /Hello,/; cart empty message equals shoppingCartEmptyValidationMessage",
+      "Checkout: 'Order Summary', 'Shipping Method', 'Order Total' labels, payment type heading visible, 'Place Order' button",
+      "Receipt banner equals thankYouMessageForPurchaseOrder; thanks text matches THANKS_RE (store name + #OS- order number)",
+      "Receipt Details / Billing / Shipping sections and Order Summary headers (Item, Status, Tracking Number, Quantity, Item Price, Total Price)",
+      "subtotal + shipping + handling + tax - shipping discount - discount equals the order total within 0.01",
+      "Reorder link 'Reorder', Print button 'Print', Continue Shopping label equals continueShoppingLabel; after Reorder -> checkout, 'Payment Method' heading",
+      "PDP: first result name, product heading, attribute group labels, 'DisplayText' label, 'Add-on options' heading, 'Add to Cart'",
+      "Each variant line (by variant SKU): quantity equals the variant's quantity; quantity x item price == total price (prices read from the page, not hard-coded)"
+    ],
+    "evidence": [
+      "Title 'validate configurable products in order receipt'; step labels 1) to 9) match the flow",
+      "Need product PRODUCT_CONFIGURABLE_WITH_VARIANTS: minVariants 2 (two variants ordered), quantityUsed 2 (highest variant quantity), minAddOns 1 + addOnDisplayType RadioButton (selectVariant clicks #add-on-value-radio-<id>), minPersonalizableAttributes 1 + personalizationAttribute DisplayText (#DisplayText filled), variantAttributes BulbSize,Color,Technology (swatches by alt text; labels asserted as 'Bulb Size', 'Color', 'Technology'), as in the approved save-cart and cart-headers entries for B-100003",
+      "Mapping: productSKU -> parentProductSku, searchResultName -> name, varient1/2Sku -> variant1Sku / variant2Sku, varient1/2BulbSize -> variantNAttr1, varient1/2Color -> variantNAttr2, varient1/2Technology -> variantNAttr3 (assumption: AttrN follows the variantAttributes order BulbSize,Color,Technology)",
+      "productHeading '75-Watt Equivalent BR40 ... (12-Pack)' is the name of z-2510001 (variant 1, profile): mapped to variant1Name. DOUBT: the PDP heading shows the default variant, which need not be the key's variant1 (first qualifying by SKU)",
+      "addOnRadioId '523-z-2530005' is <add-on product id>-<add-on SKU> (tda rows: ZnodePublishProductEntity ZnodeProductId 523 = SKU z-2530005, an add-on child of PimAddOnProductId 4/8/44): role data without output, the migrated spec composes it from product.addOnProductId + '-' + product.addOnSku",
+      "Profile: B-100003 active published ConfigurableProduct, storefrontProductIndex 1, requiredAddOnCount 1 (<= minAddOns 1); z-2510001 inventory 1000; z-2510012 has NO inventory row (product_stock NOT_FOUND, not filtered by store), yet tda readiness (2026-11-03) reports the own record qualifies under the key's store-scoped checks",
+      "Item and total prices are read from the receipt and only their relationship is checked: no amount is hard-coded",
+      "displayText 'AutomationTest' is text the test types (config); quantities 2 and 1 are config; '2' (toBeCloseTo digits) and '0.01' (tolerance) are config",
+      "migrate: addOnRadioId has no single output of PRODUCT_CONFIGURABLE_WITH_VARIANTS (composite id), and productHeading depends on the PDP default variant (rule 2 fails)",
+      "Account: the spec signs in with its OWN dedicated account from the test data (username/password masked, storageState empty): USER_WEBSTORE_REGISTERED with preferred.required true on the username credential source; the migrated spec declares it with testData.useExisting('user', data.username)",
+      "checkoutPage.selectShippingMethod clicks Ship Complete then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE shippingCode FLAT; the destination is the account's default address (not in the test data), countries 'us' is an assumption as in the approved checkout COD retail entry",
+      "checkoutPage.selectCOD clicks txtCOD: PAYMENT_COD_ON_STORE",
+      "DOUBT: checkout goes straight to shipping, so the account must already have a default billing/shipping address; USER_WEBSTORE_REGISTERED does not constrain that (ADDRESS_DEFAULT_IDS_OF_USER owner=@user.userId could be added as a precondition check)",
+      "DOUBT (vouchers): retail accounts on atstage can have their own vouchers auto-applied at webstore checkout (memory 2026-11-01/02: 88RXQ9C5YT zeroed an order; created orders showed 'Voucher + COD'). orderReceiptPage.getTotals reads subtotal, shipping, handling, tax, shipping discount, discount and order total only, so an applied voucher line would break the order-total check, and each run would spend the account's voucher balance. No key expresses 'account without active vouchers' (the account is the declared one)",
+      "The order is created by the UI checkout (stateChanges, created-by-test), not a need; no collection is involved, so the run teardown does not delete it",
+      "THANKS_RE (spec code regex) names the store 'Maxwell's Hardware' and the #OS-\\d{8}-\\d{5} order number pattern: fixed for store MaxwellsHardware; not a scan value",
+      "Store MaxwellsHardware as in the approved shopping-cart, checkout and PDP entries (the spec names none); no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 2,
+        "minVariants": 2,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "RadioButton",
+        "personalizationAttribute": "DisplayText",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:48",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:20",
+      "kind": "json",
+      "keyPath": "shoppingCartEmptyValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "B-100003",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:4",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "Havells Base B23 17-Watt Bulb",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:5",
+      "kind": "json",
+      "keyPath": "searchResultName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:6",
+      "kind": "json",
+      "keyPath": "productHeading",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Name"
+    },
+    {
+      "value": "Bulb Size",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "attributeGroup",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Color",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "attributeGroup",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Technology",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:69",
+      "kind": "literal",
+      "keyPath": "attributeGroup",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DisplayText",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:70",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Add-on options",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Small",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:9",
+      "kind": "json",
+      "keyPath": "varient1BulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Attr1"
+    },
+    {
+      "value": "LED",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:11",
+      "kind": "json",
+      "keyPath": "varient1Technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Attr3"
+    },
+    {
+      "value": "White",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:10",
+      "kind": "json",
+      "keyPath": "varient1Color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Attr2"
+    },
+    {
+      "value": "AutomationTest",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:7",
+      "kind": "json",
+      "keyPath": "displayText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:12",
+      "kind": "json",
+      "keyPath": "varient1ProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "523-z-2530005",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:8",
+      "kind": "json",
+      "keyPath": "addOnRadioId",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Add to Cart",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:80",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Medium",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:14",
+      "kind": "json",
+      "keyPath": "varient2BulbSize",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Attr1"
+    },
+    {
+      "value": "Halogen",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:16",
+      "kind": "json",
+      "keyPath": "varient2Technology",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Attr3"
+    },
+    {
+      "value": "Yellow",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:15",
+      "kind": "json",
+      "keyPath": "varient2Color",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Attr2"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:17",
+      "kind": "json",
+      "keyPath": "varient2ProductQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:106",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:108",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Place Order",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:112",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:19",
+      "kind": "json",
+      "keyPath": "thankYouMessageForPurchaseOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Details",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:122",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Billing To",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:123",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping To",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:124",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:125",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:126",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Status",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:127",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tracking Number",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:128",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2510001",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:13",
+      "kind": "json",
+      "keyPath": "varient1Sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Sku"
+    },
+    {
+      "value": "z-2510012",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:18",
+      "kind": "json",
+      "keyPath": "varient2Sku",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "variant2Sku"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:142",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:144",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:145",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Total Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:146",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.01",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:154",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Reorder",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:159",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Print",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:165",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Continue Shopping",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-configurable-products-in-order-receipt.json:24",
+      "kind": "json",
+      "keyPath": "continueShoppingLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Payment Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-configurable-products-in-order-receipt.spec.ts:180",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
