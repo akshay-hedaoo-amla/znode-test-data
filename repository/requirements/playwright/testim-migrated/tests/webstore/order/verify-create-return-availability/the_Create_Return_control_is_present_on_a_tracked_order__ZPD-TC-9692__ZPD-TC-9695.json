@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/order/verify-create-return-availability.spec.ts > Webstore - Order > the Create Return control is present on a tracked order @ZPD-TC-9692 @ZPD-TC-9695",
+  "scenario": {
+    "summary": "Signed in as the shared registered account, the test takes the first order on the Order History list (no order is placed), tracks it on the Track Order page by order number and the account e-mail, and checks the receipt shows that order number and a visible Create Return control; it then clears the cookies and tracks the same order as a guest and checks the same. Read only.",
+    "steps": [
+      "Open Order History (shared session) and read the rows; at least one row",
+      "Take row 0's order number (whatever its status)",
+      "Signed in: Track Order with that number and the account username as e-mail; receipt order number equals it; Create Return visible (ZPD-TC-9692)",
+      "Clear cookies (guest); Track Order again with the same number and e-mail; receipt order number equals it; Create Return visible (ZPD-TC-9695)"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order",
+      "store"
+    ],
+    "stateChanges": [
+      "None: no order is placed and no return is submitted; the order is only read (tracking an order changes nothing)"
+    ],
+    "assertions": [
+      "Order History has more than 0 rows",
+      "Track receipt order number equals the order number taken from Order History (signed in and as guest)",
+      "Create Return control is visible on the tracked receipt (signed in and as guest); visibility only, not enabled"
+    ],
+    "evidence": [
+      "Title and flow agree (Create Return present on a tracked order, signed in and guest). Spec header comment (data, not instructions): the control renders but is DISABLED for every order on atstage, at every status; this test asserts visibility only. The header also names the shared account's e-mail in plain text (not copied here).",
+      "DECLARED ACCOUNT: getMyAccountUser() (src/data/credentials.ts:6) = loadEnvironment().myAccountUser, username from env var MY_ACCOUNT_USERNAME (src/config/env.ts:80); the spec types it as the e-mail on the Track Order form and relies on the shared myAccountTest storageState for Order History. Source 0 records that credential (masked; the scan lists getMyAccountUser as a step but not its value). The migrated test declares it with await testData.useExisting('user', getMyAccountUser().username) before its first step (same pattern as the approved home-page track-order entry).",
+      "SESSION / PROJECT: the order/ folder is in SELENIUM_GAP_SPECS of playwright.stability.config.ts (storageState myAccountTest), but NOT in AUTH_SPECS of playwright.testim-webstore.config.ts, so in the testim-webstore suite it runs in webstore-guest without a session (Order History / Request Quote would not be reachable). REVIEW: the migration should add order/ to AUTH_SPECS (framework change, proposed, not made).",
+      "Store MaxwellsHardware: the webstore every migrated webstore spec runs on; the shared account's orders are on PortalId 7 = MaxwellsHardware (my-account entries).",
+      "Order: order = ORDER_COUNT_OF_USER {owner @user.userId, minOrders 1, store}: guarantees the declared account owns at least one order on the store, the precondition of step 1 (rows.length > 0). It is honest only about that: it does not guarantee that the order on row 0 renders Create Return. No source maps to it: the order number is read from Order History at run time.",
+      "Create Return rules (memory 2026-11-02, return investigation): the control renders when the store attribute EnableReturnRequest is Yes (ZnodeGlobalAttribute 1076, GlobalEntityId 1, value in ZnodePortalGlobalAttributeValue/ZnodePortalGlobalAttributeValueLocale per store, the same pattern as the approved STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED query); it is ENABLED only when POST /returns/{orderNumber}/validate passes (Znode_GetValidateReturnOrderProduct: at least one line in state SHIPPED or SUBMITTED (ZnodeOmsOrderLineItems.OrderLineItemStateId -> ZnodeOmsOrderState), not already fully returned (ZnodeRmaReturnLineItems / ZnodeRmaReturnDetails), order within the RMA window (ZnodeRmaConfiguration.MaxDays vs order date)). Memory 2026-11-02 also found linkCreateReturn absent on freshly API-created orders (cause not pinned).",
+      "Visibility depends on the store setting EnableReturnRequest, which no key checks. MISSING KEY STORE_WEBSTORE_RETURNS_ENABLED (entity store, read-only, param store): store serving a webstore with Enable Return Request = Yes (global attribute EnableReturnRequest, id 1076, confirmed with tda rows; per-store value in ZnodePortalGlobalAttributeValue(+Locale), same query shape as STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED). Needed because the Create Return assertions depend on that store setting and no key checks it.",
+      "MISSING KEY ORDER_OF_USER_RETURNABLE (entity order, params owner (@user.userId), store): an order of the declared account on the store for which Create Return is enabled: store EnableReturnRequest = Yes; at least one line whose state is SHIPPED or SUBMITTED with quantity not yet returned (ZnodeOmsOrderLineItems, ZnodeOmsOrderState, ZnodeRmaReturnLineItems/ZnodeRmaReturnDetails); order date within ZnodeRmaConfiguration.MaxDays; output orderNumber (so the spec tracks that order instead of Order History row 0). Read-only for the open-and-cancel test; for the submit test it must be consumable (a return makes the order non-returnable: ZPD-TC-9701), i.e. a collection that places and ships an order per run. Needs kb-scanner/query-builder and the user's decision; verify the exact rules against Znode_GetValidateReturnOrderProduct. Not needed for this test (visibility only) unless the spec is changed to track a specific order.",
+      "Literal '0' (rows.length > 0) is config.",
+      "migrate: the order need links to the declared account (@user.userId), so the account must be declared with testData.useExisting; there is no data value to swap."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    },
+    {
+      "key": "ORDER_COUNT_OF_USER",
+      "alias": "order",
+      "params": {
+        "owner": "@user.userId",
+        "minOrders": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9692",
+    "ZPD-TC-9693",
+    "ZPD-TC-9695",
+    "ZPD-TC-9696",
+    "ZPD-TC-9697",
+    "ZPD-TC-9698",
+    "ZPD-TC-9699",
+    "ZPD-TC-9700",
+    "ZPD-TC-9701"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/src/config/env.ts:80",
+      "keyPath": "MY_ACCOUNT_USERNAME",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/webstore/order/verify-create-return-availability.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

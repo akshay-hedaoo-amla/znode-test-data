@@ -16,3 +16,8 @@ knownFailures:
     evidence: "Baseline 2026-11-02: the committed original spec run without the test data agents (no TDA_HOME, its own JSON data) fails identically; with the agents it fails the same way in normal and fallback mode."
     decidedBy: "Akshay Hedaoo"
     decidedAt: "2026-11-02"
+  - testId: "testim-migrated/tests/webstore/order/verify-create-return-availability.spec.ts > Webstore - Order > the Create Return control is present on a tracked order @ZPD-TC-9692 @ZPD-TC-9695"
+    reason: "Tracking the shared account's most recent order (Order History row 0) shows no Create Return button on atstage; the spec's own header says Create Return is disabled for every order there. Same as the parked my-account order-history step 6 (linkCreateReturn absent on recently created orders). A return-eligible order (proposed key ORDER_OF_USER_RETURNABLE) would be needed."
+    evidence: "Baseline 2026-11-04: the original spec run without migration, signed in (order/ added to AUTH_SPECS), fails on getByRole('button', { name: /create return/i }) not visible; the quote request spec in the same run passes."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-04"
