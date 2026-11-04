@@ -10,14 +10,15 @@
     "requiresCoupon": "false",
     "discountAmount": "{discountAmount}",
     "allProfiles": "{allProfiles}",
-    "minimumQuantity": "<= {quantityUsed}"
+    "minimumQuantity": "<= {quantityUsed}",
+    "productId": "= {productId}"
   },
   "scope": {
     "store": "{store}",
     "profile": "{profile}"
   },
-  "usage": "read-only",
-  "description": "Active automatic (no coupon) Amount Off Product promotion on the store and profile, flat amount off each unit of its products once the minimum quantity is met. KB: Configuring a Promotion (Minimum Quantity, Find Product, Profile).",
+  "usage": "consumable",
+  "description": "Active automatic (no coupon) Amount Off Product promotion on the store and profile, flat amount off each unit of productId once the minimum quantity is met; created for the run when none exists. KB: Configuring a Promotion (Minimum Quantity, Find Product, Profile).",
   "declaredParams": {
     "discountAmount": {
       "type": "number",
@@ -42,9 +43,13 @@
     "quantityUsed": {
       "type": "integer",
       "description": "Quantity the test raises the eligible line to; the minimum quantity must be reached at it but not at the starting quantity of 1"
+    },
+    "productId": {
+      "type": "integer",
+      "description": "Product the promotion discounts (Find Product); link it to the product need, e.g. @product.productId. Id as promotion_products.promotionProductId"
     }
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedAt": "2026-11-04T14:30:00Z"
 }
