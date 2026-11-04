@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts > Webstore - Order Receipt > validate simple products in order receipt",
+  "scenario": {
+    "summary": "A registered retail user signs in with the test's own account, empties the cart, adds a simple product (quantity 3) with three checkbox add-on options, checks out with Custom Flat Rate shipping and COD and places the order, then checks the receipt: sections, the product line (quantity, quantity x item price == total price), totals calculation, Reorder/Print/Continue Shopping; reorders to checkout without placing it and logs out.",
+    "steps": [
+      "Open the webstore logged out, click Sign In, sign in with the dedicated account (masked credentials from the test data), empty the cart and check the empty-cart message",
+      "Search the simple SKU; open the PDP; set quantity productQuantity (3); tick add-on options addOnIds (512, 164, 165); add to cart",
+      "Open the cart",
+      "Proceed to checkout from the cart; select Ship Complete + Custom Flat Rate (FLAT); select COD; place the order",
+      "Receipt: thank-you banner and #OS- order number message; Details, Billing To, Shipping To sections",
+      "Receipt totals: subtotal + shipping + handling + tax - discounts == order total",
+      "Receipt: Reorder, Print and Continue Shopping controls; click Reorder, proceed to checkout, pick FLAT shipping, check the Payment Method heading, select COD (no second order is placed)",
+      "Log out"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "shipping",
+      "payment",
+      "order"
+    ],
+    "stateChanges": [
+      "Declared account's cart emptied at the start (cartPage.empty)",
+      "A new COD order with Custom Flat Rate shipping is placed on the declared account by the test (created-by-test; OS-<date>-<n>); it is not deleted afterwards and stays in the account's order history; inventory of the ordered items is reserved/decremented by the ordered quantity",
+      "If the account has active vouchers, the webstore checkout may auto-apply them and the order spends voucher balance (not restored)",
+      "Reorder from the receipt puts the ordered items back into the account's cart and opens checkout (shipping + COD selected) without placing a second order; the cart is left filled (the next run empties it)"
+    ],
+    "assertions": [
+      "Sign-in button text 'Sign In'; greeting matches /Hello,/; cart empty message equals shoppingCartEmptyValidationMessage",
+      "Checkout: 'Order Summary', 'Shipping Method', 'Order Total' labels, payment type heading visible, 'Place Order' button",
+      "Receipt banner equals thankYouMessageForPurchaseOrder; thanks text matches THANKS_RE (store name + #OS- order number)",
+      "Receipt Details / Billing / Shipping sections and Order Summary headers (Item, Status, Tracking Number, Quantity, Item Price, Total Price)",
+      "subtotal + shipping + handling + tax - shipping discount - discount equals the order total within 0.01",
+      "Reorder link 'Reorder', Print button 'Print', Continue Shopping label equals continueShoppingLabel; after Reorder -> checkout, 'Payment Method' heading",
+      "Product line (by SKU): quantity equals productQuantity; quantity x item price == total price (prices read from the page; no amount hard-coded)"
+    ],
+    "evidence": [
+      "Title 'validate simple products in order receipt'; step labels 1) to 8) match the flow",
+      "Need product PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK: quantityUsed 3, addOnDisplayType CheckBox (selectAddOns ticks #add-on-value-checkbox-<id>), as in the approved save-cart simple and reorder-from-receipt entries",
+      "tda rows ZnodePimAddOnProductDetail: 512, 164 and 165 are options of the same add-on mappings (one checkbox group, DisplayOrder 1/2/3): addOnIds.0 -> addOnProductId",
+      "RESOLVED (2026-11-03): PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK now returns addOn2ProductId / addOn3ProductId (product ids of the 2nd and 3rd add-on options); addOnIds.1 and addOnIds.2 map to them (PRODUCT_GROUPED_IN_STOCK and PRODUCT_BUNDLE_IN_STOCK already have addOn2ProductId / addOn3ProductId). Also the key does not require three options in the group",
+      "Profile: z-2420001 active published SimpleProduct (Dewalt), inventory 250, requiredAddOnCount 0, but storefrontProductIndex 0 (key needs >= 1, not filtered by store): yet tda readiness (2026-11-03) reports the own record qualifies (store-scoped index)",
+      "The receipt item price includes the selected add-ons or lists them separately; the spec checks only quantity x item price == total price, so no add-on price is asserted",
+      "productQuantity 3 is config; '2' and '0.01' are config",
+      "migrate: addOnIds.1 and addOnIds.2 have no output of the key (rule 2 fails); swap becomes possible once the two outputs exist",
+      "Account: the spec signs in with its OWN dedicated account from the test data (username/password masked, storageState empty): USER_WEBSTORE_REGISTERED with preferred.required true on the username credential source; the migrated spec declares it with testData.useExisting('user', data.username)",
+      "checkoutPage.selectShippingMethod clicks Ship Complete then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE shippingCode FLAT; the destination is the account's default address (not in the test data), countries 'us' is an assumption as in the approved checkout COD retail entry",
+      "checkoutPage.selectCOD clicks txtCOD: PAYMENT_COD_ON_STORE",
+      "DOUBT: checkout goes straight to shipping, so the account must already have a default billing/shipping address; USER_WEBSTORE_REGISTERED does not constrain that (ADDRESS_DEFAULT_IDS_OF_USER owner=@user.userId could be added as a precondition check)",
+      "DOUBT (vouchers): retail accounts on atstage can have their own vouchers auto-applied at webstore checkout (memory 2026-11-01/02: 88RXQ9C5YT zeroed an order; created orders showed 'Voucher + COD'). orderReceiptPage.getTotals reads subtotal, shipping, handling, tax, shipping discount, discount and order total only, so an applied voucher line would break the order-total check, and each run would spend the account's voucher balance. No key expresses 'account without active vouchers' (the account is the declared one)",
+      "The order is created by the UI checkout (stateChanges, created-by-test), not a need; no collection is involved, so the run teardown does not delete it",
+      "THANKS_RE (spec code regex) names the store 'Maxwell's Hardware' and the #OS-\\d{8}-\\d{5} order number pattern: fixed for store MaxwellsHardware; not a scan value",
+      "Store MaxwellsHardware as in the approved shopping-cart, checkout and PDP entries (the spec names none); no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "CheckBox"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:35",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:38",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:8",
+      "kind": "json",
+      "keyPath": "shoppingCartEmptyValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2420001",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:4",
+      "kind": "json",
+      "keyPath": "productSKU",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Add to Cart",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:51",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:5",
+      "kind": "json",
+      "keyPath": "productQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "512",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:6",
+      "kind": "json",
+      "keyPath": "addOnIds.0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnProductId"
+    },
+    {
+      "value": "164",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:6",
+      "kind": "json",
+      "keyPath": "addOnIds.1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2ProductId"
+    },
+    {
+      "value": "165",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:6",
+      "kind": "json",
+      "keyPath": "addOnIds.2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3ProductId"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:61",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:63",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:64",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Place Order",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:7",
+      "kind": "json",
+      "keyPath": "thankYouMessageForPurchaseOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Details",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:76",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Billing To",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:77",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping To",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:78",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:79",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:80",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Status",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:81",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tracking Number",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:82",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:89",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Total Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:90",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:95",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0.01",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:102",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Reorder",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Print",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:114",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Continue Shopping",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-simple-products-in-order-receipt.json:12",
+      "kind": "json",
+      "keyPath": "continueShoppingLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Payment Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-simple-products-in-order-receipt.spec.ts:130",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}

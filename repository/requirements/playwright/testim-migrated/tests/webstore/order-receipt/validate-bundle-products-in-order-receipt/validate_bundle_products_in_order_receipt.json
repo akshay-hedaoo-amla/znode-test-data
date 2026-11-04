@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts > Webstore - Order Receipt > validate bundle products in order receipt",
+  "scenario": {
+    "summary": "A registered retail user signs in with the test's own account, empties the cart, searches a bundle product by SKU, adds quantity 3, checks out with Custom Flat Rate shipping and Charge on Delivery (COD) and places the order, then checks the order receipt: thank-you message, sections, totals calculation, the bundle line (quantity, item price, total price = item price x quantity), Reorder/Print/Continue Shopping; reorders to checkout without placing it and logs out.",
+    "steps": [
+      "Open the webstore logged out, click Sign In, sign in with the dedicated account (masked credentials from the test data), empty the cart and check the empty-cart message",
+      "Search the bundle SKU (productName); first result name equals productDisplayName; open the PDP; set quantity orderQuantity (3); add to cart; view cart and checkout",
+      "Proceed to checkout from the cart; select Ship Complete + Custom Flat Rate (FLAT); select COD; place the order",
+      "Receipt: thank-you banner and #OS- order number message; Details, Billing To, Shipping To sections",
+      "Receipt totals: subtotal + shipping + handling + tax - discounts == order total",
+      "Receipt: Reorder, Print and Continue Shopping controls; click Reorder, proceed to checkout, pick FLAT shipping, check the Payment Method heading, select COD (no second order is placed)",
+      "Log out"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart",
+      "shipping",
+      "payment",
+      "order"
+    ],
+    "stateChanges": [
+      "Declared account's cart emptied at the start (cartPage.empty)",
+      "A new COD order with Custom Flat Rate shipping is placed on the declared account by the test (created-by-test; OS-<date>-<n>); it is not deleted afterwards and stays in the account's order history; inventory of the ordered items is reserved/decremented by the ordered quantity",
+      "If the account has active vouchers, the webstore checkout may auto-apply them and the order spends voucher balance (not restored)",
+      "Reorder from the receipt puts the ordered items back into the account's cart and opens checkout (shipping + COD selected) without placing a second order; the cart is left filled (the next run empties it)"
+    ],
+    "assertions": [
+      "Sign-in button text 'Sign In'; greeting matches /Hello,/; cart empty message equals shoppingCartEmptyValidationMessage",
+      "Checkout: 'Order Summary', 'Shipping Method', 'Order Total' labels, payment type heading visible, 'Place Order' button",
+      "Receipt banner equals thankYouMessageForPurchaseOrder; thanks text matches THANKS_RE (store name + #OS- order number)",
+      "Receipt Details / Billing / Shipping sections and Order Summary headers (Item, Status, Tracking Number, Quantity, Item Price, Total Price)",
+      "subtotal + shipping + handling + tax - shipping discount - discount equals the order total within 0.01",
+      "Reorder link 'Reorder', Print button 'Print', Continue Shopping label equals continueShoppingLabel; after Reorder -> checkout, 'Payment Method' heading",
+      "Bundle line (by SKU): quantity equals orderQuantity, item price equals itemPrice, total price equals totalPrice; quantity x item price == total price"
+    ],
+    "evidence": [
+      "Title 'validate bundle products in order receipt'; step labels 1) to 9) match the flow",
+      "Spec line 52-56: search(data.productName) / openResult(data.productName) / setQuantity(data.orderQuantity); productName holds the bundle SKU z-1234586 (not a name), productDisplayName the search-result name",
+      "Need product PRODUCT_BUNDLE_IN_STOCK: quantityUsed 3, minAddOns 0, minPersonalizableAttributes 0 (no add-on or personalization selected); preferred source productName. productName -> sku, productDisplayName -> name; the receipt locators divQuantity/divItemprice/divTotalprice are built from the SKU passed in (data, not a literal)",
+      "Profile: productName z-1234586 NOT_FOUND because the profiler looked it up by name (keyPath productName); tda rows ZnodePublishProductEntity SKU z-1234586: published 'Sonic Tools Screwdriver Set, 24-PCS' (ZnodeProductId 131), active",
+      "itemPrice '$190.00' and totalPrice '$570.00' are hard-coded amounts of the recorded bundle: expected-output from outputs, itemPrice = product.price (unit price the cart charges; no add-ons on this line) formatted '$0.00', totalPrice = product.price x orderQuantity (3). DOUBT: if the bundle has a tier price at quantity 3 (tier1Qty <= 3) the receipt shows the tier price; the migrated spec should then use tier1Price",
+      "migrate: data only through loadData, but itemPrice and totalPrice are amounts derived from the recorded bundle (rule 3 fails)",
+      "Account: the spec signs in with its OWN dedicated account from the test data (username/password masked, storageState empty): USER_WEBSTORE_REGISTERED with preferred.required true on the username credential source; the migrated spec declares it with testData.useExisting('user', data.username)",
+      "checkoutPage.selectShippingMethod clicks Ship Complete then lblShippingMethodFLAT (Custom Flat Rate): SHIPPING_FLAT_RATE_ON_STORE shippingCode FLAT; the destination is the account's default address (not in the test data), countries 'us' is an assumption as in the approved checkout COD retail entry",
+      "checkoutPage.selectCOD clicks txtCOD: PAYMENT_COD_ON_STORE",
+      "DOUBT: checkout goes straight to shipping, so the account must already have a default billing/shipping address; USER_WEBSTORE_REGISTERED does not constrain that (ADDRESS_DEFAULT_IDS_OF_USER owner=@user.userId could be added as a precondition check)",
+      "DOUBT (vouchers): retail accounts on atstage can have their own vouchers auto-applied at webstore checkout (memory 2026-11-01/02: 88RXQ9C5YT zeroed an order; created orders showed 'Voucher + COD'). orderReceiptPage.getTotals reads subtotal, shipping, handling, tax, shipping discount, discount and order total only, so an applied voucher line would break the order-total check, and each run would spend the account's voucher balance. No key expresses 'account without active vouchers' (the account is the declared one)",
+      "The order is created by the UI checkout (stateChanges, created-by-test), not a need; no collection is involved, so the run teardown does not delete it",
+      "THANKS_RE (spec code regex) names the store 'Maxwell's Hardware' and the #OS-\\d{8}-\\d{5} order number pattern: fixed for store MaxwellsHardware; not a scan value",
+      "Store MaxwellsHardware as in the approved shopping-cart, checkout and PDP entries (the spec names none); no linked cases, no AIO files"
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": false
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": true
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "/",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:37",
+      "kind": "literal",
+      "keyPath": "goto",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sign In",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:40",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:2",
+      "kind": "json",
+      "keyPath": "username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:3",
+      "kind": "json",
+      "keyPath": "password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:10",
+      "kind": "json",
+      "keyPath": "shoppingCartEmptyValidationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-1234586",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:4",
+      "kind": "json",
+      "keyPath": "productName",
+      "sensitive": false,
+      "profiled": true,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Sonic Tools Screwdriver Set, 24-PCS",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:5",
+      "kind": "json",
+      "keyPath": "productDisplayName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "Add to Cart",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:55",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "3",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:6",
+      "kind": "json",
+      "keyPath": "orderQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Order Summary",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:65",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Shipping Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:67",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Order Total",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:68",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Place Order",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:71",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Thank You For Your Purchase",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:9",
+      "kind": "json",
+      "keyPath": "thankYouMessageForPurchaseOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0.01",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:100",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Item",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:106",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Status",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:107",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Tracking Number",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:108",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Quantity",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Item Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:110",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Total Price",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:111",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "$190.00",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:7",
+      "kind": "json",
+      "keyPath": "itemPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "$570.00",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:8",
+      "kind": "json",
+      "keyPath": "totalPrice",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output",
+      "alias": "product"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Reorder",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:125",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Print",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:131",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Continue Shopping",
+      "location": "testim-migrated/test-data/webstore/order-receipt/validate-bundle-products-in-order-receipt.json:14",
+      "kind": "json",
+      "keyPath": "continueShoppingLabel",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Payment Method",
+      "location": "testim-migrated/tests/webstore/order-receipt/validate-bundle-products-in-order-receipt.spec.ts:146",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-03T14:30:00Z"
+}
