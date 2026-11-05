@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ShippingCostTest#shippingCostVerifyShippingCostPageValidation",
+  "scenario": {
+    "summary": "Clicks Estimate shipping with no zip code and verifies the validation message.",
+    "steps": [
+      "Scroll to top",
+      "Click Estimate",
+      "Verify the missing zip code message"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Estimate shipping message equals 'Please enter the zip code.'"
+    ],
+    "evidence": [
+      "dependsOn shippingCostVerifyShoppingCartPageNavigation; only a UI message from the shoppingCart sheet.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please enter the zip code.",
+      "location": "webstoreTestData.xlsx!shoppingCart!C28",
+      "kind": "excel",
+      "keyPath": "shippingCostDetails/ShippingCostErrorMsg/Validation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

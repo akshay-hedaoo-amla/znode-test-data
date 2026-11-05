@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.BundleProductShoppingCartPageTest#bundleProductVerifyShoppingCartPageDetails",
+  "scenario": {
+    "summary": "Guest searches the bundle product, opens its PDP, types a personalization text into the AdditionalInformation field and adds it to the cart; on the cart page verifies the buttons, line item name, unit and total price, personalization line, product image, the included (free) bundle products, then removes all items and checks the empty-cart message.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the bundle SKU and open the first result",
+      "Type the personalization text (AdditionalInformation field) and Add to Cart",
+      "Open the cart",
+      "Verify Continue Shopping and Checkout",
+      "Verify line item name, unit price and total price (price x initial quantity)",
+      "Verify the personalization line '<label> : <text>'",
+      "Verify the line item image against the stored DeWalt bundle image",
+      "Verify the included bundle products text",
+      "Verify the Remove all items link label",
+      "Click Remove all items",
+      "Verify the empty cart message"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the bundle is added with a personalization text, then all items are removed"
+    ],
+    "assertions": [
+      "Continue Shopping and Checkout are visible",
+      "Line item name equals the product name",
+      "Unit price equals the bundle price",
+      "Total price equals unit price x initial quantity",
+      "Line item shows 'AdditionalInformation : <typed text>'",
+      "Line item image is visible with a non-empty src (structural, after migration)",
+      "Included products text lists 'Qty: <n> | <child SKU> - <child name>' per child plus the personalization line",
+      "Remove all items label and the empty-cart message"
+    ],
+    "evidence": [
+      "Method name and comment: cart page details for a bundle (buttons, name, prices, personalization, image, included products, remove all).",
+      "The personalization input locator is fixed to data-test-selector txtProductPersonalizationAdditionalinformation, so the need pins personalizationAttribute AdditionalInformation (minPersonalizableAttributes 1).",
+      "The cart unit price is the effective price: ProductSalesPrice '$500.00' -> product.price (COALESCE(sales, retail) on the store's first price list).",
+      "PersonalizeLabel 'AdditionalInformation' -> product.personalizationCode (equal to the pinned attribute code). The typed text 'DisplaySampleText' is chosen by the test: config.",
+      "FreeBundleProduct is composed: one line 'Qty: <childNBundleQty> | <childNSku> - <childNName>' per child (child1..3 outputs, display order) and a last line '<personalizationCode> : <typed text>'; it stays data without output and the migrated test builds it. The key returns at most 3 children; a resolved bundle with more children would not match.",
+      "Image check becomes structural when migrated (user decision 2026-11-04): verifyBundleProductImage asserts only that the line item image is visible with a non-empty src; the stored image file constant is config and no longer tied to the recorded product. No need.",
+      "Profile (Playwright observations): z-1234579 is an active BundleProduct in PRODUCTION, inventory 28362, required add-ons 0.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware",
+        "personalizationAttribute": "AdditionalInformation"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5144"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplaySampleText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C381",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/PersonalizeText/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C335",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductName/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "(//a[contains(@data-test-selector,'linkProductName')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:45",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LINK_CART_ITEM_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$500.00",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C341",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSalesPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "price"
+    },
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C363",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/InitialQuantity/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C382",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/PersonalizeLabel/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "personalizationCode"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Qty: 1 | z-1234582 - DeWalt Led Work Light\nQty: 1 | z-1234607 - DeWalt Compact Hammerdrill\nQty: 1 | z-1234580 - DeWalt 1/4 Impact Driver\nAdditionalInformation : DisplaySampleText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C383",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/FreeBundleProduct/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "Remove all items",
+      "location": "webstoreTestData.xlsx!shoppingCart!B7",
+      "kind": "excel",
+      "keyPath": "shoppingCartDetails/RemoveAll/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "webstoreTestData.xlsx!shoppingCart!B8",
+      "kind": "excel",
+      "keyPath": "shoppingCartDetails/RemoveAllSuccessMsg/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text captured for ",
+      "location": "src/main/java/utilities/ReportMessages.java:36",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//a[starts-with(@data-test-selector,'linkProductImage')]//img",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:44",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.IMG_CART_LINE_PRODUCT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

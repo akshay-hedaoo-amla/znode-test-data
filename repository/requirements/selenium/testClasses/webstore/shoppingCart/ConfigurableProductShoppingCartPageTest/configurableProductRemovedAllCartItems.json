@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductRemovedAllCartItems",
+  "scenario": {
+    "summary": "Cleans up: removes all items from the cart. No test data.",
+    "steps": [
+      "Remove all cart items"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart emptied"
+    ],
+    "assertions": [
+      "None (clean-up)"
+    ],
+    "evidence": [
+      "Clean-up method; the scan has no values for it.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

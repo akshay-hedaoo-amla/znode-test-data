@@ -21,3 +21,8 @@ knownFailures:
     evidence: "Baseline 2026-11-04: the original spec run without migration, signed in (order/ added to AUTH_SPECS), fails on getByRole('button', { name: /create return/i }) not visible; the quote request spec in the same run passes."
     decidedBy: "Akshay Hedaoo"
     decidedAt: "2026-11-04"
+  - testId: "testClasses.webstore.shoppingCart.ShippingCostTest#shippingCostVerifyPaidShippingCost"
+    reason: "After selecting a paid shipping option, the cart's order total does not equal sub-total + shipping + handling as the test computes it (e.g. page $29.00 vs expected $39.00, $783.00 vs $46.00): a page/framework calculation mismatch, not test data. The test reads no data value."
+    evidence: "Baseline 2026-11-04: ShippingCostTest run alone from origin/dev (9633704f) without the test data agents, original sheet data, atstage: fails the same assertion in both attempts. With the agents 2026-11-05: fails the same way in normal mode (run tda-selenium-1793856369691) and fallback mode (tda-selenium-1793857670661)."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-05"

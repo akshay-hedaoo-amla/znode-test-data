@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.BundleProductShoppingCartPageTest#bundleProductAddProductWithAddonAndNavigateTillShoppingCartPage",
+  "scenario": {
+    "summary": "Guest adds the bundle product with two checkbox add-ons selected on the PDP, then verifies on the cart that the line item lists the included products and the add-ons and that the unit price equals bundle price plus both add-on prices; removes all items.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the bundle SKU and open the first result",
+      "Select two checkbox add-ons by name",
+      "Add to Cart and open the cart",
+      "Verify the line item description (included products and 'Checkbox : <add-on>' lines)",
+      "Verify unit price = bundle price + first add-on price + second add-on price",
+      "Remove all items"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the bundle with two add-ons is added, then all items are removed"
+    ],
+    "assertions": [
+      "Line item description lists the included products and the two selected add-ons",
+      "Unit price equals bundle price + both add-on prices"
+    ],
+    "evidence": [
+      "Method name and comment: add-ons added with a bundle are shown on the cart.",
+      "selectAddOnOptionOfTypeCheckbox clicks the add-on by its name, so the two names are data: AddOnFirstProduct -> addOnName, AddOnSecondProduct -> addOn2Name (the key's first two add-ons of display type CheckBox, in display order), their prices FirstAddonPrice -> addOnPrice, SecondAddonPrice -> addOn2Price. The sheet pair is GE Pro 6-Outlet ($11) and 8-Outlet ($23); any two add-ons of the resolved bundle serve.",
+      "BundleProductPrice '500' -> product.price (effective unit price); the test sums it with the two add-on prices.",
+      "Gap risk: minAddOns counts add-on associations (groups), not add-on products; the test needs at least two products in CheckBox groups. A fallback bundle with one checkbox add-on product has addOn2Name null and the test cannot select a second add-on.",
+      "AddOnBundleProduct is composed: 'Qty: <childNBundleQty> | <childNSku> - <childNName>' per child, then '<addOnGroupName> : <addOnName>' and '<addOnGroupName> : <addOn2Name>' (group label 'Checkbox' on the recorded bundle); data without output, built by the migrated test.",
+      "Profile (Playwright observations): z-1234579 is an active BundleProduct in PRODUCTION; the Playwright bundle PDP entry shows three checkbox add-ons on it.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "CheckBox"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GE Pro 6-Outlet Surge Protector",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C386",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/AddOnFirstProduct/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnName"
+    },
+    {
+      "value": "GE Pro 8-Outlet Surge Protector",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C387",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/AddOnSecondProduct/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2Name"
+    },
+    {
+      "value": "Qty: 1 | z-1234582 - DeWalt Led Work Light\nQty: 1 | z-1234607 - DeWalt Compact Hammerdrill\nQty: 1 | z-1234580 - DeWalt 1/4 Impact Driver\nCheckbox : GE Pro 6-Outlet Surge Protector\nCheckbox : GE Pro 8-Outlet Surge Protector",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C388",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/AddOnBundleProduct/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "500",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C392",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/BundleProductPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "price"
+    },
+    {
+      "value": "11",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C389",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/FirstAddonPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnPrice"
+    },
+    {
+      "value": "23",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C390",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/SecondAddonPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2Price"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

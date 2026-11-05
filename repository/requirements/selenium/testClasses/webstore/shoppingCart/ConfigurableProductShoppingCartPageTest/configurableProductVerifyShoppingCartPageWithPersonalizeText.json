@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyShoppingCartPageWithPersonalizeText",
+  "scenario": {
+    "summary": "Guest searches a configurable product with a personalizable attribute, types a personalization text into the AdditionalInformation field, adds it (default variant) to the cart and verifies the personalization line on the cart.",
+    "steps": [
+      "Search the configurable parent SKU and open it",
+      "Type the personalization text (AdditionalInformation field)",
+      "Add to Cart and open the cart",
+      "Verify the line '<label> : <text>'"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the configurable product is added with a personalization text (kept for ProductImages)"
+    ],
+    "assertions": [
+      "Line item shows 'AdditionalInformation : <typed text>'"
+    ],
+    "evidence": [
+      "First method of the sequence WithPersonalizeText -> ProductImages: ProductImages reads no record value (structural image check), so this method holds the only need.",
+      "Method name: personalize text on the cart line for a configurable product; ProductImages depends on it but reads no sheet value, so the preferred b-100004 is safe here.",
+      "The personalization input locator is fixed to txtProductPersonalizationAdditionalinformation, so the need pins personalizationAttribute AdditionalInformation. The label 'AdditionalInformation' equals that pinned param (config); PRODUCT_CONFIGURABLE_WITH_VARIANTS has no personalizationCode output. The typed text 'PleaseHandleWithCare' is config.",
+      "No variant attribute is selected: the default variant is added. variantAttributes kept as in every other entry of this key (required param).",
+      "Profile: b-100004 not profiled.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware",
+        "personalizationAttribute": "AdditionalInformation",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "b-100004",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PleaseHandleWithCare",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G238",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttributeText2/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G236",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttribute2/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

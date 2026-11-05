@@ -1,0 +1,33 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, pp.price AS price, lim.av AS availableQuantity, ch.child1Sku AS child1Sku, ch.child1Name AS child1Name, ch.c1Q AS child1BundleQty, ch.child2Sku AS child2Sku, ch.child2Name AS child2Name, ch.c2Q AS child2BundleQty, ch.child3Sku AS child3Sku, ch.child3Name AS child3Name, ch.c3Q AS child3BundleQty FROM dbo.ZnodePimProduct p JOIN dbo.ZnodePublishState ps ON ps.PublishStateId=p.PublishStateId JOIN dbo.ZnodePortal po ON po.StoreCode=@store CROSS APPLY(SELECT TOP 1 COALESCE(pr.SalesPrice,pr.RetailPrice) AS price,pr.RetailPrice rp,pr.SalesPrice sp,pl.PriceListId plid FROM dbo.ZnodePrice pr JOIN dbo.ZnodePriceList pl ON pl.PriceListId=pr.PriceListId JOIN dbo.ZnodePriceListPortal plp ON plp.PriceListId=pl.PriceListId WHERE pr.SKU=p.SKU AND plp.PortalId=po.PortalId AND pr.RetailPrice>@minPrice AND(pl.ActivationDate IS NULL OR pl.ActivationDate<=@now)AND(pl.ExpirationDate IS NULL OR pl.ExpirationDate>=@now)AND(pr.ActivationDate IS NULL OR pr.ActivationDate<=@now)AND(pr.ExpirationDate IS NULL OR pr.ExpirationDate>=@now)ORDER BY plp.Precedence,pl.PriceListId) pp CROSS APPLY (SELECT MIN(FLOOR(ISNULL(cs.qty, @none) / la.BundleQuantity)) AS av FROM dbo.ZnodePimProductTypeAssociation la JOIN dbo.ZnodePimProduct lc ON lc.PimProductId = la.PimProductId OUTER APPLY (SELECT SUM(si.Quantity) AS qty FROM dbo.ZnodeInventory si INNER JOIN dbo.ZnodePortalWarehouse spw ON spw.PortalId = po.PortalId LEFT JOIN dbo.ZnodePortalAlternateWarehouse saw ON saw.PortalWarehouseId = spw.PortalWarehouseId AND saw.WarehouseId = si.WarehouseId WHERE si.SKU = lc.SKU AND (si.WarehouseId = spw.WarehouseId OR saw.PortalAlternateWarehouseId IS NOT NULL)) cs WHERE la.PimParentProductId = p.PimProductId AND lc.IsActive = @isActive AND lc.OutOfStockOptions = @trackedOption AND la.BundleQuantity > @none) lim OUTER APPLY(SELECT MAX(CASE WHEN kc.rn=@n1 THEN kc.SKU END) AS child1Sku,MAX(CASE WHEN kc.rn=@n1 THEN kc.ProductName END) AS child1Name,MAX(CASE WHEN kc.rn=@n2 THEN kc.SKU END) AS child2Sku,MAX(CASE WHEN kc.rn=@n2 THEN kc.ProductName END) AS child2Name,MAX(CASE WHEN kc.rn=@n3 THEN kc.SKU END) AS child3Sku,MAX(CASE WHEN kc.rn=@n3 THEN kc.ProductName END) AS child3Name,MAX(CASE WHEN kc.rn=@n1 THEN kc.PimProductId END) c1Id,MAX(CASE WHEN kc.rn=@n2 THEN kc.PimProductId END) c2Id,MAX(CASE WHEN kc.rn=@n3 THEN kc.PimProductId END) c3Id,MAX(CASE WHEN kc.rn=@n1 THEN kc.BundleQuantity END) c1Q,MAX(CASE WHEN kc.rn=@n2 THEN kc.BundleQuantity END) c2Q,MAX(CASE WHEN kc.rn=@n3 THEN kc.BundleQuantity END) c3Q FROM(SELECT c.SKU,c.ProductName,c.PimProductId,a.BundleQuantity,ROW_NUMBER() OVER(ORDER BY a.DisplayOrder,c.PimProductId) rn FROM dbo.ZnodePimProductTypeAssociation a JOIN dbo.ZnodePimProduct c ON c.PimProductId=a.PimProductId WHERE a.PimParentProductId=p.PimProductId AND c.IsActive=@isActive) kc) ch WHERE p.ProductType=@productType AND p.IsActive=@isActive AND ps.PublishStateCode=@publishState AND (@preferred IS NULL OR p.SKU=@preferred) AND lim.av < @exceedQuantity AND NOT EXISTS (SELECT na.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation na JOIN dbo.ZnodePimProduct nc ON nc.PimProductId = na.PimProductId WHERE na.PimParentProductId = p.PimProductId AND nc.IsActive = @isActive AND ISNULL((SELECT SUM(si.Quantity) FROM dbo.ZnodeInventory si INNER JOIN dbo.ZnodePortalWarehouse spw ON spw.PortalId = po.PortalId LEFT JOIN dbo.ZnodePortalAlternateWarehouse saw ON saw.PortalWarehouseId = spw.PortalWarehouseId AND saw.WarehouseId = si.WarehouseId WHERE si.SKU = nc.SKU AND (si.WarehouseId = spw.WarehouseId OR saw.PortalAlternateWarehouseId IS NOT NULL)), @none) < @quantityUsed * na.BundleQuantity) AND EXISTS(SELECT pe.ZnodeProductId FROM dbo.ZnodePublishProductEntity pe JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId=pe.VersionId JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId=pe.ZnodeCatalogId WHERE pe.ZnodeProductId=p.PimProductId AND pc.PortalId=po.PortalId AND ve.RevisionType=@publishState AND ve.IsPublishSuccess=@publishSuccess AND pe.IsActive=@storefrontActive AND pe.IsObsolete=@storefrontObsolete AND pe.ProductIndex>=@minProductIndex) AND NOT EXISTS(SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId=p.PimProductId AND rq.RequiredType=@requiredType) AND CHARINDEX(@space,p.SKU)=@none ORDER BY p.SKU",
+  "params" : [ "store", "minPrice", "now", "none", "isActive", "trackedOption", "n1", "n2", "n3", "productType", "publishState", "preferred", "exceedQuantity", "quantityUsed", "publishSuccess", "storefrontActive", "storefrontObsolete", "minProductIndex", "requiredType", "space" ],
+  "constants" : {
+    "productType" : "BundleProduct",
+    "isActive" : "true",
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0",
+    "none" : "0",
+    "publishSuccess" : "true",
+    "storefrontActive" : "true",
+    "storefrontObsolete" : "false",
+    "minProductIndex" : "1",
+    "requiredType" : "Required",
+    "space" : " ",
+    "n1" : "1",
+    "n2" : "2",
+    "n3" : "3",
+    "trackedOption" : "DisablePurchasing"
+  },
+  "outputs" : [ "sku", "name", "productId", "price", "availableQuantity", "child1Sku", "child1Name", "child1BundleQty", "child2Sku", "child2Name", "child2BundleQty", "child3Sku", "child3Name", "child3BundleQty" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:651b4b40b2d612e74b100c9f4ffadb5a5bf457cc6f6c4006092e77fcce59a9df",
+  "vocabularyFingerprint" : "sha256:501714fb3f611eaafacce9091ff7b1e6c12c09035155832b11d1a0ba69d2c6f0",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z",
+  "createdAt" : "2026-11-04T20:00:00Z",
+  "lastValidated" : "2026-11-04T14:09:39Z",
+  "verifiedHash" : "sha256:5674ef088f95fd92629abfd1b79fa229b1964bfb4e34d10f86e1cc6781d910aa"
+}

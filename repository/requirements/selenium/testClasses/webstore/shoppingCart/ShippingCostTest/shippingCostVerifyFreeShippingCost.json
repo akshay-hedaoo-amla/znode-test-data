@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ShippingCostTest#shippingCostVerifyFreeShippingCost",
+  "scenario": {
+    "summary": "Enters a zip code, estimates shipping, selects every $0.00 option and verifies the order total equals sub-total plus shipping plus handling.",
+    "steps": [
+      "Type the zip code",
+      "Click Estimate",
+      "For each shipping option priced $0.00: select it and verify order total = sub-total + 0 + handling"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "Cart shipping estimate selected (free option)"
+    ],
+    "assertions": [
+      "Order total equals sub-total + shipping price + handling charges for the free option"
+    ],
+    "evidence": [
+      "dependsOn shippingCostVerifyShoppingCartPageNavigation (cart with the simple product).",
+      "The method checks only the estimate options priced $0.00 and reads no data value; with no such option it asserts nothing. No precondition need (decision 2026-11-04 after a baseline run: the migrated test behaves exactly as today).",
+      "Baseline 2026-11-04 (origin/dev, original sheet, atstage): FreeShippingCost PASS; PaidShippingCost FAILS on the order total (e.g. page $29.00 vs expected $39.00), a pre-existing page/framework calculation issue, not data. Zip '71342' is the destination the test chooses: config.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "71342",
+      "location": "webstoreTestData.xlsx!shoppingCart!B29",
+      "kind": "excel",
+      "keyPath": "shippingCostDetails/ShippingCost/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[@class='flex items-center pb-1']",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:136",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.DIV_SHIPPING_COST_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//*[contains(@data-test-selector,'lblShipping')]/span[2])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:137",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.DIV_SHIPPING_COST_ITEM_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$0.00",
+      "location": "src/main/java/utilities/GlobalVariables.java:191",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DEFAULT_COST_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//*[contains(@data-test-selector,'lblShipping')]/span[1])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:138",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LBL_SHIPPING_COST_ITEM_LABEL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

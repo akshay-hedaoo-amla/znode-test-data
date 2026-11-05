@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyShoppingCartPageProductTotalPrice",
+  "scenario": {
+    "summary": "Verifies that the cart line item total equals the variant price times the initial quantity.",
+    "steps": [
+      "Verify the first line item total price = price x quantity"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Total price equals variant price x initial quantity"
+    ],
+    "evidence": [
+      "dependsOn configurableProductVerifyShoppingCartPageNavigateToShoppingCart.",
+      "Class chain, first method captures (user decision 2026-11-04): this method reads the record captured by configurableProductVerifyShoppingCartPageNavigateToShoppingCart from the class field and has no needs. The record values it reads today (ProductPrice) are declared as sources of configurableProductVerifyShoppingCartPageNavigateToShoppingCart; until the class is migrated, check-hardcoded reports them here.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I252",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/InitialQuantity/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

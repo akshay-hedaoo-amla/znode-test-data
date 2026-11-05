@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageProductName",
+  "scenario": {
+    "summary": "Verifies that the cart line item name equals the name of the simple product added by the head method.",
+    "steps": [
+      "Verify the first line item name"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Line item name equals the product name"
+    ],
+    "evidence": [
+      "dependsOn simpleProductVerifyShoppingCartPageNavigation.",
+      "Class chain, first method captures (user decision 2026-11-04): this method reads the record captured by simpleProductVerifyShoppingCartPageNavigation from the class field and has no needs. The record values it reads today (ProductName) are declared as sources of simpleProductVerifyShoppingCartPageNavigation; until the class is migrated, check-hardcoded reports them here.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "(//a[contains(@data-test-selector,'linkProductName')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:47",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LINK_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

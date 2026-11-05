@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageAddProductsToCart",
+  "scenario": {
+    "summary": "Adds the products of the optionalAddonProductsSku table to the guest cart (search, add to cart, open cart for each). First method of the line-items chain: declares the three products for CartLineItems.",
+    "steps": [
+      "For each row ProductSku1..N: search the SKU, add to cart and open the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: N simple products added (kept for CartLineItems)"
+    ],
+    "assertions": [
+      "None in this method"
+    ],
+    "evidence": [
+      "Rows used: Navigate.addMultipleSimpleProductIntoShoppingCart loops itemCount = 1..productsSkuDataMap.size() over keys ProductSku<itemCount> (GlobalVariables.SEARCH_PRODUCT_SKU) and reads column SimpleOptionalSku; ShoppingCart.verifySimpleProductShoppingCartLineItems compares cart row i with ProductSku<i> columns ProductName, ProductPrice (unit and total) and InitialQuantity. Table layout (adapter ExcelTables, the framework's own reader): table name row, header row, data rows until column A is blank. ProductSku1 is shoppingCart!B22 (scanned in ShippingCostTest), so the data rows start at 22; the next table, shippingCostDetails, has data rows at 28-29 (C28, B29), so its name row is 26 and a blank column-A row must precede it (otherwise its rows would join this map and ProductSku<n> lookups would fail). The table therefore has at most 3 rows (22-24); the exact count (2 or 3) needs the workbook, which is not read. Three distinct needs are declared: the migrated test loops over the declared needs, so it adds three products whatever the sheet holds today.",
+      "Class chain, first method captures (user decision 2026-11-04): this method runs first and declares every need and record value of the chain; the migrated class keeps the resolved record in a class field and the later methods read that field, so they have no needs of their own. Consumers: CartLineItems (name, unit price, total = price x quantity per row; sub-total and order amounts).",
+      "Outputs the chain reads: productN.sku (search), productN.name (ProductName), productN.salesPrice, else retailPrice (ProductPrice); InitialQuantity is 1 (config, quantityUsed 1).",
+      "Distinct records: product1..product3 are separate PRODUCT_SIMPLE_IN_STOCK needs; the resolver gives them different SKUs (identity sku), which the line-item comparison needs.",
+      "Source imported: optionalAddonProductsSku/ProductSku1/SimpleOptionalSku z-2420004 (shoppingCart!B22, recorded by the ShippingCostTest scan; this method reads the same cell through the loop) -> product1.sku, preferred (not required). ProductSku2/3 cells are not in any scan: no preferred.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product3",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!shoppingCart!B22",
+      "kind": "excel",
+      "keyPath": "optionalAddonProductsSku/ProductSku1/SimpleOptionalSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1",
+      "output": "sku"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.BundleProductShoppingCartPageTest#bundleProductVerifyIncludedQuantitiesAndExceedingProductQuantityErrorMessage",
+  "scenario": {
+    "summary": "Guest adds a bundle at quantity 1, sets the cart quantity to a value above the available quantity and checks the exceeding-quantity message, sets it back to 1, checks out as guest and verifies the included child quantities on checkout, then empties the cart.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the bundle SKU and open the first result",
+      "Set PDP quantity 1 and Add to Cart",
+      "Open the cart",
+      "Set the cart quantity to the exceeding quantity; verify 'Exceeding the available quantity.'",
+      "Set the quantity back to 1",
+      "Checkout as guest; verify the included products text 'Qty: <n> | <child SKU> - <child name>'",
+      "Remove all cart items"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the bundle is added, its quantity changed, then all items are removed (no order placed)"
+    ],
+    "assertions": [
+      "Cart quantity error equals 'Exceeding the available quantity.'",
+      "Checkout shows the included child products with their bundle quantities"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-8999 exceeding product quantity error message, Z10-TC-9000 included quantities, Z10-TC-9001 remove all.",
+      "What drives the message (read-only, znode10-api-migration PublishProductService): GetPublishProductPriceAndInventory -> CheckBundleProductsInventory(selectedQuantity) -> CheckBundleProductInventory per child: combined = (selected + cart quantity) x child AssociatedQuantity (bundle quantity); a child with OutOfStockOptions DisablePurchasing and stock < combined (or DontTrackInventory with combined outside its Minimum/MaximumQuantity) fails, and with selectedQuantity > 0 the bundle gets WebStore_Resources.ExceedingAvailableWithoutQuantity 'Exceeding the available quantity'.",
+      "Key PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK {store, quantityUsed 1, exceedQuantity 5} with a drafted query: every active child has store stock >= quantityUsed x bundle quantity, and the lowest floor(stock / bundle quantity) over DisablePurchasing children (output availableQuantity) is below exceedQuantity. The DontTrackInventory min/max branch is not used.",
+      "AddToCartQuantity '5' is the exceeding quantity: config tied to exceedQuantity (the migrated test can also set availableQuantity + 1).",
+      "The literal '1' quantities (PDP and cart reset) are config.",
+      "FreeBundleProduct (ProductInfo2) is composed 'Qty: <childNBundleQty> | <childNSku> - <childNName>' per child (recorded: z-2671004 x2, z-2672001, z-2672003); data without output, built from child1..3 outputs.",
+      "Profile: z-345678 not profiled (no Playwright test uses it).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "exceedQuantity": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-345678",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "src/test/java/testClasses/webstore/shoppingCart/BundleProductShoppingCartPageTest.java:165",
+      "kind": "literal",
+      "keyPath": "quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E364",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/AddToCartQuantity/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Exceeding the available quantity.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B370",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ExceedingProductQuantityMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "src/test/java/testClasses/webstore/shoppingCart/BundleProductShoppingCartPageTest.java:177",
+      "kind": "literal",
+      "keyPath": "strQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Qty: 2 | z-2671004 - DeWalt 6-1/2 in. 36-Tooth Aluminum Cutting Blade\nQty: 1 | z-2672001 - DeWalt 12 in. Dual-Port Rip Guide\nQty: 1 | z-2672003 - DeWalt Circular Saw Rip Fence",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E383",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/FreeBundleProduct/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

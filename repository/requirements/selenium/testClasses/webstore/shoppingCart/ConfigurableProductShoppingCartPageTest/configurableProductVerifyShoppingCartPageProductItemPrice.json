@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyShoppingCartPageProductItemPrice",
+  "scenario": {
+    "summary": "Verifies that the cart line item unit price equals the price of the configurable variant added by the head method.",
+    "steps": [
+      "Verify the first line item unit price"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Unit price equals the variant price"
+    ],
+    "evidence": [
+      "dependsOn configurableProductVerifyShoppingCartPageNavigateToShoppingCart.",
+      "Class chain, first method captures (user decision 2026-11-04): this method reads the record captured by configurableProductVerifyShoppingCartPageNavigateToShoppingCart from the class field and has no needs. The record values it reads today (ProductPrice) are declared as sources of configurableProductVerifyShoppingCartPageNavigateToShoppingCart; until the class is migrated, check-hardcoded reports them here.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

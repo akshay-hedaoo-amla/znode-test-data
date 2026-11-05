@@ -180,7 +180,12 @@ migrated:
     - testim-migrated/tests/webstore/order/verify-quote-request-page-details.spec.ts
     # 2026-11-04: amount-off-product promotion (promotion created per run by the PROMOTION_AMOUNT_OFF_PRODUCT collection)
     - testim-migrated/tests/webstore/shopping-cart/verify-amount-off-product-promotion-functionality.spec.ts
-  selenium: []   # Phase 6 wave 2
+  selenium:   # Phase 6 wave 2
+    # Phase 6 wave 2, webstore/shoppingCart
+    - src/test/java/testClasses/webstore/shoppingCart/BundleProductShoppingCartPageTest.java
+    - src/test/java/testClasses/webstore/shoppingCart/ConfigurableProductShoppingCartPageTest.java
+    - src/test/java/testClasses/webstore/shoppingCart/ShippingCostTest.java
+    - src/test/java/testClasses/webstore/shoppingCart/SimpleProductShoppingCartPageTest.java
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
 # swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.

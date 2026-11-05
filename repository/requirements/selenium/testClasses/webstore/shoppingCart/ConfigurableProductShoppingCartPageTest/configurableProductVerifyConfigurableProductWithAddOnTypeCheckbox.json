@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyConfigurableProductWithAddOnTypeCheckbox",
+  "scenario": {
+    "summary": "Guest opens a configurable product with checkbox add-ons, picks the variant by attributes, selects three checkbox add-ons by name, adds to cart and verifies the line item lists the variant attributes and the three add-ons.",
+    "steps": [
+      "Search the configurable parent SKU and open it",
+      "Select the variant's Bulb Size, Color and Technology",
+      "Select three checkbox add-ons by name",
+      "Add to Cart and open the cart",
+      "Verify the line item description (attributes and 'Checkbox : <add-on>' lines)"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the variant with three add-ons is added (not removed by this method; the radio method empties the cart first)"
+    ],
+    "assertions": [
+      "Line item description equals 'Bulb Size : <v>', 'Color : <v>', 'Technology : <v>' and one 'Checkbox : <add-on>' line per selected add-on"
+    ],
+    "evidence": [
+      "Method ZPD-TC-5159: configurable product with checkbox add-ons on the cart. Independent method (priority 45, no dependsOn).",
+      "Read by the page object, not scanned: ProductDisplayPage.selectConfigurableAttributes(pdpDataMap, <variant column>) reads rows ProductSize, ProductColor and Technology of the variant's column -> product.variant1Attr1 (BulbSize), variant1Attr2 (Color), variant1Attr3 (Technology) (order of variantAttributes). No source entries: the cells are not in the scan and the workbook is not read.",
+      "The add-ons are clicked by name: AddOnFirst/Second/ThirdProduct -> product.addOnName / addOn2Name / addOn3Name (drafted optional outputs on PRODUCT_CONFIGURABLE_WITH_VARIANTS: the parent's priced, active add-on products of the CheckBox groups in display order).",
+      "Gap (params): the test selects three add-on products; minAddOns counts add-on groups, so a fallback product may have fewer than three (addOn3Name null).",
+      "AddOnConfigurableProduct is composed: 'Bulb Size : <variant1Attr1>', 'Color : <variant1Attr2>', 'Technology : <variant1Attr3>', then '<addOnGroupName> : <addOnName>' per selected add-on; data without output, built by the migrated test.",
+      "Profile (Playwright observations): z-2510006 is an active SimpleProduct (variant), inventory 1000; b-100002 not profiled.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 1,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "CheckBox",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5159"
+  ],
+  "sources": [
+    {
+      "value": "b-100002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/ConfigurableProductWithAddOnAsCheckbox",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510006",
+      "location": "webstoreTestData.xlsx!productDisplayPage!L209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510006",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Sku"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 4 in. x 1/4 in. x 5/8 in. General Purpose Metal Grinding Wheel",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E241",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnFirstProduct/ConfigurableProductWithAddOnAsCheckbox",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnName"
+    },
+    {
+      "value": "Milwaukee 1 in. #2 Square Recess Shockwave Impact Duty Steel Insert Bits (5-Pack)",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E244",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnSecondProduct/ConfigurableProductWithAddOnAsCheckbox",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2Name"
+    },
+    {
+      "value": "Leviton Decora 3 Gang Wall Plate",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E247",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnThirdProduct/ConfigurableProductWithAddOnAsCheckbox",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3Name"
+    },
+    {
+      "value": "Bulb Size : Small\nColor : Yellow\nTechnology : LED\nCheckbox : DeWalt 4 in. x 1/4 in. x 5/8 in. General Purpose Metal Grinding Wheel\nCheckbox : Milwaukee 1 in. #2 Square Recess Shockwave Impact Duty Steel Insert Bits (5-Pack)\nCheckbox : Leviton Decora 3 Gang Wall Plate",
+      "location": "webstoreTestData.xlsx!productDisplayPage!L251",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnConfigurableProduct/z-2510006",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

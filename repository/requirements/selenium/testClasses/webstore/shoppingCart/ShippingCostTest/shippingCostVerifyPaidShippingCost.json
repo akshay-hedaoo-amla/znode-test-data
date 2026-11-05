@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ShippingCostTest#shippingCostVerifyPaidShippingCost",
+  "scenario": {
+    "summary": "Selects every shipping option priced above $0.00 from the estimate and verifies the order total equals sub-total plus the shipping price plus handling.",
+    "steps": [
+      "Wait",
+      "For each shipping option priced above $0.00: select it and verify order total = sub-total + shipping + handling"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "Cart shipping estimate selected (paid option)"
+    ],
+    "assertions": [
+      "Order total equals sub-total + shipping price + handling charges for each paid option"
+    ],
+    "evidence": [
+      "dependsOn shippingCostVerifyShoppingCartPageNavigation (cart with the simple product).",
+      "The method checks only the estimate options priced above $0.00 and reads no data value; with no such option it asserts nothing. No precondition need (decision 2026-11-04 after a baseline run: the migrated test behaves exactly as today).",
+      "Baseline 2026-11-04 (origin/dev, original sheet, atstage): FreeShippingCost PASS; PaidShippingCost FAILS on the order total (e.g. page $29.00 vs expected $39.00), a pre-existing page/framework calculation issue, not data.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "//*[@class='flex items-center pb-1']",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:136",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.DIV_SHIPPING_COST_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//*[contains(@data-test-selector,'lblShipping')]/span[2])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:137",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.DIV_SHIPPING_COST_ITEM_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//*[contains(@data-test-selector,'lblShipping')]/span[1])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:138",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LBL_SHIPPING_COST_ITEM_LABEL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}
