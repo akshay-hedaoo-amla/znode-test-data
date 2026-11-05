@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageRemoveAllFunctionality",
+  "scenario": {
+    "summary": "Verifies the Remove all items label, removes all items and checks the empty-cart message.",
+    "steps": [
+      "Verify the Remove all items link label",
+      "Click Remove all items",
+      "Verify the empty cart message"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart emptied"
+    ],
+    "assertions": [
+      "Remove all items label",
+      "Empty-cart message"
+    ],
+    "evidence": [
+      "Only UI texts from the shoppingCart sheet.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "Remove all items",
+      "location": "webstoreTestData.xlsx!shoppingCart!B7",
+      "kind": "excel",
+      "keyPath": "shoppingCartDetails/RemoveAll/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Hi! Your shopping cart is empty.",
+      "location": "webstoreTestData.xlsx!shoppingCart!B8",
+      "kind": "excel",
+      "keyPath": "shoppingCartDetails/RemoveAllSuccessMsg/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

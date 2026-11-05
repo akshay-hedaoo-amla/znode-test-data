@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ShippingCostTest#shippingCostVerifyShoppingCartPageNavigation",
+  "scenario": {
+    "summary": "Guest searches a simple product, adds it to the cart and opens the cart. Head of the shipping-cost chain (validation, free and paid shipping methods depend on it).",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the simple SKU and open it",
+      "Add to Cart",
+      "Open the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: one simple product added (kept for the dependent methods)"
+    ],
+    "assertions": [
+      "Search box and Add to Cart visible (page-object checks)"
+    ],
+    "evidence": [
+      "Class chain, first method captures (user decision 2026-11-04): this method runs first and declares every need and record value of the chain; the migrated class keeps the resolved record in a class field and the later methods read that field, so they have no needs of their own. Consumers: ShippingCostPageValidation, FreeShippingCost and PaidShippingCost read no product value (cart state only) and have no needs.",
+      "The dependent methods never read the product's values (they check shipping estimates on the cart), so the preferred sheet SKU is safe here.",
+      "Profile (Playwright observations): z-2420004 is an active SimpleProduct (BlackAndDecker) in PRODUCTION, inventory 235, required add-ons 0.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!shoppingCart!B22",
+      "kind": "excel",
+      "keyPath": "optionalAddonProductsSku/ProductSku1/SimpleOptionalSku",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

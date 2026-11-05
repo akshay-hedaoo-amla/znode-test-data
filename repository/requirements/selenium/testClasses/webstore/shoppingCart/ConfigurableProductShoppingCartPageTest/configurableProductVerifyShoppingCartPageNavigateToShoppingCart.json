@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyShoppingCartPageNavigateToShoppingCart",
+  "scenario": {
+    "summary": "Guest searches the configurable parent, opens its PDP, picks the variant by its Bulb Size, Color and Technology values, adds it to the cart and opens the cart. Head of the class chain: the next methods verify this line item. Declares the record for the whole chain.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Type the parent SKU in the search box and open the first result",
+      "Select the variant's Bulb Size, Color and Technology",
+      "Add to Cart",
+      "Open the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the configurable variant is added (kept for the dependent methods)"
+    ],
+    "assertions": [
+      "Search box and Add to Cart visible (page-object checks)"
+    ],
+    "evidence": [
+      "Class chain, first method captures (user decision 2026-11-04): this method runs first and declares every need and record value of the chain; the migrated class keeps the resolved record in a class field and the later methods read that field, so they have no needs of their own. Consumers: ProductName (variant1Name), ProductItemPrice and ProductTotalPrice (variant1Price), LinksAndButton, RemoveAllLink, RemoveAllFunctionality (cart state only).",
+      "Sources: parent SKU -> product.parentProductSku (preferred B-100000, not required), variant SKU z-2510002 -> product.variant1Sku; imported from the consumers' scans: ProductName -> variant1Name, ProductPrice -> variant1Price (effective guest price). InitialQuantity stays a config source of ProductTotalPrice.",
+      "Read by the page object, not scanned: ProductDisplayPage.selectConfigurableAttributes(pdpDataMap, <variant column>) reads rows ProductSize, ProductColor and Technology of the variant's column -> product.variant1Attr1 (BulbSize), variant1Attr2 (Color), variant1Attr3 (Technology) (order of variantAttributes). No source entries: the cells are not in the scan and the workbook is not read.",
+      "variant1 is the parent's first eligible variant by SKU, not necessarily the sheet's z-2510002; the migrated test selects variant1's attribute values and asserts variant1's name and price.",
+      "Profile (Playwright observations): B-100000 is an active ConfigurableProduct in PRODUCTION (parent has no own stock row).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "B-100000",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Sku"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "EcoSmart 100-Watt A19 Halogen Light Bulb (16-Pack)",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I208",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductName/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Name"
+    },
+    {
+      "value": "$16.90",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I214",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductPrice/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "variant1Price"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

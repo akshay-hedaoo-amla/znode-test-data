@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageCartLineItems",
+  "scenario": {
+    "summary": "Verifies each cart line item's name, unit price and total against the optionalAddonProductsSku table rows, then the sub-total and order amount calculations.",
+    "steps": [
+      "For each cart row: verify name, unit price, total = price x quantity",
+      "Verify sub-total = sum of row totals",
+      "Verify order amount calculations"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Row name equals ProductName of row N",
+      "Row unit price equals ProductPrice of row N",
+      "Row total equals price x InitialQuantity",
+      "Sub-total equals the sum of row totals x quantity",
+      "Order amounts are consistent"
+    ],
+    "evidence": [
+      "dependsOn simpleProductVerifyShoppingCartPageAddProductsToCart.",
+      "Class chain, first method captures (user decision 2026-11-04): this method reads the record captured by simpleProductVerifyShoppingCartPageAddProductsToCart from the class field and has no needs. The record values it reads today (ProductName, ProductPrice, InitialQuantity of rows ProductSku1..N, read by the page object and not scanned) are declared as sources of simpleProductVerifyShoppingCartPageAddProductsToCart; until the class is migrated, check-hardcoded reports them here.",
+      "Assumption to check when migrated: cart row i is the i-th product added.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "//a[contains(@data-test-selector, 'linkProductName')]",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:52",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LINK_CART_LINE_ITEM_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//a[contains(@data-test-selector,'linkProductName')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:47",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.LINK_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//*[contains(@data-test-selector,'txtProductRowQuantity')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:42",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.TXT_PRODUCT_ROW_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!shoppingCart!E22",
+      "kind": "excel",
+      "keyPath": "optionalAddonProductsSku/ProductSku1/InitialQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

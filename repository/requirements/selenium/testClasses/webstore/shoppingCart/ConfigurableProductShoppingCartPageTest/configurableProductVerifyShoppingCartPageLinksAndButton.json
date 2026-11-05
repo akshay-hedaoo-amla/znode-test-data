@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.ConfigurableProductShoppingCartPageTest#configurableProductVerifyShoppingCartPageLinksAndButton",
+  "scenario": {
+    "summary": "Verifies that Continue Shopping and Checkout are present on the cart filled by the head method (dependsOn the navigation method). No test data of its own.",
+    "steps": [
+      "Verify Continue Shopping",
+      "Verify Checkout"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Continue Shopping and Checkout are visible"
+    ],
+    "evidence": [
+      "Reads no sheet value; uses the cart state of configurableProductVerifyShoppingCartPageNavigateToShoppingCart.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

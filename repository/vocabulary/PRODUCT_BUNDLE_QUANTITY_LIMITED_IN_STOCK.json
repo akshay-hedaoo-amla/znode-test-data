@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK",
+  "entity": "product",
+  "type": "bundle_quantity_limited",
+  "constraints": {
+    "type": "bundle",
+    "status": "active",
+    "publishState": "production",
+    "activeChildCount": ">= 1",
+    "childInventory": ">= {quantityUsed}",
+    "availableQuantity": "< {exceedQuantity}",
+    "price": "> 0",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "requiredAddOnCount": "= 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active published bundle on the store where every active child has stock for quantityUsed x its bundle quantity and a DisablePurchasing child has less than exceedQuantity x it, so the cart shows 'Exceeding the available quantity'.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test adds to cart and checks out with; it must be available"
+    },
+    "exceedQuantity": {
+      "type": "integer",
+      "description": "Cart quantity the test sets to get the exceeding-quantity message; the available bundle quantity must be below it"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

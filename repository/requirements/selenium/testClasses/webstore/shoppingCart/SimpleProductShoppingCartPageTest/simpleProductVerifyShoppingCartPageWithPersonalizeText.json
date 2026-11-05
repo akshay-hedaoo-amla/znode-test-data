@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageWithPersonalizeText",
+  "scenario": {
+    "summary": "Guest adds a second simple product that has a personalizable AdditionalInformation attribute, types a personalization text and verifies the '<label> : <text>' line on that product's cart row.",
+    "steps": [
+      "Search the personalizable SKU and open it",
+      "Type the personalization text (AdditionalInformation field)",
+      "Add to Cart and open the cart",
+      "Find the cart row by product name and verify '<label> : <text>'"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: a second simple product with personalization is added"
+    ],
+    "assertions": [
+      "The product's cart row shows 'AdditionalInformation : <typed text>'"
+    ],
+    "evidence": [
+      "Independent method (priority 25, no dependsOn) with its own record; it runs after the navigation chain's head, so the cart also holds that product and the row is found by product name.",
+      "The personalization input locator is fixed to txtProductPersonalizationAdditionalinformation, so the need pins personalizationAttribute AdditionalInformation. New key PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK with a drafted query (pending; outputs sku, name, productId, retailPrice, salesPrice, price, personalizationCode).",
+      "PersonalizeLabel2 -> product.personalizationCode (equals the pinned code). The typed text (also 'AdditionalInformation' in the sheet) is chosen by the test: config.",
+      "Distinct records: the chain head's product is another method's need (PRODUCT_SIMPLE_IN_STOCK); the sheet uses different SKUs (z-2420004, z-2410001).",
+      "Profile (Playwright observations): z-2410001 is an active SimpleProduct (BlackAndDecker) in PRODUCTION, inventory 250, required add-ons 0.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); Playwright observations of the same SKUs are cited where they exist.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "personalizationAttribute": "AdditionalInformation"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "z-2410001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I17",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeText2/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I15",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeLabel2/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "personalizationCode"
+    },
+    {
+      "value": "Black + Decker 20 Volt Cordless Reciprocating Saw",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I3",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductName/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

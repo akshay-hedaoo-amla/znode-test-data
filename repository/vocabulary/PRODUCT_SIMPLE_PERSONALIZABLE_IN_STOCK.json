@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK",
+  "entity": "product",
+  "type": "simple_personalizable",
+  "constraints": {
+    "type": "simple",
+    "status": "active",
+    "inventory": ">= {quantityUsed}",
+    "publishState": "production",
+    "price": "> 0",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "requiredAddOnCount": "= 0",
+    "personalizableAttributeCode": "{personalizationAttribute}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active priced in-stock simple product published to the store, no required add-ons, with the given personalizable attribute, so the PDP shows that personalization field and the cart line shows '<code> : <text>'. KB: Personalization Options.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Quantity the test adds to cart"
+    },
+    "personalizationAttribute": {
+      "type": "string",
+      "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode with IsPersonalizable), e.g. AdditionalInformation"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z"
+}

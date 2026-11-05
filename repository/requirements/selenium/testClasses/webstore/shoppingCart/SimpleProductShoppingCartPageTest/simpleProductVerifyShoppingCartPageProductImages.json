@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.shoppingCart.SimpleProductShoppingCartPageTest#simpleProductVerifyShoppingCartPageProductImages",
+  "scenario": {
+    "summary": "Verifies the simple product line item image against a stored image file. No sheet data of its own.",
+    "steps": [
+      "Verify the line item image"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Line item image is visible with a non-empty src (structural, after migration)"
+    ],
+    "evidence": [
+      "dependsOn simpleProductVerifyShoppingCartPageNavigation; reads no sheet value.",
+      "Image check becomes structural when migrated (user decision 2026-11-04): verifySimpleProductImage asserts only that the line item image is visible with a non-empty src; the stored image file constant is config and no longer tied to the recorded product. No need.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text captured for ",
+      "location": "src/main/java/utilities/ReportMessages.java:36",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//a[starts-with(@data-test-selector,'linkProductImage')]//img",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:44",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.IMG_CART_LINE_PRODUCT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

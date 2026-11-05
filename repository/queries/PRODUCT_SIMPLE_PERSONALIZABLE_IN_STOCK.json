@@ -1,0 +1,29 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK",
+  "sql" : "SELECT TOP 10 p.SKU AS sku, p.ProductName AS name, p.PimProductId AS productId, gp.RetailPrice AS retailPrice, gp.SalesPrice AS salesPrice, COALESCE(gp.SalesPrice, gp.RetailPrice) AS price, pz.cd AS personalizationCode FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePublishState ps ON ps.PublishStateId = p.PublishStateId INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store CROSS APPLY (SELECT SUM(i.Quantity) AS qty FROM dbo.ZnodeInventory i INNER JOIN dbo.ZnodePortalWarehouse pw ON pw.WarehouseId = i.WarehouseId WHERE i.SKU = p.SKU AND pw.PortalId = po.PortalId) st CROSS APPLY (SELECT TOP 1 pr.RetailPrice, pr.SalesPrice FROM dbo.ZnodePrice pr INNER JOIN dbo.ZnodePriceList pl ON pl.PriceListId = pr.PriceListId INNER JOIN dbo.ZnodePriceListPortal plo ON plo.PriceListId = pl.PriceListId WHERE pr.SKU = p.SKU AND plo.PortalId = po.PortalId AND (pl.ActivationDate IS NULL OR pl.ActivationDate <= @now) AND (pl.ExpirationDate IS NULL OR pl.ExpirationDate >= @now) AND (pr.ActivationDate IS NULL OR pr.ActivationDate <= @now) AND (pr.ExpirationDate IS NULL OR pr.ExpirationDate >= @now) ORDER BY plo.Precedence, pl.PriceListId, pr.PriceId) gp CROSS APPLY (SELECT TOP 1 zpa.AttributeCode AS cd FROM dbo.ZnodePimAttributeValue zav INNER JOIN dbo.ZnodePimAttribute zpa ON zpa.PimAttributeId = zav.PimAttributeId WHERE zav.PimProductId = p.PimProductId AND zpa.IsPersonalizable = @personalizable AND zpa.AttributeCode = @personalizationAttribute ORDER BY zav.PimAttributeValueId) pz WHERE p.ProductType = @productType AND p.IsActive = @isActive AND ps.PublishStateCode = @publishState AND st.qty >= @quantityUsed AND gp.RetailPrice > @minPrice AND EXISTS (SELECT pe.PublishProductEntityId FROM dbo.ZnodePublishProductEntity pe INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = pe.ZnodeCatalogId WHERE pe.ZnodeProductId = p.PimProductId AND pc.PortalId = po.PortalId AND ve.RevisionType = @publishState AND ve.IsPublishSuccess = @isActive AND pe.IsActive = @isActive AND pe.IsObsolete = @notObsolete AND pe.ProductIndex >= @minProductIndex) AND CHARINDEX(@space, p.SKU) = @zero AND NOT EXISTS (SELECT rq.PimAddOnProductId FROM dbo.ZnodePimAddOnProduct rq WHERE rq.PimProductId = p.PimProductId AND rq.RequiredType = @requiredType) AND NOT EXISTS (SELECT cl.PimProductTypeAssociationId FROM dbo.ZnodePimProductTypeAssociation cl INNER JOIN dbo.ZnodePimProduct cp ON cp.PimProductId = cl.PimParentProductId WHERE cl.PimProductId = p.PimProductId AND cp.ProductType = @configurableType) AND (@preferred IS NULL OR p.SKU = @preferred) ORDER BY p.SKU",
+  "params" : [ "store", "now", "personalizable", "personalizationAttribute", "productType", "isActive", "publishState", "quantityUsed", "minPrice", "notObsolete", "minProductIndex", "space", "zero", "requiredType", "configurableType", "preferred" ],
+  "constants" : {
+    "productType" : "SimpleProduct",
+    "isActive" : "true",
+    "notObsolete" : "false",
+    "publishState" : "PRODUCTION",
+    "minPrice" : "0",
+    "minProductIndex" : "1",
+    "requiredType" : "Required",
+    "space" : " ",
+    "zero" : "0",
+    "configurableType" : "ConfigurableProduct",
+    "personalizable" : "1"
+  },
+  "outputs" : [ "sku", "name", "productId", "retailPrice", "salesPrice", "price", "personalizationCode" ],
+  "identity" : "sku",
+  "schemaFingerprint" : "sha256:aec652f9bd1772333f3e57cc28c786479a11239abd673f92a365eeb68d3f4a2a",
+  "vocabularyFingerprint" : "sha256:455e6c950e6bc5997d92db0ca1893611584b6a21302897328755a4f12c3fb4b7",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-04T14:30:00Z",
+  "createdAt" : "2026-11-04T20:00:00Z",
+  "lastValidated" : "2026-11-04T14:09:33Z",
+  "verifiedHash" : "sha256:ad1d6d8416c290ff6b87a66b4183a45a6e8e61dc2a3f867604794faee8c8ad80"
+}
