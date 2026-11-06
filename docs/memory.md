@@ -6,9 +6,70 @@ Living state of the project for Claude Code and the team. Read at the start of e
 
 | Field | Value |
 | --- | --- |
-| Current phase | Phase 6 (Rollout) in progress: plan approved 2026-10-27 |
-| Last updated | 2026-10-29 |
-| Next step | Shopping-cart stage 2 (see "2026-10-29: Shopping-cart stage 2" below, "Resume here"). Done 2026-10-29: core 0.10.1 released and pinned, category ids fixed, new queries, 6 coupon collections approved and verified; data repo PRs #1 and #2 merged, main 9fdc84c, CI green. Everything is approved except PROMOTION_AMOUNT_OFF_PRODUCT and SHIPPING_FLAT_RATE_ON_STORE: user decided to KEEP THEM PENDING until atstage has the data (no automatic $15 product promotion for guests; FLAT shipping not set up for CA, US fails too). Do not approve them before they verify (approved needs lastValidated; CI fails). Their specs (amount-off-product promotion, 3 estimate-shipping) are not migrated. Next: migrate the 15 spec files (step 5) and run normal + fallback on atstage; first live coupon create (ProfileIds [0] untried). Rollout plan and MRRSoft move plan written (links in the decisions log); move waits for an MRRSoft admin |
+| Current phase | Phase 6 (Rollout). Playwright webstore wave DONE (153/153 specs, org release 0.16.0). Selenium wave 2 IN PROGRESS: webstore module by module |
+| Last updated | 2026-11-06 |
+| Next step | Selenium module productDisplayPage, from the start (step 2 "Map"): see "Resume here: Selenium wave 2" below. shoppingCart is merged (PR #30); quickOrder is committed and pushed on branch selenium-webstore-quick-order, no PR (user: "commit and push, do not raise PR") |
+
+
+## Resume here: Selenium wave 2 (handover 2026-11-06)
+
+Plan approved 2026-11-04 (Phase 6 wave 2 = the Selenium suite, same steps and checks as Playwright). Scope: webstore
+first (53 classes, 432 tests), module order shoppingCart -> quickOrder -> productDisplayPage -> productListingPage ->
+home/login/forgotPassword/getAnAccount -> myAccount/orderReceipt/quote -> promotionsAndCoupon -> singlePageCheckout
+(+ PaymentTaxShippingEnhancement). Not migrated: webstore/adminPrerequisite, webstore/adminPostValidations (app-log
+config/check, admin credentials only). Smoke after webstore; integration/* (admin-driven, 102 classes) not planned yet.
+
+State of the repos
+- Data repo (this repo): main f4a3337 has shoppingCart (PR #30 merged). Branch selenium-webstore-quick-order (519b460,
+  pushed, no PR) adds quickOrder on top of main. (No pdp branch yet: create selenium-webstore-pdp from this branch, or from main once quickOrder is merged.)
+  Open the quickOrder PR before any later module PR (no stacked PRs: merge it first, then branch the next from main).
+- Selenium repo MRRSoft/znode10-integration-ui-automation-1: branch tda/selenium-webstore (cut from origin/dev 9633704f,
+  pushed, no PR; head 2ea74baa = shoppingCart 95f3616b + quickOrder). Untracked there: testSuites/webstore/tda/
+  webstoreProductDisplayPage.xml (module suite for pdp, ready to use). Never commit config.properties (local environment
+  edit), Integration/src/test/resources/testDataExcels/*.xlsx (downloaded at run time) or .idea/.
+- Baseline worktree: D:\Sample Framework\sel-baseline = clean origin/dev, used to run each module WITHOUT the agents.
+
+How a module is done (copy shoppingCart / quickOrder)
+1. Data branch from main. Fetch workbooks `mvn -q -pl tools exec:java -Dexec.args="fetch"` (into git-ignored input/selenium;
+   never open them), scan the module's classes `... -Dexec.args="scan --force src/test/java/testClasses/webstore/<module>/<Class>.java ..."`.
+2. Map: requirements-mapper agent writes repository/requirements/selenium/testClasses/webstore/<module>/<Class>/<method>.json
+   (pending). Conventions decided by the user: strategy migrate (Selenium adapter has no swap); roles data (record values,
+   with output) / expected-output (UI texts) / config (values the test chooses, framework constants) / credential;
+   "first method captures" (the first method of a chain declares the needs, sheet SKU as non-required preferred, and keeps
+   the record in class fields; later methods have no needs and throw SkipException DATA_UNAVAILABLE if the field is null);
+   every method that signs in or reuses the signed-in session declares the sheet account (Tda.declareUser -> useExisting,
+   user USER_WEBSTORE_REGISTERED, preferred {source: username, required: true}); reuse approved keys, new keys/outputs only
+   optional and never changing which rows an approved key returns. `bin/tda validate`, `bin/tda readiness selenium/testClasses/webstore/<module>`.
+3. Approvals (only the user approves, by editing status/approvedBy/approvedAt in the files): round 1 requirements +
+   vocabulary, then `bin/tda query-verify <KEY>` for new/changed queries, round 2 queries/collections.
+4. Migrate the classes (agent): read data through utilities/Tda.java (value/get/optional/declareUser/money); alias/output
+   names as private static final constants or reads in private helpers (the scanner records literals passed to project
+   calls in a test method); page-object OVERLOADS taking plain values, never change methods other classes use; money with
+   Tda.money() (storefront format "$1,050.00"). Add the files to config/scanners.yaml migrated.selenium, rescan,
+   `bin/tda check-hardcoded` must say "no hardcoded test data" (constants newly pulled in by page-object code must be added
+   as config sources to the entries -> those entries go back to pending -> user re-approves). `mvn -q test-compile`.
+5. Runs on atstage (VPN needed for the DB): baseline in sel-baseline with a scratch suite (classes of the module, listener
+   listeners.TestListener only); with the agents: `TDA_HOME=D:/znode-test-data mvn test -DsuiteXmlFile=src/test/java/testSuites/webstore/tda/webstore<Module>.xml -Denvironment=atstage`,
+   normal and fallback (TDA_IGNORE_PREFERRED=1). Failures that also fail on the baseline (both attempts) and in every agent
+   run -> config/known-failures.yaml with evidence; anything else is diagnosed and fixed. Known framework flakes on atstage:
+   loader overlay intercepting clicks, btnCartNotificationClose not found, Quick Order Paste Multiple tab intercepted by the logo.
+6. Record here, commit both repos, push (ask the user first; the user decides about PRs).
+
+productDisplayPage (next; 9 classes, 74 tests)
+- Scanned 2026-11-06 (work/scans/selenium__src_test_java_testClasses_webstore_productDisplayPage_*.json): Bundle 17 tests/34
+  sheet values, Configurable 16/43, ConfigurableWithAddOnType Checkbox/Dropdown/Radio 6 each (~12), ConfigurableWithPersonalize
+  6/10, GroupProductDisplayPage 4/15, GroupProductShoppingCartPage 5/13, SimpleProductDisplayPage 8/61. Some classes sign in.
+- Mapping was started and STOPPED by the user; its partial edits were discarded (it had set the approved
+  PRODUCT_CONFIGURABLE_PDP_DETAILS back to pending without verifying - the DB was unreachable - and drafted
+  PRODUCT_BUNDLE_WITH_BACKORDER_CHILDREN / PRODUCT_BUNDLE_WITH_OUT_OF_STOCK_CHILD). Restart at step 2; the Playwright pdp
+  keys (PRODUCT_CONFIGURABLE_PDP_DETAILS with variantRank/swatches/tabs/inventory, bundle/group details, linked products,
+  highlights, obsolete) cover most values. The pdp baseline was also stopped before it finished: run it again.
+- Check `bin/tda ping` first (atstage DB 200.200.204.6 needs the VPN).
+
+Open items carried over: known failures listed in config/known-failures.yaml; Playwright parked items (my-account
+order-history 6-7, quote history, plp highlights fallback 404, voucher balance drain by ORDER_OF_USER_REORDERABLE, pdp
+group fallback, order Create Return); framework PR MRRSoft/znode10-playwright-automation-integration#28 kept open by the user;
+21 out-of-scope Playwright specs; Dependabot reports 11 alerts on the Selenium repo default branch (not ours).
 
 ## Project summary
 
@@ -814,3 +875,4 @@ Add one entry per session, newest first.
   - 2026-11-05 user re-approved the 3 entries: validate valid, check-hardcoded "no hardcoded test data", readiness 13/13 READY.
   - Next: commit both repos; PRs (data repo into main; Selenium branch: user decides PR into dev or keep open); then quickOrder.
 - 2026-11-05 Selenium module quickOrder (4 classes, 38 tests; data branch selenium-webstore-quick-order): 38 requirements on approved keys only (PRODUCT_SIMPLE_IN_STOCK, _OBSOLETE, _OUT_OF_STOCK, USER_WEBSTORE_REGISTERED), approved by the user; no round 2. Retail: every method that signs in or reuses the session declares the sheet account (Tda.declareUser) so the lease covers the method. Derived checks: range message from minQuantity/maxQuantity, above-max = max+1, MaxMin types floor(max/2)+1, line totals = price x qty, add-multiple expects the 2 declared products x 1. Page-object overloads in QuickOrderPadPage (List<String> skus). New shared Tda.money() (storefront format "$1,050.00"; fallback found "$1050.00" vs "$1,050.00"), now used by quickOrder and shoppingCart classes. Runs: baseline origin/dev 8/35 fail (both attempts); TDA normal x2, fallback x2: 7 tests fail every run -> config/known-failures.yaml (6 guest Paste Multiple tests: tab click intercepted by the logo / txtSkuList not found; retail MaxMin: toast not shown); intermittent UI flakes (retail InvalidSKUs, IsObsolete, OutOfStock, ZeroQuantity, AdjustQuantity) each passed in other runs. check-hardcoded clean. Next: commit, data PR, then productDisplayPage.
+- 2026-11-06 productDisplayPage started on branch selenium-webstore-pdp: 9 classes scanned; mapping agent and baseline stopped at the user's request ("stop for now"); partial edits discarded (see "Resume here: Selenium wave 2"). Status table and handover section updated for the team.
