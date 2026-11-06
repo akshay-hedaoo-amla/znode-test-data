@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForGuestUserTest#pasteMultipleSkusForGuestUserVerifyQuickOrderPadNavigation",
+  "scenario": {
+    "summary": "Opens the Quick Order Pad, checks the tabs and default quantity, selects a product from the SKU auto-suggestion, checks Add to Cart becomes enabled, types a quantity above the product's maximum and checks the range message.",
+    "steps": [
+      "Open the webstore, Quick Order, Add Multiple Items",
+      "Verify pad heading; open Paste Multiple; verify default quantity",
+      "Verify Search / Paste Multiple tab labels",
+      "Verify Add to Cart disabled",
+      "Select validSku from the auto-suggestion in row 1; verify Add to Cart enabled",
+      "Set quantity aboveMaximumQuantity; verify the SKU validation message",
+      "Clear all"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "None (quick list cleared)"
+    ],
+    "assertions": [
+      "Pad heading visible",
+      "Default quantity",
+      "Tab labels",
+      "Add to Cart disabled, then enabled",
+      "Validation message equals 'Selected quantity should be in between 1 to 100'"
+    ],
+    "evidence": [
+      "First method of the dependsOn pair pasteMultipleSkusForGuestUserVerifyQuickOrderPadNavigation -> pasteMultipleSkusForGuestUserVerifyNotSelectingProductFromSuggestionListValidationMessage (disabled, enabled = false): first method captures; the disabled consumer types maxQuantityProduct.sku without selecting the suggestion and has no needs.",
+      "validSku z-2460001 (quickOrderPage!C11): active SimpleProduct 'Black + Decker 6.5 in Corded Angle Grinder', OutOfStockOptions DontTrackInventory, MinimumQuantity 1 / MaximumQuantity 100 (tda rows). The Playwright profile (2026-11-01) saw storefrontProductIndex 0; bin/tda readiness (2026-11-05) reports that the record now qualifies for these needs. Inventory 25 per warehouse row (tda rows dbo.ZnodeInventory). Preferred, not required.",
+      "Range message 'Selected quantity should be in between 1 to 100': 1 is the product's MinimumQuantity, 100 its MaximumQuantity (z-2460001: Min 1 / Max 100). Need = the Playwright maxQuantityProduct pattern: PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, minMaxQuantity 1, outOfStockOption DontTrackInventory (so a stock check cannot pre-empt the range message), maxPersonalizableAttributes 0 (Quick Order rejects personalizable products)}. Outputs used: sku, minQuantity, maxQuantity. The message stays expected-output; the migrated test builds it from minQuantity/maxQuantity.",
+      "aboveMaximumQuantity 101 (quickOrderPage!C15) is config (a quantity the test chooses); it equals MaximumQuantity + 1 for the sheet product, so the migrated test types maxQuantityProduct.maxQuantity + 1.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows dbo.ZnodePimProduct (2026-11-05) and the approved Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "maxQuantityProduct",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 1,
+        "outOfStockOption": "DontTrackInventory"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-7952",
+    "Z10-TC-7963",
+    "ZPD-TC-9730"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C14",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/defaultQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SEARCH",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B9",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/searchTab/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PASTE MULTIPLE",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B10",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/pasteMultipleTab/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2460001",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C11",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/validSku/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "maxQuantityProduct",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "101",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C15",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/aboveMaximumQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Selected quantity should be in between 1 to 100",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B17",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/exceedingMaximumQuantityValidationMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForGuestUserTest#pasteMultipleSkusForGuestUserAddSingleProductWithZeroQuantity",
+  "scenario": {
+    "summary": "pastes a valid SKU with quantity 0 into the Add Multiple Items box and checks the '1 SKU couldn't be added' message.",
+    "steps": [
+      "Open the webstore",
+      "Quick Order, Add Multiple Items; verify pad heading; Paste Multiple",
+      "Paste '<validSku>, <belowMinimumQuantity>'; click Add All to Quick List",
+      "Verify the quantity validation message"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Validation message equals belowMinimumQuantityValidationMessage"
+    ],
+    "evidence": [
+      "Independent method (priority 60, no dependsOn): it opens the webstore itself and clears the quick list / cart at the end, so it declares its own needs.",
+      "validSku z-2460001 (quickOrderPage!C11): active SimpleProduct 'Black + Decker 6.5 in Corded Angle Grinder', OutOfStockOptions DontTrackInventory, MinimumQuantity 1 / MaximumQuantity 100 (tda rows). The Playwright profile (2026-11-01) saw storefrontProductIndex 0; bin/tda readiness (2026-11-05) reports that the record now qualifies for these needs. Inventory 25 per warehouse row (tda rows dbo.ZnodeInventory). Preferred, not required.",
+      "The SKU must be a valid sellable simple product so that only the zero quantity makes the row fail: same need as the approved Playwright entry 'pasting a zero quantity is rejected' (PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, maxPersonalizableAttributes 0, store}). belowMinimumQuantity 0 is config; the message is expected-output (count '1 SKU' fixed by the test).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows dbo.ZnodePimProduct (2026-11-05) and the approved Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-7970",
+    "ZPD-TC-9770"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2460001",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C11",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/validSku/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C16",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/belowMinimumQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1 SKU couldn't be added to the Quick List because the SKU is either invalid or entered with incorrect formatting, such as a space between the SKU and quantity.",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B18",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/belowMinimumQuantityValidationMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

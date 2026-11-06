@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderWithMultipleSkuTest#multipleSkuVerifyQuickOrderPadPageContent",
+  "scenario": {
+    "summary": "Checks the Quick Order Pad shows Add Row, Add to Cart (disabled) and Clear All, and the number of SKU and quantity rows.",
+    "steps": [
+      "Open the webstore, Quick Order, Add Multiple Items",
+      "Verify Add Row, Add to Cart, its state, Clear All",
+      "Verify the number of SKU rows and quantity rows"
+    ],
+    "entitiesTouched": [
+      "store"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Add to Cart enabled state = AddToCartButtonState (false)",
+      "SKU rows = SkuNumberOfRows (5)",
+      "Quantity rows = QuantityNumberOfRows (5)"
+    ],
+    "evidence": [
+      "Reads no record value: button state and row counts are UI settings (config), as the approved Playwright entry 'the quick order pad opens disabled' (initialRowCount 5 config).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9753"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "false",
+      "location": "webstoreTestData.xlsx!quickOrderPage!J3",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value0/AddToCartButtonState",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!quickOrderPage!H3",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value0/SkuNumberOfRows",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!quickOrderPage!I3",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value0/QuantityNumberOfRows",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserRemoveProductsFromCartAndLoggOff",
+  "scenario": {
+    "summary": "Last method of the class: waits for the cart page and logs the retail account off.",
+    "steps": [
+      "Wait for the page",
+      "User menu > Log Off"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "Ends the signed-in session of the class"
+    ],
+    "assertions": [
+      "None (log-off inside the page object)"
+    ],
+    "evidence": [
+      "Uses the session of the account declared by pasteMultipleSkusForRetailUserLoginWithAUserAccount (class field); reads no sheet value.",
+      "Clean-up method; only framework constants in the scan.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9751"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

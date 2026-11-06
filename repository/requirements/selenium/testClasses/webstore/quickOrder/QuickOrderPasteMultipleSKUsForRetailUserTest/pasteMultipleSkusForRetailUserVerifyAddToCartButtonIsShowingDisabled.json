@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserVerifyAddToCartButtonIsShowingDisabled",
+  "scenario": {
+    "summary": "Signed in: opens the Paste Multiple tab of the Quick Order Pad and checks Add to Cart is disabled.",
+    "steps": [
+      "Open the webstore and sign in",
+      "Quick Order, Add Multiple Items, Paste Multiple",
+      "Verify Add to Cart disabled"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Add to Cart disabled"
+    ],
+    "evidence": [
+      "Reads no sheet value.",
+      "DECLARED ACCOUNT (per method): this method signs in itself with loginPage.successfullLogin(testClassRetailUsers/quickOrderRetailUserTest Username, Password; loginAndRegistration!B190/C190). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every signing-in method declares its own need user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium pilot entries T01-T04. Username/password are credential sources (masked) the test keeps reading from its own sheet. The scanner recorded the credential values only on LoginWithAUserAccount, MaximumAndMinimumQuantityValidations and AddMultipleProductsToCart; on the other methods the same two cells (same location, kind and masking) are declared from the test source (every method calls successfullLogin with them).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9733"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

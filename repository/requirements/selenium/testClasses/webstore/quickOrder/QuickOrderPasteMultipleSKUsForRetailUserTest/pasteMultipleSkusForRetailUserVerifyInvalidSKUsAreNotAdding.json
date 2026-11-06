@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserVerifyInvalidSKUsAreNotAdding",
+  "scenario": {
+    "summary": "Signed in: pastes two non-existent SKUs into the Add Multiple Items box and checks the '2 SKUs couldn't be added' message.",
+    "steps": [
+      "Open the webstore and sign in",
+      "Quick Order, Add Multiple Items, Paste Multiple",
+      "paste '<invalidSku1>, <defaultQuantity>' and '<invalidSku2>, <defaultQuantity>'; click Add All to Quick List",
+      "Verify the message box text"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Message box text equals invalidProductValidationMessage"
+    ],
+    "evidence": [
+      "invalidSku1 z-123564 / invalidSku2 z-123565 -> config: non-existent SKUs the test only needs to be invalid (Playwright profile: both NOT_FOUND). As the approved Playwright entry 'pasting invalid SKUs is rejected', they stay config values read from the sheet (coordinator decision 2026-11-05: no generated values). Nothing to resolve.",
+      "defaultQuantity 0 is config; the message is expected-output (the count '2' is the point of the test).",
+      "DECLARED ACCOUNT (per method): this method signs in itself with loginPage.successfullLogin(testClassRetailUsers/quickOrderRetailUserTest Username, Password; loginAndRegistration!B190/C190). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every signing-in method declares its own need user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium pilot entries T01-T04. Username/password are credential sources (masked) the test keeps reading from its own sheet. The scanner recorded the credential values only on LoginWithAUserAccount, MaximumAndMinimumQuantityValidations and AddMultipleProductsToCart; on the other methods the same two cells (same location, kind and masking) are declared from the test source (every method calls successfullLogin with them).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9742"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-123564",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C25",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/invalidSku1/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C14",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/defaultQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-123565",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C26",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/invalidSku2/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2 SKUs couldn't be added to the Quick List because the SKUs are either invalid or entered with incorrect formatting, such as a space between the SKU and quantity.",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B27",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/invalidProductValidationMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

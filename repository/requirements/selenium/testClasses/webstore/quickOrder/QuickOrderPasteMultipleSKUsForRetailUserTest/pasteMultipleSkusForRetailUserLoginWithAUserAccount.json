@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserLoginWithAUserAccount",
+  "scenario": {
+    "summary": "Signs in on the webstore with the class's retail account. First method of the class: declares the account the whole class signs in with.",
+    "steps": [
+      "Open the webstore",
+      "Sign in with the testClassRetailUsers/quickOrderRetailUserTest username and password"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user"
+    ],
+    "stateChanges": [
+      "Signed-in webstore session for the account (kept for the class; logged off by pasteMultipleSkusForRetailUserRemoveProductsFromCartAndLoggOff)"
+    ],
+    "assertions": [
+      "Sign-in succeeds (inside loginPage.successfullLogin)"
+    ],
+    "evidence": [
+      "First method of the class (priority 1): signs in and leaves the session for the class; RemoveProductsFromCartAndLoggOff logs it off. It declares its own account need like every other signing-in method of the class (an account lease is held by the declaring method only, so each method declares; coordinator decision 2026-11-05).",
+      "DECLARED ACCOUNT: USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium pilot T01-T04 and the Playwright quick-order retail entries; username/password stay credential sources (masked, loginAndRegistration!B190/C190) the test keeps reading from its own sheet. Quick-order cart lines of later methods go to this account's cart; each method removes them.",
+      "Product needs are not declared here: the later methods are independent (each opens Quick Order itself) and declare their own products.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9750"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

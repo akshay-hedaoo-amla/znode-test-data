@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserVerifyQuickOrderPadNavigation",
+  "scenario": {
+    "summary": "Signed in: opens the Quick Order Pad from the Quick Order fly-out and checks the Paste Multiple tab default quantity and the Search / Paste Multiple tab labels.",
+    "steps": [
+      "Open the webstore and sign in",
+      "Open Quick Order, click Add Multiple Items",
+      "Verify the pad heading",
+      "Open Paste Multiple; verify default quantity of every quantity box",
+      "Verify the Search and Paste Multiple tab labels"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Pad heading visible",
+      "Every quantity box shows defaultQuantity",
+      "Search tab text equals searchTab label",
+      "Paste Multiple tab text equals pasteMultipleTab label"
+    ],
+    "evidence": [
+      "Reads no record value: default quantity is a UI setting (config), tab labels are fixed UI texts (expected-output).",
+      "DECLARED ACCOUNT (per method): this method signs in itself with loginPage.successfullLogin(testClassRetailUsers/quickOrderRetailUserTest Username, Password; loginAndRegistration!B190/C190). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every signing-in method declares its own need user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium pilot entries T01-T04. Username/password are credential sources (masked) the test keeps reading from its own sheet. The scanner recorded the credential values only on LoginWithAUserAccount, MaximumAndMinimumQuantityValidations and AddMultipleProductsToCart; on the other methods the same two cells (same location, kind and masking) are declared from the test source (every method calls successfullLogin with them).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9752"
+  ],
+  "sources": [
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C190",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/quickOrderRetailUserTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C14",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/defaultQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SEARCH",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B9",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/searchTab/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "PASTE MULTIPLE",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B10",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/pasteMultipleTab/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

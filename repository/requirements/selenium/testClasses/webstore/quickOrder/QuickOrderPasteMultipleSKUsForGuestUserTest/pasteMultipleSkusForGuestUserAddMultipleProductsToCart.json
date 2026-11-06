@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForGuestUserTest#pasteMultipleSkusForGuestUserAddMultipleProductsToCart",
+  "scenario": {
+    "summary": "pastes every row of the multiple-products table ('<sku> , <qty>') into the Add Multiple Items box, adds them to the quick list and the cart, and checks the cart has one line per row, then empties the cart.",
+    "steps": [
+      "Open the webstore",
+      "Quick Order, Add Multiple Items, Paste Multiple",
+      "Paste one '<ProductSku> , <ProductQuantity>' line per row of multipleValidProductsAndTheirQuantity; Add All to Quick List; verify message box",
+      "Add to Cart",
+      "Verify cart line item count = number of rows",
+      "Remove all items"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the products added, then removed"
+    ],
+    "assertions": [
+      "Cart line item count equals the number of pasted rows"
+    ],
+    "evidence": [
+      "Independent method (priority 105, no dependsOn): it opens the webstore itself and clears the quick list / cart at the end, so it declares its own needs.",
+      "Read by the page object, not scanned: QuickOrderPadPage.addMultipleProductsInAddMultipleItemsBox reads table multipleValidProductsAndTheirQuantity (TestDataConstants.TEST_DATA_QUICK_ORDER_MULTIPLE_PRODUCTS_DATA, sheet quickOrderPage) rows product0..product<N-1>, columns ProductSku and ProductQuantity. It pastes '<ProductSku> , <ProductQuantity>' for every row; the test expects quickOrderMultipleProductsDataMap.size() cart lines. No source entries: the cells are not in any scan and the workbook is not read. Table position: quickOrderPasteMultipleSkusPageData data rows end at 31, so the table starts after row 31; its row count is unknown (at least 2: multipleProductsCountToBeAdded = 2 reads product0 and product1). ASSUMPTION (needs review): two rows; the migrated test loops over the declared needs.",
+      "Quantities: ProductQuantity is not scanned (config); ASSUMPTION: the migrated test pastes quantity 1 per row (quantityUsed 1). The line-item count becomes the number of declared needs (2).",
+      "Distinct records: product0 and product1 are separate PRODUCT_SIMPLE_IN_STOCK needs; the resolver gives them different SKUs (identity sku), which the line-item / cart-count checks need.",
+      "No preferred: the sheet SKUs are not in any scan.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows dbo.ZnodePimProduct (2026-11-05) and the approved Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product0",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5792"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

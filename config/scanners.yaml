@@ -186,6 +186,11 @@ migrated:
     - src/test/java/testClasses/webstore/shoppingCart/ConfigurableProductShoppingCartPageTest.java
     - src/test/java/testClasses/webstore/shoppingCart/ShippingCostTest.java
     - src/test/java/testClasses/webstore/shoppingCart/SimpleProductShoppingCartPageTest.java
+    # Phase 6 wave 2, webstore/quickOrder
+    - src/test/java/testClasses/webstore/quickOrder/QuickOrderPasteMultipleSKUsForGuestUserTest.java
+    - src/test/java/testClasses/webstore/quickOrder/QuickOrderPasteMultipleSKUsForRetailUserTest.java
+    - src/test/java/testClasses/webstore/quickOrder/QuickOrderWithMultipleSkuTest.java
+    - src/test/java/testClasses/webstore/quickOrder/QuickOrderWithSingleSkuTest.java
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
 # swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.

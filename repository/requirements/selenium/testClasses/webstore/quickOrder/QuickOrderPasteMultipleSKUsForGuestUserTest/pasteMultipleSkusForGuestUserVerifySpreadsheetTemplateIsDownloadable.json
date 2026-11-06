@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForGuestUserTest#pasteMultipleSkusForGuestUserVerifySpreadsheetTemplateIsDownloadable",
+  "scenario": {
+    "summary": "clicks the spreadsheet template link on the Paste Multiple tab and checks the template file is downloaded (then deletes it).",
+    "steps": [
+      "Open the webstore",
+      "Quick Order, Add Multiple Items, Paste Multiple",
+      "Click the spreadsheet download link",
+      "Verify the downloaded file quickOrderTemplateName exists; delete it"
+    ],
+    "entitiesTouched": [
+      "store"
+    ],
+    "stateChanges": [
+      "Downloads and deletes a local file"
+    ],
+    "assertions": [
+      "Downloaded file named quickOrderTemplateName exists"
+    ],
+    "evidence": [
+      "Reads no record value; the template file name is fixed UI output (expected-output).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9777"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "QuickOrderCSVTemplate.csv",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B20",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/quickOrderTemplateName/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

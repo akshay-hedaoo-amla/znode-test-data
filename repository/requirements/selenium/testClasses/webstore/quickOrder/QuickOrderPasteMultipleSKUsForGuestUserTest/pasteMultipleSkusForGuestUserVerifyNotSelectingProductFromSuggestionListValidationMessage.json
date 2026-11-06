@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForGuestUserTest#pasteMultipleSkusForGuestUserVerifyNotSelectingProductFromSuggestionListValidationMessage",
+  "scenario": {
+    "summary": "DISABLED (enabled = false). Continues on the pad left by VerifyQuickOrderPadNavigation: types the SKU without selecting the suggestion and checks the 'SKU is invalid' message.",
+    "steps": [
+      "(dependsOn VerifyQuickOrderPadNavigation, no navigation)",
+      "Type validSku in the SKU box without selecting a suggestion",
+      "Click the Paste Multiple tab; verify the quantity validation message",
+      "Clear all"
+    ],
+    "entitiesTouched": [
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Validation message equals invalidSkuValidationMessage"
+    ],
+    "evidence": [
+      "dependsOn pasteMultipleSkusForGuestUserVerifyQuickOrderPadNavigation; enabled = false (the method does not run today).",
+      "Class chain, first method captures: this method reads maxQuantityProduct captured by pasteMultipleSkusForGuestUserVerifyQuickOrderPadNavigation from the class field and has no needs. The record value it reads today (validSku, quickOrderPage!C11) is declared as a source of that method; until the class is migrated, check-hardcoded reports it here.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "The entered SKU is invalid",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B23",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/invalidSkuValidationMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

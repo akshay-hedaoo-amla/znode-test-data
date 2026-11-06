@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderWithMultipleSkuTest#multipleSkuVerifyQuickOrderPadPageFunctionality",
+  "scenario": {
+    "summary": "On the Quick Order Pad selects a product from the auto-suggestion (default quantity 1), adds and removes a second row with the same product, sets quantity 3, adds to cart and checks the cart count and the cart line name, price, quantity and total; then empties the cart.",
+    "steps": [
+      "Open the webstore, Quick Order, Add Multiple Items",
+      "Select value0 SKU from the auto-suggestion; verify quantity = 1",
+      "Add Row; type the SKU in the new row, select the suggestion; verify quantity = 1; remove the row",
+      "Set quantity value2 SKUQuantity (3); Add to Cart",
+      "Verify cart heading; cart icon count = 3",
+      "Verify cart line name, price, quantity and total",
+      "Remove all items"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: product x3 added, then removed"
+    ],
+    "assertions": [
+      "Quantity fields = 1 after selection",
+      "Cart icon count = 3",
+      "Line name = product name",
+      "Line price = product price",
+      "Line quantity = 3",
+      "Line total = price x 3"
+    ],
+    "evidence": [
+      "Independent method (priority 10, no dependsOn): opens the webstore itself and empties the cart at the end.",
+      "value0 SKU z-1234576 (quickOrderPage!B3): SimpleProduct 'Frigidaire 5,000 BTU Window-Mounted Air Conditioner', DisablePurchasing, Min 1 / Max 100 (tda rows). The asserted name and price come from row value2 (D5/E5), which holds the same product: one need product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 3, minMaxQuantity 3, maxPersonalizableAttributes 0, store}, preferred value0 SKU (not required).",
+      "Outputs: sku, name, salesPrice, else retailPrice ('$165.00'). Line total '$495.00' is expected-output (price x 3, computed by the migrated test).",
+      "value0 SKUQuantity 1, value2 SKUQuantity 3 and value2 Quantity 3 are config. REVIEW: the default quantity 1 may be the product's MinimumQuantity (see the single-SKU entry).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows dbo.ZnodePimProduct (2026-11-05) and the approved Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "maxPersonalizableAttributes": 0,
+        "quantityUsed": 3,
+        "store": "MaxwellsHardware",
+        "minMaxQuantity": 3
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9754"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered on ",
+      "location": "src/main/java/utilities/ReportMessages.java:42",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:84",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234576",
+      "location": "webstoreTestData.xlsx!quickOrderPage!B3",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value0/SKU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C3",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value0/SKUQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text captured for ",
+      "location": "src/main/java/utilities/ReportMessages.java:36",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "3",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C5",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value2/SKUQuantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Frigidaire 5,000 BTU Window-Mounted Air Conditioner",
+      "location": "webstoreTestData.xlsx!quickOrderPage!D5",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value2/ProductName",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "$165.00",
+      "location": "webstoreTestData.xlsx!quickOrderPage!E5",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value2/Price",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "3",
+      "location": "webstoreTestData.xlsx!quickOrderPage!F5",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value2/Quantity",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$495.00",
+      "location": "webstoreTestData.xlsx!quickOrderPage!G5",
+      "kind": "excel",
+      "keyPath": "quickOrderPageData/value2/Total",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}

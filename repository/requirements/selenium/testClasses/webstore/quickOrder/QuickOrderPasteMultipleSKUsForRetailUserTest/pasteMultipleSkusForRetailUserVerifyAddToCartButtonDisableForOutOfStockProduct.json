@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.quickOrder.QuickOrderPasteMultipleSKUsForRetailUserTest#pasteMultipleSkusForRetailUserVerifyAddToCartButtonDisableForOutOfStockProduct",
+  "scenario": {
+    "summary": "DISABLED (enabled = false). Continues on the quick list left by VerifyOutOfStockProductValidation: checks Add to Cart is disabled, removes the out-of-stock product, sets a quantity and checks Add to Cart is enabled.",
+    "steps": [
+      "(dependsOn VerifyOutOfStockProductValidation, no navigation)",
+      "Verify Add to Cart disabled",
+      "Remove outOfStockProductSku from the quick list",
+      "Set quantity aboveMaximumQuantity; verify Add to Cart enabled",
+      "Clear all"
+    ],
+    "entitiesTouched": [
+      "product"
+    ],
+    "stateChanges": [
+      "None (quick list cleared)"
+    ],
+    "assertions": [
+      "Add to Cart disabled, then enabled"
+    ],
+    "evidence": [
+      "dependsOn pasteMultipleSkusForRetailUserVerifyOutOfStockProductValidation; enabled = false (the method does not run today).",
+      "Class chain, first method captures: reads outOfStockProduct (and the remaining validProduct line) captured by pasteMultipleSkusForRetailUserVerifyOutOfStockProductValidation from the class field; no needs. The record value it reads today (outOfStockProductSku, quickOrderPage!C12) is declared as a source of that method; until the class is migrated, check-hardcoded reports it here.",
+      "aboveMaximumQuantity 101 is config.",
+      "DECLARED ACCOUNT (per method): this method signs in itself with loginPage.successfullLogin(testClassRetailUsers/quickOrderRetailUserTest Username, Password; loginAndRegistration!B190/C190). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every signing-in method declares its own need user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium pilot entries T01-T04. Username/password are credential sources (masked) the test keeps reading from its own sheet. The scanner recorded the credential values only on LoginWithAUserAccount, MaximumAndMinimumQuantityValidations and AddMultipleProductsToCart; on the other methods the same two cells (same location, kind and masking) are declared from the test source (every method calls successfullLogin with them).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart entries and the Playwright quick-order entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9745"
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "101",
+      "location": "webstoreTestData.xlsx!quickOrderPage!C15",
+      "kind": "excel",
+      "keyPath": "quickOrderPasteMultipleSkusPageData/aboveMaximumQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+"status": "approved",
+"approvedBy": "Akshay Hedaoo",
+"approvedAt": "2026-11-05T09:00:00Z"
+}
