@@ -1,0 +1,22 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_CONFIGURABLE_ADDON_OF_PARENT",
+  "sql" : "SELECT TOP 20 p.SKU AS parentProductSku, ac.SKU AS addOnSku, ac.ProductName AS addOnName, gl.AddonGroupName AS addOnGroupName, ROW_NUMBER() OVER (ORDER BY ap.DisplayOrder, ap.PimAddOnProductId, d.DisplayOrder, ac.SKU) AS addOnPosition FROM dbo.ZnodePimProduct p INNER JOIN dbo.ZnodePortal po ON po.StoreCode = @store INNER JOIN dbo.ZnodePimAddOnProduct ap ON ap.PimProductId = p.PimProductId INNER JOIN dbo.ZnodePimAddonGroup g ON g.PimAddonGroupId = ap.PimAddonGroupId LEFT JOIN dbo.ZnodePimAddonGroupLocale gl ON gl.PimAddonGroupId = g.PimAddonGroupId AND gl.LocaleId = @localeId INNER JOIN dbo.ZnodePimAddOnProductDetail d ON d.PimAddOnProductId = ap.PimAddOnProductId INNER JOIN dbo.ZnodePimProduct ac ON ac.PimProductId = d.PimChildProductId WHERE p.SKU = @parentSku AND p.ProductType = @productType AND p.IsActive = @isActive AND ac.IsActive = @isActive AND g.DisplayType = @addOnDisplayType AND EXISTS (SELECT xp.PriceId FROM dbo.ZnodePrice xp INNER JOIN dbo.ZnodePriceList xl ON xl.PriceListId = xp.PriceListId INNER JOIN dbo.ZnodePriceListPortal xo ON xo.PriceListId = xl.PriceListId WHERE xp.SKU = ac.SKU AND xo.PortalId = po.PortalId AND xp.RetailPrice > @zero AND ISNULL(xl.ActivationDate, @now) <= @now AND ISNULL(xl.ExpirationDate, @now) >= @now AND ISNULL(xp.ActivationDate, @now) <= @now AND ISNULL(xp.ExpirationDate, @now) >= @now) ORDER BY ap.DisplayOrder, ap.PimAddOnProductId, d.DisplayOrder, ac.SKU",
+  "params" : [ "store", "localeId", "parentSku", "productType", "isActive", "addOnDisplayType", "zero", "now" ],
+  "constants" : {
+    "productType" : "ConfigurableProduct",
+    "isActive" : "true",
+    "zero" : "0",
+    "localeId" : "1"
+  },
+  "outputs" : [ "parentProductSku", "addOnSku", "addOnName", "addOnGroupName", "addOnPosition" ],
+  "identity" : "addOnSku",
+  "schemaFingerprint" : "sha256:794b41a2581b4b5ba3d7d3cee3429b2cf3a4d23fb72c8530f1c3bcfa60361fa9",
+  "vocabularyFingerprint" : "sha256:95dfb9053ecd031b270c5ec29121537ebcf80bb14c2c8dd60dc4678af0e31618",
+   "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z",
+  "createdAt" : "2026-11-06T00:00:00Z",
+  "lastValidated" : "2026-11-06T05:57:45Z",
+  "verifiedHash" : "sha256:75a57f5fb973a946cb851c7ecd64406d049295b6da8640843dd5f2180344270e"
+}

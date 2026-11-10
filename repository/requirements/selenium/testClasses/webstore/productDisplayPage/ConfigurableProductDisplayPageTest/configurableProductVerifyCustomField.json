@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductDisplayPageTest#configurableProductVerifyCustomField",
+  "scenario": {
+    "summary": "Signed in, on the configurable PDP: opens the Additional Information panel and verifies its custom-field text.",
+    "steps": [
+      "Scroll to the price",
+      "Open Additional Information",
+      "Verify the panel text"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Additional Information text equals the product's custom fields"
+    ],
+    "evidence": [
+      "dependsOn configurableProductSearchForConfigurableProduct.",
+      "Class chain, first method captures (user decision 2026-11-04): configurableProductSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1..variant8); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no product needs of their own. This method reads variant5.additionalInfo (custom fields of the selected variant, else the parent: 'Key: Value|...'); the sheet value C272 is declared as a source of configurableProductSearchForConfigurableProduct; until the class is migrated, check-hardcoded reports it here.",
+      "The panel shows the variant selected at that time (variant5, selected by the inventory method, priority 45); for the recorded data the custom fields are on the parent.",
+      "DECLARED ACCOUNT (per method): the class signs in once in configurableProductSearchForConfigurableProduct with loginPage.successfullLogin(testClassRetailUsers/configurableProductPDPTest Username, Password; loginAndRegistration!B176/C176) and every later method works in that signed-in session (its cart, wishlist, review). An account lease is held by the declaring method only, so each method declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium quickOrder retail entries. Username/password stay credential sources (masked) the test keeps reading from its own sheet; the scanner recorded them only on the head method, here the same two cells are declared from the test source (the session it reuses).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

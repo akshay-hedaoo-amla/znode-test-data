@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.BundleProductDisplayPageTest#verifyBundleProductDetailsOnPLPAndPDP",
+  "scenario": {
+    "summary": "Registered user clears the wishlist, opens the bundle PDP and checks name, SKU, retail and sales price, tier offers and included products, adds and removes it from the wishlist, then opens an obsolete bundle and checks the obsolete messages on PLP and PDP, hidden prices, disabled quantity and Add to Cart and the replacement products; logs off.",
+    "steps": [
+      "Open the webstore and sign in with the sheet account",
+      "Open My Account > Wishlist and remove any product",
+      "Search the bundle SKU and open the first result",
+      "Verify name, default image, 'SKU:\\n<sku>', retail price and sales price",
+      "Verify the special offers (tier quantity, price, savings) and the included products list",
+      "Add to wishlist (message 'Product added to your Wishlist.'), click again (message 'Product removed from your Wishlist.')",
+      "Search the obsolete bundle SKU; verify the PLP obsolete message; open it and verify the PDP obsolete message",
+      "Verify sales/cost price hidden, quantity box and Add to Cart disabled, replacement product names",
+      "Log off"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product",
+      "wishlist"
+    ],
+    "stateChanges": [
+      "The user's wishlist is cleared, the bundle is added then removed again"
+    ],
+    "assertions": [
+      "PDP name, SKU, retail price and sales price equal the bundle's",
+      "Tier offers and included product names equal the bundle's",
+      "Wishlist add/remove toast messages",
+      "Obsolete message on PLP and PDP; prices hidden; quantity and Add to Cart disabled",
+      "Replacement product cards show the obsolete bundle's replacement products"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-8846 bundle details, Z10-TC-8847 tier pricing, Z10-TC-8848 included products, Z10-TC-8849 obsolete bundle properties, Z10-TC-8865 log out. Independent method (priority 1).",
+      "DECLARED ACCOUNT (per method): this method signs in itself with loginPage.customerSuccessfullLogin (testClassRetailUsers/bundleProductPDPTest Username, Password; loginAndRegistration!B175/C175). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, with Tda.declareUser at method start. Username/password are credential sources (masked) the test keeps reading from its own sheet.",
+      "ProductCutPrice '$530.00' goes to verifyProductRetailPrice and ProductSalesPrice '$500.00' to verifyProductCutPrice (method names swapped): product.retailPrice and product.salesPrice, formatted with Tda.money. 'SKU:' is a UI label (expected-output).",
+      "Read by the page object, not scanned: specialOfferQuantity / specialOfferPrice / specialOfferSavings (TestData.getHashMap of SCENARIO_TEST_DATA_NAME_SPECIAL_OFFERS_QUANTITY/_PRICE/_SAVINGS, keys BuyingQuantity<n> / QuantityPrice<n> / Saving<n>) -> product.tier1..3Qty and tier1..3Price; savings are derived (round((price - tierNPrice) / price * 100)), as in the approved Playwright bundle PDP entry. No source entries: the cells are not in the scan and the workbook is not read.",
+      "Read by the page object, not scanned: bundleProductList (getHashMap SCENARIO_TEST_DATA_NAME_INCLUDED_PRODUCTS, keys GlobalVariables.PRODUCTS_INCULDED_IN_BUNDLED_PRODUCT + index) -> product.child1..3Name for verifyIncludedProductsInBundleProduct. The same list is reused by verifyReplacementProductsNames for the obsolete bundle's replacement cards: z-98765's ProductSuggestions links (bin/tda rows ZnodePimLinkProductDetail, PimParentProductId 871) are PimProductIds 139/140/141 = the three children of z-1234579. Migrated: replacement = PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK {product @obsoleteProduct.productId}; the test checks that replacement.name is among the cards.",
+      "Gap: PRODUCT_BUNDLE_IN_STOCK has no tier-price constraint; a fallback bundle without tiers returns null tier outputs and the special-offer checks cannot pass. Gap: only the first replacement is resolved, so the migrated replacement check is 'contains', not the full list.",
+      "New key PRODUCT_BUNDLE_OBSOLETE (pending, proposed with this module): ProductInfo1 z-98765 is an active BundleProduct with IsObsolete true (PimProductId 871); PRODUCT_SIMPLE_OBSOLETE returns simple products only and the TCs are about an obsolete bundle. minReplacements 1 because the test checks the replacement cards.",
+      "Image check: verifyProductDefaultImage compares the stored file LogoAndImageConstants.BUNDLE_PRODUCT_THUMBNAILS (not in the scan); ASSUMPTION: becomes structural when migrated (visible image with a non-empty src), as decided for the shoppingCart images.",
+      "Obsolete messages (PLP 'This product is obsolete. View replacement products.', PDP '... Please choose from suggested replacement products.') and the wishlist toasts are fixed UI texts: expected-output.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows (2026-11-06) and the approved Playwright pdp entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "linkedCases": [],
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_OBSOLETE",
+      "alias": "obsoleteProduct",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minReplacements": 1
+      },
+      "preferred": {
+        "source": 23,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_REPLACEMENT_OF_PRODUCT_IN_STOCK",
+      "alias": "replacement",
+      "params": {
+        "product": "@obsoleteProduct.productId",
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B175",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/bundleProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C175",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/bundleProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-1234579",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3-Tool Combo Kit Bundle",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C335",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductName/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "SKU:",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$530.00",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C342",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductCutPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "retailPrice"
+    },
+    {
+      "value": "$500.00",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C341",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSalesPrice/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "salesPrice"
+    },
+    {
+      "value": "BuyingQuantity",
+      "location": "src/main/java/utilities/GlobalVariables.java:168",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_PRICE_OFFERS_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "QuantityPrice",
+      "location": "src/main/java/utilities/GlobalVariables.java:169",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Saving",
+      "location": "src/main/java/utilities/GlobalVariables.java:170",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_PRICE_OFFERS_SAVINGS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C375",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/MessageBoxContainerText/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Product removed from your Wishlist.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C376",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/WishlistMessageBoxContainerText/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-98765",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/ProductInfo1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "obsoleteProduct",
+      "output": "sku"
+    },
+    {
+      "value": "This product is obsolete. View replacement products.",
+      "location": "webstoreTestData.xlsx!productListingPage!B47",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/IsObsoleteMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "This product is obsolete. Please choose from suggested replacement products.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B380",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/IsObsoleteMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " Element is present ",
+      "location": "src/main/java/utilities/ReportMessages.java:37",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ELEMENT_ATTRIBUTE_IS_PRESENT_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not present.",
+      "location": "src/main/java/utilities/ReportMessages.java:80",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ELEMENT_ATTRIBUTE_IS_NOT_PRESENT_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

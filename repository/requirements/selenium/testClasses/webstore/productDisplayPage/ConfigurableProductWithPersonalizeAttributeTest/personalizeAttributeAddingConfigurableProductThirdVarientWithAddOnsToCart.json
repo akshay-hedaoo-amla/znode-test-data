@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductWithPersonalizeAttributeTest#personalizeAttributeAddingConfigurableProductThirdVarientWithAddOnsToCart",
+  "scenario": {
+    "summary": "Guest, on the PDP opened by the head method: selects the third variant of the chain by its attribute values and adds it three times with different personalization texts (three cart lines).",
+    "steps": [
+      "Select variant3's Bulb Size, Color and Technology",
+      "Type DisplayText, add to cart, verify cart count",
+      "Clear it, type AdditionalInformation, add to cart, verify cart count",
+      "Type both, add to cart, verify cart count"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: three lines of variant3 added; emptied by personalizeAttributeRemoveAllItemsFromCart"
+    ],
+    "assertions": [
+      "Cart count increases by one after each add"
+    ],
+    "evidence": [
+      "dependsOn personalizeAttributeSearchForConfigurableProduct.",
+      "Class chain, first method captures (user decision 2026-11-04): personalizeAttributeSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1, variant2, variant3, variant4); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no needs of their own. This method reads variant3 and the pinned attribute codes (class fields). The record values it reads today (variant SKU z-2520007) are declared as sources of personalizeAttributeSearchForConfigurableProduct; until the class is migrated, check-hardcoded reports them here.",
+      "Adds three lines: DisplayText text only, AdditionalInformation text only (after clearing DisplayText), both. Codes 'DisplayText'/'AdditionalInformation' and texts 'DeckerVoltCordlessReciprocatingSaw'/'PleaseHandleWithCare' are values the test chooses: config.",
+      "Each add checks the cart count with the page object's counter; InitialQuantity '1' is config.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G233",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttribute1/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeckerVoltCordlessReciprocatingSaw",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G235",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttributeText1/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//input[@id='",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:330",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.BEFORE_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:332",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.AFTER_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " validated successfully.",
+      "location": "src/main/java/utilities/ReportMessages.java:29",
+      "kind": "constant",
+      "keyPath": "ReportMessages.WEB_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G252",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/InitialQuantity/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G236",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttribute2/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PleaseHandleWithCare",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G238",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/PersonalizeAttributeText2/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductWithAddOnTypeRadioTest#addOnTypeRadioAddingConfigurableProductThirdVarientWithAddOnsToCart",
+  "scenario": {
+    "summary": "Guest, on the PDP opened by the head method: selects the third variant of the chain by its attribute values and, one after another, picks the three add-ons, adding the variant to the cart after each (three cart lines).",
+    "steps": [
+      "Select variant3's Bulb Size, Color and Technology",
+      "Select add-on 1, add to cart, verify cart count",
+      "Select add-on 2, add to cart, verify cart count",
+      "Select add-on 3, add to cart, verify cart count"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: three lines of variant3 added; emptied by addOnTypeRadioRemoveAllItemsFromCart"
+    ],
+    "assertions": [
+      "Cart count increases by one after each add"
+    ],
+    "evidence": [
+      "dependsOn addOnTypeRadioSearchForConfigurableProduct.",
+      "Class chain, first method captures (user decision 2026-11-04): addOnTypeRadioSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1, variant2, variant3, variant4); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no needs of their own. This method reads variant3 and product (add-on group and names) (class fields). The record values it reads today (variant SKU z-2520007, add-on values) are declared as sources of addOnTypeRadioSearchForConfigurableProduct; until the class is migrated, check-hardcoded reports them here.",
+      "Radio add-ons are clicked by aria-label containing the add-on name (product.addOnName / addOn2Name / addOn3Name).",
+      "Each add checks the cart count with the page object's counter; InitialQuantity '1' is config.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!F252",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/InitialQuantity/ConfigurableProductWithAddOnAsRadio",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

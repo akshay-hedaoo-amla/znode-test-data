@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+  "entity": "product",
+  "type": "configurable_variant_of_parent",
+  "constraints": {
+    "parentSku": "= {parentSku}",
+    "parentType": "configurable",
+    "isActive": "true",
+    "publishState": "production",
+    "variantStatus": "active",
+    "variantInventory": ">= {quantityUsed}",
+    "swatchCombination": "unique"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "One active variant (inventory >= quantityUsed) of a published configurable parent, with a swatch combination no other active variant shares; SKU order. Guest PDP: texts, price, swatches, custom fields, linked products (retail prices), warehouse inventory. Distinct per need. KB: Product Types.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "parentSku": {
+      "type": "string",
+      "description": "SKU of the configurable parent the test opened (ZnodePimProduct.SKU); link it to the parent need's output, e.g. \"@product.parentProductSku\""
+    },
+    "quantityUsed": {
+      "type": "integer",
+      "description": "Highest quantity the test adds of this variant; the variant needs at least this inventory on the store"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

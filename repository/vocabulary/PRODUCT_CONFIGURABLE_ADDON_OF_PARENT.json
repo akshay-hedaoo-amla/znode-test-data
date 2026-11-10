@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_CONFIGURABLE_ADDON_OF_PARENT",
+  "entity": "product",
+  "type": "configurable_addon_of_parent",
+  "constraints": {
+    "parentSku": "= {parentSku}",
+    "parentType": "configurable",
+    "addOnGroupDisplayType": "{addOnDisplayType}",
+    "addOnStatus": "active",
+    "addOnPrice": "> 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "One active priced add-on product in an add-on group of the given display type on a given configurable parent, one row per add-on in display order, with its SKU (dropdown option value), name and group. Several needs get distinct add-ons. KB: Configuring Product Add-ons.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "parentSku": {
+      "type": "string",
+      "description": "SKU of the configurable parent the test opened (ZnodePimProduct.SKU); link it to the parent need's output, e.g. \"@product.parentProductSku\""
+    },
+    "addOnDisplayType": {
+      "type": "string",
+      "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects from (CheckBox, RadioButton or DropDown)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

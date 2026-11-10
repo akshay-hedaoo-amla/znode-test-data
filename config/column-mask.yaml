@@ -65,3 +65,23 @@ columns:
   - "dbo.*.*postalcode*"
   - "dbo.*.*apikey*"      # API keys (e.g. ZnodeDomain.ApiKey); added 2026-10-21
   - "dbo.*.*secret*"
+
+# Output exceptions: masked columns a run-time QUERY may return to a test, only through the stated join. The mask list
+# above still applies in full to the profiler, `rows` and every agent: no agent ever reads these values. An exception
+# applies only once a human fills in approvedBy and approvedAt. Changes go through review (security_and_access_doc.md
+# section 6: customer personal data never leaves the database layer; warehouse addresses are store data).
+outputExceptions:
+  - columns:
+      - dbo.ZnodeAddress.Address1
+      - dbo.ZnodeAddress.Address2
+      - dbo.ZnodeAddress.Address3
+      - dbo.ZnodeAddress.CityName
+      - dbo.ZnodeAddress.PostalCode
+    onlyVia: dbo.ZnodeWarehouseAddress.AddressId   # rows that are a warehouse's address, never a user's or an order's
+    usedBy: [PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK, PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT]
+    reason: >-
+      Selenium productDisplayPage inventory tests compare the default and other warehouse addresses shown on the PDP
+      (store warehouse setup, not customer data). User decision 2026-11-06 (mask exception chosen over keeping the
+      sheet values).
+    approvedBy: Akshay Hedaoo
+    approvedAt: 2026-11-06T09:00:00Z

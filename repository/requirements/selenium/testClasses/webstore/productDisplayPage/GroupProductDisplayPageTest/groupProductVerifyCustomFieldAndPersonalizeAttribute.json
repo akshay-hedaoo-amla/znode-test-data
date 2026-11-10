@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductDisplayPageTest#groupProductVerifyCustomFieldAndPersonalizeAttribute",
+  "scenario": {
+    "summary": "On the grouped PDP opened by the head method, checks the personalization label and the Additional Information panel text.",
+    "steps": [
+      "Verify the personalization label",
+      "Open the Additional Information panel",
+      "Verify its text"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Personalization label equals the pinned attribute code DisplayText",
+      "Additional Information text equals the product's custom field"
+    ],
+    "evidence": [
+      "dependsOn groupProductVerifyProductBreadCrumbPathAndGroupProductDetails.",
+      "Method comment: Z10-TC-8869 custom field and personalize attribute.",
+      "Class chain, first method captures: the record value it reads today (AdditionalInfo) is declared as a source of groupProductVerifyProductBreadCrumbPathAndGroupProductDetails (customFields.additionalInfo); until the class is migrated, check-hardcoded reports it here.",
+      "PersonalizeAttribute 'DisplayText' is compared with the fixed locator lblProductPersonalizationDisplayText: it equals the pinned param personalizationAttribute DisplayText of the head need (config).",
+      "This method reuses the head method's signed-in session (wishlist and log-off need it), so it declares the same sheet account; the scan records the credential cells only on the head method, and the same two cells (same location, kind and masking) are declared here from the test source.",
+      "DECLARED ACCOUNT (per method): the head method signs in with loginPage.successfullLogin (testClassRetailUsers/groupProductPDPTest Username, Password; loginAndRegistration!B177/C177). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, with Tda.declareUser at method start. Username/password are credential sources (masked) the test keeps reading from its own sheet.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "linkedCases": [],
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "DisplayText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C451",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/PersonalizeAttribute/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

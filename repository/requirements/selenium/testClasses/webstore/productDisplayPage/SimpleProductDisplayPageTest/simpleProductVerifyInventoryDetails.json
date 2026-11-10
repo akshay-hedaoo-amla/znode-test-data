@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.SimpleProductDisplayPageTest#simpleProductVerifyInventoryDetails",
+  "scenario": {
+    "summary": "Guest opens a simple product's PDP and verifies its inventory block (default warehouse count and name, total), then the Inventory Check popup: default location count, name and address, the other locations' counts, names and addresses, and that the total equals the sum.",
+    "steps": [
+      "Open the webstore, search the product SKU and open its PDP",
+      "Verify 'Inventory' label, default warehouse count and name, total count, 'All Locations' label",
+      "Open the inventory details link; verify 'Inventory Check' heading and product name",
+      "Verify 'Default Location' count, warehouse name and address; 'Other Locations' counts, names and addresses",
+      "Verify total = default + other locations; close the popup"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "inventory",
+      "warehouse"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Default warehouse count and name and the total count match the product's stock",
+      "Inventory Check popup shows the default location's count, name and address and every other location's count, name and address",
+      "Total = default count + sum of the other locations' counts"
+    ],
+    "evidence": [
+      "Independent method (no dependsOn); linked manual cases Z10-TC-8684, 8877 are in the class comment, not in the scan.",
+      "Key PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK {addOnDisplayType DropDown}: the only approved simple key that returns per-warehouse stock (warehouseInventory = 'name=qty|...' with the store's default warehouse first, then alternates by precedence). It keeps the sheet product z-2420005 (column AddonDropdownAsRequired, drop-down add-on group) as the preferred record. The add-on constraint is not needed by this method; PRODUCT_SIMPLE_IN_STOCK returns no stock and excludes products with a required add-on (z-2420005 has one).",
+      "DefaultInventoryCount ('25'), DefaultWarehouse ('Milwaukee, Wisconsin') and TotalInventoryCount ('250') -> product.warehouseInventory: the first pair's qty and name, and the sum of all qtys (the migrated test parses the list).",
+      "Gap (outputs): DefaultWarehouseAddress (masked address) is the default warehouse's address: data without output; no key returns warehouse addresses. Proposal (not written): optional output warehouseAddresses on PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK, or a check that the address is shown (structural).",
+      "Gap (params): the popup lists other locations; the key does not require stock in more than one warehouse (a fallback product may show none).",
+      "Not scanned: TestData.getHashMap tables are not in the scan. the other-locations tables (inventoryCount0..n, warehouseName0..n, address0..n) compare every other location row. They are values of this method's needs and must come from the resolved record when the class is migrated (product.warehouseInventory pairs after the first; addresses have no output); check-hardcoded cannot see them today.",
+      "ProductName (E3) -> product.name (Inventory Check popup product name). Labels are UI texts: expected-output.",
+      "quantityUsed 1: nothing is added to the cart; the key needs a quantity (inventory >= 1).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in (the CentralizedLogin group is a tag only; no login call in the method).",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); sheet SKUs were looked up read-only with bin/tda rows (2026-11-06) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "2026-11-06 outputs added to PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK (query pending re-approval, verified): DefaultWarehouseAddress -> product.defaultWarehouseAddress ('Address1 Address2 State').",
+      "Unscanned tables now from the record: other-locations inventory counts -> product.warehouseInventory pairs after the first; other-locations names (verifyOtherWarehouseLocationsNameList, contains) -> product.otherWarehouseLabels ('WarehouseName City PostalCode', '|'-joined, entry i = warehouseInventory entry i+1); other-locations addresses (contains) -> product.otherWarehouseAddresses."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "DropDown"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420005",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Inventory",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B48",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/Inventory/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "25",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E49",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/DefaultInventoryCount/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "warehouseInventory"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E50",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/DefaultWarehouse/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "warehouseInventory"
+    },
+    {
+      "value": "250",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E51",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/TotalInventoryCount/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "warehouseInventory"
+    },
+    {
+      "value": "All Locations",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B53",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/AllLocations/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Inventory Check",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B54",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/InventoryCheck/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Bosch 2.5 Amp 5 in. Corded Variable Speed Random Orbital Sander/Polisher Kit",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E3",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductName/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "Default Location",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B55",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/DefaultLocation/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E52",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/DefaultWarehouseAddress/AddonDropdownAsRequired",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "defaultWarehouseAddress"
+    },
+    {
+      "value": "Other Locations",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B56",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/OtherLocations/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "inventoryCount",
+      "location": "src/main/java/utilities/GlobalVariables.java:178",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_INVENTORY_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "warehouseName",
+      "location": "src/main/java/utilities/GlobalVariables.java:179",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "src/main/java/utilities/GlobalVariables.java:180",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_ADDRESS",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

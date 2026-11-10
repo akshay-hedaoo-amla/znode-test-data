@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductDisplayPageTest#configurableProductVerifyConfigurableProductSixthVarientDetails",
+  "scenario": {
+    "summary": "Signed in, on the configurable PDP opened by the head method: selects the sixth variant of the chain by its attribute values, verifies its name, SKU, short description, price, quantity validations and Details/Specifications/Shipping panels, and adds it to the cart.",
+    "steps": [
+      "Select variant6's Bulb Size, Color and Technology",
+      "Verify name, 'SKU:' + SKU, short description and price",
+      "Verify Read Reviews link and default quantity",
+      "Type 0 and blank quantity, verify the validation messages",
+      "Verify Details, Specifications and Shipping panels and the Write a Review link",
+      "Add to cart and verify the cart count"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Account cart: variant6 added (quantity 1); emptied by configurableProductRemoveAllItemsFromCartAndLoggOff"
+    ],
+    "assertions": [
+      "Name, SKU, short description, price and panel texts equal variant6's",
+      "Zero and blank quantity validation messages",
+      "Cart count increases by one"
+    ],
+    "evidence": [
+      "dependsOn configurableProductSearchForConfigurableProduct.",
+      "Class chain, first method captures (user decision 2026-11-04): configurableProductSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1..variant8); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no product needs of their own. This method reads variant6 (class field). The variant SKU it reads today (z-2730012) is declared as a source of configurableProductSearchForConfigurableProduct (variant6.variantSku); until the class is migrated, check-hardcoded reports it here.",
+      "Read by the page object, not scanned: verifyDetailsOfProductVarient selects the variant by ProductSize/ProductColor/Technology and asserts ProductName, 'SKU:' + SKU, ShortDescription, ProductPrice, ProductDetails, ProductSpecification and Shipping of the variant's column -> variant6.swatches, variantName, variantSku, shortDescription, price, details, specifications, shippingInfo; then adds InitialQuantity (config 1) and checks the cart count (the page object's counter, one more per variant).",
+      "Labels: the 'SKU:' prefix and the zero/blank quantity validation messages are UI texts (expected-output); the zero quantity '0' the test types is config.",
+      "DECLARED ACCOUNT (per method): the class signs in once in configurableProductSearchForConfigurableProduct with loginPage.successfullLogin(testClassRetailUsers/configurableProductPDPTest Username, Password; loginAndRegistration!B176/C176) and every later method works in that signed-in session (its cart, wishlist, review). An account lease is held by the declaring method only, so each method declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium quickOrder retail entries. Username/password stay credential sources (masked) the test keeps reading from its own sheet; the scanner recorded them only on the head method, here the same two cells are declared from the test source (the session it reuses).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 5,
+        "required": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "SKU:",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "value",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:323",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.LBL_VALUE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B295",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ZeroQuantity/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please specify valid product quantity.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B294",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ZeroQuantityValidationMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Please enter a numeric value.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B267",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/BlankValidationMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

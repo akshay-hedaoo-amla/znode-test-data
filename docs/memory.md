@@ -7,8 +7,8 @@ Living state of the project for Claude Code and the team. Read at the start of e
 | Field | Value |
 | --- | --- |
 | Current phase | Phase 6 (Rollout). Playwright webstore wave DONE (153/153 specs, org release 0.16.0). Selenium wave 2 IN PROGRESS: webstore module by module |
-| Last updated | 2026-11-06 |
-| Next step | Selenium module productDisplayPage, from the start (step 2 "Map"): see "Resume here: Selenium wave 2" below. shoppingCart is merged (PR #30); quickOrder is committed and pushed on branch selenium-webstore-quick-order, no PR (user: "commit and push, do not raise PR") |
+| Last updated | 2026-11-10 |
+| Next step | productDisplayPage migrated and run (uncommitted: data branch selenium-webstore-pdp, Selenium branch tda/selenium-webstore): commit both, push and PR on the user's word. Then productListingPage (see "Resume here: Selenium wave 2"). shoppingCart is merged (PR #30); quickOrder is pushed on branch selenium-webstore-quick-order, no PR |
 
 
 ## Resume here: Selenium wave 2 (handover 2026-11-06)
@@ -40,6 +40,9 @@ How a module is done (copy shoppingCart / quickOrder)
    every method that signs in or reuses the signed-in session declares the sheet account (Tda.declareUser -> useExisting,
    user USER_WEBSTORE_REGISTERED, preferred {source: username, required: true}); reuse approved keys, new keys/outputs only
    optional and never changing which rows an approved key returns. `bin/tda validate`, `bin/tda readiness selenium/testClasses/webstore/<module>`.
+   After ANY vocabulary change (declaredParams, constraints), restamp its query (`bin/tda restamp repository/queries/<KEY>.json`)
+   before the run, or every test on that key is skipped as STALE (pdp 2026-11-10 lost a full run to this). Restamp only
+   writes fingerprints (status and verifiedHash unchanged); on approved queries ask the user first.
 3. Approvals (only the user approves, by editing status/approvedBy/approvedAt in the files): round 1 requirements +
    vocabulary, then `bin/tda query-verify <KEY>` for new/changed queries, round 2 queries/collections.
 4. Migrate the classes (agent): read data through utilities/Tda.java (value/get/optional/declareUser/money); alias/output
@@ -55,16 +58,32 @@ How a module is done (copy shoppingCart / quickOrder)
    loader overlay intercepting clicks, btnCartNotificationClose not found, Quick Order Paste Multiple tab intercepted by the logo.
 6. Record here, commit both repos, push (ask the user first; the user decides about PRs).
 
-productDisplayPage (next; 9 classes, 74 tests)
-- Scanned 2026-11-06 (work/scans/selenium__src_test_java_testClasses_webstore_productDisplayPage_*.json): Bundle 17 tests/34
-  sheet values, Configurable 16/43, ConfigurableWithAddOnType Checkbox/Dropdown/Radio 6 each (~12), ConfigurableWithPersonalize
-  6/10, GroupProductDisplayPage 4/15, GroupProductShoppingCartPage 5/13, SimpleProductDisplayPage 8/61. Some classes sign in.
-- Mapping was started and STOPPED by the user; its partial edits were discarded (it had set the approved
-  PRODUCT_CONFIGURABLE_PDP_DETAILS back to pending without verifying - the DB was unreachable - and drafted
-  PRODUCT_BUNDLE_WITH_BACKORDER_CHILDREN / PRODUCT_BUNDLE_WITH_OUT_OF_STOCK_CHILD). Restart at step 2; the Playwright pdp
-  keys (PRODUCT_CONFIGURABLE_PDP_DETAILS with variantRank/swatches/tabs/inventory, bundle/group details, linked products,
-  highlights, obsolete) cover most values. The pdp baseline was also stopped before it finished: run it again.
-- Check `bin/tda ping` first (atstage DB 200.200.204.6 needs the VPN).
+productDisplayPage (DONE 2026-11-10, uncommitted; 9 classes, 74 tests)
+- Data branch selenium-webstore-pdp (from selenium-webstore-quick-order). 74 requirements approved; new keys (approved,
+  verified): PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT, PRODUCT_CONFIGURABLE_ADDON_OF_PARENT, PRODUCT_BUNDLE_CHILD_STOCK_STATES,
+  PRODUCT_BUNDLE_OBSOLETE, PRODUCT_CUSTOM_FIELDS_OF_PRODUCT; entity map warehouse_address; config/column-mask.yaml
+  outputExceptions (warehouse address columns only via ZnodeWarehouseAddress.AddressId, signed by the user).
+- Changed approved keys (user re-approved, rows of existing param sets proven unchanged with query-verify):
+  PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK (outputs + optional withAdditionalInfo/withBrand), PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK
+  (outputs + optional withBrand), PRODUCT_GROUPED_IN_STOCK (categoryPath = the product's FIRST (lowest-id) catalog category:
+  the storefront breadcrumb shows HOME/TOOLS for z-2200003, which is in Tools, Power Tools and Pneumatics; the query used to
+  match the publish entity's CategoryName = the deepest), PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (linked-product prices =
+  RetailPrice, the cards show spnRetailPrice; variants whose swatch combination another active variant shares are excluded:
+  z-2510008 and z-2520003 are both Small/White/Incandescent and the storefront shows z-2520003; B-100004 11 -> 9 rows).
+- Selenium repo (tda/selenium-webstore, uncommitted): 9 classes migrated; Tda.text decodes all entities, new Tda.visible
+  (page text normalised: spaces/nbsp collapsed per line, blank lines dropped) and Tda.count; ProductDisplayPage new methods
+  only (*Text panel checks compare Tda.visible(page) with Tda.text(stored HTML); whole Specifications tab
+  DIV_PRODUCT_SPECIFICATION_TAB, the old locator read only its first <p>; add-on labels 'name\n(+$price)'; thumbnails: one
+  shown and every one with a source); shown price = salesPrice else price; inventory/custom-field tests use variant 4
+  (the original z-2510006, the migration had 5). Untracked: testSuites/webstore/tda/webstoreProductDisplayPage.xml.
+- Runs on atstage: baseline (origin/dev, no agents) 7/74 fail. First agent runs 2026-11-06: 19/17 fail (all diagnosed and
+  fixed above). Final 2026-11-10: normal tda-selenium-1794292919417 6 fail, fallback -1794294733682 7 fail + 3 skips
+  (btnCartNotificationClose flake in groupProductSearchForTheProductAndAddToCart, its 3 dependants skipped; passes in normal),
+  SimpleProductDisplayPageTest-only reruns -1794296640881 / -1794297249417 (add-on label fix confirmed). 4 tests fail in the
+  baseline and in every agent run with the same assertion -> config/known-failures.yaml (decided by the user 2026-11-10):
+  configurable WriteAReview product name, group and simple drop-down 'CAUTION::' panel, simple checkbox 'Remove all items'
+  click intercepted. Intermittent (passed in other runs, not listed): simple personalize removeAll intercepted, group wishlist
+  close button. check-hardcoded: no hardcoded test data (315 tests).
 
 Open items carried over: known failures listed in config/known-failures.yaml; Playwright parked items (my-account
 order-history 6-7, quote history, plp highlights fallback 404, voucher balance drain by ORDER_OF_USER_REORDERABLE, pdp
@@ -876,3 +895,4 @@ Add one entry per session, newest first.
   - Next: commit both repos; PRs (data repo into main; Selenium branch: user decides PR into dev or keep open); then quickOrder.
 - 2026-11-05 Selenium module quickOrder (4 classes, 38 tests; data branch selenium-webstore-quick-order): 38 requirements on approved keys only (PRODUCT_SIMPLE_IN_STOCK, _OBSOLETE, _OUT_OF_STOCK, USER_WEBSTORE_REGISTERED), approved by the user; no round 2. Retail: every method that signs in or reuses the session declares the sheet account (Tda.declareUser) so the lease covers the method. Derived checks: range message from minQuantity/maxQuantity, above-max = max+1, MaxMin types floor(max/2)+1, line totals = price x qty, add-multiple expects the 2 declared products x 1. Page-object overloads in QuickOrderPadPage (List<String> skus). New shared Tda.money() (storefront format "$1,050.00"; fallback found "$1050.00" vs "$1,050.00"), now used by quickOrder and shoppingCart classes. Runs: baseline origin/dev 8/35 fail (both attempts); TDA normal x2, fallback x2: 7 tests fail every run -> config/known-failures.yaml (6 guest Paste Multiple tests: tab click intercepted by the logo / txtSkuList not found; retail MaxMin: toast not shown); intermittent UI flakes (retail InvalidSKUs, IsObsolete, OutOfStock, ZeroQuantity, AdjustQuantity) each passed in other runs. check-hardcoded clean. Next: commit, data PR, then productDisplayPage.
 - 2026-11-06 productDisplayPage started on branch selenium-webstore-pdp: 9 classes scanned; mapping agent and baseline stopped at the user's request ("stop for now"); partial edits discarded (see "Resume here: Selenium wave 2"). Status table and handover section updated for the team.
+- 2026-11-10 productDisplayPage migrated and run (data branch selenium-webstore-pdp, Selenium tda/selenium-webstore, uncommitted): 74 requirements + 5 new keys approved; 4 approved queries changed and re-approved (details in Resume here). A run skipped 40 tests as STALE because 3 queries were not restamped after their vocabulary changed; restamped (user: "Yes, restamp"). Final runs 6 (normal) / 7 (fallback) failures vs 7 in the baseline; 4 recorded in config/known-failures.yaml with evidence (user: "Add as known"). Token-reduction proposals (readiness output-gap check, tda module digest, Sonnet for mechanical steps, resumed agents, shorter briefs) offered 2026-11-06, no answer yet.

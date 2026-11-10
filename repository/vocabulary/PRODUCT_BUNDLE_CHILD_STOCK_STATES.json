@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_BUNDLE_CHILD_STOCK_STATES",
+  "entity": "product",
+  "type": "bundle_child_stock_states",
+  "constraints": {
+    "type": "bundle",
+    "status": "active",
+    "publishState": "production",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= false",
+    "storefrontProductIndex": ">= 1",
+    "child1State": "{child1State}",
+    "child2State": "{child2State}",
+    "child3State": "{child3State}",
+    "leadTimeChild": "{leadTimeChild}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active searchable bundle on the store whose children (PDP order) are in the given stock states: untracked (backorder/don't track), tracked (DisablePurchasing, stock >= bundle qty), outOfStock (below it) or available; optional child lead time. KB: Bundled; Inventory.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode); stock is the sum over the store's default and alternate warehouses"
+    },
+    "child1State": {
+      "type": "string",
+      "description": "State the first child (PDP order) must be in: untracked, tracked, outOfStock or available. Left out = any",
+      "optional": true
+    },
+    "child2State": {
+      "type": "string",
+      "description": "State the second child must be in (same values). Left out = any (the child may be missing)",
+      "optional": true
+    },
+    "child3State": {
+      "type": "string",
+      "description": "State the third child must be in (same values). Left out = any (the child may be missing)",
+      "optional": true
+    },
+    "leadTimeChild": {
+      "type": "integer",
+      "description": "Position (1, 2 or 3) of the child that must have a Typical Lead Time (attribute TypicalLeadTime); outputs childNLeadTime. Left out = no lead time needed",
+      "optional": true
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

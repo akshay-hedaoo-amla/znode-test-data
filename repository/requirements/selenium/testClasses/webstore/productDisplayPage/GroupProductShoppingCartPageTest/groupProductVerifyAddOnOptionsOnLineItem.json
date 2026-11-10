@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductShoppingCartPageTest#groupProductVerifyAddOnOptionsOnLineItem",
+  "scenario": {
+    "summary": "Checks the cart line item's add-on and personalization lines.",
+    "steps": [
+      "Verify the line item add-on options text"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Line item text equals '<child name>\\nDisplayText : <text>\\nCheckbox : <add-on>' x3"
+    ],
+    "evidence": [
+      "dependsOn groupProductSearchForTheProductAndAddToCart.",
+      "Class chain, first method captures: the record value it reads today (AddOnOptions1, composed from the head's record) is declared as a source of groupProductSearchForTheProductAndAddToCart; until the class is migrated, check-hardcoded reports it here.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "linkedCases": [],
+  "requires": [],
+  "sources": [
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

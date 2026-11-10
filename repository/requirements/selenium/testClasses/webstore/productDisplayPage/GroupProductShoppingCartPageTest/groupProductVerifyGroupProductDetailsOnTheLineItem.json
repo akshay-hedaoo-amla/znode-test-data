@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductShoppingCartPageTest#groupProductVerifyGroupProductDetailsOnTheLineItem",
+  "scenario": {
+    "summary": "Checks the cart line item name, the included product list and that the unit price equals the child price plus the three add-on prices.",
+    "steps": [
+      "Verify the line item name",
+      "Verify the included products list",
+      "Verify unit price = child price + three add-on prices"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Line item name equals the grouped product name",
+      "Unit price equals child price + add-on prices"
+    ],
+    "evidence": [
+      "dependsOn groupProductSearchForTheProductAndAddToCart.",
+      "Class chain, first method captures: the record values it reads today (ProductName, GroupedProduct1Price, AddOnOptionPrice1..3) are declared as sources of groupProductSearchForTheProductAndAddToCart; until the class is migrated, check-hardcoded reports them here.",
+      "Read by the page object, not scanned: includedProducts (getHashMap SCENARIO_TEST_DATA_NAME_GROUPED_PRODUCTS) -> product.child1Name from the head's record.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "linkedCases": [],
+  "requires": [],
+  "sources": [
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "GroupedProduct",
+      "location": "src/main/java/utilities/GlobalVariables.java:172",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.PRODUCTS_INCULDED_IN_GROUP_PRODUCT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "(//p[contains(@data-test-selector, 'paraOrderRowTotal')])",
+      "location": "src/main/java/pageObjects/webstore/ShoppingCartPageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ShoppingCartPageObjects.PARA_ORDER_ROW_TOTAL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "$",
+      "location": "src/main/java/utilities/GlobalVariables.java:193",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.DOLLER_SYMBOL",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

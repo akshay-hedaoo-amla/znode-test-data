@@ -191,6 +191,16 @@ migrated:
     - src/test/java/testClasses/webstore/quickOrder/QuickOrderPasteMultipleSKUsForRetailUserTest.java
     - src/test/java/testClasses/webstore/quickOrder/QuickOrderWithMultipleSkuTest.java
     - src/test/java/testClasses/webstore/quickOrder/QuickOrderWithSingleSkuTest.java
+    # Phase 6 wave 2, webstore/productDisplayPage
+    - src/test/java/testClasses/webstore/productDisplayPage/BundleProductDisplayPageTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/ConfigurableProductDisplayPageTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/ConfigurableProductWithAddOnTypeCheckboxTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/ConfigurableProductWithAddOnTypeDropdownTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/ConfigurableProductWithAddOnTypeRadioTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/ConfigurableProductWithPersonalizeAttributeTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/GroupProductDisplayPageTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/GroupProductShoppingCartPageTest.java
+    - src/test/java/testClasses/webstore/productDisplayPage/SimpleProductDisplayPageTest.java
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
 # swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.

@@ -1,0 +1,21 @@
+{
+  "schemaVersion" : 1,
+  "key" : "PRODUCT_CUSTOM_FIELDS_OF_PRODUCT",
+  "sql" : "SELECT TOP 10 p.PimProductId AS productId, p.SKU AS sku, cf.ai AS additionalInfo, f1.k AS customField1Key, f1.v AS customField1Value FROM dbo.ZnodePimProduct p CROSS APPLY (SELECT STRING_AGG(CONCAT(fl.CustomKey, @keyValueSep, fl.CustomKeyValue), @listSep) WITHIN GROUP (ORDER BY f.DisplayOrder, f.CustomCode) AS ai FROM dbo.ZnodePimCustomField f INNER JOIN dbo.ZnodePimCustomFieldLocale fl ON fl.PimCustomFieldId = f.PimCustomFieldId AND fl.LocaleId = @localeId WHERE f.PimProductId = p.PimProductId) cf OUTER APPLY (SELECT TOP 1 fl.CustomKey AS k, fl.CustomKeyValue AS v FROM dbo.ZnodePimCustomField f INNER JOIN dbo.ZnodePimCustomFieldLocale fl ON fl.PimCustomFieldId = f.PimCustomFieldId AND fl.LocaleId = @localeId WHERE f.PimProductId = p.PimProductId ORDER BY f.DisplayOrder, f.CustomCode) f1 WHERE p.PimProductId = @product AND cf.ai IS NOT NULL ORDER BY p.PimProductId",
+  "params" : [ "product", "localeId", "keyValueSep", "listSep" ],
+  "constants" : {
+    "localeId" : "1",
+    "keyValueSep" : ": ",
+    "listSep" : "|"
+  },
+  "outputs" : [ "productId", "sku", "additionalInfo", "customField1Key", "customField1Value" ],
+  "identity" : "productId",
+  "schemaFingerprint" : "sha256:02ef99c4b4c6efbb2e1b4945d22ce53ce882504fb913683234b1ca8ad823ee80",
+  "vocabularyFingerprint" : "sha256:de3568718a078d0d78e81706281d52dc1faaffc8548db1c7df77d4ac9f7cfe31",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z",
+  "createdAt" : "2026-11-06T12:00:00Z",
+  "lastValidated" : "2026-11-06T05:58:19Z",
+  "verifiedHash" : "sha256:71ff378764e8e8240e70165a27630b242b0716a89832db83b92f436e44fcae6a"
+}

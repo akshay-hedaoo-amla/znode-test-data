@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductDisplayPageTest#groupProductAddProductToWishList",
+  "scenario": {
+    "summary": "On the grouped PDP, adds the product to the wishlist, checks the toast, clicks the wishlist button again and logs off.",
+    "steps": [
+      "Click the wishlist button; verify 'Product added to your Wishlist.'",
+      "Close the toast; click the wishlist button again",
+      "Log off"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "The user's wishlist: the grouped product is added (second click toggles it); the user is logged off"
+    ],
+    "assertions": [
+      "Wishlist toast equals 'Product added to your Wishlist.'"
+    ],
+    "evidence": [
+      "dependsOn groupProductVerifyProductBreadCrumbPathAndGroupProductDetails.",
+      "Method comment: Z10-TC-8871 add to wishlist, Z10-TC-8872 log out.",
+      "MessageBoxContainerText is a fixed UI text: expected-output.",
+      "This method reuses the head method's signed-in session (wishlist and log-off need it), so it declares the same sheet account; the scan records the credential cells only on the head method, and the same two cells (same location, kind and masking) are declared here from the test source.",
+      "DECLARED ACCOUNT (per method): the head method signs in with loginPage.successfullLogin (testClassRetailUsers/groupProductPDPTest Username, Password; loginAndRegistration!B177/C177). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, with Tda.declareUser at method start. Username/password are credential sources (masked) the test keeps reading from its own sheet.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "linkedCases": [],
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product added to your Wishlist.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C455",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/MessageBoxContainerText/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

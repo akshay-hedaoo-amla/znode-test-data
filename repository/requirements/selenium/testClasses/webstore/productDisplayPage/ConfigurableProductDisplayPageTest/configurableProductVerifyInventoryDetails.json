@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductDisplayPageTest#configurableProductVerifyInventoryDetails",
+  "scenario": {
+    "summary": "Signed in, on the configurable PDP: selects variant5 (the fifth variant of the chain), verifies the inventory section (default warehouse quantity and name, All Locations total) and the Inventory Check popup (default location with address, other locations' quantities, names and addresses, total = sum).",
+    "steps": [
+      "Select variant5 by its attribute values",
+      "Verify Inventory label, default warehouse quantity and name, All Locations label and total",
+      "Open Inventory details",
+      "Verify Inventory Check heading, product name, Default Location label, default quantity, warehouse and address",
+      "Verify Other Locations label and the other warehouses' quantities, names and addresses",
+      "Verify total = default + others",
+      "Close the popup"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "warehouse",
+      "inventory"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Default warehouse quantity/name and All Locations total equal variant5's",
+      "Inventory Check lists the default and other warehouses with quantity, name and address",
+      "Total inventory equals the sum"
+    ],
+    "evidence": [
+      "dependsOn configurableProductSearchForConfigurableProduct.",
+      "Class chain, first method captures (user decision 2026-11-04): configurableProductSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1..variant8); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no product needs of their own. This method reads variant5 (class field): the sheet reads the same variant (z-2510006) as the fifth variant method. The record values it reads today (L209 z-2510006, L208 name, C259 100, C260 Milwaukee, Wisconsin, C261 1000, C262 masked address) are declared as sources of configurableProductSearchForConfigurableProduct; until the class is migrated, check-hardcoded reports them here.",
+      "Mapping: the variant selected by selectConfigurableAttributes(z-2510006 column) -> variant5.swatches; product name -> variant5.variantName; DefaultInventoryCount -> variant5.defaultWarehouseQty; DefaultWarehouse -> variant5.defaultWarehouseName; TotalInventoryCount -> variant5.allLocationsQty; other locations (TestData.getHashMap of the configurable inventory count / warehouse name tables, page-object reads, not scanned) -> variant5.inventoryList ('Warehouse=qty|...', default first), as approved for the Playwright variant2 entry.",
+      "Gap (needsReview): warehouse addresses (default C262, masked, and the other-locations address table) have no output on PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (as on the approved PRODUCT_CONFIGURABLE_PDP_DETAILS); the migrated test keeps these checks only for the preferred record or drops them (warehouse addresses are store configuration, not product data).",
+      "Labels (Inventory, All Locations, Inventory Check, Default Location, Other Locations) are UI texts: expected-output.",
+      "DECLARED ACCOUNT (per method): the class signs in once in configurableProductSearchForConfigurableProduct with loginPage.successfullLogin(testClassRetailUsers/configurableProductPDPTest Username, Password; loginAndRegistration!B176/C176) and every later method works in that signed-in session (its cart, wishlist, review). An account lease is held by the declaring method only, so each method declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium quickOrder retail entries. Username/password stay credential sources (masked) the test keeps reading from its own sheet; the scanner recorded them only on the head method, here the same two cells are declared from the test source (the session it reuses).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium.",
+      "2026-11-06: the warehouse addresses are no longer a gap: the default address comes from variant5.defaultWarehouseAddress (captured by the head method, source C262 declared there), the other-locations names table from variant5.otherWarehouseLabels and the other-locations address table (TestData.getHashMap CONFIG_PRODUCT_WAREHOUSE_ADDRESS, unscanned) from variant5.otherWarehouseAddresses."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 14,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5741"
+  ],
+  "sources": [
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Inventory",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B258",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/Inventory/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "All Locations",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B263",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AllLocations/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Inventory Check",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B264",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/InventoryCheck/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Default Location",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B265",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/DefaultLocation/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Other Locations",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B266",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/OtherLocations/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "inventoryCount",
+      "location": "src/main/java/utilities/GlobalVariables.java:178",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_INVENTORY_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "warehouseName",
+      "location": "src/main/java/utilities/GlobalVariables.java:179",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "src/main/java/utilities/GlobalVariables.java:180",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WAREHOUSE_ADDRESS",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductShoppingCartPageTest#groupProductSearchForTheProductAndAddToCart",
+  "scenario": {
+    "summary": "Guest searches the grouped product, sets quantity 1, types the personalization text, ticks three checkbox add-ons, adds it to the cart and opens the cart; head of the class chain.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the product by name and SKU and open it",
+      "Set the grouped quantity 1",
+      "Type the personalization text into the DisplayText field",
+      "Tick the three checkbox add-ons by name",
+      "Add to Cart and open the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the grouped product with personalization and three add-ons is added (removed by groupProductRemovedAllCartItems)"
+    ],
+    "assertions": [
+      "None in this method (the cart checks are in the dependsOn methods)"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-9013 search for the product and add to cart.",
+      "Class chain, first method captures (user decision 2026-11-04): groupProductSearchForTheProductAndAddToCart declares the need and every record value of the chain and keeps the record in class fields; the dependsOn methods read those fields and throw SkipException DATA_UNAVAILABLE when they are null. Consumers: groupProductVerifyGroupProductDetailsOnTheLineItem (name, child price, add-on prices), groupProductVerifyPersonalizeTextOnLineItem (config only), groupProductVerifyAddOnOptionsOnLineItem (composed line-item text).",
+      "Params: minAddOns 1 + addOnDisplayType CheckBox (selectAddOnOptionOfTypeCheckbox clicks the add-ons by name); minPersonalizableAttributes 1 + personalizationAttribute DisplayText (addTextToPersonalizeAttribute builds the input locator //input[@id='<label>'] from the label).",
+      "AddOnOption1..3 -> product.addOnName / addOn2Name / addOn3Name (the key's first three priced add-ons of CheckBox groups in display order); imported AddOnOptionPrice1..3 -> addOnPrice / addOn2Price / addOn3Price.",
+      "Gap (params): the test ticks three add-on products; minAddOns counts add-on groups, so a fallback product may have fewer than three (addOn3Name null).",
+      "PersonalizeLabel 'DisplayText' equals the pinned personalizationAttribute (config); PersonalizeText 'DisplaySampleText' is typed by the test (config); InitialQuantity '1' is config (quantityUsed).",
+      "Imported: GroupedProduct1Price '$22.48' -> product.child1SalesPrice (the grouped child whose quantity is set; shown price: sales, else child1RetailPrice). The line-item unit price is computed by the test (child price + three add-on prices).",
+      "Imported: AddOnOptions1 is composed '<child1Name>\\nDisplayText : <typed text>\\n<addOnGroupName> : <addOnName>' (one line per add-on; group label 'Checkbox' on the recorded product): data without output, built by the migrated test.",
+      "Read by the page object, not scanned: groupProductVerifyGroupProductDetailsOnTheLineItem reads includedProducts (getHashMap SCENARIO_TEST_DATA_NAME_GROUPED_PRODUCTS, keys GroupedProduct<n>) for verifyGroupIncludedProductList -> product.child1Name (only the child added). No source entries: the cells are not in the scan.",
+      "Search uses search.searchForProduct(name, sku): both are data of product.",
+      "Profile (Playwright observations): z-2200003 is an active GroupedProduct in PRODUCTION, inventory 250, requiredAddOnCount 0.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows (2026-11-06) and the approved Playwright pdp entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "linkedCases": [],
+  "requires": [
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 1,
+        "addOnDisplayType": "CheckBox",
+        "minPersonalizableAttributes": 1,
+        "personalizationAttribute": "DisplayText",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C423",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductName/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "z-2200003",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C424",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductSKU/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C446",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/InitialQuantity/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C460",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/PersonalizeLabel/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplaySampleText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C461",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/PersonalizeText/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//input[@id='",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:330",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.BEFORE_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:332",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.AFTER_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Leviton Decora 2 Gang Wall Plate",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C462",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOption1/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnName"
+    },
+    {
+      "value": "Nibco 1-1/2 in. 40S PVC Coupling",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C463",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOption2/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2Name"
+    },
+    {
+      "value": "Nibco 2 in. 40S PVC Coupling",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C464",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOption3/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3Name"
+    },
+    {
+      "value": "$22.48",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C444",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/GroupedProduct1Price/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1SalesPrice"
+    },
+    {
+      "value": "$1.38",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C465",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOptionPrice1/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnPrice"
+    },
+    {
+      "value": "$1.40",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C466",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOptionPrice2/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn2Price"
+    },
+    {
+      "value": "$1.25",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C467",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOptionPrice3/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOn3Price"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil\nDisplayText : DisplaySampleText\nCheckbox : Leviton Decora 2 Gang Wall Plate\nCheckbox : Nibco 1-1/2 in. 40S PVC Coupling\nCheckbox : Nibco 2 in. 40S PVC Coupling",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C479",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddOnOptions1/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

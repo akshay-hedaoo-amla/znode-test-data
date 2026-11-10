@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductDisplayPageTest#groupProductVerifyProductBreadCrumbPathAndGroupProductDetails",
+  "scenario": {
+    "summary": "Registered user opens the grouped product PDP and checks the breadcrumb, name, SKU, brand, short description, 'Starting at' price, thumbnails and the first included product with its price; head of the class chain.",
+    "steps": [
+      "Open the webstore and sign in with the sheet account",
+      "Search the grouped SKU and open the first result",
+      "Verify Read Reviews and Home links and the breadcrumb path",
+      "Verify name, 'SKU:\\n<sku>', brand (not on multistore12), short description and 'Starting at: <price>'",
+      "Verify the thumbnails",
+      "Verify the first included product's name and price"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "None (read-only PDP; the session stays signed in for the chain)"
+    ],
+    "assertions": [
+      "Breadcrumb 'HOME / <CATEGORY PATH> / <NAME>' (upper case)",
+      "Name, SKU, brand and short description equal the product's",
+      "Starting price equals 'Starting at: <lowest child price>'",
+      "First included product name and price"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-8866 breadcrumb, Z10-TC-8867 group details, Z10-TC-8868 included products, Z10-TC-7728 only the starting price shows for the parent. Linked case Z10-TC-7728.",
+      "Class chain, first method captures (user decision 2026-11-04): groupProductVerifyProductBreadCrumbPathAndGroupProductDetails declares the product needs and every record value of the chain and keeps the record in class fields; the dependsOn methods read those fields and throw SkipException DATA_UNAVAILABLE when they are null. Consumers: groupProductVerifyCustomFieldAndPersonalizeAttribute (AdditionalInfo -> customFields.additionalInfo), groupProductVerifyPageLinks (Tools label -> product category), groupProductAddProductToWishList (UI text only).",
+      "DECLARED ACCOUNT (per method): the head method signs in with loginPage.successfullLogin (testClassRetailUsers/groupProductPDPTest Username, Password; loginAndRegistration!B177/C177). An account lease (useExisting) is held by the method that declares it and released when that method ends, so every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: its username source, required: true}, with Tda.declareUser at method start. Username/password are credential sources (masked) the test keeps reading from its own sheet.",
+      "Params: minPersonalizableAttributes 1 + personalizationAttribute DisplayText because the chain checks the personalization label with the fixed locator lblProductPersonalizationDisplayText (groupProductVerifyCustomFieldAndPersonalizeAttribute); minAddOns 0 (nothing selected; requiredAddOnCount <= 0 keeps Add to Wishlist usable).",
+      "BreadCrumbPath 'HOME\\n/\\nTOOLS\\n/\\nSPEEDAIRE ...' is composed 'HOME' + each product.categoryPath segment + product.name, upper case, joined '\\n/\\n': data without output.",
+      "ProductSalesPrice 'Starting at: $22.48' -> product.startingPrice ('Starting at: ' + money(startingPrice)), as in the approved Playwright group PDP entry.",
+      "Read through TestData.getMap of the included-products tables: GroupedProduct0 -> product.child1Name, GroupedProductPrice0 '$22.48' -> product.child1SalesPrice (shown price: sales, else child1RetailPrice), children in the key's order.",
+      "Imported from the consumers' scans: AdditionalInfo 'CAUTION: Before removing ...' -> customFields.additionalInfo (the panel shows '<CustomKey>: <CustomKeyValue>'; z-2200003 has one custom field, CustomKey CAUTION, bin/tda rows ZnodePimCustomFieldLocale); 'TOOLS' (Tools/Labels) is the PLP title after clicking the breadcrumb category link: the product's category, upper case (data without output, from product.categoryPath).",
+      "New key PRODUCT_CUSTOM_FIELDS_OF_PRODUCT (pending, proposed with this module): PRODUCT_GROUPED_IN_STOCK has no custom-field output; only PRODUCT_CONFIGURABLE_PDP_DETAILS returns additionalInfo.",
+      "Image check: verifyGroupProductThumbnailImages compares stored files (LogoAndImageConstants.GROUP_PRODUCT_THUMBNAILS, not in the scan); ASSUMPTION: structural when migrated, as decided for the shoppingCart images.",
+      "Profile (Playwright observations): z-2200003 is an active GroupedProduct in PRODUCTION, brand Speedaire, inventory 250, storefrontProductIndex 1, requiredAddOnCount 0.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows (2026-11-06) and the approved Playwright pdp entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "linkedCases": [
+    "Z10-TC-7728"
+  ],
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 1,
+        "personalizationAttribute": "DisplayText",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CUSTOM_FIELDS_OF_PRODUCT",
+      "alias": "customFields",
+      "params": {
+        "product": "@product.productId"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C177",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/groupProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "z-2200003",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C424",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductSKU/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "HOME\n/\nTOOLS\n/\nSPEEDAIRE POSITIVE DISPLACEMENT BLOWER/VACUUM PUMP",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C442",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/BreadCrumbPath/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Positive Displacement Blower/Vacuum Pump",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C423",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductName/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "SKU:",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B424",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductSKU/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Speedaire",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C425",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/Brand/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "brandName"
+    },
+    {
+      "value": "Easily select the right blower for you thanks to fine-structured steps of volume flows. Due to high mechanical loading capacity (stage up to 200 mbar - in case of drive, depending on selected motor rating up to 140 mbar).considerable reduction of pumping-down times. Variable adaptation to special applications through a wide variety of possible modifications",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C427",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ShortDescription/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shortDescription"
+    },
+    {
+      "value": "Starting at: $22.48",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C429",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductSalesPrice/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "startingPrice"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Speedaire Vacuum Pump Oil",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B484",
+      "kind": "excel",
+      "keyPath": "includedGroupedProducts/GroupedProduct0/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1Name"
+    },
+    {
+      "value": "$22.48",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B491",
+      "kind": "excel",
+      "keyPath": "includedGroupedProductsPrice/GroupedProductPrice0/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child1SalesPrice"
+    },
+    {
+      "value": "CAUTION: Before removing or installing components of a device, attach an electrostatic discharge (ESD) grounding strap to an ESD point and place the other end of the strap around your bare wrist. Failure to use an ESD grounding strap could result in damage to the device.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C456",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AdditionalInfo/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "customFields",
+      "output": "additionalInfo"
+    },
+    {
+      "value": "TOOLS",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B459",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/Tools/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

@@ -35,9 +35,19 @@
     "addOnDisplayType": {
       "type": "string",
       "description": "Stored ZnodePimAddonGroup.DisplayType of the add-on group the test selects: CheckBox, RadioButton or DropDown"
+    },
+    "withAdditionalInfo": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the Additional Information panel (the product must have custom fields). Left out: any"
+    },
+    "withBrand": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the product's brand (it must have one). Left out: any"
     }
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z"
+  "approvedAt": "2026-11-06T14:30:00Z"
 }

@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.SimpleProductDisplayPageTest#simpleProductCreateAndVerifyWriteAReviewFunctionality",
+  "scenario": {
+    "summary": "Guest opens a simple product's PDP, opens Write a Review, checks the review page labels and blank-field errors, submits a review (rating, headline, comment, name, location) and verifies it is listed under the product's reviews after a refresh.",
+    "steps": [
+      "Open the webstore, search the product SKU and open its PDP",
+      "Open the Reviews tab and Write a Review",
+      "Verify product name, review page labels and blank validation errors",
+      "Fill rating, headline, review text, name and state/country; submit; close the confirmation",
+      "Refresh the PDP, open Reviews and verify the new review"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "review"
+    ],
+    "stateChanges": [
+      "A product review is created for the product (stays; no teardown, as in the Playwright review entries)"
+    ],
+    "assertions": [
+      "Review page shows the product name",
+      "Labels 'Rating *', 'Review headline *', 'Review *', name, 'Your state/country*'",
+      "Blank submit shows the five required-field errors",
+      "Submitted review (headline, text, name, location) is listed on the PDP after refresh"
+    ],
+    "evidence": [
+      "Independent method (no dependsOn); linkedCases Z10-TC-8412 and Z10-TC-8648 come from the scan (TestNG groups); Z10-TC-7853 is in the class comment.",
+      "Key PRODUCT_SIMPLE_IN_STOCK (quantityUsed 1, nothing is added): any reviewable simple product; the Playwright review entries use the same key (2026-11-02: the review tab issue was framework, not data). The sheet product z-2420005 has a Required add-on, which this key excludes: the preferred record will not pass and the resolver falls back.",
+      "The review values the test types (ReviewHeadline, ReviewComments, ReviewerUsername (masked), ReviewerCountry) are created by the test: created-by-test. The review shows at once only if the store publishes reviews without moderation (store setting, not a data need; unchanged from today).",
+      "LabelUsername (masked by the key-name rule) is the name field label: expected-output, sensitive.",
+      "ProductName (E3) -> product.name (review page product name).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in (the CentralizedLogin group is a tag only; no login call in the method).",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); sheet SKUs were looked up read-only with bin/tda rows (2026-11-06) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-8412",
+    "Z10-TC-8648"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420005",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Bosch 2.5 Amp 5 in. Corded Variable Speed Random Orbital Sander/Polisher Kit",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E3",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductName/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Rating *",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B504",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/LabelRating/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review headline *",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B505",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/LabelReviewHeadline/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review *",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B506",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/LabelReview/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B507",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/LabelUsername/Value",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Your state/country*",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B508",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/LabelLocation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Rating is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B509",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/RatingErrorValidation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review headline is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B510",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/HeadlineRequiredErrorValidation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Review is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B511",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/CommentRequiredErrorValidation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Name is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B512",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/NameRequiredErrorValidation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Your state/country is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B513",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/StateCountryRequiredErrorValidation/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "//button[starts-with(@data-test-selector,'btnRating0')][",
+      "location": "src/main/java/pageObjects/webstore/ProductReviewsPageObjects.java:62",
+      "kind": "constant",
+      "keyPath": "ProductReviewsPageObjects.STAR_RATING_BEFORE_XPATH",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "]",
+      "location": "src/main/java/pageObjects/webstore/ProductReviewsPageObjects.java:63",
+      "kind": "constant",
+      "keyPath": "ProductReviewsPageObjects.STAR_RATING_AFTER_XPATH",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Great Purchase",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B502",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/ReviewHeadline/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Value for Money",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B503",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/ReviewComment/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B500",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/ReviewerUsername/Value",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Boston, USA",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B501",
+      "kind": "excel",
+      "keyPath": "reviewPagelabelandErrorValidation/ReviewerCountry/Value",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

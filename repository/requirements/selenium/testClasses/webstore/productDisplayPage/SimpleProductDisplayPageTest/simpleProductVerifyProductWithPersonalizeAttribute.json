@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.SimpleProductDisplayPageTest#simpleProductVerifyProductWithPersonalizeAttribute",
+  "scenario": {
+    "summary": "Guest opens a simple product with personalizable attributes, verifies its PDP details, then adds it three times with personalization texts (AdditionalInformation, DisplayText, then both), checks the cart count and empties the cart.",
+    "steps": [
+      "Open the webstore, search the personalizable SKU and open its PDP",
+      "Verify name, 'SKU:\\n<sku>', brand, short description, price, Read Reviews link, personalization labels",
+      "Verify special offers title, quantity default, blank and zero quantity messages; set quantity 1",
+      "Verify Details, Specification and Shipping tabs and the Write a Review link",
+      "Type the AdditionalInformation text, Add to Cart, verify cart count",
+      "Clear and type the DisplayText text, Add to Cart (count +1); type both, Add to Cart (count +2)",
+      "View cart and Remove All"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart: the product is added three times with different personalization, then all cart items are removed"
+    ],
+    "assertions": [
+      "Product name, 'SKU:\\n<sku>', brand (skipped on multistore12 centralized login), short description and price match the product",
+      "SPECIAL PRICE OFFERS title, Read Reviews link, quantity box default 1",
+      "Blank quantity shows 'Please enter a numeric value.'; quantity 0 shows 'Please specify valid product quantity.'",
+      "Details, Specification and Shipping tabs show the product's texts",
+      "Personalization labels match the product's personalizable attributes",
+      "Add to Cart notification appears and the header cart count goes up after each add"
+    ],
+    "evidence": [
+      "Independent method (no dependsOn); linked manual cases Z10-TC-8874, 8875 are in the class comment, not in the scan.",
+      "Key PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK (approved for shoppingCart, same sheet product z-2410001) pinned to personalizationAttribute AdditionalInformation: the input locator is //input[@id='<code>'], so PersonalizeLabel2 -> product.personalizationCode.",
+      "Gap (params/outputs): the method also types into DisplayText (PersonalizeLabel3); the key pins one attribute, so a fallback product may lack DisplayText. PersonalizeLabel3 is data without output. Proposal (not written): optional param personalizationAttribute2 and output personalization2Code on PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK.",
+      "Gap (outputs): Brand, ShortDescription, ProductDetails, ProductSpecification and Shipping are the product's texts, but PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK returns only sku, name, productId, retailPrice, salesPrice, price, personalizationCode. Data without output. Proposal (not written): optional outputs brandName, shortDescription, details, specifications, shippingInfo (same expressions as PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK).",
+      "ProductPrice '$40.95' -> product.price (storefront format with Tda.money). PersonalizeText2/3 are texts the test types: config.",
+      "Not scanned: TestData.getHashMap tables are not in the scan. verifyProductPersonalizeLabels(personalizeAttributeDataMap) compares every personalization label with sheet rows Attribute0..n. They are values of this method's needs and must come from the resolved record when the class is migrated (the product's personalizable attribute labels; no key returns the list); check-hardcoded cannot see them today.",
+      "quantityUsed 3: the product is added three times at quantity 1 (one cart line per personalization), so the cart holds 3 units of it; the cart is emptied at the end (Remove All).",
+      "verifyProductDefaultImage / verifyThumbnailImages call BasePage.verifyImageEquals, whose body is commented out and always returns true: no data need (as decided for shoppingCart: image checks structural).",
+      "tda rows: z-2410001 = PimProductId 498, active SimpleProduct, brand BlackAndDecker, DontTrackInventory, one Optional add-on (group 1): passes the key's no-required-add-on rule.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in (the CentralizedLogin group is a tag only; no login call in the method).",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); sheet SKUs were looked up read-only with bin/tda rows (2026-11-06) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "2026-11-06 outputs added to PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK (query pending re-approval, verified): Brand -> product.brandName, ShortDescription -> shortDescription, ProductDetails -> details, ProductSpecification -> specifications, Shipping -> shippingInfo (the migrated test compares the visible text of the stored HTML, Tda.text).",
+      "PersonalizeLabel3 (DisplayText, the second personalize input) -> the first of product.personalization1Code..personalization3Code (attribute DisplayOrder) that differs from personalizationCode; output names personalization1Code as the first candidate (which position holds DisplayText on the recorded product was not checked). The migrated test skips that input with DATA_UNAVAILABLE when the product has no second personalize attribute.",
+      "Unscanned table now from the record: verifyProductPersonalizeLabels (TestData.getHashMap SCENARIO_TEST_DATA_NAME_PERSONALIZE_ATTRIBUTE, keys Attribute0..n) -> product.personalization1Label..personalization3Label (non-null, DisplayOrder order)."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_PERSONALIZABLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "store": "MaxwellsHardware",
+        "personalizationAttribute": "AdditionalInformation",
+        "withBrand": true
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2410001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 20 Volt Cordless Reciprocating Saw",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I3",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductName/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "name"
+    },
+    {
+      "value": "SKU:",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I6",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/Brand/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "brandName"
+    },
+    {
+      "value": "The BLACK+DECKER BDCR20B cordless reciprocating saw is ideal for most cutting applications. This saw is part of the BLACK+DECKER 20-Volt MAX Lithium-Ion system. Battery and charger sold separately.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I8",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ShortDescription/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shortDescription"
+    },
+    {
+      "value": "$40.95",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I10",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductPrice/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "price"
+    },
+    {
+      "value": "Attribute",
+      "location": "src/main/java/utilities/GlobalVariables.java:147",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.ATTRIBUTE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E44",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/InitialQuantity/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "value",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:323",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.LBL_VALUE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please enter a numeric value.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B57",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/BlankValidationMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B99",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ZeroQuantity/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Please specify valid product quantity.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B98",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ZeroQuantityValidationMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I44",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/InitialQuantity/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "The BLACK+DECKER BDCR20B cordless reciprocating saw is ideal for most cutting applications. This saw is part of the BLACK+DECKER 20-Volt MAX Lithium-Ion system. Battery and charger sold separately. 20-Volt lithium ion power. 0-3000 strokes per minute. Variable speed trigger. Keyless blade clamp.7/8 in. stroke length. Pivoting shoe.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I58",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductDetails/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "details"
+    },
+    {
+      "value": "Batteries Included: No Battery Amp Hours: 0.0 Battery Power Type: Lithium Ion Battery Size: Lithium Ion Battery/Charger: Tool Only Charger Included: Charger Not Included",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I59",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSpecification/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "specifications"
+    },
+    {
+      "value": "Domestic Shipping Policy \nShipment processing time \nAll orders are processed within 2-3 business days. Orders are not shipped or delivered on weekends or holidays. If we are experiencing a high volume of orders, shipments may be delayed by a few days. Please allow additional days in transit for delivery. If there will be a significant delay in shipment of your order, we will contact you via email or telephone. Update this section if your processing time exceeds 2-3 business days. \n\nShipping charges\nShipping charges for your order will be calculated and displayed at checkout.   \n\nInternational Shipping Policy \nWe currently do not ship outside the U.S.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I60",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/Shipping/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "shippingInfo"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I15",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeLabel2/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "personalizationCode"
+    },
+    {
+      "value": "AdditionalInformation",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I17",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeText2/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//input[@id='",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:330",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.BEFORE_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:332",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.AFTER_XPATH_PERSONALIZE_ATTRIBUTE_PLACE_HOLDER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " validated successfully.",
+      "location": "src/main/java/utilities/ReportMessages.java:29",
+      "kind": "constant",
+      "keyPath": "ReportMessages.WEB_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I18",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeLabel3/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "personalization1Code"
+    },
+    {
+      "value": "DisplaySampleText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I20",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/PersonalizeText3/PersonalizeProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

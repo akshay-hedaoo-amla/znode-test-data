@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductDisplayPageTest#configurableProductSearchForConfigurableProduct",
+  "scenario": {
+    "summary": "Signed-in retail customer searches the configurable parent by SKU and opens its PDP. Head of the class chain: declares the account and every record the chain verifies (a configurable parent with at least eight variants, and eight distinct variants of that parent with their PDP details).",
+    "steps": [
+      "Open the webstore and click the logo",
+      "Sign in with the testClassRetailUsers/configurableProductPDPTest username and password",
+      "Type the parent SKU in the search box",
+      "Open the first result (configurable PDP)"
+    ],
+    "entitiesTouched": [
+      "store",
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "Signed-in webstore session for the account (kept for the class; logged off by configurableProductRemoveAllItemsFromCartAndLoggOff)"
+    ],
+    "assertions": [
+      "Product image and breadcrumb visible on the opened PDP (page-object checks)"
+    ],
+    "evidence": [
+      "Class chain, first method captures (user decision 2026-11-04): configurableProductSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1..variant8); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no product needs of their own.",
+      "Consumers: the eight *VarientDetails methods (variant1..variant8: SKU, name, short description, price, details, specifications, shipping info, swatches), configurableProductVerifyInventoryDetails (variant5: swatches, name, inventory), configurableProductVerifyCustomField (variant5.additionalInfo), configurableProductVerifyYouMayAlsoLikeSection / FrequentlyBoughtSection (variant5.youMayAlsoLike / frequentlyBought, parent-level links), configurableProductVerifyWriteAReviewFunctionality (variant5.variantName), configurableProductAddProductToWishList (no record value).",
+      "Sources: parent SKU B-100000 -> product.parentProductSku (preferred, not required). Imported from the consumers' scans: the eight variant SKUs (I209 z-2510002, J209 z-2520007, H209 z-2510001, K209 z-2510011, L209 z-2510006, M209 z-2730012, N209 z-25100020, O209 z-2510012) -> variant1..variant8.variantSku in method order. The inventory method reads the same variant as the fifth variant method (L209 z-2510006), so its values go to variant5: L208 name -> variantName, C259 100 -> defaultWarehouseQty, C260 Milwaukee, Wisconsin -> defaultWarehouseName, C261 1000 -> allLocationsQty, C262 masked warehouse address -> variant5 (no output); custom field C272 -> variant5.additionalInfo.",
+      "Keys: product = PRODUCT_CONFIGURABLE_WITH_VARIANTS (approved) with minVariants 8 keeps the parent to one with eight priced in-stock variants varying by BulbSize, Color and Technology; its own variant outputs stop at variant3. variant1..variant8 = new key PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (pending, proposed with this entry): one row per eligible variant (active, inventory >= quantityUsed on the store) of the parent passed in parentSku, identity variantSku, with the PDP outputs of PRODUCT_CONFIGURABLE_PDP_DETAILS for that variant (texts, guest price, swatches, custom fields, linked products, per-warehouse inventory); parentSku links to @product.parentProductSku, so the resolver serves eight distinct variants of the parent the head opened.",
+      "Why not the approved PRODUCT_CONFIGURABLE_PDP_DETAILS: it returns one variant per parent and has neither a parent param nor a minimum variant count, so eight needs cannot be tied to one parent, and as the parent of the linked needs it picks AutomationConfigurableProduct first (1 eligible variant: readiness 2026-11-06 GAP on variant2..8 in a first draft). It is not changed.",
+      "Read by the page object, not scanned: ProductDisplayPage.verifyDetailsOfProductVarient reads ProductName, ShortDescription, ProductPrice, ProductDetails, ProductSpecification, Shipping and InitialQuantity, and selectConfigurableAttributes reads ProductSize/ProductColor/Technology of the variant's column -> variantN.variantName, shortDescription, price, details, specifications, shippingInfo and swatches ('Label=Value|...' in display order); InitialQuantity is config (1). verifySpecialPriceOfferTitle reads SpecialPriceOffer/Labels (UI text). The YouMayAlsoLike/FrequentlyBought product and price hash maps and the other-locations inventory tables -> variant5.youMayAlsoLike / frequentlyBought (SKU:name lists; prices: gap) and inventoryList. No source entries: the cells are not in any scan and the workbook is not read.",
+      "Price (needsReview): the key gives the guest price (store / default anonymous profile price list); this class is signed in, so a profile price list of the account would show another price. The sheet prices were recorded signed in.",
+      "DECLARED ACCOUNT (per method): the class signs in once in configurableProductSearchForConfigurableProduct with loginPage.successfullLogin(testClassRetailUsers/configurableProductPDPTest Username, Password; loginAndRegistration!B176/C176) and every later method works in that signed-in session (its cart, wishlist, review). An account lease is held by the declaring method only, so each method declares user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting), as the Selenium quickOrder retail entries. Username/password stay credential sources (masked) the test keeps reading from its own sheet.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium.",
+      "2026-11-06 outputs added to PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (query pending re-approval, verified): DefaultWarehouseAddress (C262) -> variant5.defaultWarehouseAddress; linked products' prices -> variant5.youMayAlsoLikePrices / frequentlyBoughtPrices ('SKU:price|...', aligned with the name lists, Tda.money); other-locations names -> variant5.otherWarehouseLabels, addresses -> variant5.otherWarehouseAddresses (entry i = inventoryList entry i+1)."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "minVariants": 8,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant1",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant2",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant3",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant4",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant5",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant6",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant7",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant8",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 1
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C176",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/configurableProductPDPTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "B-100000",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant1",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2520007",
+      "location": "webstoreTestData.xlsx!productDisplayPage!J209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2520007",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant2",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant3",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510011",
+      "location": "webstoreTestData.xlsx!productDisplayPage!K209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510011",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant4",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510006",
+      "location": "webstoreTestData.xlsx!productDisplayPage!L209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510006",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2730012",
+      "location": "webstoreTestData.xlsx!productDisplayPage!M209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2730012",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant6",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-25100020",
+      "location": "webstoreTestData.xlsx!productDisplayPage!N209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-25100020",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant7",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510012",
+      "location": "webstoreTestData.xlsx!productDisplayPage!O209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510012",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant8",
+      "output": "variantSku"
+    },
+    {
+      "value": "EcoSmart 100-Watt Equivalent A19 Non-Dimmable LED Light Bulb Daylight (16-Pack)",
+      "location": "webstoreTestData.xlsx!productDisplayPage!L208",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductName/z-2510006",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "variantName"
+    },
+    {
+      "value": "100",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C259",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/DefaultInventoryCount/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "defaultWarehouseQty"
+    },
+    {
+      "value": "Milwaukee, Wisconsin",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C260",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/DefaultWarehouse/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "defaultWarehouseName"
+    },
+    {
+      "value": "1000",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C261",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/TotalInventoryCount/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "allLocationsQty"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C262",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/DefaultWarehouseAddress/Configurable Product",
+      "sensitive": true,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "defaultWarehouseAddress"
+    },
+    {
+      "value": "CAUTION: Before removing or installing components of a device, attach an electrostatic discharge (ESD) grounding strap to an ESD point and place the other end of the strap around your bare wrist. Failure to use an ESD grounding strap could result in damage to the device.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C272",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AdditionalInfo/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant5",
+      "output": "additionalInfo"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

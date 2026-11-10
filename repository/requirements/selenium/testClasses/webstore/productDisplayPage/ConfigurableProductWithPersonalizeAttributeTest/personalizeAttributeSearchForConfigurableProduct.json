@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductWithPersonalizeAttributeTest#personalizeAttributeSearchForConfigurableProduct",
+  "scenario": {
+    "summary": "Guest searches the configurable parent with personalizable attributes by SKU and opens its PDP. Head of the class chain: declares every record the chain uses (the parent and four distinct variants of it).",
+    "steps": [
+      "Open the webstore and click the logo",
+      "Type the parent SKU in the search box",
+      "Open the first result (configurable PDP)"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Product image and breadcrumb visible on the opened PDP (page-object checks)"
+    ],
+    "evidence": [
+      "Class chain, first method captures (user decision 2026-11-04): personalizeAttributeSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1, variant2, variant3, variant4); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no needs of their own.",
+      "Sources: parent SKU b-100004 -> product.parentProductSku (preferred, not required). Imported from the consumers' scans: the four variant SKUs (H209 z-2510001, I209 z-2510002, J209 z-2520007, K209 z-2510011) -> variant1..variant4.variantSku in method order.",
+      "Personalization: the first variant method types into the inputs with id DisplayText and AdditionalInformation (PersonalizeAttribute1/2, attribute codes used as element ids) the texts PersonalizeAttributeText1/2. The attribute codes are pinned by the test (config); the need pins personalizationAttribute AdditionalInformation with minPersonalizableAttributes 1, as the approved shoppingCart personalize entry. Gap (needsReview): the key takes one attribute code (the count is filtered by it), so DisplayText is not guaranteed on a fallback product; the migrated test then skips that input.",
+      "Four variants of ONE parent: PRODUCT_CONFIGURABLE_WITH_VARIANTS outputs variant1..variant3 only. New key PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (pending, proposed with the ConfigurableProductDisplayPageTest entries): one row per eligible variant of the parent passed in parentSku, identity variantSku; variant1..variant4 link parentSku to @product.parentProductSku and get four distinct variants. minVariants 4 keeps the parent to ones with four eligible variants.",
+      "Read by the page object, not scanned: selectConfigurableAttributes reads ProductSize/ProductColor/Technology of the variant's column -> variantN.swatches (attribute values in display order). No source entries: the cells are not in any scan and the workbook is not read.",
+      "Quantities: each variant is added three times with quantity 1 (InitialQuantity, config), one cart line per personalization; quantityUsed 3 on the parent and the variants.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "minVariants": 4,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 1,
+        "store": "MaxwellsHardware",
+        "personalizationAttribute": "AdditionalInformation",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant1",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant2",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant3",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant4",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "b-100004",
+      "location": "webstoreTestData.xlsx!productDisplayPage!G209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/ConfigurableProductWithPersonalizeAttribute",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2510001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant1",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant2",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2520007",
+      "location": "webstoreTestData.xlsx!productDisplayPage!J209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2520007",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant3",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510011",
+      "location": "webstoreTestData.xlsx!productDisplayPage!K209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510011",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant4",
+      "output": "variantSku"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

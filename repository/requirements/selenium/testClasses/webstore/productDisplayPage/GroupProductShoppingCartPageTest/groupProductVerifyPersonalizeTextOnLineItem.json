@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.GroupProductShoppingCartPageTest#groupProductVerifyPersonalizeTextOnLineItem",
+  "scenario": {
+    "summary": "Checks that the cart line item shows the personalization label and the typed text.",
+    "steps": [
+      "Verify '<label> : <text>' on the line item"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cart"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Line item personalization equals the label and the typed text"
+    ],
+    "evidence": [
+      "dependsOn groupProductSearchForTheProductAndAddToCart.",
+      "PersonalizeText (typed by the head method) and PersonalizeLabel (the pinned attribute code DisplayText) are config, as in the head entry; no need.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "linkedCases": [],
+  "requires": [],
+  "sources": [
+    {
+      "value": "DisplaySampleText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C461",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/PersonalizeText/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DisplayText",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C460",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/PersonalizeLabel/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

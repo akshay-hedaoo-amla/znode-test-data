@@ -32,9 +32,14 @@
     "personalizationAttribute": {
       "type": "string",
       "description": "Personalizable attribute code the test types into (ZnodePimAttribute.AttributeCode with IsPersonalizable), e.g. AdditionalInformation"
+    },
+    "withBrand": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the product's brand (it must have one). Left out: any"
     }
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-04T14:30:00Z"
+  "approvedAt": "2026-11-06T14:30:00Z"
 }

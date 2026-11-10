@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "key": "PRODUCT_BUNDLE_OBSOLETE",
+  "entity": "product",
+  "type": "bundle_obsolete",
+  "constraints": {
+    "type": "bundle",
+    "status": "active",
+    "publishState": "production",
+    "obsolete": "= true",
+    "storefrontActive": "= true",
+    "storefrontObsolete": "= true",
+    "storefrontProductIndex": ">= 1",
+    "replacementCount": ">= {minReplacements}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active bundle marked obsolete (PIM and published record) on the store, so PLP/PDP show the obsolete message and disable Add to Cart; optionally with ProductSuggestions replacements. Bundle counterpart of PRODUCT_SIMPLE_OBSOLETE. KB: Bundled; Obsolete.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "minReplacements": {
+      "type": "integer",
+      "description": "Optional: at least this many active replacement products linked under ProductSuggestions (the PDP lists them); left out = not constrained",
+      "optional": true
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductWithAddOnTypeDropdownTest#addOnTypeDropdownRemoveAllItemsFromCart",
+  "scenario": {
+    "summary": "Guest: opens the cart and removes every item. Clean-up of the class.",
+    "steps": [
+      "Open the cart",
+      "Remove all items"
+    ],
+    "entitiesTouched": [
+      "cart"
+    ],
+    "stateChanges": [
+      "Guest cart emptied"
+    ],
+    "assertions": [
+      "Cart page elements visible (page-object checks)"
+    ],
+    "evidence": [
+      "Independent method (priority 25, no dependsOn): reads no sheet value and no record.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.BundleProductDisplayPageTest#bundleProductVerifyOutOfStockMessageForChildProducts",
+  "scenario": {
+    "summary": "Guest opens a bundle whose third included product is DisablePurchasing and out of stock and checks its out-of-stock text.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the bundle SKU and open the first result",
+      "Verify included product 3's out-of-stock text"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "None (read-only PDP)"
+    ],
+    "assertions": [
+      "Included product 3 shows the store's out-of-stock text"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-8861 out-of-stock message for a DisablePurchasing child with stock <= 0 or below its bundle quantity; Z10-TC-7732 inventory decimal format.",
+      "Params: child3State outOfStock.",
+      "OutOfStockMessage 'Out of Stock' (Labels) is compared with equals: the store's out-of-stock text -> product.outOfStockMessage (ZnodePortal.OutOfStockMsg).",
+      "IncludedProductN names locate the child row by its name (XPath //*[text()='<name>']): data, product.childNName (children in PDP order).",
+      "New key PRODUCT_BUNDLE_CHILD_STOCK_STATES (pending, proposed with this module): bundle whose children in PDP order (association display order) are in the stock states the test checks: untracked = AllowBackOrdering or DontTrackInventory, tracked = DisablePurchasing with store stock >= bundle qty, outOfStock = DisablePurchasing with store stock below it, available = untracked or tracked; leadTimeChild = position of a child with a TypicalLeadTime. Outputs childN Sku/Name/BundleQty/StockOption/StoreQty/LeadTime/State, inStockMessage and outOfStockMessage (ZnodePortal InStockMsg / OutOfStockMsg). No approved key returns child stock options, child stock or lead times.",
+      "DB (bin/tda rows 2026-11-06): z-959595 is an active BundleProduct (PimProductId 869, own option AllowBackOrdering); children in PDP order (display order 1, 99, 99) z-2651001 'DeWalt 12 in. Miter Saw Blade 32-Teeth and 80-Teeth (2-Pack)' (DontTrackInventory), z-2651002 (DontTrackInventory) and z-2652001 'DeWalt 32-1/2 in. x 60 in. Rolling Miter Saw Stand' (DisablePurchasing), bundle qty 1 each.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows (2026-11-06) and the approved Playwright pdp entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "linkedCases": [
+    "Z10-TC-7732"
+  ],
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_CHILD_STOCK_STATES",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "child3State": "outOfStock"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-959595",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/ProductInfo4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 32-1/2 in. x 60 in. Rolling Miter Saw Stand",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I356",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/IncludedProduct3/ProductInfo4",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "child3Name"
+    },
+    {
+      "value": "Out of Stock",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B368",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/OutOfStockMessage/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "outOfStockMessage"
+    },
+    {
+      "value": "//*[text()='",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:376",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.BEFORE_XPATH_CHILD_PRODUCT_ERROR_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::div//*[@data-test-selector='valOutOfStock']",
+      "location": "src/main/java/pageObjects/webstore/ProductDisplayPageObjects.java:378",
+      "kind": "constant",
+      "keyPath": "ProductDisplayPageObjects.AFTER_XPATH_CHILD_PRODUCT_ERROR_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

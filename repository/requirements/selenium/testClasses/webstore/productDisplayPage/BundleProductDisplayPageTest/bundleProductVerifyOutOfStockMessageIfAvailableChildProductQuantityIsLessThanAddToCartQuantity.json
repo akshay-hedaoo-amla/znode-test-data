@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.BundleProductDisplayPageTest#bundleProductVerifyOutOfStockMessageIfAvailableChildProductQuantityIsLessThanAddToCartQuantity",
+  "scenario": {
+    "summary": "Guest adds one quantity-limited bundle to the cart from the PDP, types a quantity above what is left and checks the exceeding-stock message, then empties the cart.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the bundle SKU and open the first result",
+      "Type 1 and Add to Cart",
+      "Type 2 in the quantity box",
+      "Verify 'Quantity exceeds available stock (<available>).'",
+      "Remove all products from the cart"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "Guest cart: one bundle is added, then all items are removed"
+    ],
+    "assertions": [
+      "Validation message equals 'Quantity exceeds available stock (<availableQuantity>).'"
+    ],
+    "evidence": [
+      "Method comment: Z10-TC-8852 out-of-stock message when a DisablePurchasing child has less stock than the included quantity per bundle.",
+      "Key PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK {store, quantityUsed 1, exceedQuantity 2}: one bundle can be added (quantityUsed 1) and the available bundle quantity is below 2, so the second quantity exceeds it (recorded availableQuantity 1).",
+      "InitialQuantity '1' is config (quantityUsed). IncludedQuantity1 '2' (the sheet's child-1 bundle quantity cell) is typed as the next quantity: config tied to exceedQuantity 2 (the migrated test types availableQuantity + 1).",
+      "ExceedingProductQuantityMessage (ProductInfo1) is composed 'Quantity exceeds available stock (<availableQuantity>).': data without output.",
+      "DB (bin/tda rows 2026-11-06): z-345678 is an active BundleProduct (PimProductId 868); its active children in PDP order are z-2671004 'DeWalt 6-1/2 in. 36-Tooth Aluminum Cutting Blade' (bundle qty 2, DisablePurchasing, stock 2 in warehouse 2), z-2672001 'DeWalt 12 in. Dual-Port Rip Guide' (bundle qty 1, DisablePurchasing) and z-2672003 (bundle qty 1, DisablePurchasing), so the available bundle quantity is floor(2 / 2) = 1. The shoppingCart entry bundleProductVerifyIncludedQuantitiesAndExceedingProductQuantityErrorMessage resolves the same SKU with PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); product facts come from bin/tda rows (2026-11-06) and the approved Playwright pdp entries.",
+      "Scanned constant values (locators, report messages, delays) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "linkedCases": [],
+  "requires": [
+    {
+      "key": "PRODUCT_BUNDLE_QUANTITY_LIMITED_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "exceedQuantity": 2,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-345678",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E363",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/InitialQuantity/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "2",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E359",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/IncludedQuantity1/ProductInfo2",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Quantity exceeds available stock (1).",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D370",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ExceedingProductQuantityMessage/ProductInfo1",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

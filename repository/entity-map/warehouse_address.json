@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "entity": "warehouse_address",
+  "tables": [
+    "dbo.ZnodeWarehouse",
+    "dbo.ZnodeWarehouseAddress",
+    "dbo.ZnodeAddress"
+  ],
+  "joins": [
+    { "from": "dbo.ZnodeWarehouse.WarehouseId", "to": "dbo.ZnodeWarehouseAddress.WarehouseId", "kind": "inner" },
+    { "from": "dbo.ZnodeWarehouseAddress.AddressId", "to": "dbo.ZnodeAddress.AddressId", "kind": "inner" }
+  ],
+  "properties": {
+    "warehouseId": "dbo.ZnodeWarehouse.WarehouseId",
+    "warehouseName": "dbo.ZnodeWarehouse.WarehouseName",
+    "warehouseCode": "dbo.ZnodeWarehouse.WarehouseCode",
+    "addressLine1": "dbo.ZnodeAddress.Address1",
+    "addressLine2": "dbo.ZnodeAddress.Address2",
+    "addressLine3": "dbo.ZnodeAddress.Address3",
+    "city": "dbo.ZnodeAddress.CityName",
+    "state": "dbo.ZnodeAddress.StateName",
+    "postalCode": "dbo.ZnodeAddress.PostalCode",
+    "country": "dbo.ZnodeAddress.CountryName"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeAddress.Address1",
+    "dbo.ZnodeAddress.Address2",
+    "dbo.ZnodeAddress.Address3",
+    "dbo.ZnodeAddress.CityName",
+    "dbo.ZnodeAddress.PostalCode"
+  ],
+  "schemaFingerprint": "sha256:0b938b2f575e9e0ba85e58f814d9192b9d0445d11b6defcf9e89ee25e2dddc75",
+  "scannedAt": "2026-11-06T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-06T14:30:00Z"
+}

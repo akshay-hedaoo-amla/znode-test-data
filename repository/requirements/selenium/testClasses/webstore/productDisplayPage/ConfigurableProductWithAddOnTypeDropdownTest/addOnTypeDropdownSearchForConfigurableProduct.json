@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.ConfigurableProductWithAddOnTypeDropdownTest#addOnTypeDropdownSearchForConfigurableProduct",
+  "scenario": {
+    "summary": "Guest searches the configurable parent with a dropdown add-on group by SKU and opens its PDP. Head of the class chain: declares every record the chain uses (the parent with its add-ons and four distinct variants of it).",
+    "steps": [
+      "Open the webstore and click the logo",
+      "Type the parent SKU in the search box",
+      "Open the first result (configurable PDP)"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Product image and breadcrumb visible on the opened PDP (page-object checks)"
+    ],
+    "evidence": [
+      "Class chain, first method captures (user decision 2026-11-04): addOnTypeDropdownSearchForConfigurableProduct runs first and declares every record need of the chain (product, variant1, variant2, variant3, variant4, addOn1, addOn2, addOn3); the migrated class keeps the resolved records in class fields and the later methods read them (SkipException DATA_UNAVAILABLE when a field is null), so they declare no needs of their own.",
+      "Sources: parent SKU b-100001 -> product.parentProductSku (preferred, not required). Imported from the consumers' scans: the four variant SKUs (H209 z-2510001, I209 z-2510002, J209 z-2520007, K209 z-2510011) -> variant1..variant4.variantSku in method order.",
+      "Imported from addOnTypeDropdownAddingConfigurableProductFirstVarientWithAddOnsToCart: AddOnType 'Select Add-on' -> product.addOnGroupName; AddOnValidationMessage 'Add-on Select Add-on is required.' -> product, no output (composed 'Add-on ' + addOnGroupName + ' is required.'); AddOnFirst/Second/ThirdProductSKU (D243 z-2550002, D246 z-1234612, D249 z-1234613) -> addOn1..addOn3.addOnSku.",
+      "Dropdown add-ons are selected by option value = add-on SKU (ProductDisplayPageObjects BEFORE_XPATH_LBL_SELECT_DROPDOWN_ADDONS, option[@value=<sku>]). PRODUCT_CONFIGURABLE_WITH_VARIANTS returns only the first add-on's SKU (addOnSku), so a new key PRODUCT_CONFIGURABLE_ADDON_OF_PARENT (pending, proposed with this entry) gives one row per priced active add-on of the parent's DropDown groups, identity addOnSku; addOn1..addOn3 link parentSku to @product.parentProductSku and get three distinct add-ons. DB (bin/tda rows 2026-11-06): b-100001 (PimProductId 673) has one Required DropDown group (PimAddonGroupId 2) with three add-on products.",
+      "Four variants of ONE parent: PRODUCT_CONFIGURABLE_WITH_VARIANTS outputs variant1..variant3 only. New key PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT (pending, proposed with the ConfigurableProductDisplayPageTest entries): one row per eligible variant of the parent passed in parentSku, identity variantSku; variant1..variant4 link parentSku to @product.parentProductSku and get four distinct variants. minVariants 4 keeps the parent to ones with four eligible variants.",
+      "Read by the page object, not scanned: selectConfigurableAttributes reads ProductSize/ProductColor/Technology of the variant's column -> variantN.swatches (attribute values in display order). No source entries: the cells are not in any scan and the workbook is not read.",
+      "Quantities: each variant is added three times with quantity 1 (InitialQuantity, config), one cart line per add-on choice; quantityUsed 3 on the parent and the variants.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium shoppingCart/quickOrder entries and the Playwright pdp entries. Guest flow, no sign-in.",
+      "Profile: work/profiles/profile.json (2026-11-01) has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-06) and the approved Playwright pdp entries where cited.",
+      "Scanned constant values (locators, report messages, delays, image extension) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 3,
+        "minVariants": 4,
+        "minAddOns": 1,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware",
+        "addOnDisplayType": "DropDown",
+        "variantAttributes": "BulbSize,Color,Technology"
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant1",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant2",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant3",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_VARIANT_OF_PARENT",
+      "alias": "variant4",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "quantityUsed": 3
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_ADDON_OF_PARENT",
+      "alias": "addOn1",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "addOnDisplayType": "DropDown"
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_ADDON_OF_PARENT",
+      "alias": "addOn2",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "addOnDisplayType": "DropDown"
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_ADDON_OF_PARENT",
+      "alias": "addOn3",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parentSku": "@product.parentProductSku",
+        "addOnDisplayType": "DropDown"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "b-100001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "parentProductSku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Select Add-on",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D240",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnType/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "addOnGroupName"
+    },
+    {
+      "value": "Add-on Select Add-on is required.",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D250",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnValidationMessage/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product"
+    },
+    {
+      "value": "z-2510001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant1",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2550002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D243",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnFirstProductSKU/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "addOn1",
+      "output": "addOnSku"
+    },
+    {
+      "value": "z-1234612",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D246",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnSecondProductSKU/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "addOn2",
+      "output": "addOnSku"
+    },
+    {
+      "value": "z-1234613",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D249",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddOnThirdProductSKU/ConfigurableProductWithAddOnAsDropdown",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "addOn3",
+      "output": "addOnSku"
+    },
+    {
+      "value": "z-2510002",
+      "location": "webstoreTestData.xlsx!productDisplayPage!I209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510002",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant2",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2520007",
+      "location": "webstoreTestData.xlsx!productDisplayPage!J209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2520007",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant3",
+      "output": "variantSku"
+    },
+    {
+      "value": "z-2510011",
+      "location": "webstoreTestData.xlsx!productDisplayPage!K209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510011",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "variant4",
+      "output": "variantSku"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}

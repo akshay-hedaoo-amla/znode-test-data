@@ -24,7 +24,7 @@
     "store": "{store}"
   },
   "usage": "read-only",
-  "description": "Active published grouped product on the store with an active in-stock child, plus as many add-on groups and personalizable attributes as the test fills in. KB: Product Types (Grouped); Configuring Product Add-ons; Adding Personalization Options to a Product.",
+  "description": "Active published grouped product on the store with an active in-stock child, plus as many add-on groups and personalizable attributes as the test fills in. Path: first catalog category. KB: Product Types (Grouped); Configuring Product Add-ons; Adding Personalization Options to a Product.",
   "declaredParams": {
     "quantityUsed": {
       "type": "integer",
@@ -55,5 +55,5 @@
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-10-28T14:30:00Z"
+  "approvedAt": "2026-11-06T14:30:00Z"
 }

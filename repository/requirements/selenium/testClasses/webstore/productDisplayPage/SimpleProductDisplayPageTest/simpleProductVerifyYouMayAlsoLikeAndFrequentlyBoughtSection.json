@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productDisplayPage.SimpleProductDisplayPageTest#simpleProductVerifyYouMayAlsoLikeAndFrequentlyBoughtSection",
+  "scenario": {
+    "summary": "Guest opens a simple product's PDP and verifies the You May Also Like and Frequently Bought sections: each card's details are visible, names and prices match the linked products, the highlight badges and the remaining-highlights count are shown.",
+    "steps": [
+      "Open the webstore, search the product SKU and open its PDP",
+      "Scroll to You May Also Like: title and card details visible; names and prices; Free Shipping / WaterSense / BIO badges; '+N' remaining highlights",
+      "Scroll to Frequently Bought: card details visible; names and prices; badges; '+N' remaining highlights"
+    ],
+    "entitiesTouched": [
+      "store",
+      "product",
+      "linked_product",
+      "highlight"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "You May Also Like cards show the product's YouMayAlsoLike links (name, price)",
+      "Frequently Bought cards show the product's FrequentlyBought links (name, price)",
+      "Free Shipping, WaterSense and BIO Certified badges are visible; remaining highlights count is 1 in both sections"
+    ],
+    "evidence": [
+      "Independent method (no dependsOn); linked manual cases Z10-TC-8694, 8695, 8696, 8699, 8703, 8707, 8711 are in the class comment, not in the scan.",
+      "Needs as the Playwright pdp add-to-cart entry: product + PRODUCT_LINKED_PRODUCTS for FrequentlyBought and YouMayAlsoLike linked to @product.productId (the resolver resolves the product first and re-picks it when it has no links, core 0.15.0). minLinked left out (at least one): the method checks whatever cards the PDP shows.",
+      "Product key PRODUCT_SIMPLE_WITH_REQUIRED_ADDON {minRequiredAddOns 1, quantityUsed 1 (nothing is added)}: chosen so the sheet product z-2420005 (tda rows: one Required DropDown add-on group; 3 YouMayAlsoLike, 2 FrequentlyBought links) qualifies as the preferred record and both link needs resolve; it returns productId, which PRODUCT_SIMPLE_WITH_ADDON_IN_STOCK does not. The required add-on is NOT something this method needs (it adds nothing to the cart). First draft used PRODUCT_SIMPLE_IN_STOCK: z-2420005 fails its requiredAddOnCount = 0 rule and readiness bound the fallback product 950, which has no FrequentlyBought links (GAP ZERO_ROWS). Reviewer choice: keep this key, or go back to PRODUCT_SIMPLE_IN_STOCK and rely on the resolver re-picking the parent (core 0.15.0) - readiness does not show whether any of its rows has both link types.",
+      "Not scanned: TestData.getHashMap tables are not in the scan. youMayAlsoLikeProduct / youMayAlsoLikeProductPrice / frequentlyBoughtProduct / frequentlyBoughtProductPrice (ProductName0..n, ProductPrice0..n) compare every card's name and price. They are values of this method's needs and must come from the resolved record when the class is migrated (youMayAlsoLike / frequentlyBought linked1..3Name and linked1..3RetailPrice/SalesPrice; the key returns the first three links, so a product with more than three links per type would leave cards unchecked); check-hardcoded cannot see them today.",
+      "Gap (no key): the Free Shipping, WaterSense and BIO Certified badges and the remaining-highlights count ('1', RemainingHighlightsCount) depend on the linked products' highlights; PRODUCT_LINKED_PRODUCTS returns no highlights and does not constrain them. RemainingHighlightsCount stays expected-output; a fallback product's links will likely fail these checks. Proposal (not written): make the badge checks structural (badges of the linked products as returned) or add optional linkedNHighlights outputs to PRODUCT_LINKED_PRODUCTS.",
+      "Same need as the bundle/group classes' linked-products checks (PRODUCT_LINKED_PRODUCTS); no new key.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware; centralizedLoginEnabled=no), the same store as the Playwright webstore entries. Guest flow, no sign-in (the CentralizedLogin group is a tag only; no login call in the method).",
+      "Profile: work/profiles/profile.json (2026-11-01) was not run for these Selenium tests (profiled false); sheet SKUs were looked up read-only with bin/tda rows (2026-11-06) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_WITH_REQUIRED_ADDON",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware",
+        "quantityUsed": 1,
+        "minRequiredAddOns": 1
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "frequentlyBought",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "FrequentlyBought",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_LINKED_PRODUCTS",
+      "alias": "youMayAlsoLike",
+      "params": {
+        "product": "@product.productId",
+        "linkType": "YouMayAlsoLike",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420005",
+      "location": "webstoreTestData.xlsx!productDisplayPage!E4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonDropdownAsRequired",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ProductName",
+      "location": "src/main/java/utilities/GlobalVariables.java:148",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.PRODUCTNAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ProductPrice",
+      "location": "src/main/java/utilities/GlobalVariables.java:149",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.PRODUCTPRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B104",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/RemainingHighlightsCount/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-06T09:00:00Z"
+}
