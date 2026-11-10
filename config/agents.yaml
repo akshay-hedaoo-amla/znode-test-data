@@ -10,3 +10,13 @@ apiChoices: |
   v2 cannot create and delete the record. Decided 2026-10-22: promotions (POST /Promotion/Create, POST /Promotion/Delete)
   and customer users (POST /User/CreateCustomerAccount, POST /User/DeleteUserAccount) use v1. v1 deletes take the IDs in
   the body (ParameterModel.Ids): teardown.bodyTemplate { "Ids": "{id}" }.
+
+# test-migrator (tda-agents 0.17.0): how this project's tests read resolved data. Selenium (Java/TestNG) conventions
+# decided for Selenium wave 2 (2026-11-04/05); the Playwright suite reads testData through its fixture (see onboarding).
+migration:
+  helper: "utilities/Tda.java in Integration/src/main/java: Tda.value(alias, output), Tda.get(alias) (whole record), Tda.optional(alias, output) (null when absent)"
+  skip: "throw new SkipException(\"DATA_UNAVAILABLE: <what is missing>\") (TestNG; later methods of a chain whose head method did not capture the record)"
+  declareUser: "Tda.declareUser(<user name from the test data sheet>) in every method that signs in or reuses the signed-in session"
+  formatting: "Tda.money(amount) storefront money \"$1,050.00\"; Tda.count(quantity) \"25.000000\" -> \"25\"; Tda.text(storedHtml) visible text, compared with Tda.visible(page text) in page-object *Text methods"
+  scan: "TDA_HOME=D:/znode-test-data mvn -q -pl tools exec:java -Dexec.args=\"scan --force <src/test/java/... files>\" (run in this data repository)"
+  compile: 'mvn -q test-compile in D:/Sample Framework/znode10-integration-ui-automation-1/Integration'

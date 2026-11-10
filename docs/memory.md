@@ -39,13 +39,17 @@ How a module is done (copy shoppingCart / quickOrder)
    the record in class fields; later methods have no needs and throw SkipException DATA_UNAVAILABLE if the field is null);
    every method that signs in or reuses the signed-in session declares the sheet account (Tda.declareUser -> useExisting,
    user USER_WEBSTORE_REGISTERED, preferred {source: username, required: true}); reuse approved keys, new keys/outputs only
-   optional and never changing which rows an approved key returns. `bin/tda validate`, `bin/tda readiness selenium/testClasses/webstore/<module>`.
+   optional and never changing which rows an approved key returns. `bin/tda validate`, `bin/tda readiness selenium/testClasses/webstore/<module>`
+   AS SOON AS the drafts exist (tda 0.17.0: OUTPUT_GAP = a recorded value no output of the test's own record carries -> add
+   the output now, not after migration). `bin/tda digest <prefix>` = one page per module (tests, needs, sources by role,
+   data without output, key states incl. STALE): briefs name the prefix + digest + "done", not file lists.
    After ANY vocabulary change (declaredParams, constraints), restamp its query (`bin/tda restamp repository/queries/<KEY>.json`)
    before the run, or every test on that key is skipped as STALE (pdp 2026-11-10 lost a full run to this). Restamp only
    writes fingerprints (status and verifiedHash unchanged); on approved queries ask the user first.
 3. Approvals (only the user approves, by editing status/approvedBy/approvedAt in the files): round 1 requirements +
    vocabulary, then `bin/tda query-verify <KEY>` for new/changed queries, round 2 queries/collections.
-4. Migrate the classes (agent): read data through utilities/Tda.java (value/get/optional/declareUser/money); alias/output
+4. Migrate the classes (tda-agents `test-migrator`, Sonnet, conventions in config/agents.yaml `migration`; one agent per
+   module, continued with SendMessage; report <= 15 lines): read data through utilities/Tda.java (value/get/optional/declareUser/money); alias/output
    names as private static final constants or reads in private helpers (the scanner records literals passed to project
    calls in a test method); page-object OVERLOADS taking plain values, never change methods other classes use; money with
    Tda.money() (storefront format "$1,050.00"). Add the files to config/scanners.yaml migrated.selenium, rescan,
@@ -53,8 +57,9 @@ How a module is done (copy shoppingCart / quickOrder)
    as config sources to the entries -> those entries go back to pending -> user re-approves). `mvn -q test-compile`.
 5. Runs on atstage (VPN needed for the DB): baseline in sel-baseline with a scratch suite (classes of the module, listener
    listeners.TestListener only); with the agents: `TDA_HOME=D:/znode-test-data mvn test -DsuiteXmlFile=src/test/java/testSuites/webstore/tda/webstore<Module>.xml -Denvironment=atstage`,
-   normal and fallback (TDA_IGNORE_PREFERRED=1). Failures that also fail on the baseline (both attempts) and in every agent
-   run -> config/known-failures.yaml with evidence; anything else is diagnosed and fixed. Known framework flakes on atstage:
+   normal and fallback (TDA_IGNORE_PREFERRED=1). Compare each run with `bin/tda run-compare <surefire-reports> --baseline
+   <sel-baseline surefire-reports> --name <run>` (NEW/SAME/KNOWN/FIXED/SKIP; exit 3 on NEW). Failures that also fail on the
+   baseline (both attempts) and in every agent run -> config/known-failures.yaml with evidence; anything else is diagnosed and fixed. Known framework flakes on atstage:
    loader overlay intercepting clicks, btnCartNotificationClose not found, Quick Order Paste Multiple tab intercepted by the logo.
 6. Record here, commit both repos, push (ask the user first; the user decides about PRs).
 
@@ -896,3 +901,4 @@ Add one entry per session, newest first.
 - 2026-11-05 Selenium module quickOrder (4 classes, 38 tests; data branch selenium-webstore-quick-order): 38 requirements on approved keys only (PRODUCT_SIMPLE_IN_STOCK, _OBSOLETE, _OUT_OF_STOCK, USER_WEBSTORE_REGISTERED), approved by the user; no round 2. Retail: every method that signs in or reuses the session declares the sheet account (Tda.declareUser) so the lease covers the method. Derived checks: range message from minQuantity/maxQuantity, above-max = max+1, MaxMin types floor(max/2)+1, line totals = price x qty, add-multiple expects the 2 declared products x 1. Page-object overloads in QuickOrderPadPage (List<String> skus). New shared Tda.money() (storefront format "$1,050.00"; fallback found "$1050.00" vs "$1,050.00"), now used by quickOrder and shoppingCart classes. Runs: baseline origin/dev 8/35 fail (both attempts); TDA normal x2, fallback x2: 7 tests fail every run -> config/known-failures.yaml (6 guest Paste Multiple tests: tab click intercepted by the logo / txtSkuList not found; retail MaxMin: toast not shown); intermittent UI flakes (retail InvalidSKUs, IsObsolete, OutOfStock, ZeroQuantity, AdjustQuantity) each passed in other runs. check-hardcoded clean. Next: commit, data PR, then productDisplayPage.
 - 2026-11-06 productDisplayPage started on branch selenium-webstore-pdp: 9 classes scanned; mapping agent and baseline stopped at the user's request ("stop for now"); partial edits discarded (see "Resume here: Selenium wave 2"). Status table and handover section updated for the team.
 - 2026-11-10 productDisplayPage migrated and run (data branch selenium-webstore-pdp, Selenium tda/selenium-webstore, uncommitted): 74 requirements + 5 new keys approved; 4 approved queries changed and re-approved (details in Resume here). A run skipped 40 tests as STALE because 3 queries were not restamped after their vocabulary changed; restamped (user: "Yes, restamp"). Final runs 6 (normal) / 7 (fallback) failures vs 7 in the baseline; 4 recorded in config/known-failures.yaml with evidence (user: "Add as known"). Token-reduction proposals (readiness output-gap check, tda module digest, Sonnet for mechanical steps, resumed agents, shorter briefs) offered 2026-11-06, no answer yet.
+- 2026-11-10 Token savings (code repo branch feat/token-savings, tda 0.17.0, not released): readiness OUTPUT_GAP (pdp 86/86 READY, no false positives after counting messages built around a record value as carried), validate warns on STALE vocabulary fingerprints and unknown outputs (finds the 5 parked order-history outputs), `tda digest`, `tda run-compare` (reproduces the pdp3 result: 4 KNOWN, 2 SAME, 1 FIXED), plugin agent test-migrator (model sonnet) + config/agents.yaml `migration` block. Use them from productListingPage on.
