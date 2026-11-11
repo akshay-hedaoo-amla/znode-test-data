@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "key": "CATEGORY_SUBCATEGORY_LINKS_OF_CATEGORY",
+  "entity": "category_listing",
+  "type": "subcategory_links",
+  "constraints": {
+    "categoryId": "{categoryId}",
+    "publishState": "production",
+    "subcategoriesWithProducts": ">= {minWithProducts}",
+    "emptySubcategories": ">= {minEmpty}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active published sub-categories of a category: at least N listing products and M listing none. Outputs per tile: subcategoryNName, subcategoryNLinkCode (CategoryCode + 'Category', the para<...> tile selector), emptySubcategoryName/LinkCode. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "categoryId": {
+      "type": "integer",
+      "description": "Parent category the test opens (ZnodePublishCategoryEntity.ZnodeCategoryId): link it to @category.categoryId"
+    },
+    "minWithProducts": {
+      "type": "integer",
+      "description": "Sub-categories with products the test opens (at most 2)"
+    },
+    "minEmpty": {
+      "type": "integer",
+      "description": "Sub-categories with no products the test opens (0 or 1)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

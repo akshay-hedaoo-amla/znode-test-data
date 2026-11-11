@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyCategoryHeadingAndListedSubCategories",
+  "scenario": {
+    "summary": "On the Plumbing PLP opened by the head method, verifies the category heading and the listed sub-category tiles.",
+    "steps": [
+      "Verify the category heading",
+      "Verify the sub-categories label is visible",
+      "Verify the sub-category names against the sheet list"
+    ],
+    "entitiesTouched": [
+      "category"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Heading equals the upper-case category name",
+      "Sub-category tiles equal the sheet list"
+    ],
+    "evidence": [
+      "dependsOn navigateToProductListingPage. First method captures: the category record is declared by navigateToProductListingPage (class field); this method declares no need.",
+      "homePage!B28 'PLUMBING' is the category heading (upper-case rendering of category.name): data of the head's category record (class field), also declared on the head.",
+      "Not scanned: verifySubCategories compares the tiles with TestData.getHashMap(SCENARIO_TEST_DATA_NAME_PLUMBING); the migrated method checks category.subcategory1Name..subcategory4Name instead (CATEGORY_WITH_PRODUCTS returns at most 4; user decision 2026-11-10).",
+      "HEAD RECORD VALUES (first method captures): homePageLabels/categoryPlumbing1/Label -> category.name. These values belong to a record the head method declares (as data with that output there); this method has no needs, so they are recorded as expected-output copies (chain rule confirmed by the user 2026-11-10). The migrated method reads them from the class field (alias.output above), not from the sheet; after migration and rescan they leave this entry.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "PLUMBING",
+      "location": "webstoreTestData.xlsx!homePage!B28",
+      "kind": "excel",
+      "keyPath": "homePageLabels/categoryPlumbing1/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SubCategories",
+      "location": "src/main/java/utilities/GlobalVariables.java:143",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

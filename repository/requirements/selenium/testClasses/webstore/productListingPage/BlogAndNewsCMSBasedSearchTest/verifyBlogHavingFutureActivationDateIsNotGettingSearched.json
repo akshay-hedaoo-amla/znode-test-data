@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.BlogAndNewsCMSBasedSearchTest#verifyBlogHavingFutureActivationDateIsNotGettingSearched",
+  "scenario": {
+    "summary": "Guest searches a blog whose activation date is in the future and verifies the CMS results are empty.",
+    "steps": [
+      "Click the logo",
+      "Search the record's SEO title",
+      "Open the CMS search results tab",
+      "Verify 0 results"
+    ],
+    "entitiesTouched": [
+      "store",
+      "blog_news"
+    ],
+    "stateChanges": [
+      "Run-time blog created by the collection (code/title TDA-<runId>-..., activation date 30 days ahead, published) and deleted at teardown"
+    ],
+    "assertions": [
+      "CMS search result count is 0"
+    ],
+    "evidence": [
+      "blog = BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE (NEW consumable key and collection, pending; user decision 2026-11-10): MaxwellsHardware has no blog with a future activation date (the sheet's 'SampleBlog' matches no record; MyBlog 'Sample Blog' is dated 1930, i.e. expired), so the resolver creates one per run with the v1 API: POST /BlogNews/CreateBlogNews (BlogNewsType Blog, active, ActivationDate now+30 days, ExpirationDate now+60 days, SEO title = code = TDA-<runId>-<suffix>), POST /BlogNews/PublishBlogNews, teardown POST /BlogNews/DeleteBlogNews. v2 has no blog delete, so v1 per apiChoices.",
+      "The sheet's SampleBlog/SEOPageTitle is the term searched: blog.seoTitle (the created record's SEO title). No preferred: the record is created per run.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE",
+      "alias": "blog",
+      "params": {
+        "store": "MaxwellsHardware",
+        "blogNewsType": "Blog"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sample Blog",
+      "location": "webstoreTestData.xlsx!productListingPage!C109",
+      "kind": "excel",
+      "keyPath": "cmsBasedSearchData/SampleBlog/SEOPageTitle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "blog",
+      "output": "seoTitle"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "src/test/java/testClasses/webstore/productListingPage/BlogAndNewsCMSBasedSearchTest.java:338",
+      "kind": "literal",
+      "keyPath": "count",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

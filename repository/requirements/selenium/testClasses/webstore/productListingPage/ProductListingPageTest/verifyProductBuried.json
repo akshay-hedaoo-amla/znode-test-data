@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyProductBuried",
+  "scenario": {
+    "summary": "On the keyword search results left open by verifyProductBoosted, verifies the buried product is listed last (name and SKU).",
+    "steps": [
+      "Verify the last listed product's name and SKU"
+    ],
+    "entitiesTouched": [
+      "user",
+      "search_rule",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Last listed product is the buried product"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): verifyWishListFunctionalityForRetailUser signs in with loginPage.customerSuccessfullLogin(testClassRetailUsers/productListingPageTest Username, Password; loginAndRegistration!B179/C179) and the later methods of the class (priority 100-125) run in that signed-in session until productListingPageLoggOffTheUser. Convention: every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store}, preferred {source: the username source, required: true} (Tda.declareUser -> useExisting). Username/password stay credential sources (masked); the scanner recorded them only on the sign-in method, later methods declare the same two cells from the test source (the session they reuse).",
+      "Reuses the search results of verifyProductBoosted (no dependsOn, priority order). First method captures: bury is declared by verifyProductBoosted with keyword @boost.keyword (class field); this method declares only the account. Runs in the signed-in session of verifyWishListFunctionalityForRetailUser (declares the account, see DECLARED ACCOUNT).",
+      "Sheet values BuriedProductNameInAdmin / BuriedProductSku are data of that bury record (bury.productName / productSku).",
+      "HEAD RECORD VALUES (first method captures): boostAndBury/BuriedProductNameInAdmin/Input -> bury.productName; boostAndBury/BuriedProductSku/Input -> bury.productSku. These values belong to a record the head method declares (as data with that output there); this method has no needs, so they are recorded as expected-output copies (chain rule confirmed by the user 2026-11-10). The migrated method reads them from the class field (alias.output above), not from the sheet; after migration and rescan they leave this entry.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Bosch 120-Volt 10 Amp 4-1/2 In Corded Angle Grinder",
+      "location": "webstoreTestData.xlsx!productListingPage!B152",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BuriedProductNameInAdmin/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "z-2460005",
+      "location": "webstoreTestData.xlsx!productListingPage!B153",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BuriedProductSku/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "//*[starts-with(@data-test-selector,'linkProductName')]",
+      "location": "src/main/java/pageObjects/webstore/ProductListingPageObjects.java:196",
+      "kind": "constant",
+      "keyPath": "ProductListingPageObjects.LINK_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[starts-with(@data-test-selector,'spnProductSkuValue')]",
+      "location": "src/main/java/pageObjects/webstore/ProductListingPageObjects.java:197",
+      "kind": "constant",
+      "keyPath": "ProductListingPageObjects.LINK_PRODUCT_SKU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

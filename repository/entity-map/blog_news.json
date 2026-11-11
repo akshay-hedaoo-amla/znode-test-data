@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "entity": "blog_news",
+  "tables": [
+    "dbo.ZnodeBlogNews",
+    "dbo.ZnodeBlogNewsLocale",
+    "dbo.ZnodeBlogNewsContent",
+    "dbo.ZnodePublishBlogNewsEntity",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeCMSContentPages",
+    "dbo.ZnodeCMSSEODetail",
+    "dbo.ZnodeCMSSEODetailLocale",
+    "dbo.ZnodeCMSSEOType"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeBlogNews.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeBlogNews.BlogNewsId",
+      "to": "dbo.ZnodeBlogNewsLocale.BlogNewsId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeBlogNews.BlogNewsId",
+      "to": "dbo.ZnodeBlogNewsContent.BlogNewsId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeBlogNews.BlogNewsId",
+      "to": "dbo.ZnodePublishBlogNewsEntity.BlogNewsId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeBlogNews.CMSContentPagesId",
+      "to": "dbo.ZnodeCMSContentPages.CMSContentPagesId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeBlogNews.BlogNewsCode",
+      "to": "dbo.ZnodeCMSSEODetail.SEOCode",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeCMSSEODetail.CMSSEODetailId",
+      "to": "dbo.ZnodeCMSSEODetailLocale.CMSSEODetailId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeCMSSEODetail.CMSSEOTypeId",
+      "to": "dbo.ZnodeCMSSEOType.CMSSEOTypeId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "blogNewsId": "dbo.ZnodeBlogNews.BlogNewsId",
+    "blogNewsCode": "dbo.ZnodeBlogNews.BlogNewsCode",
+    "blogNewsType": "dbo.ZnodeBlogNews.BlogNewsType",
+    "isActive": "dbo.ZnodeBlogNews.IsBlogNewsActive",
+    "activationDate": "dbo.ZnodeBlogNews.ActivationDate",
+    "expirationDate": "dbo.ZnodeBlogNews.ExpirationDate",
+    "title": "dbo.ZnodeBlogNewsLocale.BlogNewsTitle",
+    "publishedTitle": "dbo.ZnodePublishBlogNewsEntity.BlogNewsTitle",
+    "publishedCount": "COUNT(DISTINCT dbo.ZnodePublishBlogNewsEntity.PublishBlogNewsEntityId)",
+    "contentPageActive": "dbo.ZnodeCMSContentPages.IsActive",
+    "seoTitle": "dbo.ZnodeCMSSEODetailLocale.SEOTitle",
+    "seoDescription": "dbo.ZnodeCMSSEODetailLocale.SEODescription",
+    "seoUrl": "dbo.ZnodeCMSSEODetail.SEOUrl",
+    "seoType": "dbo.ZnodeCMSSEOType.Name",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:58ce5bbb9553d0523cc5d8fd028bc97c07edca932696d5b912e99df2140ef050",
+  "scannedAt": "2026-11-10T00:00:00Z",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

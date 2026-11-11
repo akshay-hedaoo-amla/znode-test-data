@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyPageView",
+  "scenario": {
+    "summary": "On the Tools PLP left open by verifyPageSize, verifies grid view is active, switches to list view and back.",
+    "steps": [
+      "Verify the grid view icon class",
+      "Click list view, verify the list view icon class",
+      "Click grid view"
+    ],
+    "entitiesTouched": [
+      "category"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Active view icon classes"
+    ],
+    "evidence": [
+      "Independent method that reuses the page verifyPageSize left open (priority order); reads no record value, so no needs.",
+      "Icon classes 'lucide lucide-layout-grid' / 'lucide lucide-list' are UI texts: expected-output.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "lucide lucide-layout-grid",
+      "location": "webstoreTestData.xlsx!productListingPage!B30",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/activeGridView/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "class",
+      "location": "src/main/java/pageObjects/webstore/ProductListingPageObjects.java:163",
+      "kind": "constant",
+      "keyPath": "ProductListingPageObjects.LBL_ATTRIBUTE_CLASS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "lucide lucide-list",
+      "location": "webstoreTestData.xlsx!productListingPage!B31",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/activeListView/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

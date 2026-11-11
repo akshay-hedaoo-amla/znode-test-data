@@ -1,0 +1,103 @@
+{
+  "schemaVersion" : 1,
+  "key" : "BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE",
+  "spec" : {
+    "file" : "specs/znode-core-api-v1.json",
+    "operations" : [ "POST /BlogNews/CreateBlogNews", "POST /BlogNews/PublishBlogNews", "POST /BlogNews/DeleteBlogNews" ]
+  },
+  "create" : {
+    "steps" : [ {
+      "name" : "create",
+      "method" : "POST",
+      "path" : "/BlogNews/CreateBlogNews",
+      "payloadTemplate" : "payloads/BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE.create.json",
+      "captures" : {
+        "blogNewsId" : "/BlogNews/BlogNewsId"
+      },
+      "undo" : {
+        "method" : "POST",
+        "path" : "/BlogNews/DeleteBlogNews",
+        "bodyTemplate" : "payloads/BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE.undo.json"
+      }
+    }, {
+      "name" : "publish",
+      "method" : "POST",
+      "path" : "/BlogNews/PublishBlogNews",
+      "payloadTemplate" : "payloads/BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE.publish.json"
+    } ],
+    "id" : "{blogNewsId}",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "localeId" : 1,
+      "seoTypeId" : 5,
+      "publishState" : "PRODUCTION"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "activationDate" : {
+        "kind" : "dateTime",
+        "offset" : "P30D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      },
+      "expirationDate" : {
+        "kind" : "dateTime",
+        "offset" : "P60D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      }
+    },
+    "runIdTag" : {
+      "step" : "create",
+      "field" : "/BlogNewsCode",
+      "format" : "TDA-{runId}-",
+      "property" : "blogNewsCode"
+    },
+    "outputs" : {
+      "blogNewsCode" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/BlogNewsCode"
+      },
+      "seoTitle" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/SEOTitle"
+      },
+      "title" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/BlogNewsTitle"
+      },
+      "activationDate" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/ActivationDate"
+      },
+      "blogNewsId" : {
+        "from" : "value",
+        "name" : "blogNewsId"
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/BlogNews/DeleteBlogNews",
+    "bodyTemplate" : "payloads/BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE.teardown.json"
+  },
+  "specFingerprint" : "sha256:484d3f0ebfd9f347684f4c4dd1b25992217dbf728348e3d7bfd1e77547874d06",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z",
+  "createdAt" : "2026-11-10T00:00:00Z",
+  "lastValidated" : "2026-11-10T09:49:05Z",
+  "verifiedHash" : "sha256:0e9799f52010d73a3bec59d400b53fb65f70cee2ee1ace9be441667c7f023016"
+}

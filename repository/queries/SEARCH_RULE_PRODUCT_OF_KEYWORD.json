@@ -1,0 +1,27 @@
+{
+  "schemaVersion" : 1,
+  "key" : "SEARCH_RULE_PRODUCT_OF_KEYWORD",
+  "sql" : "SELECT TOP 10 tr.SearchTriggerValue AS keyword, pe.Name AS productName, ir.SearchItemValue AS productSku, ir.SearchItemBoostValue AS boostValue, r.SearchCatalogRuleId AS ruleId FROM dbo.ZnodeSearchCatalogRule r INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = r.PublishCatalogId INNER JOIN dbo.ZnodePortal p ON p.PortalId = pc.PortalId INNER JOIN dbo.ZnodeSearchTriggerRule tr ON tr.SearchCatalogRuleId = r.SearchCatalogRuleId INNER JOIN dbo.ZnodeSearchItemRule ir ON ir.SearchCatalogRuleId = r.SearchCatalogRuleId INNER JOIN dbo.ZnodePublishProductEntity pe ON pe.SKU = ir.SearchItemValue AND pe.ZnodeCatalogId = r.PublishCatalogId INNER JOIN dbo.ZnodePublishVersionEntity ve ON ve.VersionId = pe.VersionId WHERE p.StoreCode = @store AND r.IsPause = @notPaused AND (r.StartDate IS NULL OR r.StartDate <= @now) AND (r.EndDate IS NULL OR r.EndDate >= @now) AND tr.SearchTriggerKeyword = @triggerField AND ir.SearchItemKeyword = @itemField AND ve.RevisionType = @revisionType AND ve.IsPublishSuccess = @isActive AND ve.LocaleId = @localeId AND pe.IsActive = @isActive AND ((@ruleEffect = @boostEffect AND ir.SearchItemBoostValue > @neutralBoost) OR (@ruleEffect = @buryEffect AND ir.SearchItemBoostValue < @neutralBoost)) AND (@keyword IS NULL OR tr.SearchTriggerValue = @keyword) AND (@preferred IS NULL OR ir.SearchItemValue = @preferred) ORDER BY r.SearchCatalogRuleId, ir.SearchItemRuleId, tr.SearchTriggerRuleId",
+  "params" : [ "store", "notPaused", "now", "triggerField", "itemField", "revisionType", "isActive", "localeId", "ruleEffect", "boostEffect", "neutralBoost", "buryEffect", "keyword", "preferred" ],
+  "constants" : {
+    "notPaused" : "false",
+    "triggerField" : "Keyword",
+    "itemField" : "SKU",
+    "revisionType" : "PRODUCTION",
+    "isActive" : "true",
+    "localeId" : "1",
+    "boostEffect" : "boost",
+    "buryEffect" : "bury",
+    "neutralBoost" : "1"
+  },
+  "outputs" : [ "keyword", "productName", "productSku", "boostValue", "ruleId" ],
+  "identity" : "productSku",
+  "schemaFingerprint" : "sha256:8cb96084fd0c6944ef41a03759f92d3c34d15a86ca64b367c4f77bcfdf20e064",
+  "vocabularyFingerprint" : "sha256:e3d69aa35c9888cb13d22ba82ca11d91147f4cae8d6364704dae14f1c8900aa7",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z",
+  "createdAt" : "2026-11-10T00:00:00Z",
+  "lastValidated" : "2026-11-10T09:48:49Z",
+  "verifiedHash" : "sha256:96b2e9921d006d63e4ae469a0880bc91c7a03fbe22465d177ab8e155bdc81105"
+}

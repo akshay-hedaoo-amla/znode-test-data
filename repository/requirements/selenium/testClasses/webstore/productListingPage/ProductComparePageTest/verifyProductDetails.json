@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductComparePageTest#verifyProductDetails",
+  "scenario": {
+    "summary": "On the compare page, verifies each of the four compared products' details (name, price, brand, descriptions, specification, shipping, min/max quantity) under their labels.",
+    "steps": [
+      "Verify the compare container",
+      "For each product: verify the labels and values of its column"
+    ],
+    "entitiesTouched": [
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Each product's attribute values equal the sheet values"
+    ],
+    "evidence": [
+      "dependsOn navigateToProductComparePage. First method captures: addProductsToCompareList is the head (verifyMaximumLimitReachedMessagePopup and navigateToProductComparePage depend on it; verifyProductDetails, verifySendEmailFunctionality and verifyBackLinkFunctionality depend on navigateToProductComparePage). It declares product1..product5 and compare; later methods read the class fields.",
+      "ProductName values are product1..product4.name (class fields). The literals DeWalt/Bosch/OrbitSander/AngleGrinder are sheet column keys: config. Labels (Product Name, Price, Brand, ...) are UI texts: expected-output.",
+      "Not scanned: the attribute values come from the productCompare sheet inside verifyCompareProductSpecificDetails; the migrated method compares productN.brandName, retailPrice, shortDescription, details, specifications, shippingInfo, minQuantity, maxQuantity (class fields).",
+      "HEAD RECORD VALUES (first method captures): productDetailsData/ProductName/DeWalt -> product1.name; productDetailsData/ProductName/Bosch -> product2.name; productDetailsData/ProductName/OrbitSander -> product3.name; productDetailsData/ProductName/AngleGrinder -> product4.name. These values belong to a record the head method declares (as data with that output there); this method has no needs, so they are recorded as expected-output copies (chain rule confirmed by the user 2026-11-10). The migrated method reads them from the class field (alias.output above), not from the sheet; after migration and rescan they leave this entry.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3 Amp 5 in. Variable Speed Orbital Sander Kit",
+      "location": "webstoreTestData.xlsx!productCompare!C4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "DeWalt",
+      "location": "src/test/java/testClasses/webstore/productListingPage/ProductComparePageTest.java:147",
+      "kind": "literal",
+      "keyPath": "productType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[text()='",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:34",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.BEFORE_XPATH",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']/ancestor::div//label[starts-with(@data-test-selector,'lblProductName')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:40",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product Name",
+      "location": "webstoreTestData.xlsx!productCompare!B4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:42",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblProductPrice')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:44",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_PRODUCT_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Price",
+      "location": "webstoreTestData.xlsx!productCompare!B8",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductPrice/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'spnRetailPrice')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:46",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_PRODUCT_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblLongDescription')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:52",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_LONG_DESCRIPTION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Long Description",
+      "location": "webstoreTestData.xlsx!productCompare!B9",
+      "kind": "excel",
+      "keyPath": "productDetailsData/LongDescription/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueLongDescription')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:54",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_LONG_DESCRIPTION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblShortDescription')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:56",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_SHORT_DESCRIPTION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Short Description",
+      "location": "webstoreTestData.xlsx!productCompare!B7",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ShortDescription/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueShortDescription')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:58",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_SHORT_DESCRIPTION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblMaximumQuantity')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:60",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_MAXIMUM_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Maximum Quantity",
+      "location": "webstoreTestData.xlsx!productCompare!B12",
+      "kind": "excel",
+      "keyPath": "productDetailsData/MaxQuantity/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueMaximumQuantity')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:62",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_MAXIMUM_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblMinimumQuantity')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:64",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_MINIMUM_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Minimum Quantity",
+      "location": "webstoreTestData.xlsx!productCompare!B13",
+      "kind": "excel",
+      "keyPath": "productDetailsData/MinQuantity/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueMinimumQuantity')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:66",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_MINIMUM_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblProductSpecification')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:68",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_PRODUCT_SPECIFICATION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Product Specification",
+      "location": "webstoreTestData.xlsx!productCompare!B10",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSpecification/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueProductSpecification')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:70",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_PRODUCT_SPECIFICATION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblShippingInformation')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:72",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_SHIPPING_INFORMATION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Shipping Information",
+      "location": "webstoreTestData.xlsx!productCompare!B11",
+      "kind": "excel",
+      "keyPath": "productDetailsData/Shipping/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueShippingInformation')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:74",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_SHIPPING_INFORMATION",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'lblBrand')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:48",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_LBL_BRAND",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Brand",
+      "location": "webstoreTestData.xlsx!productCompare!B6",
+      "kind": "excel",
+      "keyPath": "productDetailsData/Brand/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "']//following::*[starts-with(@data-test-selector,'divAttributeValueBrand')]",
+      "location": "src/main/java/pageObjects/webstore/ProductComparePageObjects.java:50",
+      "kind": "constant",
+      "keyPath": "ProductComparePageObjects.AFTER_XPATH_DIV_BRAND",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "webstoreTestData.xlsx!productCompare!D4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/Bosch",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Bosch",
+      "location": "src/test/java/testClasses/webstore/productListingPage/ProductComparePageTest.java:149",
+      "kind": "literal",
+      "keyPath": "productType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Bosch 2.5 Amp 5 in. Corded Variable Speed Random Orbital Sander/Polisher Kit",
+      "location": "webstoreTestData.xlsx!productCompare!E4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/OrbitSander",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "OrbitSander",
+      "location": "src/test/java/testClasses/webstore/productListingPage/ProductComparePageTest.java:151",
+      "kind": "literal",
+      "keyPath": "productType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 6.5 in Corded Angle Grinder",
+      "location": "webstoreTestData.xlsx!productCompare!F4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/AngleGrinder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "AngleGrinder",
+      "location": "src/test/java/testClasses/webstore/productListingPage/ProductComparePageTest.java:153",
+      "kind": "literal",
+      "keyPath": "productType",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

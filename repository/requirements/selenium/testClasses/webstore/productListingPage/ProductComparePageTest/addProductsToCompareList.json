@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductComparePageTest#addProductsToCompareList",
+  "scenario": {
+    "summary": "Guest searches four products by SKU and adds each to the product compare list from the PLP.",
+    "steps": [
+      "Open the webstore",
+      "For each of 4 products: search its SKU, hover the product, click Compare, Add more"
+    ],
+    "entitiesTouched": [
+      "store",
+      "store_product_compare",
+      "product"
+    ],
+    "stateChanges": [
+      "Compare list (session): 4 products"
+    ],
+    "assertions": [
+      "Compare link and Add more popup work (page-object checks)"
+    ],
+    "evidence": [
+      "First method captures: addProductsToCompareList is the head (verifyMaximumLimitReachedMessagePopup and navigateToProductComparePage depend on it; verifyProductDetails, verifySendEmailFunctionality and verifyBackLinkFunctionality depend on navigateToProductComparePage). It declares product1..product5 and compare; later methods read the class fields.",
+      "compare = STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED {store} (Enable Product Comparison on; the 4-product limit is a webstore constant), as the Playwright plp compare entry.",
+      "product1..product4 = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store}, preferred the sheet SKUs productCompare!C5/D5/E5/F5 (z-2420001, z-2420004, z-2420005, z-2460001), not required; distinct aliases as the Playwright compare entry (simple/otherSimple). product5 (the fifth product verifyMaximumLimitReachedMessagePopup tries to add, productCompare!G5 z-2410001) is declared here too, its SKU declared from that method's source.",
+      "Not scanned (page object): verifyProductDetails reads each product's Brand, Price, Short/Long Description, Product Specification, Shipping Information and Min/Max Quantity from the productCompare sheet (rows 6-13). The migrated method compares productN.brandName, retailPrice, shortDescription, details (long description), specifications, shippingInfo, minQuantity and maxQuantity (outputs added to PRODUCT_SIMPLE_IN_STOCK 2026-11-10, user decision).",
+      "Readiness 2026-11-10: product3's sheet SKU z-2420005 does not qualify for PRODUCT_SIMPLE_IN_STOCK (the resolver falls back to another simple product); the other four qualify.",
+      "Sheet values: ProductName -> productN.name, ProductSKU -> productN.sku. No sign-in (guest).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "withBrand": true,
+        "withShippingInfo": true
+      },
+      "preferred": {
+        "source": 2,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "withBrand": true,
+        "withShippingInfo": true
+      },
+      "preferred": {
+        "source": 4,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product3",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "withBrand": true,
+        "withShippingInfo": true
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product4",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware",
+        "withBrand": true,
+        "withShippingInfo": true
+      },
+      "preferred": {
+        "source": 8,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product5",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_PRODUCT_COMPARE_ENABLED",
+      "alias": "compare",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-7879",
+    "Z10-TC-7880",
+    "Z10-TC-7881"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DeWalt 3 Amp 5 in. Variable Speed Orbital Sander Kit",
+      "location": "webstoreTestData.xlsx!productCompare!C4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1",
+      "output": "name"
+    },
+    {
+      "value": "z-2420001",
+      "location": "webstoreTestData.xlsx!productCompare!C5",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1",
+      "output": "sku"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "webstoreTestData.xlsx!productCompare!D4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/Bosch",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2",
+      "output": "name"
+    },
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!productCompare!D5",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSKU/Bosch",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product2",
+      "output": "sku"
+    },
+    {
+      "value": "Bosch 2.5 Amp 5 in. Corded Variable Speed Random Orbital Sander/Polisher Kit",
+      "location": "webstoreTestData.xlsx!productCompare!E4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/OrbitSander",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product3",
+      "output": "name"
+    },
+    {
+      "value": "z-2420005",
+      "location": "webstoreTestData.xlsx!productCompare!E5",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSKU/OrbitSander",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product3",
+      "output": "sku"
+    },
+    {
+      "value": "Black + Decker 6.5 in Corded Angle Grinder",
+      "location": "webstoreTestData.xlsx!productCompare!F4",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductName/AngleGrinder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product4",
+      "output": "name"
+    },
+    {
+      "value": "z-2460001",
+      "location": "webstoreTestData.xlsx!productCompare!F5",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSKU/AngleGrinder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product4",
+      "output": "sku"
+    },
+    {
+      "value": "z-2410001",
+      "location": "webstoreTestData.xlsx!productCompare!G5",
+      "kind": "excel",
+      "keyPath": "productDetailsData/ProductSKU/ReciprocatingSaw",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product5",
+      "output": "sku"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

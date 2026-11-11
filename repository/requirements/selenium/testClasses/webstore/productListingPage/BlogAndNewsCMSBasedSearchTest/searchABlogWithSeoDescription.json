@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.BlogAndNewsCMSBasedSearchTest#searchABlogWithSeoDescription",
+  "scenario": {
+    "summary": "Guest searches an active blog by its SEO description and verifies the CMS search result shows its title and description.",
+    "steps": [
+      "Open the webstore (or click the logo)",
+      "Search with the record's SEO description",
+      "Verify the CMS search results tab, open it",
+      "Verify the result's page title and description"
+    ],
+    "entitiesTouched": [
+      "store",
+      "blog_news"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Search result shows the record's SEO title and description"
+    ],
+    "evidence": [
+      "NEW key BLOG_NEWS_SEARCHABLE_OF_STORE (pending): an active blog or news of the store (ZnodeBlogNews, BlogNewsType Blog/News) published (ZnodePublishBlogNewsEntity), inside its activation/expiration dates, with SEO title and description (ZnodeCMSSEODetail/Locale), so the storefront CMS search finds it by title, description or content. No existing key covers blogs/news; entity map blog_news and query written 2026-11-10 (pending; SEO title/description via ZnodeCMSSEODetail SEOCode = BlogNewsCode on the same portal, type BlogNews). MaxwellsHardware (PortalId 7) has Shopify / CordlessWoodworkingBlog / BlogWithInactiveContentPage blogs and NewYorkTimes / SampleNews news. Guest flow, no sign-in.",
+      "blog = BLOG_NEWS_SEARCHABLE_OF_STORE {\"store\": \"MaxwellsHardware\", \"blogNewsType\": \"Blog\", \"withSeoDescription\": true}; preferred the sheet title (cmsBasedSearchData/ShopifyBlog/SEOPageTitle), not required.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "BLOG_NEWS_SEARCHABLE_OF_STORE",
+      "alias": "blog",
+      "params": {
+        "store": "MaxwellsHardware",
+        "blogNewsType": "Blog",
+        "withSeoDescription": true
+      },
+      "preferred": {
+        "source": 7,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Shopify Blog",
+      "location": "webstoreTestData.xlsx!productListingPage!D103",
+      "kind": "excel",
+      "keyPath": "cmsBasedSearchData/ShopifyBlog/SEOPageDescription",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "blog",
+      "output": "seoDescription"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Shopify Blog",
+      "location": "webstoreTestData.xlsx!productListingPage!C103",
+      "kind": "excel",
+      "keyPath": "cmsBasedSearchData/ShopifyBlog/SEOPageTitle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "blog",
+      "output": "seoTitle"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

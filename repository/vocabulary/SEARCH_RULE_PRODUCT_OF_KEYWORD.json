@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "key": "SEARCH_RULE_PRODUCT_OF_KEYWORD",
+  "entity": "search_rule",
+  "type": "product_boost",
+  "constraints": {
+    "ruleEffect": "{ruleEffect}",
+    "rulePaused": "false",
+    "withinActiveDates": "true",
+    "triggerKeyword": "{keyword}",
+    "itemField": "sku"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Search catalog rule of the store's catalog (ZnodeSearchCatalogRule, not paused, in its dates) whose trigger keyword boosts (item boost value above 1: listed first) or buries (below 1: listed last) one product by SKU. Outputs: keyword, productName, productSku. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "ruleEffect": {
+      "type": "string",
+      "description": "boost (product listed first) or bury (product listed last)"
+    },
+    "keyword": {
+      "type": "string",
+      "optional": true,
+      "description": "Trigger keyword the rule must match, e.g. @boost.keyword so a bury rule shares the boost search. Left out: any"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

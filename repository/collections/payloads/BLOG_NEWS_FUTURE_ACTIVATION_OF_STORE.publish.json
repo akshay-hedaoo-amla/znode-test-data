@@ -1,0 +1,7 @@
+{
+  "BlogNewsId": "{blogNewsId}",
+  "LocaleId": "{localeId}",
+  "PortalId": "{portalId}",
+  "TargetPublishState": "{publishState}",
+  "TakeFromDraftFirst": true
+}

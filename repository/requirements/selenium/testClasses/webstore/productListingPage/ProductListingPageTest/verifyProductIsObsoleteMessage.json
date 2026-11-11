@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyProductIsObsoleteMessage",
+  "scenario": {
+    "summary": "Searches an obsolete simple product by SKU and verifies the obsolete message on the PLP.",
+    "steps": [
+      "Search the obsolete product SKU",
+      "Verify the obsolete message"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "'This product is obsolete. View replacement products.'"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): verifyWishListFunctionalityForRetailUser signs in with loginPage.customerSuccessfullLogin(testClassRetailUsers/productListingPageTest Username, Password; loginAndRegistration!B179/C179) and the later methods of the class (priority 100-125) run in that signed-in session until productListingPageLoggOffTheUser. Convention: every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store}, preferred {source: the username source, required: true} (Tda.declareUser -> useExisting). Username/password stay credential sources (masked); the scanner recorded them only on the sign-in method, later methods declare the same two cells from the test source (the session they reuse).",
+      "product = PRODUCT_SIMPLE_OBSOLETE {store} as the Selenium pdp obsolete entry; preferred the sheet SKU productDisplayPage!V4 z-2100011 (PimProductId 385), not required. Runs in the signed-in session of verifyWishListFunctionalityForRetailUser (declares the account, see DECLARED ACCOUNT).",
+      "IsObsoleteMessage is a UI text: expected-output.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 6,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_OBSOLETE",
+      "alias": "product",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "z-2100011",
+      "location": "webstoreTestData.xlsx!productDisplayPage!V4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/IsObsoleteProduct",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This product is obsolete. View replacement products.",
+      "location": "webstoreTestData.xlsx!productListingPage!B47",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/IsObsoleteMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

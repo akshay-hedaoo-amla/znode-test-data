@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "key": "BLOG_NEWS_NOT_SEARCHABLE_OF_STORE",
+  "entity": "blog_news",
+  "type": "not_searchable",
+  "constraints": {
+    "blogNewsType": "{blogNewsType}",
+    "state": "{state}",
+    "searchableTitleMatchCount": "= 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Blog or news of the store that the CMS search must not return: activation date in the future (state futureActivation) or expiration date passed (state expired); no searchable blog/news title contains its code (the term the test searches). Outputs: blogNewsCode, seoTitle. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "blogNewsType": {
+      "type": "string",
+      "description": "ZnodeBlogNews.BlogNewsType: Blog or News"
+    },
+    "state": {
+      "type": "string",
+      "description": "Why it is not searchable: futureActivation (ActivationDate after now) or expired (ExpirationDate before now)"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

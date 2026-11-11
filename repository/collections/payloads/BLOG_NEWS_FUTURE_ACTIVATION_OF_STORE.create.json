@@ -1,0 +1,20 @@
+{
+  "BlogNewsId": 0,
+  "PortalId": "{portalId}",
+  "LocaleId": "{localeId}",
+  "CMSSEOTypeId": "{seoTypeId}",
+  "BlogNewsType": "{blogNewsType}",
+  "BlogNewsCode": "{runIdTag}{uniqueSuffix}",
+  "BlogNewsTitle": "{runIdTag}{uniqueSuffix}",
+  "BodyOverview": "{runIdTag}{uniqueSuffix}",
+  "BlogNewsContent": "<p>{runIdTag}{uniqueSuffix}</p>",
+  "SEOTitle": "{runIdTag}{uniqueSuffix}",
+  "SEODescription": "{runIdTag}{uniqueSuffix}",
+  "SEOKeywords": "{runIdTag}{uniqueSuffix}",
+  "SEOUrl": "{runIdTag}{uniqueSuffix}",
+  "SEOCode": "{runIdTag}{uniqueSuffix}",
+  "IsBlogNewsActive": true,
+  "IsAllowGuestComment": false,
+  "ActivationDate": "{activationDate}",
+  "ExpirationDate": "{expirationDate}"
+}

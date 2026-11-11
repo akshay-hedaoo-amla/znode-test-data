@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.BlogAndNewsCMSBasedSearchTest#verifyBlogHavingInactiveContentPage",
+  "scenario": {
+    "summary": "Guest searches a blog whose associated content page is inactive and verifies the CMS result shows its title (the link must not open the inactive page).",
+    "steps": [
+      "Open the webstore (or click the logo)",
+      "Search with the record's SEO page title",
+      "Verify the CMS search results tab, open it",
+      "Verify the result's page title"
+    ],
+    "entitiesTouched": [
+      "store",
+      "blog_news"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Search result shows the record's SEO title"
+    ],
+    "evidence": [
+      "NEW key BLOG_NEWS_SEARCHABLE_OF_STORE (pending): an active blog or news of the store (ZnodeBlogNews, BlogNewsType Blog/News) published (ZnodePublishBlogNewsEntity), inside its activation/expiration dates, with SEO title and description (ZnodeCMSSEODetail/Locale), so the storefront CMS search finds it by title, description or content. No existing key covers blogs/news; entity map blog_news and query written 2026-11-10 (pending; SEO title/description via ZnodeCMSSEODetail SEOCode = BlogNewsCode on the same portal, type BlogNews). MaxwellsHardware (PortalId 7) has Shopify / CordlessWoodworkingBlog / BlogWithInactiveContentPage blogs and NewYorkTimes / SampleNews news. Guest flow, no sign-in.",
+      "blog = BLOG_NEWS_SEARCHABLE_OF_STORE {\"store\": \"MaxwellsHardware\", \"blogNewsType\": \"Blog\", \"contentPageActive\": false}; preferred the sheet title (cmsBasedSearchData/BlogWithInactiveContentPage/SEOPageTitle), not required.",
+      "contentPageActive false: the blog's CMSContentPagesId points to an inactive content page (sheet blog BlogWithInactiveContentPage, BlogNewsId 12 -> content page 97 'About Maxwell's Hardware', IsActive false; its SEO description is empty, so withSeoDescription is left out). The method checks only the title (the navigation part of the title is not asserted).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "BLOG_NEWS_SEARCHABLE_OF_STORE",
+      "alias": "blog",
+      "params": {
+        "store": "MaxwellsHardware",
+        "blogNewsType": "Blog",
+        "contentPageActive": false
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Blog With Inactive Content Page",
+      "location": "webstoreTestData.xlsx!productListingPage!C111",
+      "kind": "excel",
+      "keyPath": "cmsBasedSearchData/BlogWithInactiveContentPage/SEOPageTitle",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "blog",
+      "output": "seoTitle"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

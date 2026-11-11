@@ -1,0 +1,27 @@
+{
+  "schemaVersion" : 1,
+  "key" : "CATEGORY_SUBCATEGORY_LINKS_OF_CATEGORY",
+  "sql" : "SELECT TOP 1 c.ZnodeCategoryId AS categoryId, c.CategoryCode AS categoryCode, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos1 THEN k.childName END) AS subcategory1Name, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos1 THEN CONCAT(k.childCode, @linkSuffix) END) AS subcategory1LinkCode, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos1 THEN k.childId END) AS subcategory1Id, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos2 THEN k.childName END) AS subcategory2Name, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos2 THEN CONCAT(k.childCode, @linkSuffix) END) AS subcategory2LinkCode, MAX(CASE WHEN k.hasProducts = @one AND k.position = @pos2 THEN k.childId END) AS subcategory2Id, MAX(CASE WHEN k.hasProducts = @zero AND k.position = @pos1 THEN k.childName END) AS emptySubcategoryName, MAX(CASE WHEN k.hasProducts = @zero AND k.position = @pos1 THEN CONCAT(k.childCode, @linkSuffix) END) AS emptySubcategoryLinkCode, MAX(CASE WHEN k.hasProducts = @zero AND k.position = @pos1 THEN k.childId END) AS emptySubcategoryId FROM dbo.ZnodePublishCategoryEntity c INNER JOIN dbo.ZnodePublishVersionEntity v ON v.VersionId = c.VersionId INNER JOIN dbo.ZnodePortalCatalog pc ON pc.PublishCatalogId = c.ZnodeCatalogId INNER JOIN dbo.ZnodePortal p ON p.PortalId = pc.PortalId INNER JOIN (SELECT ch.ParentPimCategoryHierarchyId AS parentId, cc.VersionId AS versionId, cc.ZnodeCategoryId AS childId, cc.Name AS childName, cc.CategoryCode AS childCode, CASE WHEN pr.productCount IS NULL THEN @zero ELSE @one END AS hasProducts, ROW_NUMBER() OVER (PARTITION BY ch.ParentPimCategoryHierarchyId, cc.VersionId, CASE WHEN pr.productCount IS NULL THEN @zero ELSE @one END ORDER BY cc.DisplayOrder, cc.ZnodeCategoryId) AS position FROM dbo.ZnodePimCategoryHierarchy ch INNER JOIN dbo.ZnodePublishCategoryEntity cc ON cc.ZnodeCategoryId = ch.PimCategoryHierarchyId LEFT JOIN (SELECT ph.PimCategoryHierarchyId AS categoryId, pe.VersionId AS versionId, COUNT(DISTINCT pe.ZnodeProductId) AS productCount FROM dbo.ZnodePimCategoryHierarchy ph INNER JOIN dbo.ZnodePimCategoryProduct cp ON cp.PimCategoryId = ph.PimCategoryId INNER JOIN dbo.ZnodePublishProductEntity pe ON pe.ZnodeProductId = cp.PimProductId WHERE cp.Status = @isActive AND pe.IsActive = @isActive AND CHARINDEX(CONCAT(@comma, ph.PimCategoryHierarchyId, @comma), CONCAT(@comma, pe.ZnodeCategoryIds, @comma)) > @zero GROUP BY ph.PimCategoryHierarchyId, pe.VersionId) pr ON pr.categoryId = cc.ZnodeCategoryId AND pr.versionId = cc.VersionId WHERE cc.IsActive = @isActive) k ON k.parentId = c.ZnodeCategoryId AND k.versionId = c.VersionId WHERE v.RevisionType = @revisionType AND v.IsPublishSuccess = @isActive AND v.LocaleId = @localeId AND c.IsActive = @isActive AND p.StoreCode = @store AND c.ZnodeCategoryId = @categoryId GROUP BY c.ZnodeCategoryId, c.CategoryCode, c.VersionId HAVING COUNT(CASE WHEN k.hasProducts = @one THEN k.childId END) >= @minWithProducts AND COUNT(CASE WHEN k.hasProducts = @zero THEN k.childId END) >= @minEmpty ORDER BY c.VersionId DESC",
+  "params" : [ "one", "pos1", "linkSuffix", "pos2", "zero", "isActive", "comma", "revisionType", "localeId", "store", "categoryId", "minWithProducts", "minEmpty" ],
+  "constants" : {
+    "revisionType" : "PRODUCTION",
+    "isActive" : "true",
+    "localeId" : "1",
+    "comma" : ",",
+    "zero" : "0",
+    "one" : "1",
+    "pos1" : "1",
+    "pos2" : "2",
+    "linkSuffix" : "Category"
+  },
+  "outputs" : [ "categoryId", "categoryCode", "subcategory1Name", "subcategory1LinkCode", "subcategory1Id", "subcategory2Name", "subcategory2LinkCode", "subcategory2Id", "emptySubcategoryName", "emptySubcategoryLinkCode", "emptySubcategoryId" ],
+  "identity" : "categoryId",
+  "schemaFingerprint" : "sha256:f2a2baab205b4adfa7453b4ffc4587ed4c4296c1a31b3ec2894bde89d10f917c",
+  "vocabularyFingerprint" : "sha256:29f896db904a18d10a1d4eede932e1dec853a8974e1a81b5544e0cc24eded0a7",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z",
+  "createdAt" : "2026-11-10T00:00:00Z",
+  "lastValidated" : "2026-11-10T09:48:56Z",
+  "verifiedHash" : "sha256:4a99da251ca0f4f5de6df08df8abbe006ee1ff343f43c83e4bcea9ea93c5f24d"
+}

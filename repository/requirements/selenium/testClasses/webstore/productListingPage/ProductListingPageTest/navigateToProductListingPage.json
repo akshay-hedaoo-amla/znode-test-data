@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#navigateToProductListingPage",
+  "scenario": {
+    "summary": "Guest opens the webstore and the Plumbing category PLP from the Departments menu and verifies the page title. Head of the Plumbing chain (category heading, quick view, facets).",
+    "steps": [
+      "Open the webstore",
+      "Open the navigation bar and click the category by its label",
+      "Verify the PLP title is present"
+    ],
+    "entitiesTouched": [
+      "store",
+      "category",
+      "category_facets"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "PLP title present"
+    ],
+    "evidence": [
+      "Head of a dependsOn chain: verifyCategoryHeadingAndListedSubCategories, verifyQuickViewButtonVisible (-> verifyQuickView) and verifyFacetsPanelAndItsProductCount depend on it. First method captures (user decision 2026-11-04): this method declares every record need of the chain and the migrated class keeps them in class fields; the later methods declare none and throw SkipException DATA_UNAVAILABLE when the field is null.",
+      "category = CATEGORY_WITH_PRODUCTS {store, minProducts 1, minSubcategories 1, topLevel true}: opened from the Departments menu (top level), the chain checks its sub-category tiles and hovers the first product. Preferred: the sheet label homePage!B14 'Plumbing' (= CategoryCode Plumbing, ZnodeCategoryId 83 in catalog 5; identity categoryCode), not required.",
+      "The heading verifyCategoryHeadingAndListedSubCategories asserts (homePage!B28 'PLUMBING', the upper-case rendering of the category name) is declared here from the test source as category.name.",
+      "facets = CATEGORY_FACET_VALUES {store, categoryId @category.categoryId, attributeCodes Brand,HeaterType, minValuesPerAttribute 1, minProductsForValue 1, maxProductsForValue 64} for verifyFacetsPanelAndItsProductCount (Brand: PimAttributeId 17, Simple Select, IsFacets; HeaterType: PimAttributeId 139 'Heater Type'). The facet lists and counts that method compares come from TestData.getHashMap tables (BRAND_FACETS_LIST/_PRODUCT_COUNT, HEATER_TYPE_FACETS_LIST/_PRODUCT_COUNT) the scanner does not record (no sources): the migrated method checks facets.facet1/facet2 labels, values and counts (up to 3 values each) instead of the whole sheet lists (user decision 2026-11-10).",
+      "Sub-category names verifyCategoryHeadingAndListedSubCategories compares come from TestData.getHashMap(SCENARIO_TEST_DATA_NAME_PLUMBING), not recorded by the scanner: category.subcategory1Name..subcategory4Name.",
+      "No sign-in: guest flow (the CentralizedLogin group is a tag only).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "category",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 1,
+        "minSubcategories": 1,
+        "topLevel": true
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "CATEGORY_FACET_VALUES",
+      "alias": "facets",
+      "params": {
+        "store": "MaxwellsHardware",
+        "categoryId": "@category.categoryId",
+        "attributeCodes": "Brand,SpoutType",
+        "minValuesPerAttribute": 1,
+        "minProductsForValue": 1,
+        "maxProductsForValue": 64
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Plumbing",
+      "location": "webstoreTestData.xlsx!homePage!B14",
+      "kind": "excel",
+      "keyPath": "homePageLabels/categoryPlumbing/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "name"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//div[@data-test-selector='divCategoryMenus']//li//*[contains(text(),'",
+      "location": "src/main/java/pageObjects/webstore/HomePageObjects.java:91",
+      "kind": "constant",
+      "keyPath": "HomePageObjects.BEFORE_XPATH_PARENT_CATEGORY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "')]",
+      "location": "src/main/java/pageObjects/webstore/HomePageObjects.java:93",
+      "kind": "constant",
+      "keyPath": "HomePageObjects.AFTER_XPATH_PARENT_CATEGORY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "PLUMBING",
+      "location": "webstoreTestData.xlsx!homePage!B28",
+      "kind": "excel",
+      "keyPath": "homePageLabels/categoryPlumbing1/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "category",
+      "output": "name"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

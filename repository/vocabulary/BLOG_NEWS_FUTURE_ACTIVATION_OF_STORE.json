@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE",
+  "entity": "blog_news",
+  "type": "future_activation",
+  "constraints": {
+    "blogNewsType": "{blogNewsType}",
+    "isActive": "true",
+    "activationInFuture": "true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Blog or news created for the test on the store, active but with an activation date in the future (set at run time), so the CMS search must not return it for its title. Outputs: blogNewsCode, title. Created by its collection and torn down after the run.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "blogNewsType": {
+      "type": "string",
+      "description": "ZnodeBlogNews.BlogNewsType to create: Blog or News"
+    }
+  },
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

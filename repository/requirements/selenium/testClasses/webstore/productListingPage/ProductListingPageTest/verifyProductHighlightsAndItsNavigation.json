@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyProductHighlightsAndItsNavigation",
+  "scenario": {
+    "summary": "Searches a bundle product by SKU and verifies its Free Shipping, WaterSense and BIO Certified highlight badges and the '+N' remaining highlights count on the PLP, then opens the BIO Certified highlight page.",
+    "steps": [
+      "Search the product SKU",
+      "Verify Free Shipping, WaterSense and BIO Certified badges",
+      "Verify the remaining highlights count",
+      "Click the BIO Certified badge, verify the Back to product link"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "product_highlights"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Highlight badges visible",
+      "Remaining highlights count equals the sheet value"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): verifyWishListFunctionalityForRetailUser signs in with loginPage.customerSuccessfullLogin(testClassRetailUsers/productListingPageTest Username, Password; loginAndRegistration!B179/C179) and the later methods of the class (priority 100-125) run in that signed-in session until productListingPageLoggOffTheUser. Convention: every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store}, preferred {source: the username source, required: true} (Tda.declareUser -> useExisting). Username/password stay credential sources (masked); the scanner recorded them only on the sign-in method, later methods declare the same two cells from the test source (the session they reuse).",
+      "product = PRODUCT_WITH_HIGHLIGHTS {productType bundle, highlight1Code BIOCertified, highlight2Code WaterSenseCertified, highlight3Code FreeShipping, store}; preferred the sheet SKU productDisplayPage!C336 z-1234579, not required. Runs in the signed-in session of verifyWishListFunctionalityForRetailUser (declares the account, see DECLARED ACCOUNT).",
+      "The badges are fixed locators (Free Shipping, WaterSense, BIO Certified): highlight3Code FreeShipping (optional param added 2026-11-10, user decision; ZnodeHighlight 5, active). The sheet's RemainingHighlightsCount '1' is product.remainingHighlightCount (new output: active highlights of the product minus the 3 badges the PLP shows).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 8,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_WITH_HIGHLIGHTS",
+      "alias": "product",
+      "params": {
+        "productType": "bundle",
+        "highlight1Code": "BIOCertified",
+        "highlight2Code": "WaterSenseCertified",
+        "highlight3Code": "FreeShipping",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "z-1234579",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!productDisplayPage!B365",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/RemainingHighlightsCount/Labels",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "remainingHighlightCount"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

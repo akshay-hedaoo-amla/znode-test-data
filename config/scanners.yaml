@@ -201,6 +201,10 @@ migrated:
     - src/test/java/testClasses/webstore/productDisplayPage/GroupProductDisplayPageTest.java
     - src/test/java/testClasses/webstore/productDisplayPage/GroupProductShoppingCartPageTest.java
     - src/test/java/testClasses/webstore/productDisplayPage/SimpleProductDisplayPageTest.java
+    # Phase 6 wave 2, webstore/productListingPage
+    - src/test/java/testClasses/webstore/productListingPage/BlogAndNewsCMSBasedSearchTest.java
+    - src/test/java/testClasses/webstore/productListingPage/ProductComparePageTest.java
+    - src/test/java/testClasses/webstore/productListingPage/ProductListingPageTest.java
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
 # swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.

@@ -1,0 +1,31 @@
+{
+  "schemaVersion" : 1,
+  "key" : "BLOG_NEWS_SEARCHABLE_OF_STORE",
+  "sql" : "SELECT TOP 10 sl.SEOTitle AS seoTitle, sl.SEODescription AS seoDescription, s.SEOUrl AS seoUrl, l.BlogNewsTitle AS title, b.BlogNewsCode AS blogNewsCode, b.BlogNewsId AS blogNewsId, CASE WHEN CHARINDEX(@lt, c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one) > CHARINDEX(@gt, c.BlogNewsContent) + @one THEN LEFT(SUBSTRING(c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one, CHARINDEX(@lt, c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one) - CHARINDEX(@gt, c.BlogNewsContent) - @one), @contentLength) END AS contentText FROM dbo.ZnodeBlogNews b INNER JOIN dbo.ZnodePortal p ON p.PortalId = b.PortalId INNER JOIN dbo.ZnodeBlogNewsLocale l ON l.BlogNewsId = b.BlogNewsId AND l.LocaleId = @localeId INNER JOIN dbo.ZnodeCMSSEODetail s ON s.SEOCode = b.BlogNewsCode AND s.PortalId = b.PortalId INNER JOIN dbo.ZnodeCMSSEOType st ON st.CMSSEOTypeId = s.CMSSEOTypeId INNER JOIN dbo.ZnodeCMSSEODetailLocale sl ON sl.CMSSEODetailId = s.CMSSEODetailId AND sl.LocaleId = @localeId LEFT JOIN dbo.ZnodeBlogNewsContent c ON c.BlogNewsId = b.BlogNewsId AND c.LocaleId = @localeId LEFT JOIN dbo.ZnodeCMSContentPages cp ON cp.CMSContentPagesId = b.CMSContentPagesId WHERE p.StoreCode = @store AND b.BlogNewsType = @blogNewsType AND b.IsBlogNewsActive = @isActive AND st.Name = @seoType AND (b.ActivationDate IS NULL OR b.ActivationDate <= @now) AND (b.ExpirationDate IS NULL OR b.ExpirationDate >= @now) AND sl.SEOTitle IS NOT NULL AND (@withSeoDescription IS NULL OR sl.SEODescription IS NOT NULL) AND EXISTS (SELECT pe.PublishBlogNewsEntityId FROM dbo.ZnodePublishBlogNewsEntity pe WHERE pe.BlogNewsId = b.BlogNewsId AND pe.PortalId = b.PortalId AND pe.LocaleId = @localeId AND pe.IsBlogNewsActive = @isActive) AND NOT EXISTS (SELECT o.BlogNewsId FROM dbo.ZnodeBlogNews o INNER JOIN dbo.ZnodeCMSSEODetail os ON os.SEOCode = o.BlogNewsCode AND os.PortalId = o.PortalId INNER JOIN dbo.ZnodeCMSSEOType ost ON ost.CMSSEOTypeId = os.CMSSEOTypeId INNER JOIN dbo.ZnodeCMSSEODetailLocale osl ON osl.CMSSEODetailId = os.CMSSEODetailId AND osl.LocaleId = @localeId WHERE o.PortalId = b.PortalId AND o.BlogNewsId <> b.BlogNewsId AND ost.Name = @seoType AND o.IsBlogNewsActive = @isActive AND (o.ActivationDate IS NULL OR o.ActivationDate <= @now) AND (o.ExpirationDate IS NULL OR o.ExpirationDate >= @now) AND CHARINDEX(sl.SEOTitle, osl.SEOTitle) > @zero) AND (@withContentText IS NULL OR LEN(LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE(CASE WHEN CHARINDEX(@lt, c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one) > CHARINDEX(@gt, c.BlogNewsContent) + @one THEN LEFT(SUBSTRING(c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one, CHARINDEX(@lt, c.BlogNewsContent, CHARINDEX(@gt, c.BlogNewsContent) + @one) - CHARINDEX(@gt, c.BlogNewsContent) - @one), @contentLength) END, @cr, @space), @lf, @space), @tab, @space), @nbsp, @space)))) > @zero) AND (@contentPageActive IS NULL OR cp.IsActive = @contentPageActive) AND (@preferred IS NULL OR sl.SEOTitle = @preferred) ORDER BY b.BlogNewsId",
+  "params" : [ "lt", "gt", "one", "contentLength", "localeId", "store", "blogNewsType", "isActive", "seoType", "now", "zero", "contentPageActive", "preferred", "withSeoDescription", "withContentText", "cr", "space", "lf", "tab", "nbsp" ],
+  "constants" : {
+    "localeId" : "1",
+    "isActive" : "true",
+    "seoType" : "BlogNews",
+    "zero" : "0",
+    "lt" : "<",
+    "gt" : ">",
+    "one" : "1",
+    "contentLength" : "60",
+    "cr" : "\r",
+    "lf" : "\n",
+    "tab" : "\t",
+    "space" : " ",
+    "nbsp" : "&nbsp;"
+  },
+  "outputs" : [ "seoTitle", "seoDescription", "seoUrl", "title", "blogNewsCode", "blogNewsId", "contentText" ],
+  "identity" : "seoTitle",
+  "schemaFingerprint" : "sha256:58ce5bbb9553d0523cc5d8fd028bc97c07edca932696d5b912e99df2140ef050",
+  "vocabularyFingerprint" : "sha256:24a47ce74a06a843e8036e73a2a2d1e77612345815d969646cd6da8529942c81",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z",
+  "createdAt" : "2026-11-10T00:00:00Z",
+  "lastValidated" : "2026-11-10T13:38:38Z",
+  "verifiedHash" : "sha256:baf8f170caecf027754d398045f747494c81e2f71de8c9700e2beb467f45e19c"
+}

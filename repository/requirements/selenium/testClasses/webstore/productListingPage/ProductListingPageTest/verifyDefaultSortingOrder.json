@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyDefaultSortingOrder",
+  "scenario": {
+    "summary": "Opens the Tools PLP with the default page size and verifies products are listed in ascending name order in grid and list view.",
+    "steps": [
+      "Open Tools from the menu, select page size 16",
+      "Grid view: verify ascending name order",
+      "List view: verify ascending name order"
+    ],
+    "entitiesTouched": [
+      "category"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Product names in ascending order"
+    ],
+    "evidence": [
+      "Independent method. Tools PLP: every method that opens Tools from the menu (independent methods, no dependsOn) declares its own tools = CATEGORY_WITH_PRODUCTS {store, minProducts 65, minSubcategories 3, topLevel true}, preferred the sheet label (homePage!B16 'Tools' = CategoryCode Tools), with identical params in every method so normal and fallback runs resolve the same category. minProducts 65: the 64 page size must fill and the sort checks read a second page (verifyListIsInZToAOrder clicks the right arrow).",
+      "Page size 16 is config.",
+      "Gap: the default order comes from the search index; the test assumes it equals name order (CATEGORY_LISTING_SORT_ANCHORS does not give the default order).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "tools",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 65,
+        "minSubcategories": 3,
+        "topLevel": true
+      },
+      "preferred": {
+        "source": 3,
+        "required": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Tools",
+      "location": "webstoreTestData.xlsx!homePage!B16",
+      "kind": "excel",
+      "keyPath": "homePageLabels/categoryTools/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "tools",
+      "output": "name"
+    },
+    {
+      "value": "//div[@data-test-selector='divCategoryMenus']//li//*[contains(text(),'",
+      "location": "src/main/java/pageObjects/webstore/HomePageObjects.java:91",
+      "kind": "constant",
+      "keyPath": "HomePageObjects.BEFORE_XPATH_PARENT_CATEGORY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "')]",
+      "location": "src/main/java/pageObjects/webstore/HomePageObjects.java:93",
+      "kind": "constant",
+      "keyPath": "HomePageObjects.AFTER_XPATH_PARENT_CATEGORY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "16",
+      "location": "webstoreTestData.xlsx!productListingPage!B22",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/defaultPageSize/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[starts-with(@data-test-selector,'linkProductName')]",
+      "location": "src/main/java/pageObjects/webstore/ProductListingPageObjects.java:196",
+      "kind": "constant",
+      "keyPath": "ProductListingPageObjects.LINK_PRODUCT_NAME",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyNavigationArrows",
+  "scenario": {
+    "summary": "On the Tools PLP left open by verifyFacetsFilter, selects page size 16 and checks the previous/next pagination arrows.",
+    "steps": [
+      "Select page size 16, verify previous arrow disabled",
+      "Click next, verify previous arrow enabled",
+      "Click previous, verify previous arrow disabled"
+    ],
+    "entitiesTouched": [
+      "category"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Previous arrow state per page"
+    ],
+    "evidence": [
+      "Independent method that reuses the Tools PLP verifyFacetsFilter left open; needs more than 16 products there (the tools need of the earlier methods has minProducts 65). Page size 16 is config. No needs.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "16",
+      "location": "webstoreTestData.xlsx!productListingPage!B22",
+      "kind": "excel",
+      "keyPath": "productListingPageLabels/defaultPageSize/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is disabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:33",
+      "kind": "constant",
+      "keyPath": "ReportMessages.DISABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not disabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:75",
+      "kind": "constant",
+      "keyPath": "ReportMessages.DISABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:32",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:74",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

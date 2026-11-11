@@ -69,9 +69,19 @@
       "type": "integer",
       "description": "Optional: at most this many personalizable attributes on the product; 0 for flows that reject personalization (Quick Order); left out = any",
       "optional": true
+    },
+    "withBrand": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the product's brand (it must have one). Left out: any"
+    },
+    "withShippingInfo": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the product's shipping information (it must have one). Left out: any"
     }
   },
   "status": "approved",
   "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-03T14:30:00Z"
+  "approvedAt": "2026-11-10T14:30:00Z"
 }

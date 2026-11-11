@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "key": "BLOG_NEWS_SEARCHABLE_OF_STORE",
+  "entity": "blog_news",
+  "type": "searchable",
+  "constraints": {
+    "blogNewsType": "{blogNewsType}",
+    "isActive": "true",
+    "publishState": "production",
+    "withinActiveDates": "true",
+    "seoTitleSet": "true",
+    "seoDescriptionSet": "{withSeoDescription}",
+    "contentPageActive": "{contentPageActive}",
+    "titleMatchCount": "= 1",
+    "contentTextSet": "{withContentText}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active blog or news of the store (ZnodeBlogNews) published, inside its activation/expiration dates, with an SEO title (and description when asked), so the CMS search finds it; its title matches no other searchable blog/news. Outputs: seoTitle, seoDescription, contentText. Read only.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "blogNewsType": {
+      "type": "string",
+      "description": "ZnodeBlogNews.BlogNewsType the test searches: Blog or News"
+    },
+    "contentPageActive": {
+      "type": "boolean",
+      "optional": true,
+      "description": "false: the record's associated CMS content page (CMSContentPagesId) must be inactive. Left out: any"
+    },
+    "withSeoDescription": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test asserts the SEO description (it must be set). Left out: any"
+    },
+    "withContentText": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Pass true when the test searches with contentText: it must be non-blank visible text (tags, line breaks, tabs, &nbsp; and spaces removed). Left out: any"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

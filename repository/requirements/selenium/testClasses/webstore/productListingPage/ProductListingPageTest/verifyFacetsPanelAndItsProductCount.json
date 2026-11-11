@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyFacetsPanelAndItsProductCount",
+  "scenario": {
+    "summary": "On the Plumbing PLP, verifies the Brand and Heater Type facet values and their product counts.",
+    "steps": [
+      "Verify Brand facet values",
+      "Verify Brand facet product counts",
+      "Verify Heater Type facet values",
+      "Verify Heater Type facet product counts"
+    ],
+    "entitiesTouched": [
+      "category",
+      "category_facets"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Facet values and counts equal the sheet lists"
+    ],
+    "evidence": [
+      "dependsOn navigateToProductListingPage. First method captures: facets (CATEGORY_FACET_VALUES {categoryId @category.categoryId, attributeCodes Brand,HeaterType}) is declared by the head (class field).",
+      "Not scanned: the four lists come from TestData.getHashMap tables the scanner does not record; the migrated method compares facets.facet1Label/facet1ValueNLabel/facet1ValueNCount (Brand) and facet2* (Heater Type), up to 3 values each, instead of the whole sheet lists (user decision 2026-11-10). GlobalVariables.FACETS / FACETS_PRODUCT_COUNT are map key prefixes: config.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-8436"
+  ],
+  "sources": [
+    {
+      "value": "Facet",
+      "location": "src/main/java/utilities/GlobalVariables.java:144",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.FACETS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "FacetProductCount",
+      "location": "src/main/java/utilities/GlobalVariables.java:145",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.FACETS_PRODUCT_COUNT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion" : 1,
+  "key" : "BLOG_NEWS_NOT_SEARCHABLE_OF_STORE",
+  "sql" : "SELECT TOP 10 b.BlogNewsCode AS blogNewsCode, sl.SEOTitle AS seoTitle, b.BlogNewsId AS blogNewsId, b.ActivationDate AS activationDate, b.ExpirationDate AS expirationDate FROM dbo.ZnodeBlogNews b INNER JOIN dbo.ZnodePortal p ON p.PortalId = b.PortalId LEFT JOIN dbo.ZnodeCMSSEODetail s ON s.SEOCode = b.BlogNewsCode AND s.PortalId = b.PortalId AND s.CMSSEOTypeId IN (SELECT t.CMSSEOTypeId FROM dbo.ZnodeCMSSEOType t WHERE t.Name = @seoType) LEFT JOIN dbo.ZnodeCMSSEOType st ON st.CMSSEOTypeId = s.CMSSEOTypeId LEFT JOIN dbo.ZnodeCMSSEODetailLocale sl ON sl.CMSSEODetailId = s.CMSSEODetailId AND sl.LocaleId = @localeId WHERE p.StoreCode = @store AND b.BlogNewsType = @blogNewsType AND ((@state = @futureState AND b.ActivationDate > @now) OR (@state = @expiredState AND b.ExpirationDate < @now)) AND NOT EXISTS (SELECT o.BlogNewsId FROM dbo.ZnodeBlogNews o INNER JOIN dbo.ZnodeCMSSEODetail os ON os.SEOCode = o.BlogNewsCode AND os.PortalId = o.PortalId INNER JOIN dbo.ZnodeCMSSEOType ost ON ost.CMSSEOTypeId = os.CMSSEOTypeId INNER JOIN dbo.ZnodeCMSSEODetailLocale osl ON osl.CMSSEODetailId = os.CMSSEODetailId AND osl.LocaleId = @localeId WHERE o.PortalId = b.PortalId AND o.BlogNewsId <> b.BlogNewsId AND ost.Name = @seoType AND o.IsBlogNewsActive = @isActive AND (o.ActivationDate IS NULL OR o.ActivationDate <= @now) AND (o.ExpirationDate IS NULL OR o.ExpirationDate >= @now) AND CHARINDEX(b.BlogNewsCode, osl.SEOTitle) > @zero) AND (@preferred IS NULL OR b.BlogNewsCode = @preferred) ORDER BY b.BlogNewsId",
+  "params" : [ "localeId", "store", "blogNewsType", "seoType", "state", "futureState", "now", "expiredState", "isActive", "zero", "preferred" ],
+  "constants" : {
+    "localeId" : "1",
+    "isActive" : "true",
+    "seoType" : "BlogNews",
+    "zero" : "0",
+    "futureState" : "futureActivation",
+    "expiredState" : "expired"
+  },
+  "outputs" : [ "blogNewsCode", "seoTitle", "blogNewsId", "activationDate", "expirationDate" ],
+  "identity" : "blogNewsCode",
+  "schemaFingerprint" : "sha256:8ec1b50de614e555e604d84b0d04be9df1906bddf8e706f2cdb76562e6f81fa4",
+  "vocabularyFingerprint" : "sha256:929ddde2ad37e7c6bfe2632ae5a8c21c4cd8a903144af71c61063566ad4736ae",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z",
+  "createdAt" : "2026-11-10T00:00:00Z",
+  "lastValidated" : "2026-11-10T09:48:43Z",
+  "verifiedHash" : "sha256:acbb479196156027ccf4ed2a619e7702173e0ac1484a1ef3c4a5a35b16cac902"
+}

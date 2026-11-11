@@ -12,7 +12,8 @@
     "storefrontProductIndex": ">= 1",
     "highlight1Code": "= {highlight1Code}",
     "highlight2Code": "= {highlight2Code}",
-    "highlightActive": "= true"
+    "highlightActive": "= true",
+    "highlight3Code": "= {highlight3Code}"
   },
   "scope": {
     "store": "{store}"
@@ -35,9 +36,14 @@
     "store": {
       "type": "string",
       "description": "Store code the webstore under test serves (ZnodePortal.StoreCode)"
+    },
+    "highlight3Code": {
+      "type": "string",
+      "optional": true,
+      "description": "Optional third highlight code the product must also have active, e.g. FreeShipping; outputs highlight3*. Left out: any"
     }
   },
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-11-02T14:30:00Z"
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
 }

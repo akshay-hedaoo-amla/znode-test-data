@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.productListingPage.ProductListingPageTest#verifyProductBoosted",
+  "scenario": {
+    "summary": "Searches a keyword that has a search boost rule and verifies the boosted product is listed first (name and SKU).",
+    "steps": [
+      "Go home, refresh, search the keyword",
+      "Verify the first product's name and SKU"
+    ],
+    "entitiesTouched": [
+      "user",
+      "search_rule",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "First listed product is the boosted product"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): verifyWishListFunctionalityForRetailUser signs in with loginPage.customerSuccessfullLogin(testClassRetailUsers/productListingPageTest Username, Password; loginAndRegistration!B179/C179) and the later methods of the class (priority 100-125) run in that signed-in session until productListingPageLoggOffTheUser. Convention: every method that signs in or reuses the signed-in session declares user = USER_WEBSTORE_REGISTERED {store}, preferred {source: the username source, required: true} (Tda.declareUser -> useExisting). Username/password stay credential sources (masked); the scanner recorded them only on the sign-in method, later methods declare the same two cells from the test source (the session they reuse).",
+      "boost = SEARCH_RULE_PRODUCT_OF_KEYWORD (NEW key, pending) {store, ruleEffect boost}: an active, not paused search catalog rule of the store's catalog whose trigger matches the keyword and whose item rule boosts one product. No existing key covers search rules (entity map search_rule and query written 2026-11-10, pending; rule 1 'Boost' of catalog 5 triggers on 'bosch' and boosts z-2430003 by 99, buries z-2460005 with 0.11: boost = item boost value above 1, bury = below 1). Preferred: the sheet SKU boostAndBury!B150 z-2430003, not required. Runs in the signed-in session of verifyWishListFunctionalityForRetailUser (declares the account, see DECLARED ACCOUNT).",
+      "verifyProductBuried (next method, no dependsOn) checks the last product of the SAME search results without searching again: first method captures, so this method also declares bury = SEARCH_RULE_PRODUCT_OF_KEYWORD {store, ruleEffect bury, keyword @boost.keyword} and the two bury values (boostAndBury!B152/B153, declared from verifyProductBuried's source).",
+      "Sheet values: SearchKeyword1 'bosch' -> boost.keyword, BoostedProductName -> boost.productName, BoostedProductSku -> boost.productSku.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-10) where cited.",
+      "Scanned constant values (locators, report messages, map key prefixes, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "low",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 7,
+        "required": true
+      }
+    },
+    {
+      "key": "SEARCH_RULE_PRODUCT_OF_KEYWORD",
+      "alias": "boost",
+      "params": {
+        "store": "MaxwellsHardware",
+        "ruleEffect": "boost"
+      },
+      "preferred": {
+        "source": 6,
+        "required": false
+      }
+    },
+    {
+      "key": "SEARCH_RULE_PRODUCT_OF_KEYWORD",
+      "alias": "bury",
+      "params": {
+        "store": "MaxwellsHardware",
+        "ruleEffect": "bury",
+        "keyword": "@boost.keyword"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "bosch",
+      "location": "webstoreTestData.xlsx!productListingPage!B148",
+      "kind": "excel",
+      "keyPath": "boostAndBury/SearchKeyword1/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "boost",
+      "output": "keyword"
+    },
+    {
+      "value": "Bosch 18-Volt 1/4 And 1/2 In Hex And Square Cordless Brushless Impact Driver Kit",
+      "location": "webstoreTestData.xlsx!productListingPage!B149",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BoostedProductName/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "boost",
+      "output": "productName"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2430003",
+      "location": "webstoreTestData.xlsx!productListingPage!B150",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BoostedProductSku/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "boost",
+      "output": "productSku"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C179",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/productListingPageTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "Bosch 120-Volt 10 Amp 4-1/2 In Corded Angle Grinder",
+      "location": "webstoreTestData.xlsx!productListingPage!B152",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BuriedProductNameInAdmin/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bury",
+      "output": "productName"
+    },
+    {
+      "value": "z-2460005",
+      "location": "webstoreTestData.xlsx!productListingPage!B153",
+      "kind": "excel",
+      "keyPath": "boostAndBury/BuriedProductSku/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bury",
+      "output": "productSku"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy":"Akshay Hedaoo",
+  "approvedAt": "2026-11-10T14:30:00Z"
+}
