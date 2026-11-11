@@ -10,3 +10,12 @@ apiChoices: |
   v2 cannot create and delete the record. Decided 2026-10-22: promotions (POST /Promotion/Create, POST /Promotion/Delete)
   and customer users (POST /User/CreateCustomerAccount, POST /User/DeleteUserAccount) use v1. v1 deletes take the IDs in
   the body (ParameterModel.Ids): teardown.bodyTemplate { "Ids": "{id}" }.
+# tda run <suite> (0.18.0): normal and fallback mode in parallel. The fallback run uses the git worktree below, which
+# tda owns: it is reset to the checkout's HEAD and given its uncommitted files before every run.
+runs:
+  workdir: "D:/Sample Framework/znode10-integration-ui-automation-1/Integration"
+  command: "mvn test -DsuiteXmlFile={suite} -Denvironment=atstage"
+  reports: "target/surefire-reports"
+  fallbackWorktree: "D:/Sample Framework/sel-fallback"
+  env:
+    PATH: "C:/Program Files/JetBrains/IntelliJ IDEA 2025.2.4/plugins/maven/lib/maven3/bin;${PATH}"
