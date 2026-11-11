@@ -111,3 +111,8 @@ knownFailures:
     evidence: "Baseline 2026-11-10: origin/dev (9633704f) without the agents, original sheet data, atstage: fails verifyPreviousPageNavArrowStatus. With the agents it fails the same step in the full module runs of 2026-11-10 (normal and fallback) and in the class-only reruns of 2026-11-11: normal tda-selenium-1794373968054, fallback tda-selenium-1794376802858."
     decidedBy: "Akshay Hedaoo"
     decidedAt: "2026-11-11"
+  - testId: "testClasses.webstore.home.HomePageTest#verifyHomePageDetails"
+    reason: "The webstore header menu items have no text on atstage (verifyHeaderMenus reads empty labels, or an empty list: Index 7 out of bounds for length 0), so the recorded header labels never match. Not test data: the header menu check is unchanged framework code and reads no resolved value."
+    evidence: "Baseline 2026-11-11: origin/dev (9633704f) without the agents, original sheet data, atstage: fails verifyHeaderMenus (Actual Text: empty, Expected Text: CORDLESS WOODWORKING). With the agents it fails the same step in the parallel run (normal tda-selenium-1794387617762 or -1794387634774, fallback the other) and in both serial reruns (tda-selenium-1794387977310, tda-selenium-1794388209166)."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-11"

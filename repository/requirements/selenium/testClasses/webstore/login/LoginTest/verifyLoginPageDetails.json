@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.login.LoginTest#verifyLoginPageDetails",
+  "scenario": {
+    "summary": "Guest opens Sign In, checks the sign-in page links, labels and fields, signs in with the class account, checks the HELLO greeting and logs off.",
+    "steps": [
+      "Open the webstore, click Login",
+      "Verify Sign In, Forgot Password and Create Account links",
+      "Verify heading, button, Remember Me and Create Account labels",
+      "Verify username and password fields",
+      "Sign in with the sheet account",
+      "Verify the user menu greeting 'HELLO', log off"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "Signs in and logs off (session only)"
+    ],
+    "assertions": [
+      "Sign-in page labels",
+      "Greeting contains 'HELLO'"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): the method signs in with the sheet account testClassRetailUsers/loginTest (loginAndRegistration!B172/C172). Convention: every method that signs in declares user = USER_WEBSTORE_REGISTERED {store}, preferred {source: the username source, required: true} (Tda.declareUser -> useExisting). Username/password stay credential sources (masked).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 11,
+        "required": true
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-6955",
+    "Z10-TC-6956",
+    "Z10-TC-6957",
+    "Z10-TC-6958",
+    "Z10-TC-6959",
+    "Z10-TC-6961",
+    "ZPD-TC-9152",
+    "ZPD-TC-9153",
+    "ZPD-TC-9154",
+    "ZPD-TC-9155"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Sign In",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B21",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginHeading/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "SIGN IN",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B18",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginNow/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Remember Me",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B13",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/RememberMe/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "CREATE AN ACCOUNT",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B17",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/GetAnAccount/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B172",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/loginTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C172",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/loginTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B20",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginSuccess/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageSearchFieldAndHomePageLogoClickNavigation",
+  "scenario": {
+    "summary": "Guest searches a product SKU from the header search, checks the search result text, returns home by the logo and checks the search field.",
+    "steps": [
+      "Open the webstore",
+      "Type the sheet SKU in the header search and submit",
+      "Verify the search result text is visible",
+      "Click the logo, verify the search field"
+    ],
+    "entitiesTouched": [
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Search result text visible",
+      "Search field visible after returning home"
+    ],
+    "evidence": [
+      "product = PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1, store}: homePage!B35 z-2410004 (tda rows: active SimpleProduct, DontTrackInventory) is only typed into the search; any searchable simple product fits -> product.sku, preferred the sheet SKU (not required). Same need as the Playwright banner/header specs.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9145"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2410004",
+      "location": "webstoreTestData.xlsx!homePage!B35",
+      "kind": "excel",
+      "keyPath": "homePageData/value0/SearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

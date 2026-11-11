@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageFeaturedDepartmentsProductHighlights",
+  "scenario": {
+    "summary": "Guest checks the Free Shipping, WaterSense and BIO Certified highlight badges on the home page product cards and the remaining-highlights count, opens the WaterSense highlight and checks the Back to Product link, then returns home.",
+    "steps": [
+      "Open the webstore",
+      "Verify Free Shipping, WaterSense and BIO Certified badges are visible",
+      "Verify the '+N' remaining highlights count equals the sheet value",
+      "Click the WaterSense badge, verify Back to Product",
+      "Click the logo"
+    ],
+    "entitiesTouched": [
+      "product",
+      "highlight"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Three badges visible",
+      "Remaining highlights count = sheet value '1'",
+      "Back to Product link visible"
+    ],
+    "evidence": [
+      "featured = HOME_FEATURED_PRODUCTS_OF_STORE {store, minProducts 1}: the products of the first Product List widget of the store's published home page, in display order (approved key; atstage 2026-11-03: z-25100011, z-26597945, z-4567890, z-09876).",
+      "The badge locators are page-wide (first imgFreeShipping / imgWatersenseEpaCertified / imgBioCertified / listShowMoreHighlights on the page), i.e. the first featured card that carries them. tda rows (2026-11-11): featured product 1 z-25100011 has Highlights FreeShipping, WaterSenseCertified, BIOCertified, APIAutomation (4, 3 shown -> '+1'); products 2-4 carry only APIAutomation.",
+      "REVIEW (no highlights need): the badges come from whichever featured card carries them, and no key ties PRODUCT_WITH_HIGHLIGHTS to the home widget. Tried (2026-11-11, reverted): an optional sku param on PRODUCT_WITH_HIGHLIGHTS linked to @featured.product1Sku; readiness gave ZERO_ROWS for z-25100011 even with BIO + WaterSense only (the key's PIM attribute / publish rules do not find it, though ZnodePimProduct.Highlights lists the codes), so the approved key was left unchanged. The sheet RemainingHighlightsCount '1' (homePage!B27) stays expected-output (featured product 1: 4 highlights - 3 shown). Closed (user decision 2026-11-11): kept as recorded expected-output, no new key.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+      "alias": "featured",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 1
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9149"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!homePage!B27",
+      "kind": "excel",
+      "keyPath": "homePageLabels/RemainingHighlightsCount/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

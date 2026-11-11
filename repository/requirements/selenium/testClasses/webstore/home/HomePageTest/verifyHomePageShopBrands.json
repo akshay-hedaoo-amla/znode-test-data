@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageShopBrands",
+  "scenario": {
+    "summary": "Guest opens SHOP BRANDS from the header, checks the brand names shown on both carousel pages against the sheet table, and returns home by the logo.",
+    "steps": [
+      "Open the webstore",
+      "Click Shop Brands",
+      "Collect brand names, click the right arrow, collect again",
+      "Compare with the sheet brand table",
+      "Click the logo"
+    ],
+    "entitiesTouched": [
+      "brand"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Shown brand names equal the sheet table"
+    ],
+    "evidence": [
+      "Not scanned: shopBrandsMap is a whole sheet table read with TestData.getHashMap (no source entries).",
+      "No need written: no vocabulary key outputs the store's brand list in display order (BRAND_WITH_ACTIVE_PRODUCTS returns one brand). MISSING KEY BRANDS_OF_STORE (params store, minBrands; outputs brand1Name..brandNName in Shop Brands order); related to the Playwright proposal BRANDS_OF_STORE_PAGINATED. Until it exists the brand names stay sheet data. Closed (user decision 2026-11-11): no new key; the brand names stay sheet data.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": false
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9148"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

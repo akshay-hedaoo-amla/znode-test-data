@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageDetails",
+  "scenario": {
+    "summary": "Guest opens the home page and checks the logo, the header menu links and Departments label, search field, Quick Order, cart and Sign In links, the hero banner texts and buttons, then moves the slider to the second banner.",
+    "steps": [
+      "Open the webstore",
+      "Verify logo image",
+      "Verify header menu links and the 'DEPARTMENTS' label",
+      "Verify search field, Quick Order button, cart and Sign In links",
+      "Verify first banner image, banner buttons and texts",
+      "Click next slider, verify second banner image"
+    ],
+    "entitiesTouched": [
+      "store",
+      "cms_banner"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Header menu texts equal the sheet table",
+      "'DEPARTMENTS' label",
+      "Banner button and banner texts equal the sheet tables"
+    ],
+    "evidence": [
+      "No need: headerLabelsMap, bannerTextMap and bannerButtonMap are whole sheet tables read with TestData.getHashMap (homePage sheet), not scanned (no source entries); they are fixed header UI texts and CMS banner texts -> expected-output. MISSING KEY HOME_PAGE_BANNER_SLIDER_OF_STORE (already proposed by the Playwright home-page entries): until it exists the banner texts stay expected-output.",
+      "Banner/logo image checks use verifyImagesEquals (structural; its body is commented out in the framework, see the shoppingCart decision): image path constants are config.",
+      "'DEPARTMENTS' (homePage!B26) is the fixed Departments menu label: expected-output.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-5749",
+    "ZPD-TC-9138"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "DEPARTMENTS",
+      "location": "webstoreTestData.xlsx!homePage!B26",
+      "kind": "excel",
+      "keyPath": "homePageLabels/headerMenuLabel/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "headerMenuLabel",
+      "location": "src/main/java/utilities/GlobalVariables.java:150",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.HEADER_MENU",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "headerBannerButton",
+      "location": "src/main/java/utilities/GlobalVariables.java:154",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.HEADER_BANNER_BUTTON",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "headerBannerText",
+      "location": "src/main/java/utilities/GlobalVariables.java:155",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.HEADER_BANNER_TEXT",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

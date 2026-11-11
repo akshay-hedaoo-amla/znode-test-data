@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageFeaturedProductsSection",
+  "scenario": {
+    "summary": "Guest checks the Featured Products heading, the featured product names, sale and cut prices against sheet tables, the product images, and that each card shows image, name, SKU, rating, reviews link and price.",
+    "steps": [
+      "Open the webstore",
+      "Verify the Featured Products heading",
+      "Verify product names, sale prices and cut prices against the sheet tables",
+      "Verify product images",
+      "Verify each card's details are visible"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cms_widget"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Card names equal the sheet table (index order)",
+      "Sale and cut prices equal the sheet tables",
+      "Card details visible"
+    ],
+    "evidence": [
+      "featured = HOME_FEATURED_PRODUCTS_OF_STORE {store, minProducts 4}: the products of the first Product List widget of the store's published home page, in display order (approved key; atstage 2026-11-03: z-25100011, z-26597945, z-4567890, z-09876).",
+      "Not scanned: featuredProductsMap, featuredProductsSalePriceMap and featuredProductsCutPriceMap are whole sheet tables (TestData.getHashMap); the migrated method compares the card names with featured.product1Name..product4Name.",
+      "Prices (user decision 2026-11-11): featuredProductsSalePriceMap -> featured.product1ShownPrice..product4ShownPrice and featuredProductsCutPriceMap -> featured.product1CutPrice..product4CutPrice (new outputs of HOME_FEATURED_PRODUCTS_OF_STORE, query pending_approval: store price list by precedence; shown = SalesPrice when set else RetailPrice, cut = RetailPrice when a SalesPrice is set else null; rows unchanged, work/agents/home-HOME_FEATURED_PRODUCTS_OF_STORE.before/after.txt). The tables are read whole via getHashMap, so they have no source entries; the migrated method reads these outputs, formatted with Tda.money(). Cut price is null for a product without a sales price: the migrated method must read it null-safely (expect no cut-price label for that card instead of comparing text).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+      "alias": "featured",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 4
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5415"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "featuredProductsSalePrice",
+      "location": "src/main/java/utilities/GlobalVariables.java:160",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.FEATURED_PRODUCT_SALE_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "featuredProductsCutPrice",
+      "location": "src/main/java/utilities/GlobalVariables.java:161",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.FEATURED_PRODUCT_CUT_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageProductClickNavigation",
+  "scenario": {
+    "summary": "Guest clicks the first featured product on the home page and checks the PDP Add to Cart button, then returns home by the logo.",
+    "steps": [
+      "Open the webstore",
+      "Click the first featured product by name",
+      "Verify Add to Cart on the PDP",
+      "Click the logo"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cms_widget"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "PDP Add to Cart button visible"
+    ],
+    "evidence": [
+      "featured = HOME_FEATURED_PRODUCTS_OF_STORE {store, minProducts 1}: the products of the first Product List widget of the store's published home page, in display order (approved key; atstage 2026-11-03: z-25100011, z-26597945, z-4567890, z-09876).",
+      "Not scanned: the product name comes from featuredProductsMap (FEATURED_PRODUCT+0, whole sheet table); the migrated method clicks featured.product1Name. Featured product 1 must be purchasable (z-25100011: active SimpleProduct).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+      "alias": "featured",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 1
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9150"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

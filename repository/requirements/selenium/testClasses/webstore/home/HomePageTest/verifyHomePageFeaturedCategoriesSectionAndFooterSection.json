@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageFeaturedCategoriesSectionAndFooterSection",
+  "scenario": {
+    "summary": "Guest checks the Featured Departments heading, names and images, then the footer Customer Support label, the support text and the store phone number.",
+    "steps": [
+      "Open the webstore",
+      "Verify Featured Departments heading and names against the sheet table",
+      "Verify category images",
+      "Verify Customer Support label, footer text and phone number"
+    ],
+    "entitiesTouched": [
+      "category",
+      "cms_widget",
+      "store"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Featured department names equal the sheet table",
+      "Footer text and phone number"
+    ],
+    "evidence": [
+      "featuredCategories = HOME_FEATURED_CATEGORIES_OF_STORE {store, minCategories 5}: the first Category List widget of the home page in display order (approved key; atstage: Electrical, Plumbing, Faucets, Tools, Padlocks). Not scanned: featuredDepartmentsMap is a whole sheet table (TestData.getHashMap); the migrated method compares the tiles with category1Name..category5Name.",
+      "Footer text homePage!C36 and phone homePage!C37 are CMS/store content: expected-output (MISSING KEY STORE_SUPPORT_PHONE_OF_STORE, proposed by the Playwright footer entry; no key yet).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_CATEGORIES_OF_STORE",
+      "alias": "featuredCategories",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minCategories": 5
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-5775",
+    "ZPD-TC-9151"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "featuredDepartment",
+      "location": "src/main/java/utilities/GlobalVariables.java:159",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.FEATURED_DEPARTMENTS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "If you have any questions\nemail us or give us a call.",
+      "location": "webstoreTestData.xlsx!homePage!C36",
+      "kind": "excel",
+      "keyPath": "homePageData/value1/FooterText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "+1-855-927-8434",
+      "location": "webstoreTestData.xlsx!homePage!C37",
+      "kind": "excel",
+      "keyPath": "homePageData/value2/FooterText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

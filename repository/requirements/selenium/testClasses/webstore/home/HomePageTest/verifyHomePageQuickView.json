@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageQuickView",
+  "scenario": {
+    "summary": "Guest hovers the first featured product, opens Quick View, checks its Add to Cart button and closes it.",
+    "steps": [
+      "Open the webstore",
+      "Hover the first featured product by name",
+      "Click Quick View",
+      "Verify Add to Cart in the pop-up",
+      "Close the pop-up"
+    ],
+    "entitiesTouched": [
+      "product",
+      "cms_widget"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Quick View Add to Cart visible"
+    ],
+    "evidence": [
+      "featured = HOME_FEATURED_PRODUCTS_OF_STORE {store, minProducts 1}: the products of the first Product List widget of the store's published home page, in display order (approved key; atstage 2026-11-03: z-25100011, z-26597945, z-4567890, z-09876).",
+      "Not scanned: the product name comes from featuredProductsMap (FEATURED_PRODUCT+0); the migrated method hovers featured.product1Name.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "HOME_FEATURED_PRODUCTS_OF_STORE",
+      "alias": "featured",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 1
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5426",
+    "ZPD-TC-9141"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered on ",
+      "location": "src/main/java/utilities/ReportMessages.java:42",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:84",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

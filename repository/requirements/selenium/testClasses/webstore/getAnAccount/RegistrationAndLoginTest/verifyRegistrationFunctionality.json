@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.getAnAccount.RegistrationAndLoginTest#verifyRegistrationFunctionality",
+  "scenario": {
+    "summary": "Guest opens Create Account, checks the empty-form validation messages and field labels, registers a new account (username = e-mail = date+time+sheet suffix), checks HELLO, reads the username in My Profile, logs off, then tries to register the same username again and checks the duplicate-user message.",
+    "steps": [
+      "Open the webstore, Login, Create Account",
+      "Submit the empty form, verify the four validation messages",
+      "Verify the four field labels",
+      "Register with username/e-mail = date + time + sheet suffix and the sheet password",
+      "Verify My Account link and 'HELLO'",
+      "Open My Profile, read the username, log off",
+      "Register again with the same username, verify the duplicate-user message"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "Creates a NEW registered account on the store per run (username = e-mail built from CUSTOM_DATE + CURRENT_TIME + sheet suffix); no cleanup, one account left per run (no ledger undo)"
+    ],
+    "assertions": [
+      "Validation messages and labels",
+      "Greeting 'HELLO'",
+      "Duplicate username message (centralizedLoginEnabled=no) or the new message box (yes)"
+    ],
+    "evidence": [
+      "No need: the account is created by the test. loginAndRegistration!F7 (Username/Input, masked) is only the suffix of the generated username -> created-by-test; F9/F10 (Password/ConfirmPassword Input, masked) are the password the test sets on the new account -> created-by-test (same as the approved Playwright create-account entry). The second registration reuses the username the test just created (read from My Profile).",
+      "Masked labels/messages, not credentials: B7..B10 (field labels) and C7..C10 (validation messages) are masked only because the key names contain username/email/password -> expected-output.",
+      "REVIEW: each run leaves a new registered account on MaxwellsHardware; cleanup would need an admin-side delete (out of TDA scope).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high",
+    "needsReview": true
+  },
+  "requires": [],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C7",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Username/Validation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C8",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/EmailAddress/Validation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C9",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Password/Validation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C10",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/ConfirmPassword/Validation",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B7",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Username/Label",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,),-]",
+      "location": "src/main/java/utilities/GlobalVariables.java:197",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS_TO_BE_REPLACED",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B8",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/EmailAddress/Label",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B9",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Password/Label",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B10",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/ConfirmPassword/Label",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!F7",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Username/Input",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!F9",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/Password/Input",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!F10",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/ConfirmPassword/Input",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!homePage!B7",
+      "kind": "excel",
+      "keyPath": "homePageLabels/DropDownMenu/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text captured for ",
+      "location": "src/main/java/utilities/ReportMessages.java:36",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "This login username is already exists. Please choose a different name for your user id.",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C22",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/MessageBoxText/Validation",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}

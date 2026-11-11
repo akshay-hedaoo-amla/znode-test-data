@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.home.HomePageTest#verifyHomePageCategoriesWithSubCategories",
+  "scenario": {
+    "summary": "Guest opens the Departments menu, checks the listed top-level categories, then hovers five parent categories (Hardware, Lawn Care, Plumbing, Tools, HVAC) and checks each sub-category list.",
+    "steps": [
+      "Open the webstore, open the Departments menu",
+      "Verify the category list against the sheet table",
+      "Hover each of five parent categories from the sheet",
+      "Verify each parent's sub-category names against its sheet table"
+    ],
+    "entitiesTouched": [
+      "category"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Departments list equals the sheet table",
+      "Each hovered parent's sub-categories equal its sheet table"
+    ],
+    "evidence": [
+      "Not scanned: categoriesMap, categoryWithSubCategoryMap (5 parent names) and the five sub-category tables (hardware/lawnCare/plumbing/tools/hvac) are whole sheet tables read with TestData.getHashMap; the scan only records the map keys categoryWithSubCategories0..4 (literals, config).",
+      "departments = CATEGORIES_TOP_LEVEL_OF_STORE {store, minCategories 8}: the Departments menu in display order (category1Name..category8Name); same param set as the approved Playwright plp entry. The migrated method compares the menu with these outputs instead of the sheet table.",
+      "category = CATEGORY_WITH_PRODUCTS {store, minProducts 1, topLevel true, minSubcategories 4}: a top-level category with at least 4 active sub-categories; hover category.name and check subcategory1Name..subcategory4Name are in the fly-out (the key returns at most 4; same approach as the plp verifyCategoryHeadingAndListedSubCategories decision 2026-11-10). This replaces the five hard-coded parents with one resolved parent (the key has no 'not this category' param, so five needs would resolve the same record); accepted by the user 2026-11-11.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, image paths) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": false
+  },
+  "requires": [
+    {
+      "key": "CATEGORIES_TOP_LEVEL_OF_STORE",
+      "alias": "departments",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minCategories": 8
+      }
+    },
+    {
+      "key": "CATEGORY_WITH_PRODUCTS",
+      "alias": "category",
+      "params": {
+        "store": "MaxwellsHardware",
+        "minProducts": 1,
+        "topLevel": true,
+        "minSubcategories": 4
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5419"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "category",
+      "location": "src/main/java/utilities/GlobalVariables.java:156",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.CATEGORY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "categoryWithSubCategories0",
+      "location": "src/test/java/testClasses/webstore/home/HomePageTest.java:147",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered on ",
+      "location": "src/main/java/utilities/ReportMessages.java:42",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Mouse hovered failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:84",
+      "kind": "constant",
+      "keyPath": "ReportMessages.MOUSE_HOVER_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hardwareSubcategory",
+      "location": "src/main/java/utilities/GlobalVariables.java:162",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.HARDWARE_SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "categoryWithSubCategories1",
+      "location": "src/test/java/testClasses/webstore/home/HomePageTest.java:151",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "lawnCareSubCategory",
+      "location": "src/main/java/utilities/GlobalVariables.java:163",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.LAWN_CARE_SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "categoryWithSubCategories2",
+      "location": "src/test/java/testClasses/webstore/home/HomePageTest.java:155",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "plumbingSubCategory",
+      "location": "src/main/java/utilities/GlobalVariables.java:142",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.PLUMBING_SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "categoryWithSubCategories3",
+      "location": "src/test/java/testClasses/webstore/home/HomePageTest.java:159",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "toolsSubCategory",
+      "location": "src/main/java/utilities/GlobalVariables.java:164",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOOLS_SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "categoryWithSubCategories4",
+      "location": "src/test/java/testClasses/webstore/home/HomePageTest.java:163",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "hvacSubCategory",
+      "location": "src/main/java/utilities/GlobalVariables.java:165",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.HVAC_SUB_CATEGORIES",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "Akshay Hedaoo",
+  "approvedAt": "2026-11-11T14:30:00Z"
+}
