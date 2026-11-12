@@ -116,3 +116,8 @@ knownFailures:
     evidence: "Baseline 2026-11-11: origin/dev (9633704f) without the agents, original sheet data, atstage: fails verifyHeaderMenus (Actual Text: empty, Expected Text: CORDLESS WOODWORKING). With the agents it fails the same step in the parallel run (normal tda-selenium-1794387617762 or -1794387634774, fallback the other) and in both serial reruns (tda-selenium-1794387977310, tda-selenium-1794388209166)."
     decidedBy: "Akshay Hedaoo"
     decidedAt: "2026-11-11"
+  - testId: "testClasses.webstore.myAccount.MyAccountTest#verifyEditProfileFunctionality"
+    reason: "After the profile change the test expects the Sign In link (linkSignIn) in the header, but it is not visible on atstage, so clickLogin and the username check fail. Not test data: the account and values are created by the test itself."
+    evidence: "Baseline 2026-11-11: origin/dev (9633704f) without the agents, original sheet data, atstage: fails verifyLoginLinkVisible / clickLogin / verifyUsernameTextboxPresent. With the agents 2026-11-12 it fails the same steps in normal and fallback mode in every run: myacc1 (parallel, tda-selenium-1794463146840 / -1794463169352), myacc2 (serial, tda-selenium-1794464619751 / -1794466271016) and myacc3 (serial, MyAccountTest only, fallback tda-selenium-1794468869827)."
+    decidedBy: "Akshay Hedaoo"
+    decidedAt: "2026-11-12"

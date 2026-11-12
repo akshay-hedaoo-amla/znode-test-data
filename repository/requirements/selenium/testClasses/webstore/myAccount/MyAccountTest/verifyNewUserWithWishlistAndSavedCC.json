@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.MyAccountTest#verifyNewUserWithWishlistAndSavedCC",
+  "scenario": {
+    "summary": "Registers a new account, searches a simple product, adds it to the wishlist and cart, saves a shipping/billing address, adds and deletes three address-book addresses, checks the wishlist item, moves it to the cart and places orders with Authorize.Net (save card, saved card with CVV), then deletes the saved card.",
+    "steps": [
+      "Register a new customer, verify 'HELLO'",
+      "Search the sheet SKU (homePageData/value0), open it, add to wishlist and cart, checkout, enter address row value0, save",
+      "Address Book: verify the saved address; add and delete addresses deleteAddress1..3",
+      "Wishlist: verify product image, item name and price; Add to Cart; cart shows the item",
+      "Checkout with Custom Flat Rate, Authorize.Net with Save Card, place order",
+      "Reorder twice: saved card shown, 'Valid CVV number required.' without CVV, order with CVV",
+      "Reorder, delete the saved card and confirm it disappears; log off"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "address",
+      "wishlist",
+      "order",
+      "saved_card"
+    ],
+    "stateChanges": [
+      "New registered account (created-by-test) with addresses, wishlist item and a saved card (deleted at the end)",
+      "Two orders placed by the test (created-by-test, not deleted)"
+    ],
+    "assertions": [
+      "Address Book shows the entered address; deleted addresses disappear",
+      "Wishlist item name/price equal the product's; image equals the stored image file",
+      "Saved card visible; CVV error 'Valid CVV number required.'; order receipt number visible; card gone after delete"
+    ],
+    "evidence": [
+      "No account need: the method registers a NEW account (registerForNewCustomer: username = date + time + method prefix + testClassRetailUsers/registerNewUser Username, password = registerNewUser Password) -> both cells created-by-test, as the approved getAnAccount registration entry. REVIEW: each run leaves a new registered account on MaxwellsHardware (no TDA cleanup).",
+      "product: homePageData/value0/SearchText z-2410004 (homePage!B35) = 'DeWalt 10 Volt Brushless Compact Reciprocating Saw', Simple, DontTrackInventory, active in Maxwell's Power Tools (tda rows). Searched and opened as the first result, added to wishlist and cart -> PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1}, preferred the sheet SKU (not required).",
+      "Not scanned (whole sheet tables via TestData.getHashMap): wishListItems (wishListItem0 = the product name) and wishListItemPrices (its price) -> product.name and product.salesPrice/retailPrice (shown price) in the migrated method.",
+      "wishList.verifyProductImages compares the wishlist image with stored files of the sheet product (LogoAndImageConstants.WISHLIST_PRODUCT_IMAGES, .jpg); a fallback product's image cannot match. Decided by the user 2026-11-11: the migration relaxes the check to 'the product image is shown' (not equal to the stored file), so any resolved product works; the product stays preferred, not required.",
+      "Address rows value0, deleteAddress1..3 (myAccount sheet) are typed by the test onto its own account (created-by-test); read through the map, not scanned. DeleteAddressSuccessMessage (R3) is masked only because its key contains 'Address': UI text -> expected-output.",
+      "Payment: Authorize.Net test card from adminTestData paymentMethods (securityPin B111, masked) -> config (framework test card); no payment key (the Authorize.Net plugin setup is not a vocabulary key). 'Valid CVV number required.' literal -> expected-output.",
+      "shipping: Custom Flat Rate (code FLAT) -> SHIPPING_FLAT_RATE_ON_STORE {FLAT, countries us (assumption)} read-only precondition.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-5136",
+    "ZPD-TC-5138",
+    "ZPD-TC-5565"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B20",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginSuccess/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2410004",
+      "location": "webstoreTestData.xlsx!homePage!B35",
+      "kind": "excel",
+      "keyPath": "homePageData/value0/SearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "webstoreTestData.xlsx!myAccount!R3",
+      "kind": "excel",
+      "keyPath": "myAccountData/value0/DeleteAddressSuccessMessage",
+      "sensitive": true,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": ".jpg",
+      "location": "src/main/java/utilities/LogoAndImageConstants.java:14",
+      "kind": "constant",
+      "keyPath": "LogoAndImageConstants.EXTENSION_JPG",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "wishListItem",
+      "location": "src/main/java/utilities/GlobalVariables.java:166",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WISHLIST_ITEM",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "wishListItemPrice",
+      "location": "src/main/java/utilities/GlobalVariables.java:167",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.WISHLIST_ITEM_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "wishListItem0",
+      "location": "src/test/java/testClasses/webstore/myAccount/MyAccountTest.java:245",
+      "kind": "literal",
+      "keyPath": "get#0",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Valid CVV number required.",
+      "location": "src/test/java/testClasses/webstore/myAccount/MyAccountTest.java:279",
+      "kind": "literal",
+      "keyPath": "expectedErrorMsg",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:card>",
+      "location": "adminTestData.xlsx!paymentMethods!B111",
+      "kind": "excel",
+      "keyPath": "authorizedotnetPaymentMethodData/securityPin/Input",
+      "sensitive": true,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

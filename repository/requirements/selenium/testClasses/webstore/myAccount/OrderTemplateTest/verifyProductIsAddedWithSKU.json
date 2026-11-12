@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.OrderTemplateTest#verifyProductIsAddedWithSKU",
+  "scenario": {
+    "summary": "Enters a product SKU in the template pad, a template name and quantity 1, clicks Add to Template, then Clear All without saving.",
+    "steps": [
+      "Type product1's SKU, pick it from the suggestions",
+      "Type the template name",
+      "Set quantity 1 for the first product",
+      "Click Add to Template",
+      "Click Clear All"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template",
+      "product"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Add to Template and Clear All work without saving"
+    ],
+    "evidence": [
+      "Class chain: navigateToRegistrationPage -> verifySuccessfulRegistration -> verifyOrderTemplateLinkNavigation -> verifyCreateTemplateButtonIsPresentAndClickable -> (verifyCreateTemplateLabels, verifyProductIsAddedWithSKU -> verifyCreateNewTemplate -> verifyEditViewCartIconIsVisible -> (verifyItemsCountBeforeEdit, verifyEditTemplate -> (verifyItemsCountAfterEdit, verifyLineItemRemove, verifyAddingProductToCart -> (verifyPlaceOrder, verifyDeleteCreatedTemplate)))); verifyAddRowsForSKU and clickOnLogOffLink run by priority. The session is the account verifySuccessfulRegistration creates (created-by-test), so no method declares an account.",
+      "First method captures: verifyProductIsAddedWithSKU is the first method that uses product records and declares product1..product3 (orderTemplateData productSKU1..3); the migrated class keeps them in class fields and later methods read them (SkipException DATA_UNAVAILABLE when null).",
+      "product1..product3: orderTemplateData productSKU1 z-2300014 (myAccount!C47, 'American Standard Astume Vortax Toilet', Simple, DontTrackInventory, tda rows); productSKU2/3 (C48/C49) are read inside OrderTemplate.verifyAddMultipleProductsWithSKUsAndQuantity by verifyCreateNewTemplate (not scanned). The template then holds 3 lines of quantity 1 (items count 3); verifyEditTemplate sets the first line to 100 (items count 102), the line goes to the cart and is ordered -> three distinct PRODUCT_SIMPLE_IN_STOCK {quantityUsed 100, minMaxQuantity 100, maxPersonalizableAttributes 0 (the template pad, like Quick Order, rejects personalizable products), store}; product1 preferred the sheet SKU (not required). 100 on all three because the edit grid's first line need not be product1. Readiness 2026-11-11: the sheet SKU z-2300014 does not qualify (MaximumQuantity 100, but DontTrackInventory with stock 10 per warehouse < quantityUsed 100), so the resolver falls back to a simple product with stock >= 100.",
+      "templateName/Input 'Automation Template' names the template the test creates -> created-by-test; productQuantity/Input 1 -> config.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product1",
+      "params": {
+        "quantityUsed": 100,
+        "minMaxQuantity": 100,
+        "maxPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product2",
+      "params": {
+        "quantityUsed": 100,
+        "minMaxQuantity": 100,
+        "maxPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product3",
+      "params": {
+        "quantityUsed": 100,
+        "minMaxQuantity": 100,
+        "maxPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-8543",
+    "ZPD-TC-5549"
+  ],
+  "sources": [
+    {
+      "value": "z-2300014",
+      "location": "webstoreTestData.xlsx!myAccount!C47",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/productSKU1/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product1",
+      "output": "sku"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Automation Template",
+      "location": "webstoreTestData.xlsx!myAccount!C42",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/templateName/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "1",
+      "location": "webstoreTestData.xlsx!myAccount!C72",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/productQuantity/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

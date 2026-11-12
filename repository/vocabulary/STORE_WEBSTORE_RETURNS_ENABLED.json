@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_WEBSTORE_RETURNS_ENABLED",
+  "entity": "store",
+  "type": "webstore_returns",
+  "constraints": {
+    "webstoreDomains": ">= 1",
+    "returnRequestsFromWebstore": "true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Store serving a webstore (active WebStore domain) with store global attribute EnableReturnRequest (1076) = true, so the webstore offers Create Return. Store setting only: per-order eligibility (line states, return window, not yet returned) is not guaranteed.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

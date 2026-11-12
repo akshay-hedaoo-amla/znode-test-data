@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.OrderTemplateTest#verifyCreateTemplateButtonIsPresentAndClickable",
+  "scenario": {
+    "summary": "On Order Templates of the new account, checks the heading, the empty-list message and the Create Template button text, then clicks it.",
+    "steps": [
+      "Verify heading 'ORDER TEMPLATES'",
+      "Verify 'No records found.'",
+      "Verify Create Template button and its text",
+      "Click Create Template"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Heading, 'No records found.' and 'CREATE TEMPLATE' shown"
+    ],
+    "evidence": [
+      "Class chain: navigateToRegistrationPage -> verifySuccessfulRegistration -> verifyOrderTemplateLinkNavigation -> verifyCreateTemplateButtonIsPresentAndClickable -> (verifyCreateTemplateLabels, verifyProductIsAddedWithSKU -> verifyCreateNewTemplate -> verifyEditViewCartIconIsVisible -> (verifyItemsCountBeforeEdit, verifyEditTemplate -> (verifyItemsCountAfterEdit, verifyLineItemRemove, verifyAddingProductToCart -> (verifyPlaceOrder, verifyDeleteCreatedTemplate)))); verifyAddRowsForSKU and clickOnLogOffLink run by priority. The session is the account verifySuccessfulRegistration creates (created-by-test), so no method declares an account.",
+      "The new account has no templates, so 'No records found.' holds without any record need. Labels are UI text (expected-output).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-8572",
+    "ZPD-TC-8741"
+  ],
+  "sources": [
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ORDER TEMPLATES",
+      "location": "webstoreTestData.xlsx!myAccount!B38",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/orderTemplateHeading/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "No records found.",
+      "location": "webstoreTestData.xlsx!myAccount!B39",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/noRecordsFound/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "CREATE TEMPLATE",
+      "location": "webstoreTestData.xlsx!myAccount!B40",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/createTemplateBtnHeading/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

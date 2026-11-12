@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.OrderTemplateTest#verifyPlaceOrder",
+  "scenario": {
+    "summary": "From the cart (template lines), checks out: enters a shipping address, selects Custom Flat Rate and COD (or the centralized-login path), completes the purchase and checks the receipt.",
+    "steps": [
+      "Checkout",
+      "Enter display name and shipping address row ValidInput, save, accept the recommended address",
+      "Custom Flat Rate + COD (centralizedLoginEnabled=no) or orderPlaceCoverageEnhancement.verifyPlaceOrder (yes)",
+      "Complete Purchase",
+      "Verify the order receipt section"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order",
+      "address"
+    ],
+    "stateChanges": [
+      "Order placed by the test (created-by-test, not deleted)"
+    ],
+    "assertions": [
+      "Order receipt shown"
+    ],
+    "evidence": [
+      "Class chain: navigateToRegistrationPage -> verifySuccessfulRegistration -> verifyOrderTemplateLinkNavigation -> verifyCreateTemplateButtonIsPresentAndClickable -> (verifyCreateTemplateLabels, verifyProductIsAddedWithSKU -> verifyCreateNewTemplate -> verifyEditViewCartIconIsVisible -> (verifyItemsCountBeforeEdit, verifyEditTemplate -> (verifyItemsCountAfterEdit, verifyLineItemRemove, verifyAddingProductToCart -> (verifyPlaceOrder, verifyDeleteCreatedTemplate)))); verifyAddRowsForSKU and clickOnLogOffLink run by priority. The session is the account verifySuccessfulRegistration creates (created-by-test), so no method declares an account.",
+      "shipping/payment: checkout selects Custom Flat Rate (shippingMethod.select/clickCustomFlatRateShipping, code FLAT) and Charge on Delivery (paymentMethod.clickCODPaymentOption) -> read-only precondition needs SHIPPING_FLAT_RATE_ON_STORE {FLAT, countries us (assumption, as the approved Playwright order-receipt entries)} and PAYMENT_COD_ON_STORE.",
+      "shippingAddressDetails/* (checkoutPage, masked) is the address the test types onto its own new account -> created-by-test; 'ValidInput' literal is the sheet column key -> config.",
+      "paymentMethodsData/PurchaseOrderNumber 12345 (adminTestData) is used only on the centralized-login path -> config.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-8577",
+    "ZPD-TC-9185"
+  ],
+  "sources": [
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:address>",
+      "location": "webstoreTestData.xlsx!checkoutPage!B4",
+      "kind": "excel",
+      "keyPath": "shippingAddressDetails/DisplayName/ValidInput",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "ValidInput",
+      "location": "src/test/java/testClasses/webstore/myAccount/OrderTemplateTest.java:376",
+      "kind": "literal",
+      "keyPath": "inputText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "12345",
+      "location": "adminTestData.xlsx!paymentMethods!C6",
+      "kind": "excel",
+      "keyPath": "paymentMethodsData/PurchaseOrderNumber/PurchaseOrder",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled successfully.",
+      "location": "src/main/java/utilities/ReportMessages.java:50",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed.",
+      "location": "src/main/java/utilities/ReportMessages.java:91",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:32",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:74",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

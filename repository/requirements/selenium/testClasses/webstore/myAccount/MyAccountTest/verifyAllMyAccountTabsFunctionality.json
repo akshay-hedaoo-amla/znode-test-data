@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.MyAccountTest#verifyAllMyAccountTabsFunctionality",
+  "scenario": {
+    "summary": "Registers a new account, opens every My Account menu (Wishlist, Address Book, Order History, Review History, Vouchers, My Profile, Change Password, Saved CC) and checks each heading, then checks username/email on My Profile, updates first/last name and changes the password.",
+    "steps": [
+      "Open the webstore, Sign In, Get an Account, register a new customer",
+      "Verify the My Account drop-down text 'HELLO'",
+      "Open each My Account menu and verify its heading (Order History also shows Generate Invoice)",
+      "My Profile: username field disabled and containing the registered username, email the same",
+      "Set first/last name, Update Profile, verify 'Profile updated successfully.'",
+      "Change Password: current = registration password, new/confirm = new password, Reset"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "New registered account created (created-by-test)",
+      "Its first/last name and password changed"
+    ],
+    "assertions": [
+      "Drop-down text contains 'HELLO'",
+      "Every My Account page heading is visible",
+      "Username/email fields contain the registered username",
+      "Message 'Profile updated successfully.'"
+    ],
+    "evidence": [
+      "No account need: the method registers a NEW account (registerForNewCustomer: username = date + time + method prefix + testClassRetailUsers/registerNewUser Username, password = registerNewUser Password) -> both cells created-by-test, as the approved getAnAccount registration entry. REVIEW: each run leaves a new registered account on MaxwellsHardware (no TDA cleanup).",
+      "myAccountData/value0 FirstName/LastName (myAccount!D3/E3, masked) are typed onto the new account -> created-by-test; loginAndRegistrationData/ConfirmPassword/NewUserInput (E10, masked) is the new password the test sets -> created-by-test.",
+      "No record need: the new account has no orders, wishlist, reviews or vouchers; the pages are only checked for their headings.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-2635",
+    "Z10-TC-8640"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B20",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginSuccess/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text captured for ",
+      "location": "src/main/java/utilities/ReportMessages.java:36",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "webstoreTestData.xlsx!myAccount!D3",
+      "kind": "excel",
+      "keyPath": "myAccountData/value0/FirstName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:person_name>",
+      "location": "webstoreTestData.xlsx!myAccount!E3",
+      "kind": "excel",
+      "keyPath": "myAccountData/value0/LastName",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Profile updated successfully.",
+      "location": "webstoreTestData.xlsx!myAccount!P3",
+      "kind": "excel",
+      "keyPath": "myAccountData/value0/ProfileUpdateSuccessMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!E10",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/ConfirmPassword/NewUserInput",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

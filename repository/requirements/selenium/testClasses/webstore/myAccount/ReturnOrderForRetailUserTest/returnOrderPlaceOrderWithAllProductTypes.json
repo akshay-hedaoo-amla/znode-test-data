@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.ReturnOrderForRetailUserTest#returnOrderPlaceOrderWithAllProductTypes",
+  "scenario": {
+    "summary": "As the new account, adds a simple product, a configurable variant, a bundle and a grouped product (quantity 5 each), checks out with a new shipping address, Custom Flat Rate and COD (or the centralized-login path) and reads the order number.",
+    "steps": [
+      "Search the simple SKU, quantity 5, Add to Cart",
+      "Search the configurable parent, pick variant z-2510001, quantity 5, Add to Cart",
+      "Search the bundle SKU, quantity 5, Add to Cart",
+      "Search the grouped SKU, child quantity 5, Add to Cart",
+      "View cart and checkout, enter shipping address row ValidInput, accept recommended address",
+      "Custom Flat Rate; COD (centralizedLoginEnabled=no) or orderPlaceCoverageEnhancement (yes); Complete Purchase",
+      "Verify and read the order number"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "order",
+      "address"
+    ],
+    "stateChanges": [
+      "Order placed by the test (created-by-test, not deleted)"
+    ],
+    "assertions": [
+      "Order receipt number shown"
+    ],
+    "evidence": [
+      "Class: 20 methods, 17 enabled=false and not mapped (returnOrderSaveTheReturnOrderAsDraft, returnOrderVerifyLineItemNotPresentAfterReturning, returnOrderVerifySavedOrderStatus, returnOrderVerifyReturnIconVisibleOnDashboardPanel, returnOrderVerifyReturnIconLinkNavigation, returnOrderVerifyDashboardReturnOrderViewButtonNavigation, returnOrderVerifyDashboardCreateReturnButtonNavigation, returnOrderVerifyDashboardEditReturnOrderLinkNavigation, returnOrderVerifyCancelButtonNavigation, returnOrderVerifyReturnQuantityErrorMessage, returnOrderVerifyReturnOrderTotalPriceCalculations, returnOrderSubmitOrderForReturnAndVerifyThankYouPage, returnOrderVerifyReturnOrderLinkNavigation, returnOrderVerifyReturnActionLinkNavigationOnOrderHistoryPage, returnOrderVerifyInvalidInputsInReturnQuantityTextbox, returnOrderVerifyQuantityReducingAfterPartiallyReturningLineItems, returnOrderVerifyIncludedQuantiiesDisplayingForEachBundleProductChild). Enabled: returnOrderCreateAnAccount -> returnOrderPlaceOrderWithAllProductTypes (dependsOn), returnOrderLogOffTheUser (priority). The session is the account returnOrderCreateAnAccount registers (created-by-test): no declared account.",
+      "Products (sheet columns, tda rows): simple z-2420004 'Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander' (Simple, DontTrackInventory; column AddonCheckboxAsOptional, the optional add-on is not selected) -> PRODUCT_SIMPLE_IN_STOCK {quantityUsed 5, minMaxQuantity 5}, as the approved Selenium shoppingCart entry; configurable B-100000 with variant z-2510001 (picked by selectConfigurableAttributes from the variant's attribute columns, not scanned -> variant1Attr1..3) -> PRODUCT_CONFIGURABLE_WITH_VARIANTS {quantityUsed 5, minVariants 1, minAddOns 0, minPersonalizableAttributes 0, variantAttributes BulbSize,Color,Technology} (outputs parentProductSku, variant1Sku, variant1Name); each preferred its sheet SKU (not required). Quantities 5 -> config.",
+      "bundle: z-1234579 (column DeWalt) -> PRODUCT_BUNDLE_IN_STOCK {quantityUsed 5, minAddOns 0, minPersonalizableAttributes 0}; grouped: z-2200003 (column VacuumPump) -> PRODUCT_GROUPED_IN_STOCK {quantityUsed 5, 0, 0}; each preferred its sheet SKU (not required). These keys have no maximum-quantity param.",
+      "shippingAddressDetails/* (masked) is the address the test types onto its own new account -> created-by-test; 'ValidInput' literal -> config.",
+      "shipping/payment: checkout selects Custom Flat Rate (shippingMethod.select/clickCustomFlatRateShipping, code FLAT) and Charge on Delivery (paymentMethod.clickCODPaymentOption) -> read-only precondition needs SHIPPING_FLAT_RATE_ON_STORE {FLAT, countries us (assumption, as the approved Playwright order-receipt entries)} and PAYMENT_COD_ON_STORE.",
+      "The enabled methods stop at the order receipt (the return steps are in disabled methods), so Create Return eligibility does not matter here.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "No returnsStore need: the baseline 2026-11-11 (no agents) passes this test, so it does not depend on the store's EnableReturnRequest setting (coordinator decision 2026-11-11)."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "minMaxQuantity": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 0,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "configurable",
+      "params": {
+        "quantityUsed": 5,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "variantAttributes": "BulbSize,Color,Technology",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_BUNDLE_IN_STOCK",
+      "alias": "bundle",
+      "params": {
+        "quantityUsed": 5,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 13,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_GROUPED_IN_STOCK",
+      "alias": "grouped",
+      "params": {
+        "quantityUsed": 5,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 15,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9703"
+  ],
+  "sources": [
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D45",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/AddToCartQuantity/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "B-100000",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "z-2510001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "variant1Sku"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H254",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddToCartQuantity/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234579",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C336",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/ProductSKU/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "bundle",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C364",
+      "kind": "excel",
+      "keyPath": "bundleProductInformation/AddToCartQuantity/DeWalt",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2200003",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C424",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/ProductSKU/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "grouped",
+      "output": "sku"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C447",
+      "kind": "excel",
+      "keyPath": "groupProductInformation/AddToCartQuantity/VacuumPump",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ValidInput",
+      "location": "src/test/java/testClasses/webstore/myAccount/ReturnOrderForRetailUserTest.java:165",
+      "kind": "literal",
+      "keyPath": "inputText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:32",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:74",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,)]",
+      "location": "src/main/java/utilities/GlobalVariables.java:198",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.OrderTemplateTest#verifyCreateNewTemplate",
+  "scenario": {
+    "summary": "Creates and saves the template: template name, three SKUs (productSKU1..3) with quantity 1 each, Add to Template, Save.",
+    "steps": [
+      "Type the template name",
+      "Enter product1..3 SKUs with quantity 1",
+      "Click Add to Template",
+      "Click Save"
+    ],
+    "entitiesTouched": [
+      "user",
+      "order_template",
+      "product"
+    ],
+    "stateChanges": [
+      "Order template 'Automation Template' with 3 lines created on the new account (deleted by verifyDeleteCreatedTemplate)"
+    ],
+    "assertions": [
+      "Template saved"
+    ],
+    "evidence": [
+      "Class chain: navigateToRegistrationPage -> verifySuccessfulRegistration -> verifyOrderTemplateLinkNavigation -> verifyCreateTemplateButtonIsPresentAndClickable -> (verifyCreateTemplateLabels, verifyProductIsAddedWithSKU -> verifyCreateNewTemplate -> verifyEditViewCartIconIsVisible -> (verifyItemsCountBeforeEdit, verifyEditTemplate -> (verifyItemsCountAfterEdit, verifyLineItemRemove, verifyAddingProductToCart -> (verifyPlaceOrder, verifyDeleteCreatedTemplate)))); verifyAddRowsForSKU and clickOnLogOffLink run by priority. The session is the account verifySuccessfulRegistration creates (created-by-test), so no method declares an account.",
+      "dependsOn verifyProductIsAddedWithSKU (head: product1..product3 class fields). HEAD RECORD VALUES: orderTemplateData/productSKU1/Input -> product1.sku (productSKU2/3 -> product2/3.sku, not scanned); recorded here as expected-output copies (chain rule confirmed by the user 2026-11-10); the migrated method reads the class fields.",
+      "templateName/Input -> created-by-test (the template this run creates).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9180"
+  ],
+  "sources": [
+    {
+      "value": "Automation Template",
+      "location": "webstoreTestData.xlsx!myAccount!C42",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/templateName/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "z-2300014",
+      "location": "webstoreTestData.xlsx!myAccount!C47",
+      "kind": "excel",
+      "keyPath": "orderTemplateData/productSKU1/Input",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

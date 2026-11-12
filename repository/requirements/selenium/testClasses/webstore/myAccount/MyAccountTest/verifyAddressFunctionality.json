@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.MyAccountTest#verifyAddressFunctionality",
+  "scenario": {
+    "summary": "Registers a new account, adds a product to the cart and saves an address at checkout, then edits the primary shipping and billing addresses in the Address Book with and without the default checkboxes and checks the checkout shows the last addresses.",
+    "steps": [
+      "Register a new customer, verify 'HELLO'",
+      "Search the sheet SKU, add to wishlist and cart, checkout, enter address row value0, save",
+      "Address Book: edit primary shipping (both checks), verify; edit primary billing (both checks), verify",
+      "Edit shipping (single check), verify default billing checked; edit billing (single check), verify default shipping checked",
+      "Cart -> Checkout: shipping and billing addresses equal the last edited row; log off"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "address"
+    ],
+    "stateChanges": [
+      "New registered account (created-by-test) with addresses and a cart line (no order)"
+    ],
+    "assertions": [
+      "Address Book shows each edited address",
+      "Default checkboxes checked as expected",
+      "Checkout shipping/billing addresses equal row editBillingAddressWithSingleCheck"
+    ],
+    "evidence": [
+      "No account need: the method registers a NEW account (registerForNewCustomer: username = date + time + method prefix + testClassRetailUsers/registerNewUser Username, password = registerNewUser Password) -> both cells created-by-test, as the approved getAnAccount registration entry. REVIEW: each run leaves a new registered account on MaxwellsHardware (no TDA cleanup).",
+      "product: homePageData/value0/SearchText z-2410004 (Simple, DontTrackInventory, tda rows): any searchable in-stock simple product only puts a line in the cart so checkout opens -> PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1}, preferred the sheet SKU (not required).",
+      "Address rows value0, editShippingAddressWithBothChecks, editBillingAddressWithBothChecks, editShippingAddressWithSingleCheck, editBillingAddressWithSingleCheck (myAccount sheet) are typed by the test onto its own account and compared back -> created-by-test; read through the map by row name, not scanned.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 12,
+        "required": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-8519",
+    "ZPD-TC-9163",
+    "ZPD-TC-9164",
+    "ZPD-TC-9167"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B20",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginSuccess/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2410004",
+      "location": "webstoreTestData.xlsx!homePage!B35",
+      "kind": "excel",
+      "keyPath": "homePageData/value0/SearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is checked.",
+      "location": "src/main/java/utilities/ReportMessages.java:51",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CHECK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not checked.",
+      "location": "src/main/java/utilities/ReportMessages.java:92",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CHECK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

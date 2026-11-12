@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.MyAccountTest#verifyVoucherHistoryWithAppliedVoucher",
+  "scenario": {
+    "summary": "Signed in with the sheet account, empties the cart, buys a simple product with Custom Flat Rate paying with the account's voucher (applied by number after removing auto-applied vouchers), then opens Vouchers, views that voucher's detail and opens the order from its transaction list.",
+    "steps": [
+      "Sign in with testClassRetailUsers/myAccountTest, verify 'HELLO', remove cart items",
+      "Search the sheet SKU, open the first result, Add to Cart, checkout, select Custom Flat Rate",
+      "Remove applied vouchers, apply the sheet voucher number, verify it is applied, Complete Purchase",
+      "Read the order number; My Account > Vouchers; View the voucher",
+      "Voucher detail shows 'Voucher Number: <number>'; click the order's View link; receipt shows the voucher amount"
+    ],
+    "entitiesTouched": [
+      "user",
+      "product",
+      "voucher",
+      "order"
+    ],
+    "stateChanges": [
+      "Order placed by the test paid with the voucher (created-by-test, not deleted)",
+      "Voucher remaining balance reduced by the order total (not restored)"
+    ],
+    "assertions": [
+      "Voucher applied at checkout",
+      "Voucher detail label + number shown",
+      "Order receipt from the voucher transaction shows a voucher amount"
+    ],
+    "evidence": [
+      "DECLARED ACCOUNT (per method): the method signs in, or works in the session signed in earlier in the class, with the sheet account testClassRetailUsers/myAccountTest (loginAndRegistration!B173/C173). user = USER_WEBSTORE_REGISTERED {store MaxwellsHardware}, preferred {source: the username source, required: true}, declared at method start with Tda.declareUser (useExisting); username/password stay credential sources (masked) the test keeps reading from its sheet.",
+      "product: homePageData/value2/SearchText z-1234613 = 'Nibco 2 in. 40S PVC Coupling', Simple, DisablePurchasing (tda rows) -> PRODUCT_SIMPLE_IN_STOCK {quantityUsed 1}, preferred the sheet SKU (not required).",
+      "voucher: myAccountData/value1/VoucherNumber TTG4U1O44N (myAccount!S4) is active, restricted to customer UserId 15041, remaining 8998.19, expires 2030-06-24 (tda rows dbo.ZnodeGiftCard) and must belong to the signed-in account (Vouchers list, View link) -> VOUCHER_RESTRICTED_TO_USER {store, owner @user.userId}, preferred the sheet number (not required).",
+      "REVIEW (balance): no payment method is selected, so the voucher must cover the whole order (product + Flat Rate + tax); VOUCHER_RESTRICTED_TO_USER only guarantees remaining > 0. A fallback voucher with a small balance leaves an amount to pay. Optional minBalance on the key would close this (approved-key change, not made).",
+      "REVIEW (drain): every run spends voucher balance (the order is not deleted and deleting does not restore RemainingAmount, memory 2026-11-02/04); the account's other restricted vouchers auto-apply first and are removed by removeAppliedVoucherCoupon.",
+      "shipping: Custom Flat Rate (code FLAT) -> SHIPPING_FLAT_RATE_ON_STORE {FLAT, countries us (assumption)} read-only precondition. giftCardDetails/VoucherNumber1/Label 'Voucher Number: ' is UI text (expected-output).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 4,
+        "required": true
+      }
+    },
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 1,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 9,
+        "required": false
+      }
+    },
+    {
+      "key": "VOUCHER_RESTRICTED_TO_USER",
+      "alias": "voucher",
+      "params": {
+        "store": "MaxwellsHardware",
+        "owner": "@user.userId"
+      },
+      "preferred": {
+        "source": 14,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-8639",
+    "ZPD-TC-9170"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B173",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/myAccountTest/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C173",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/myAccountTest/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "credential",
+      "alias": "user"
+    },
+    {
+      "value": "HELLO",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B20",
+      "kind": "excel",
+      "keyPath": "loginAndRegistrationData/LoginSuccess/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "Substring is present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:47",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Substring is not present in ",
+      "location": "src/main/java/utilities/ReportMessages.java:88",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SUBSTRING_PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-1234613",
+      "location": "webstoreTestData.xlsx!homePage!B37",
+      "kind": "excel",
+      "keyPath": "homePageData/value2/SearchText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "TTG4U1O44N",
+      "location": "webstoreTestData.xlsx!myAccount!S4",
+      "kind": "excel",
+      "keyPath": "myAccountData/value1/VoucherNumber",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "voucher",
+      "output": "voucherNumber"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:32",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:74",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[text()='",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:331",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.BEFORE_XPATH_LINK_VIEW_VOUCHER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']//ancestor::tr//a[starts-with(@data-test-selector,'linkViewVoucher')]",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:333",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.AFTER_XPATH_LINK_VIEW_VOUCHER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Voucher Number: ",
+      "location": "webstoreTestData.xlsx!checkoutPage!C92",
+      "kind": "excel",
+      "keyPath": "giftCardDetails/VoucherNumber1/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.ReturnOrderForGuestUserTest#returnOrderForGuestUserVerifyNotificationMessageDisplayingAfterReturningOrder",
+  "scenario": {
+    "summary": "Tracks the guest order again, opens Create Return, sets return quantity 5 for the simple product and the configurable variant, submits and checks 'Return submitted successfully.'",
+    "steps": [
+      "Check Order Status with orderNumber and the guest email",
+      "Click Create Return",
+      "Set return quantity 5 for the simple product row and the configurable variant row; line totals shown",
+      "Submit Return",
+      "Verify 'Return submitted successfully.'"
+    ],
+    "entitiesTouched": [
+      "order",
+      "return",
+      "product"
+    ],
+    "stateChanges": [
+      "Return submitted for the guest order (created-by-test)"
+    ],
+    "assertions": [
+      "Returned line totals visible",
+      "Message 'Return submitted successfully.'"
+    ],
+    "evidence": [
+      "No dependsOn: the class runs by priority and shares the class field orderNumber. Methods 1-3 (priority 1-10, named 'ForRetailUser') sign in with the sheet account returnOrderGuestUserTest, place an order and work on it; methods 4-10 (priority 15-45) place a guest order and work on it. First method captures: method 1 declares the retail chain's records, method 4 (returnOrderForGuestUserVerifyCreateReturnButtonVisibleAfterTrackingOrder) the guest chain's; later methods read the class fields (SkipException DATA_UNAVAILABLE when null).",
+      "HEAD RECORD VALUES (first method captures): simpleProductDetails/ProductName/AddonCheckboxAsOptional -> product.name and configurableProductInformation/ProductName/z-2510001 -> configurable.variant1Name of the guest head; recorded here as expected-output copies (chain rule confirmed by the user 2026-11-10); the migrated method reads the class fields.",
+      "AddToCartQuantity 5 (return quantity = ordered quantity) -> config; guest email (shippingAddressDetails/EmailAddress) -> created-by-test; submitReturnMessage is UI text -> expected-output.",
+      "REVIEW (Create Return, order eligibility): the order is placed by the test (created-by-test) and Check Order Status must offer Create Return on it. On atstage Create Return was NOT offered on freshly placed orders (Playwright my-account order-history step 6 parked and order create-return known failure, memory 2026-11-02/04: shown when the store's EnableReturnRequest is on, enabled by Znode_GetValidateReturnOrderProduct line states/RMA window). This is not data the resolver can supply; the proposed STORE_WEBSTORE_RETURNS_ENABLED key (deferred by the user 2026-11-04) would only check the store setting.",
+      "returnsStore: STORE_WEBSTORE_RETURNS_ENABLED {store MaxwellsHardware} (new key, pending, user decision 2026-11-11): the store must serve a webstore and have the store global attribute EnableReturnRequest (ZnodeGlobalAttribute 1076) = true, the setting that makes Create Return available. It guarantees the store setting only; whether the order this test places is eligible (line states SHIPPED/SUBMITTED, RMA window, not already returned; Znode_GetValidateReturnOrderProduct) is decided per order and is NOT guaranteed. DB 2026-11-11 (tda rows): MaxwellsHardware (PortalId 7) has EnableReturnRequest = false (ZnodePortalGlobalAttributeValueLocale 57, modified 2026-10-31), so readiness reports GAP ZERO_ROWS: this explains the missing Create Return on atstage; the store setting must be switched on (admin, not TDA) before these tests can pass.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "Baseline 2026-11-11 (no agents): this test fails at Create Return / the return page, so it keeps the returnsStore need."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_RETURNS_ENABLED",
+      "alias": "returnsStore",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9699"
+  ],
+  "sources": [
+    {
+      "value": "<masked:email>",
+      "location": "webstoreTestData.xlsx!checkoutPage!B19",
+      "kind": "excel",
+      "keyPath": "shippingAddressDetails/EmailAddress/ValidInput",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D3",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductName/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D45",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/AddToCartQuantity/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[text()='",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:134",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.BEFORE_XPATH_TXT_RETURN_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']/ancestor::tr//*[contains(@data-test-selector,'txtReturnShippedQuantity')]",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:138",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.AFTER_XPATH_TXT_RETURN_QUANTITY",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "//*[text()='",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:140",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.BEFORE_XPATH_TXT_RETURN_TOTAL_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "']/ancestor::tr//td[9]",
+      "location": "src/main/java/pageObjects/webstore/MyAccountObjects.java:142",
+      "kind": "constant",
+      "keyPath": "MyAccountObjects.AFTER_XPATH_TXT_RETURN_TOTAL_PRICE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "75-Watt Equivalent BR40 Dimmable LED Light Bulb Daylight (12-Pack)",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H208",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductName/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H254",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddToCartQuantity/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Return submitted successfully.",
+      "location": "webstoreTestData.xlsx!myAccount!B94",
+      "kind": "excel",
+      "keyPath": "returnOrderData/submitReturnMessage/Label",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

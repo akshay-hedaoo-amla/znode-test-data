@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.ReturnOrderForGuestUserTest#returnOrderForGuestUserVerifyCreateReturnButtonVisibleAfterTrackingOrder",
+  "scenario": {
+    "summary": "As a guest, adds a simple product and a configurable variant (quantity 5 each), checks out as guest with a shipping address, Custom Flat Rate and COD, then tracks the order (order number + guest email) and checks Create Return is shown.",
+    "steps": [
+      "Open the webstore (guest)",
+      "Search the simple SKU, quantity 5, Add to Cart",
+      "Search the configurable parent, pick variant z-2510001's attributes, quantity 5, Add to Cart",
+      "Cart > Checkout > Checkout as a Guest, enter shipping address row ValidInput, accept recommended address",
+      "Custom Flat Rate, COD, Complete Purchase; read the order number",
+      "Check Order Status with the order number and the guest email, Get Order Details",
+      "Verify Create Return visible"
+    ],
+    "entitiesTouched": [
+      "product",
+      "order",
+      "address",
+      "return"
+    ],
+    "stateChanges": [
+      "Guest order placed by the test (created-by-test, not deleted)"
+    ],
+    "assertions": [
+      "Order receipt number shown",
+      "Create Return link visible on the tracked guest order"
+    ],
+    "evidence": [
+      "No dependsOn: the class runs by priority and shares the class field orderNumber. Methods 1-3 (priority 1-10, named 'ForRetailUser') sign in with the sheet account returnOrderGuestUserTest, place an order and work on it; methods 4-10 (priority 15-45) place a guest order and work on it. First method captures: method 1 declares the retail chain's records, method 4 (returnOrderForGuestUserVerifyCreateReturnButtonVisibleAfterTrackingOrder) the guest chain's; later methods read the class fields (SkipException DATA_UNAVAILABLE when null).",
+      "Guest chain head: declares product and configurable; methods 5-10 read the class fields (product.name and configurable.variant1Name in the return quantity step of returnOrderForGuestUserVerifyNotificationMessageDisplayingAfterReturningOrder). No account: guest checkout.",
+      "Products (sheet columns, tda rows): simple z-2420004 'Black + Decker 2.4 Amp Corded 5 in Random Orbit Sander' (Simple, DontTrackInventory; column AddonCheckboxAsOptional, the optional add-on is not selected) -> PRODUCT_SIMPLE_IN_STOCK {quantityUsed 5, minMaxQuantity 5}, as the approved Selenium shoppingCart entry; configurable B-100000 with variant z-2510001 (picked by selectConfigurableAttributes from the variant's attribute columns, not scanned -> variant1Attr1..3) -> PRODUCT_CONFIGURABLE_WITH_VARIANTS {quantityUsed 5, minVariants 1, minAddOns 0, minPersonalizableAttributes 0, variantAttributes BulbSize,Color,Technology} (outputs parentProductSku, variant1Sku, variant1Name); each preferred its sheet SKU (not required). Quantities 5 -> config.",
+      "shippingAddressDetails/* (checkoutPage!B19 EmailAddress and the ValidInput row, masked) is the guest address the test types; the same email tracks the order -> created-by-test. 'ValidInput' literal -> config.",
+      "shipping/payment: checkout selects Custom Flat Rate (shippingMethod.select/clickCustomFlatRateShipping, code FLAT) and Charge on Delivery (paymentMethod.clickCODPaymentOption) -> read-only precondition needs SHIPPING_FLAT_RATE_ON_STORE {FLAT, countries us (assumption, as the approved Playwright order-receipt entries)} and PAYMENT_COD_ON_STORE.",
+      "REVIEW (Create Return, order eligibility): the order is placed by the test (created-by-test) and Check Order Status must offer Create Return on it. On atstage Create Return was NOT offered on freshly placed orders (Playwright my-account order-history step 6 parked and order create-return known failure, memory 2026-11-02/04: shown when the store's EnableReturnRequest is on, enabled by Znode_GetValidateReturnOrderProduct line states/RMA window). This is not data the resolver can supply; the proposed STORE_WEBSTORE_RETURNS_ENABLED key (deferred by the user 2026-11-04) would only check the store setting.",
+      "returnsStore: STORE_WEBSTORE_RETURNS_ENABLED {store MaxwellsHardware} (new key, pending, user decision 2026-11-11): the store must serve a webstore and have the store global attribute EnableReturnRequest (ZnodeGlobalAttribute 1076) = true, the setting that makes Create Return available. It guarantees the store setting only; whether the order this test places is eligible (line states SHIPPED/SUBMITTED, RMA window, not already returned; Znode_GetValidateReturnOrderProduct) is decided per order and is NOT guaranteed. DB 2026-11-11 (tda rows): MaxwellsHardware (PortalId 7) has EnableReturnRequest = false (ZnodePortalGlobalAttributeValueLocale 57, modified 2026-10-31), so readiness reports GAP ZERO_ROWS: this explains the missing Create Return on atstage; the store setting must be switched on (admin, not TDA) before these tests can pass.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "Baseline 2026-11-11 (no agents): this test fails at Create Return / the return page, so it keeps the returnsStore need."
+    ],
+    "confidence": "medium",
+    "needsReview": true
+  },
+  "requires": [
+    {
+      "key": "PRODUCT_SIMPLE_IN_STOCK",
+      "alias": "product",
+      "params": {
+        "quantityUsed": 5,
+        "minMaxQuantity": 5,
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 1,
+        "required": false
+      }
+    },
+    {
+      "key": "PRODUCT_CONFIGURABLE_WITH_VARIANTS",
+      "alias": "configurable",
+      "params": {
+        "quantityUsed": 5,
+        "minVariants": 1,
+        "minAddOns": 0,
+        "minPersonalizableAttributes": 0,
+        "variantAttributes": "BulbSize,Color,Technology",
+        "store": "MaxwellsHardware"
+      },
+      "preferred": {
+        "source": 10,
+        "required": false
+      }
+    },
+    {
+      "key": "SHIPPING_FLAT_RATE_ON_STORE",
+      "alias": "shipping",
+      "params": {
+        "shippingCode": "FLAT",
+        "countries": "us",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "PAYMENT_COD_ON_STORE",
+      "alias": "payment",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_RETURNS_ENABLED",
+      "alias": "returnsStore",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "ZPD-TC-9695"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "z-2420004",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D4",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/ProductSKU/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "product",
+      "output": "sku"
+    },
+    {
+      "value": " is visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:30",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not visible on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:72",
+      "kind": "constant",
+      "keyPath": "ReportMessages.VISIBLE_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!D45",
+      "kind": "excel",
+      "keyPath": "simpleProductDetails/AddToCartQuantity/AddonCheckboxAsOptional",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key success on ",
+      "location": "src/main/java/utilities/ReportMessages.java:43",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Send key failed on ",
+      "location": "src/main/java/utilities/ReportMessages.java:83",
+      "kind": "constant",
+      "keyPath": "ReportMessages.SEND_KEY_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "B-100000",
+      "location": "webstoreTestData.xlsx!productDisplayPage!C209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/Configurable Product",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "parentProductSku"
+    },
+    {
+      "value": "z-2510001",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H209",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/ProductSKU/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "data",
+      "alias": "configurable",
+      "output": "variant1Sku"
+    },
+    {
+      "value": " text capture failed for web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:77",
+      "kind": "constant",
+      "keyPath": "ReportMessages.TEXT_CAPTURED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "5",
+      "location": "webstoreTestData.xlsx!productDisplayPage!H254",
+      "kind": "excel",
+      "keyPath": "configurableProductInformation/AddToCartQuantity/z-2510001",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "ValidInput",
+      "location": "src/test/java/testClasses/webstore/myAccount/ReturnOrderForGuestUserTest.java:237",
+      "kind": "literal",
+      "keyPath": "inputText",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:49",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed till element ",
+      "location": "src/main/java/utilities/ReportMessages.java:90",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_TILL_ELEMENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "top",
+      "location": "src/main/java/utilities/GlobalVariables.java:136",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.TOP",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scrolled successfully.",
+      "location": "src/main/java/utilities/ReportMessages.java:50",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Page scroll failed.",
+      "location": "src/main/java/utilities/ReportMessages.java:91",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PAGE_SCROLL_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:32",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " is not enabled on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:74",
+      "kind": "constant",
+      "keyPath": "ReportMessages.ENABLED_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "[\\$,*,#,+,-,(,)]",
+      "location": "src/main/java/utilities/GlobalVariables.java:198",
+      "kind": "constant",
+      "keyPath": "GlobalVariables.SPECIAL_SYMBOLS",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:email>",
+      "location": "webstoreTestData.xlsx!checkoutPage!B19",
+      "kind": "excel",
+      "keyPath": "shippingAddressDetails/EmailAddress/ValidInput",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

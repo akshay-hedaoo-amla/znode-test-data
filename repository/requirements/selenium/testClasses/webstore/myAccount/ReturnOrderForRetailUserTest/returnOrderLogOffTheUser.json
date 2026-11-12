@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.ReturnOrderForRetailUserTest#returnOrderLogOffTheUser",
+  "scenario": {
+    "summary": "Scrolls to the top and logs off the new account.",
+    "steps": [
+      "Scroll to the top",
+      "Open user menu, Log Off"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None"
+    ],
+    "assertions": [
+      "Log off succeeds"
+    ],
+    "evidence": [
+      "Class: 20 methods, 17 enabled=false and not mapped (returnOrderSaveTheReturnOrderAsDraft, returnOrderVerifyLineItemNotPresentAfterReturning, returnOrderVerifySavedOrderStatus, returnOrderVerifyReturnIconVisibleOnDashboardPanel, returnOrderVerifyReturnIconLinkNavigation, returnOrderVerifyDashboardReturnOrderViewButtonNavigation, returnOrderVerifyDashboardCreateReturnButtonNavigation, returnOrderVerifyDashboardEditReturnOrderLinkNavigation, returnOrderVerifyCancelButtonNavigation, returnOrderVerifyReturnQuantityErrorMessage, returnOrderVerifyReturnOrderTotalPriceCalculations, returnOrderSubmitOrderForReturnAndVerifyThankYouPage, returnOrderVerifyReturnOrderLinkNavigation, returnOrderVerifyReturnActionLinkNavigationOnOrderHistoryPage, returnOrderVerifyInvalidInputsInReturnQuantityTextbox, returnOrderVerifyQuantityReducingAfterPartiallyReturningLineItems, returnOrderVerifyIncludedQuantiiesDisplayingForEachBundleProductChild). Enabled: returnOrderCreateAnAccount -> returnOrderPlaceOrderWithAllProductTypes (dependsOn), returnOrderLogOffTheUser (priority). The session is the account returnOrderCreateAnAccount registers (created-by-test): no declared account.",
+      "No data values.",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "No returnsStore need: the baseline 2026-11-11 (no agents) passes this test, so it does not depend on the store's EnableReturnRequest setting (coordinator decision 2026-11-11)."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9721"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}

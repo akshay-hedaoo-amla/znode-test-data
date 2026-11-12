@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "framework": "selenium",
+  "testId": "testClasses.webstore.myAccount.ReturnOrderForRetailUserTest#returnOrderCreateAnAccount",
+  "scenario": {
+    "summary": "Registers a new customer account (Sign In > Get an Account); the class keeps working in that session.",
+    "steps": [
+      "Open the webstore",
+      "Sign In, Get an Account",
+      "Register a new customer"
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "New registered account created (created-by-test)"
+    ],
+    "assertions": [
+      "Registration completes"
+    ],
+    "evidence": [
+      "Class: 20 methods, 17 enabled=false and not mapped (returnOrderSaveTheReturnOrderAsDraft, returnOrderVerifyLineItemNotPresentAfterReturning, returnOrderVerifySavedOrderStatus, returnOrderVerifyReturnIconVisibleOnDashboardPanel, returnOrderVerifyReturnIconLinkNavigation, returnOrderVerifyDashboardReturnOrderViewButtonNavigation, returnOrderVerifyDashboardCreateReturnButtonNavigation, returnOrderVerifyDashboardEditReturnOrderLinkNavigation, returnOrderVerifyCancelButtonNavigation, returnOrderVerifyReturnQuantityErrorMessage, returnOrderVerifyReturnOrderTotalPriceCalculations, returnOrderSubmitOrderForReturnAndVerifyThankYouPage, returnOrderVerifyReturnOrderLinkNavigation, returnOrderVerifyReturnActionLinkNavigationOnOrderHistoryPage, returnOrderVerifyInvalidInputsInReturnQuantityTextbox, returnOrderVerifyQuantityReducingAfterPartiallyReturningLineItems, returnOrderVerifyIncludedQuantiiesDisplayingForEachBundleProductChild). Enabled: returnOrderCreateAnAccount -> returnOrderPlaceOrderWithAllProductTypes (dependsOn), returnOrderLogOffTheUser (priority). The session is the account returnOrderCreateAnAccount registers (created-by-test): no declared account.",
+      "No account need: the method registers a NEW account (registerForNewCustomer: username = date + time + method prefix + testClassRetailUsers/registerNewUser Username, password = registerNewUser Password) -> both cells created-by-test, as the approved getAnAccount registration entry. REVIEW: each run leaves a new registered account on MaxwellsHardware (no TDA cleanup).",
+      "Store: openWebstoreUrl opens automation_webStoreUrl (atstage: webstore-z10-atstage, the main store MaxwellsHardware), the same store as the Selenium pdp/quickOrder/plp/home entries.",
+      "Profile: work/profiles/profile.json has no observations for these Selenium cells (profiled false); DB facts from bin/tda rows (2026-11-11) where cited.",
+      "Scanned constant values (locators, report messages, map keys, delays, regex) are framework constants: role config, no need.",
+      "migrate: Selenium reads Excel tables through TestData.getMap / getHashMap; there is no swap for Selenium.",
+      "No returnsStore need: the baseline 2026-11-11 (no agents) passes this test, so it does not depend on the store's EnableReturnRequest setting (coordinator decision 2026-11-11)."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "ZPD-TC-9702"
+  ],
+  "sources": [
+    {
+      "value": "//*[contains(@class,'loading-state loader-color undefined')]",
+      "location": "src/main/java/pageObjects/webstore/SearchObjects.java:13",
+      "kind": "constant",
+      "keyPath": "SearchObjects.LOADING_STATE_LOADER",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Clicked on ",
+      "location": "src/main/java/utilities/ReportMessages.java:38",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_SUCCESS_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": " Element is not present on web page.",
+      "location": "src/main/java/utilities/ReportMessages.java:73",
+      "kind": "constant",
+      "keyPath": "ReportMessages.PRESENT_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "Could not clicked on web element :",
+      "location": "src/main/java/utilities/ReportMessages.java:78",
+      "kind": "constant",
+      "keyPath": "ReportMessages.CLICK_FAILURE_MESSAGE",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "<masked:username>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!B195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Username",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    },
+    {
+      "value": "<masked:password>",
+      "location": "webstoreTestData.xlsx!loginAndRegistration!C195",
+      "kind": "excel",
+      "keyPath": "testClassRetailUsers/registerNewUser/Password",
+      "sensitive": true,
+      "profiled": false,
+      "role": "created-by-test"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-12T05:39:00Z"
+}
