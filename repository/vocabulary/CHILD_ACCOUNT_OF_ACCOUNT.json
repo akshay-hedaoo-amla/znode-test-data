@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "key": "CHILD_ACCOUNT_OF_ACCOUNT",
+  "entity": "account",
+  "type": "child_of_account",
+  "constraints": {
+    "parentAccountId": "{parent}",
+    "salesRepUserId": "{rep}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Child account under the given parent account of the store, created through the account API after the parent, optionally with its own Sales Rep. Outputs: accountId, accountName, accountCode, salesRepUserId. Created per test, deleted at teardown before its parent. Story Z10-38546.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code of the parent account (ZnodePortal.StoreCode)"
+    },
+    "parent": {
+      "type": "integer",
+      "description": "AccountId of the parent account: link it to the test's parent account (@parent.accountId)"
+    },
+    "rep": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the child's own Sales Rep (@rep.userId), overriding inheritance. Left out: none set; inherited from the parent if its inheritance flag is Yes"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

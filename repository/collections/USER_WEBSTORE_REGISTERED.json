@@ -2,7 +2,7 @@
   "schemaVersion" : 1,
   "key" : "USER_WEBSTORE_REGISTERED",
   "spec" : {
-    "file" : "specs/znode-core-api-v1.json",
+    "file" : "specs/multifront-v1.json",
     "operations" : [ "POST /User/CreateCustomerAccount", "POST /User/DeleteUserAccount" ]
   },
   "create" : {
@@ -40,6 +40,10 @@
     },
     "idPointer" : "/User/UserId",
     "outputs" : {
+      "userId" : {
+        "from" : "response",
+        "pointer" : "/User/UserId"
+      },
       "userName" : {
         "from" : "payload",
         "pointer" : "/UserName"
@@ -56,10 +60,11 @@
     "path" : "/User/DeleteUserAccount",
     "bodyTemplate" : "payloads/USER_WEBSTORE_REGISTERED.teardown.json"
   },
-  "specFingerprint" : "sha256:c5ba7fdc87826a592fc0526e205581824399c1c79c1d93629a56d470a09fcb92",
-  "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-22T14:30:00Z",
+  "specFingerprint" : "sha256:57f2382eb43298f40c436da468f69fcbb313c55a3e359514810794870527a982",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
   "createdAt" : "2026-10-22T00:00:00Z",
-  "lastValidated" : "2026-10-22T10:18:18Z"
+  "lastValidated" : "2026-11-20T12:52:39Z",
+  "verifiedHash" : "sha256:ba0da78e1eb375d9f9b83c72a29f92b09e29f005167440597d3f3b9c741b10bd"
 }

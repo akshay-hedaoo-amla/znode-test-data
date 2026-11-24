@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23089 sales rep field resets when the user's store changes",
+  "scenario": {
+    "summary": "For a user on all stores, the admin assigns store A's sales rep on Manage User with store A selected, then changes the Store Name dropdown to another store; the Sales Rep field becomes blank and a different sales rep can be chosen.",
+    "steps": [
+      "Go to Accounts and Users > Users; search the all-stores user (@user.userName) and click Manage.",
+      "With store A selected, assign the sales rep (@rep.fullName) through the popup.",
+      "Change the Store Name dropdown to another store.",
+      "Observe the Sales Rep field."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "The user is assigned to the sales rep for store A by the test (precondition done in the UI)."
+    ],
+    "assertions": [
+      "The Sales Rep field is blank after the store change",
+      "The Sales Rep search icon is available to assign a sales rep for the new store"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23089 (AIO export).",
+      "FSD 'Salesrep Assignment behaviour Under Manage User Screen' (user belongs to All Stores; changing the store blanks the Sales Rep field).",
+      "The test case's precondition (rep already assigned for store A) is done by the test in the UI: USER_ASSIGNED_TO_SALES_REP creates single-store users only.",
+      "User on all stores: USER_WEBSTORE_ALL_STORES (creates an All Stores user; replaces change proposal 7b, user answer 4), store MaxwellsHardware.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "The test is skipped when the environment has the global setting AllowGlobalUserCreation off (user decision 2026-11-19): Znode creates a user for All Stores only when it is on (off on atstage)."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "GLOBAL_USER_CREATION_ENABLED",
+      "alias": "globalUsers"
+    },
+    {
+      "key": "USER_WEBSTORE_ALL_STORES",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23089"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:26:21Z"
+}

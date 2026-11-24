@@ -2,11 +2,10 @@
   "schemaVersion" : 1,
   "key" : "ORDER_OF_USER_REORDERABLE",
   "spec" : {
-    "file" : "specs/Commerceportal_v1.json",
-    "operations" : [ "POST /carts/items", "PUT /{classType}/update-all-details", "PUT /payments", "PUT /{classType}/{classNumber}/finalize-details", "POST /{classType}/{classNumber}/orders", "DELETE /{classType}/bulk" ]
+    "file" : "specs/commerceportal.json",
+    "operations" : [ "POST /commerceapi/v1/carts/items", "PUT /commerceapi/v1/{classType}/update-all-details", "PUT /commerceapi/v1/payments", "PUT /commerceapi/v1/{classType}/{classNumber}/finalize-details", "POST /commerceapi/v1/{classType}/{classNumber}/orders", "DELETE /commerceapi/v1/{classType}/bulk" ]
   },
   "create" : {
-    "basePath" : "/commerceapi/v1",
     "headers" : {
       "Znode-PortalCode" : "{store}",
       "Znode-LocaleCode" : "{localeCode}",
@@ -16,33 +15,33 @@
     "steps" : [ {
       "name" : "addToCart",
       "method" : "POST",
-      "path" : "/carts/items",
+      "path" : "/commerceapi/v1/carts/items",
       "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.addToCart.json",
       "captures" : {
         "cartNumber" : "/CartNumber"
       },
       "undo" : {
         "method" : "DELETE",
-        "path" : "/{cartClass}/bulk?classNumbers={cartNumber}"
+        "path" : "/commerceapi/v1/{cartClass}/bulk?classNumbers={cartNumber}"
       }
     }, {
       "name" : "setShipping",
       "method" : "PUT",
-      "path" : "/{cartClass}/update-all-details",
+      "path" : "/commerceapi/v1/{cartClass}/update-all-details",
       "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.setShipping.json"
     }, {
       "name" : "setPayment",
       "method" : "PUT",
-      "path" : "/payments",
+      "path" : "/commerceapi/v1/payments",
       "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.setPayment.json"
     }, {
       "name" : "finalize",
       "method" : "PUT",
-      "path" : "/{cartClass}/{cartNumber}/finalize-details"
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/finalize-details"
     }, {
       "name" : "placeOrder",
       "method" : "POST",
-      "path" : "/{cartClass}/{cartNumber}/orders",
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/orders",
       "payloadTemplate" : "payloads/ORDER_OF_USER_REORDERABLE.placeOrder.json",
       "captures" : {
         "orderNumber" : "/OrderNumber"
@@ -323,13 +322,13 @@
   },
   "teardown" : {
     "method" : "DELETE",
-    "path" : "/{orderClass}/bulk?classNumbers={id}"
+    "path" : "/commerceapi/v1/{orderClass}/bulk?classNumbers={id}"
   },
-  "specFingerprint" : "sha256:2e8c9d11f845a97985f1f1aa6881fe9fbeee24618e91e99f3886a04de9d32e05",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-02T14:30:00Z",
+  "specFingerprint" : "sha256:06463a7edf13bac97b78ad08eb3e781a9c1b47fa74647695dda1c9ff49f2dc1e",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
   "createdAt" : "2026-11-01T00:00:00Z",
-  "lastValidated" : "2026-11-02T09:15:49Z",
-  "verifiedHash" : "sha256:a9f5bea2fbf34b13a9ad41b60fc97ec18937564c141b455f83e9b9956fa20344"
+  "lastValidated" : "2026-11-20T12:51:41Z",
+  "verifiedHash" : "sha256:c865c6d55c9a415787a4eeacb0b4faed8389fc2e840f976474c80838b36b9cd3"
 }

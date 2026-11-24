@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "entity": "return_reason",
+  "tables": [
+    "dbo.ZnodeRmaReasonForReturn"
+  ],
+  "joins": [],
+  "properties": {
+    "reasonCode": "dbo.ZnodeRmaReasonForReturn.RmaReasonCode",
+    "name": "dbo.ZnodeRmaReasonForReturn.Name",
+    "isActive": "dbo.ZnodeRmaReasonForReturn.IsActive",
+    "isDefault": "dbo.ZnodeRmaReasonForReturn.IsDefault"
+  },
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:247901b1d35323b5f284968c7f9273b60735ceebef4cd03fdcc35c4a9b363f30",
+  "scannedAt": "2026-11-20T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

@@ -1,0 +1,10 @@
+{
+  "UserId": "{owner}",
+  "CatalogCode": "{catalogCode}",
+  "SkuDetails": [
+    {
+      "Sku": "{sku}",
+      "Quantity": "{quantity}"
+    }
+  ]
+}

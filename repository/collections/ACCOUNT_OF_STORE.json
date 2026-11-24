@@ -1,0 +1,101 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ACCOUNT_OF_STORE",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /Account/Create", "POST /GlobalAttributeEntity/SaveEntityAttributeDetails", "POST /Account/Delete" ]
+  },
+  "create" : {
+    "steps" : [ {
+      "name" : "create",
+      "method" : "POST",
+      "path" : "/Account/Create",
+      "payloadTemplate" : "payloads/ACCOUNT_OF_STORE.create.json",
+      "captures" : {
+        "accountId" : "/CompanyDetails/CompanyAccount/AccountId"
+      },
+      "undo" : {
+        "method" : "POST",
+        "path" : "/Account/Delete",
+        "bodyTemplate" : "payloads/ACCOUNT_OF_STORE.undo.json"
+      }
+    }, {
+      "name" : "flags",
+      "method" : "POST",
+      "path" : "/GlobalAttributeEntity/SaveEntityAttributeDetails",
+      "payloadTemplate" : "payloads/ACCOUNT_OF_STORE.flags.json"
+    } ],
+    "id" : "{accountId}",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "domainName" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "domainName",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "localeId" : 1,
+      "entityType" : "Account",
+      "inheritanceAttributeId" : 1272,
+      "inheritanceAttributeCode" : "EnableSalesRepInheritance",
+      "applyAllAttributeId" : 1273,
+      "applyAllAttributeCode" : "ApplySalesRepChangestoAllUsers"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "step" : "create",
+      "field" : "/CompanyAccount/Name",
+      "format" : "TDA-{runId}-",
+      "property" : "accountName"
+    },
+    "outputs" : {
+      "accountId" : {
+        "from" : "value",
+        "name" : "accountId"
+      },
+      "accountName" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/CompanyAccount/Name"
+      },
+      "accountCode" : {
+        "from" : "payload",
+        "step" : "create",
+        "pointer" : "/CompanyAccount/AccountCode"
+      },
+      "salesRepUserId" : {
+        "from" : "response",
+        "step" : "create",
+        "pointer" : "/CompanyDetails/CompanyAccount/SalesRepId"
+      }
+    },
+    "headers" : {
+      "Znode-DomainName" : "{domainName}"
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/Account/Delete",
+    "bodyTemplate" : "payloads/ACCOUNT_OF_STORE.teardown.json"
+  },
+  "specFingerprint" : "sha256:2d07e586f26371705e337a20b61fa6b278598bda06190cdff24bb63a9dec5ace",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
+  "createdAt" : "2026-11-19T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:50:21Z",
+  "verifiedHash" : "sha256:70f196f85250bb42ddc172c9c4d9cbf59e26172918ed855ac8926bcb62588456"
+}

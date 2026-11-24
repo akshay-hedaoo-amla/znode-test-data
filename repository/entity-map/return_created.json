@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "entity": "return_created",
+  "tables": [
+    "dbo.ZnodeOrder",
+    "dbo.ZnodeCPOrderClass",
+    "dbo.ZnodeOrderNote",
+    "dbo.ZnodeOmsOrderState",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeOrder.ClassId",
+      "to": "dbo.ZnodeCPOrderClass.CPOrderClassId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OrderId",
+      "to": "dbo.ZnodeOrderNote.MappingId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.OmsOrderStateId",
+      "to": "dbo.ZnodeOmsOrderState.OmsOrderStateId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeOrder.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "returnNumber": "dbo.ZnodeOrder.ClassNumber",
+    "orderClass": "dbo.ZnodeCPOrderClass.ClassCode",
+    "returnNote": "dbo.ZnodeOrderNote.Note",
+    "statusCode": "dbo.ZnodeOmsOrderState.StatusCode",
+    "ownerUserId": "dbo.ZnodeOrder.UserId",
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeOrderNote.Note",
+    "dbo.ZnodeOrderNote.OrderAdditionalDetails"
+  ],
+  "schemaFingerprint": "sha256:2e2ed3043a5ea43a580b96d766089aa674de47aac36c08f97661961dfc8f20a6",
+  "scannedAt": "2026-11-20T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

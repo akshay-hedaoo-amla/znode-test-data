@@ -35,3 +35,4 @@ localTrustedCert: work/certs/localhost-dev.cer
 entityTerms:
   promotion: [promotion, coupon]
   user: [user, customer, account, register]
+  voucher: [voucher, giftcard]

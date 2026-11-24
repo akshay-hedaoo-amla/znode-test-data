@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-signed-in.spec.ts > Admin - Sales Rep > Z10-TC-23096 sales rep sees only the allowed menu items",
+  "scenario": {
+    "summary": "A sales rep signs in to the admin panel, lands on the Dashboard and sees only Accounts & Users (Accounts, Users) and OMS (Orders, Quotes, Returns, Pending Orders, Pending Payments, Vouchers); Dashboard is the landing page, not a menu item; every other menu is hidden.",
+    "steps": [
+      "Sign in to the admin panel as the sales rep (@rep.userName, @rep.password).",
+      "Check the page shown after sign-in.",
+      "Read the main navigation menu."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "After sign-in the Dashboard is displayed",
+      "Menu items are exactly Accounts & Users with Accounts, Users, and OMS with Orders, Quotes, Returns, Pending Orders, Pending Payments, Vouchers",
+      "Dashboard is not a menu item; no Customers menu; no other menu is shown"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Phase 2 (story Z10-38546): FSD 'Salesrep Phase 2 - Account Association' section 10 (navigation: Customers renamed to Accounts & Users; Accounts, Users; OMS menus) and section 11 (Dashboard displayed immediately after login); work/stories/Z10-38546/analysis.md section 2 and user answer 1 (expect the Phase 2 menu, Dashboard as landing page, not a menu item).",
+      "Phase 1 FSD 'Sales Rep Login Experience in Admin panel' listed Dashboard and Customers; replaced by Phase 2 (atstage run 6 shows the Phase 2 menu).",
+      "Test case Z10-TC-23096 (AIO export).",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (analysis answer 2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23096"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

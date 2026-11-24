@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "key": "USER_ASSIGNED_TO_SALES_REP",
+  "entity": "user",
+  "type": "assigned_to_sales_rep",
+  "constraints": {
+    "userType": "registered",
+    "isActive": "true",
+    "salesRepUserId": "{rep}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Active registered webstore customer of the store whose Sales Rep is the given sales rep (Manage User > Sales Rep), so that rep sees the user and the user's records. Created per test, deleted at teardown. Story Z10-28590.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the user belongs to (ZnodePortal.StoreCode); the same store the sales rep is assigned to"
+    },
+    "rep": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the sales rep the user is assigned to: link it to the test's sales rep (@rep.userId). Left out (verification only): any sales rep"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

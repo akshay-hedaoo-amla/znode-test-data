@@ -1,0 +1,966 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "EDMP Integration API",
+    "description": "Machine-to-machine Import/Export integration -- see each capability's own GET v1/capabilities/{name}/schema for its field contract.",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/capabilities": {
+      "get": {
+        "tags": [
+          "CapabilitySchema"
+        ],
+        "summary": "Lists the active capabilities.",
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The capabilities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/V1CapabilityDto"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No capability is active."
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities/{name}/schema": {
+      "get": {
+        "tags": [
+          "CapabilitySchema"
+        ],
+        "summary": "Gets the fields a capability accepts and returns.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The capability name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1SchemaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The capability is not registered, inactive, or points at an unregistered resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities/{name}/export": {
+      "post": {
+        "tags": [
+          "V1Export"
+        ],
+        "summary": "Queues an export job and returns its job id. Optional `Idempotency-Key` header: a repeat with the\n            same key and body returns the original job id; keys are scoped per capability and separately from imports.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The capability name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The export request (filters, format, optional narrowing and delivery).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1ExportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The export was queued (or an identical request with the same Idempotency-Key was replayed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1JobAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request failed validation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The capability is not registered, inactive, or points at a missing resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency-Key reused with a different body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities/{name}/import/preview": {
+      "post": {
+        "tags": [
+          "V1Import"
+        ],
+        "summary": "Validates and stages the caller's JSON rows; writes nothing to the target table.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The capability name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The rows, plus optional template and scope parameters.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1ImportPreviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The staging id and the validation summary.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1ImportPreviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid (see the error message).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The capability is not registered, inactive, or points at an unregistered resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The request body exceeds the configured maximum.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities/{name}/import/confirm": {
+      "post": {
+        "tags": [
+          "V1Import"
+        ],
+        "summary": "Writes previously staged rows as an import job and returns its job id. Optional `Idempotency-Key`\n            header: a repeat with the same key (per capability) returns the original job id; without it every call creates a job.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The capability name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The staging id from preview, plus the same template and scope parameters.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1ImportConfirmRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The import job was accepted; the body carries its job id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1JobAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is invalid (see the error message).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The capability is not registered, inactive, or points at an unregistered resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The Idempotency-Key was reused with a different body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/jobs/{jobId}": {
+      "get": {
+        "tags": [
+          "V1Jobs"
+        ],
+        "summary": "Gets one job's status and counters.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The job id returned when the import/export was accepted.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The job.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1JobDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No job has that id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/jobs/{jobId}/result": {
+      "get": {
+        "tags": [
+          "V1Jobs"
+        ],
+        "summary": "Downloads a completed export job's output file. Import jobs have no output; their result is the job's\n            Inserted/Updated/Failed counters.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The export job id.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "429": {
+            "description": "The rate limit was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The export file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No job has that id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The job is not an Export, its output is not ready yet, or it produced no file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "The output existed but has expired (retention); re-run the export.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FilterExpression": {
+        "type": "object",
+        "properties": {
+          "root": {
+            "$ref": "#/components/schemas/FilterGroup"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FilterGroup": {
+        "type": "object",
+        "properties": {
+          "logic": {
+            "type": "string",
+            "nullable": true
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterNode"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FilterNode": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "V1CapabilityDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "An entry in the GET v1/capabilities discovery list. SchemaVersion changes whenever the fields behind the\n            capability change, so a partner can cheaply detect a schema change."
+      },
+      "V1ExportRequest": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "consolidateMultiResultExport": {
+            "type": "boolean"
+          },
+          "includedFieldNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "forceZip": {
+            "type": "boolean"
+          },
+          "conditions": {
+            "$ref": "#/components/schemas/FilterExpression"
+          },
+          "destinationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "An export request: optional filters/conditions narrow the rows, Format/TemplateName/IncludedFieldNames shape\n            the file, DestinationId delivers it. IncludedFieldNames and TemplateName are mutually exclusive; Conditions is not\n            supported by every capability."
+      },
+      "V1ImportConfirmRequest": {
+        "type": "object",
+        "properties": {
+          "stagingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopeParameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1ImportPreviewRequest": {
+        "type": "object",
+        "properties": {
+          "rows": { },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopeParameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1ImportPreviewResponse": {
+        "type": "object",
+        "properties": {
+          "stagingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insertCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errorRowCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/V1RowErrorDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1JobAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1JobDto": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "jobType": {
+            "type": "string",
+            "nullable": true
+          },
+          "resourceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "processed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inserted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updated": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1RowErrorDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "rowNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "columnName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "One row-level validation finding in a successful (200) import preview; error responses use ZnodeErrorDetail.\n            Code is a stable machine-readable value safe to branch on; Message is human-readable and may change."
+      },
+      "V1SchemaDto": {
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "nullable": true
+          },
+          "resourceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/V1SchemaFieldDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1SchemaFieldDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isBusinessKey": {
+            "type": "boolean"
+          },
+          "includeInImport": {
+            "type": "boolean"
+          },
+          "includeInExport": {
+            "type": "boolean"
+          },
+          "validators": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/V1SchemaValidatorDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "V1SchemaValidatorDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "parameter": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "CapabilitySchema"
+    },
+    {
+      "name": "V1Export"
+    },
+    {
+      "name": "V1Import"
+    },
+    {
+      "name": "V1Jobs"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "key": "VOUCHER_ISSUED_TO_USER",
+  "entity": "voucher",
+  "type": "issued_to_user",
+  "constraints": {
+    "isActive": "true",
+    "restrictedToCustomer": "true",
+    "startDate": "<= {now}",
+    "expirationDate": ">= {now}",
+    "remainingAmount": "> 0",
+    "ownerUserId": "{owner}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Active voucher of the store, started, not expired, with balance left, restricted to one customer, created for a user the test created (VOUCHER_RESTRICTED_TO_USER only finds existing users' vouchers). Deleted at teardown. KB: Managing Vouchers. Story Z10-28590.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the voucher belongs to (ZnodePortal.StoreCode)"
+    },
+    "now": {
+      "type": "string",
+      "description": "System param: evaluation time, filled in by the profiler or resolver; tests do not set it"
+    },
+    "owner": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId the voucher is restricted to: link it to a user of the test (@assigned.userId). Left out (verification only): any customer"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

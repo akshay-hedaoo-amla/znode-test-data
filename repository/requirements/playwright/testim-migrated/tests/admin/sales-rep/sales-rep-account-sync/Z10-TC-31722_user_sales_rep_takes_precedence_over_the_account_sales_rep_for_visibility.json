@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-sync.spec.ts > Admin - Sales Rep > Z10-TC-31722 user sales rep takes precedence over the account sales rep for visibility",
+  "scenario": {
+    "summary": "Account A has sales rep A; User 1 of account A (with an address, an order, a quote and a return) is overridden to sales rep B on Manage User. Rep A sees account A and its metrics but not User 1 or User 1's orders, quotes and returns; rep B sees User 1 and those records, and they count toward rep B's dashboard metrics.",
+    "steps": [
+      "As admin: Accounts and Users > Users; open Manage User of User 1 (@overridden.userName); check its Sales Rep is @repA.fullName; select @repB.fullName in the Sales Rep lookup; save (precondition: User 1's rep manually overridden to rep B).",
+      "Sign in as sales rep A (@repA.userName, @repA.password); read the dashboard metrics (Total Accounts, Total Users, Total Orders, Total Quotes, Total Returns, Total Sales).",
+      "Rep A: Accounts and Users > Accounts, search @account.accountName and open its users; Accounts and Users > Users, search @overridden.userName.",
+      "Rep A: OMS > Orders search @order.orderNumber; OMS > Quotes search @quote.quoteNumber; OMS > Returns search @return.returnNumber; sign out.",
+      "Sign in as sales rep B (@repB.userName, @repB.password); read the dashboard metrics.",
+      "Rep B: Accounts and Users > Users search @overridden.userName; OMS > Orders search @order.orderNumber; OMS > Quotes search @quote.quoteNumber; OMS > Returns search @return.returnNumber."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user",
+      "address",
+      "order",
+      "quote",
+      "return"
+    ],
+    "stateChanges": [
+      "Changes User 1's Sales Rep from @repA (taken from account A) to @repB on Manage User (User 1 and its records are deleted at teardown)."
+    ],
+    "assertions": [
+      "Before the override User 1's Sales Rep is @repA.fullName",
+      "Rep A: @account.accountName is listed in Accounts and the dashboard shows its metrics",
+      "Rep A: @overridden.userName is not listed in Users nor in account A's users (No records found. when searched)",
+      "Rep A: @order.orderNumber, @quote.quoteNumber and @return.returnNumber are not listed in Orders, Quotes and Returns",
+      "Rep B: @overridden.userName is listed in Users",
+      "Rep B: @order.orderNumber, @quote.quoteNumber and @return.returnNumber are listed in Orders, Quotes and Returns",
+      "Rep B: User 1's transactions count toward rep B's dashboard metrics"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31722 (AIO export): precondition, steps 1-4 and expected result.",
+      "FSD section 8 (effective Sales Rep: user rep > account rep, for dashboard, user, account and OMS visibility), section 11 (dashboard metrics only from records of the logged-in rep), section 12 (users reassigned to another rep are excluded from the account rep's listing), sections 13-14 (Users, OMS pages).",
+      "FSD (story Z10-38546) section 7: dashboard metrics, user listings, account-related user listings, orders, quotes, returns and other OMS entities of the user follow the effective user-level Sales Rep, so the records created before the override move with it to rep B.",
+      "Precondition 'User 1 overridden to rep B' is a UI step of the test on Manage User, as in Z10-TC-31717: USER_OF_ACCOUNT gets no rep param, because the account link in its create call takes the account's rep (FSD section 7 Important Point).",
+      "User 1's OMS records: ADDRESS_OF_USER (owner = @overridden.userId), then ORDER_OF_USER_REORDERABLE (simple product, quantity 1, no add-ons or personalization), QUOTE_OF_USER_CREATED and RETURN_OF_ORDER (order = @order.orderNumber), all created for User 1 through the API before the override.",
+      "Dashboard metric labels (Total Accounts, Total Users, Total Orders, Total Quotes, Total Returns, Total Sales: FSD section 11) are read from the page.",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (Phase 1 analysis answer 2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "User 1's order is a simple in-stock product (ORDER_OF_USER_SIMPLE): the case needs any order of User 1; the reorder key always orders a configurable product with add-ons, which atstage does not have.",
+      "User 1's return is kept after the run (atstage never deletes a submitted return; user decision 2026-11-23). Its number comes from returnLookup (RETURN_NUMBER_OF_ORDER by the order number): the create response carries none."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repB",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "account",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@repA.userId"
+      }
+    },
+    {
+      "key": "USER_OF_ACCOUNT",
+      "alias": "overridden",
+      "params": {
+        "store": "MaxwellsHardware",
+        "account": "@account.accountId"
+      }
+    },
+    {
+      "key": "ADDRESS_OF_USER",
+      "alias": "address",
+      "params": {
+        "owner": "@overridden.userId"
+      }
+    },
+    {
+      "key": "ORDER_OF_USER_SIMPLE",
+      "alias": "order",
+      "params": {
+        "owner": "@overridden.userId",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "QUOTE_OF_USER_CREATED",
+      "alias": "quote",
+      "params": {
+        "owner": "@overridden.userId",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "RETURN_OF_ORDER",
+      "alias": "return",
+      "params": {
+        "order": "@order.orderNumber",
+        "owner": "@overridden.userId",
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "RETURN_NUMBER_OF_ORDER",
+      "alias": "returnLookup",
+      "params": {
+        "order": "@order.orderNumber"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31722"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-account-sync.spec.ts:104",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-23T09:17:53Z"
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23074 admin creates a sales rep for a specific store",
+  "scenario": {
+    "summary": "The admin creates a new sales rep with All Stores unchecked and one specific active store selected, clicks Save, stays on the Add Sales Rep page, and the sales rep is assigned only to that store.",
+    "steps": [
+      "On the Sales Rep listing page click Add New.",
+      "Uncheck All Stores and select the store (@storeA.name) in the Select store dropdown.",
+      "Enter a unique username, a valid email, first name and last name (made up by the test, run-ID tagged).",
+      "Click Save."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "A new sales rep assigned to the store is created by the test in the UI; the test deletes it at the end."
+    ],
+    "assertions": [
+      "The page stays on Add Sales Rep after Save with a success notification",
+      "The sales rep is assigned only to the selected store (store selection shows @storeA.name)"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23074 (AIO export).",
+      "FSD 'Create a Sales Rep' (uncheck All Stores and select one or more specific stores).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23074"
+  ],
+  "sources": [
+    {
+      "value": "data-message",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:88",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T07:38:32Z"
+}

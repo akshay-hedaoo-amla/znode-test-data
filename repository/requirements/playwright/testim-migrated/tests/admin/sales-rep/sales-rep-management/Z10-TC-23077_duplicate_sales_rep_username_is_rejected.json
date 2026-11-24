@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23077 duplicate sales rep username is rejected",
+  "scenario": {
+    "summary": "With a sales rep already existing, the admin opens Add Sales Rep, enters that sales rep's username with valid other mandatory fields and clicks Save; the duplicate-username message is shown and nothing is saved.",
+    "steps": [
+      "Open Add Sales Rep from the Sales Rep listing.",
+      "Enter the existing sales rep's username (@rep.userName) and valid store, email, first and last name.",
+      "Click Save."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None: the save is refused."
+    ],
+    "assertions": [
+      "Message 'This username already exists. Please enter a different username.' shown in red under Username",
+      "No second sales rep with that username is created"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23077 (AIO export).",
+      "FSD 'Create a Sales Rep': duplicate username validation as in the user module.",
+      "The test case's example username is not used: the existing sales rep comes from SALES_REP_OF_STORE (created per test).",
+      "Expected text from the test case; the FSD only refers to the user module's validations (expected-output, to confirm on the page).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23077"
+  ],
+  "sources": [
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:120",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T07:38:32Z"
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "entity": "user_role",
+  "tables": [
+    "dbo.AspNetRoles",
+    "dbo.AspNetUserRoles",
+    "dbo.ZnodeUser",
+    "dbo.ZnodePortal"
+  ],
+  "joins": [
+    {
+      "from": "dbo.AspNetUserRoles.RoleId",
+      "to": "dbo.AspNetRoles.Id",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.AspNetUserRoles.UserId",
+      "to": "dbo.ZnodeUser.AspNetUserId",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.AspNetUserRoles.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "roleId": "dbo.AspNetRoles.Id",
+    "roleName": "dbo.AspNetRoles.Name",
+    "typeOfRole": "dbo.AspNetRoles.TypeOfRole",
+    "isActive": "dbo.AspNetRoles.IsActive",
+    "isSystemDefined": "dbo.AspNetRoles.IsSystemDefined",
+    "userId": "dbo.ZnodeUser.UserId",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "userCount": "COUNT(DISTINCT dbo.ZnodeUser.UserId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeUser.CustomerPaymentGUID",
+    "dbo.ZnodeUser.RefreshToken",
+    "dbo.ZnodeUser.ExternalId",
+    "dbo.ZnodeUser.Custom1",
+    "dbo.ZnodeUser.Custom2",
+    "dbo.ZnodeUser.Custom3",
+    "dbo.ZnodeUser.Custom4",
+    "dbo.ZnodeUser.Custom5"
+  ],
+  "schemaFingerprint": "sha256:1262378b9202e1acf04c43e89caf142752400ca1d531ce851db60e3d0cde8b61",
+  "scannedAt": "2026-11-18T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

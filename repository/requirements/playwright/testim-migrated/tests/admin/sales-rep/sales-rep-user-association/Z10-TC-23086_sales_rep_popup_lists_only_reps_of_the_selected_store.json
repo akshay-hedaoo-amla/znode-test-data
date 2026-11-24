@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23086 sales rep popup lists only reps of the selected store",
+  "scenario": {
+    "summary": "With sales reps on store A and store B and a user of store A, the admin opens Manage User with store A selected and opens the Sales Rep popup: only store A's sales rep is listed, store B's is not.",
+    "steps": [
+      "Go to Accounts and Users > Users; search the user of store A (@user.userName) and click Manage.",
+      "Ensure store A is selected in the Store Name dropdown.",
+      "Click the search icon next to Sales Rep; search the popup for @rep.fullName and @repB.fullName."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "None (popup only)."
+    ],
+    "assertions": [
+      "@rep.fullName is listed in the popup",
+      "@repB.fullName is not listed (No records found. when searched)"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23086 (AIO export).",
+      "FSD 'Store Assignment Rules for Sales Rep' and 'Salesrep selection popup': only sales reps of the selected store.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId and no store (optional params from change proposal 7a, analysis.md; pending approval): any other active webstore.",
+      "Sales rep of store B: SALES_REP_OF_STORE with store = @storeB.storeCode (STORE_WEBSTORE_ACTIVE query output storeCode).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeB",
+      "params": {
+        "exceptPortalId": "@storeA.portalId"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repB",
+      "params": {
+        "store": "@storeB.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23086"
+  ],
+  "sources": [
+    {
+      "value": "option:checked",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:78",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:86",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T07:38:32Z"
+}

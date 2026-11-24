@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "entity": "global_settings",
+  "tables": [
+    "dbo.ZnodeGlobalSetting"
+  ],
+  "joins": [],
+  "properties": {
+    "featureName": "dbo.ZnodeGlobalSetting.FeatureName",
+    "featureValue": "dbo.ZnodeGlobalSetting.FeatureValues"
+  },
+  "scope": {},
+  "maskedColumns": [],
+  "schemaFingerprint": "sha256:a04709c5eab179d98796ca1924aca4141bea497b1e0469fe2767aca855cf8e46",
+  "scannedAt": "2026-11-19T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:26:21Z"
+}

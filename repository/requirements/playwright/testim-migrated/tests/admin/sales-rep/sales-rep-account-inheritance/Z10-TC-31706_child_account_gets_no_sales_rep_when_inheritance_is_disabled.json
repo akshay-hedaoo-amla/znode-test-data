@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-inheritance.spec.ts > Admin - Sales Rep > Z10-TC-31706 child account gets no sales rep when inheritance is disabled",
+  "scenario": {
+    "summary": "A parent account with a sales rep and Enable Sales Rep Inheritance = No; the admin creates a child account under it without a sales rep; the child's Sales Rep field stays blank.",
+    "steps": [
+      "Go to Accounts and Users > Accounts; open the parent account (@parent.accountName) and add a child account (name and code made up by the test) without selecting a Sales Rep; save.",
+      "Open Manage Account of the child account; read the Sales Rep field."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user"
+    ],
+    "stateChanges": [
+      "Creates a child account under @parent (created by the test; the test deletes it at the end, before the parent's teardown)."
+    ],
+    "assertions": [
+      "The child account's Sales Rep field is blank (not @rep.fullName)"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31706 (AIO export).",
+      "FSD section 4 and section 5 Scenario 3 (inheritance disabled: no inheritance).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "ACCOUNT_OF_STORE, CHILD_ACCOUNT_OF_ACCOUNT and USER_OF_ACCOUNT are new consumable keys (analysis section 4, pending approval; collections still to build through the account and customer APIs).",
+      "enableSalesRepInheritance = false is set explicitly although No is the default, so the test does not depend on the default.",
+      "The child account is created in the UI by the test (analysis section 3, P2-B), not a need.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "parent",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@rep.userId",
+        "enableSalesRepInheritance": false
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31706"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

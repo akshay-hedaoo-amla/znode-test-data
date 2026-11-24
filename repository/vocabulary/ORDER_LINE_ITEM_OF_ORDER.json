@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_LINE_ITEM_OF_ORDER",
+  "entity": "order",
+  "type": "line_item_of_order",
+  "constraints": {
+    "orderNumber": "{order}"
+  },
+  "scope": {},
+  "usage": "read-only",
+  "description": "A product line (not an add-on) of the given order, with the line item id the returns API expects (ZnodeOrderProduct.OrderProductId). For an order the test created.",
+  "declaredParams": {
+    "order": {
+      "type": "string",
+      "description": "Order number (ZnodeOrder.ClassNumber): link it to the test's created order (@order.orderNumber) Left out (verification only): any order.",
+      "optional": true
+    },
+    "sku": {
+      "type": "string",
+      "optional": true,
+      "description": "SKU of the line (ZnodeOrderProduct.SKU). Left out: any line of the order"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T13:02:38Z"
+}

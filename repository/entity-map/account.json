@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "entity": "account",
+  "tables": [
+    "dbo.ZnodeAccount",
+    "dbo.ZnodePortalAccount",
+    "dbo.ZnodePortal",
+    "dbo.ZnodeAccountGlobalAttributeValue",
+    "dbo.ZnodeAccountGlobalAttributeValueLocale",
+    "dbo.ZnodeGlobalAttribute",
+    "dbo.ZnodeGlobalEntity",
+    "dbo.ZnodeGlobalAttributeGroupMapper",
+    "dbo.ZnodeGlobalAttributeLocale"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeAccount.AccountId",
+      "to": "dbo.ZnodePortalAccount.AccountId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodePortalAccount.PortalId",
+      "to": "dbo.ZnodePortal.PortalId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeAccount.AccountId",
+      "to": "dbo.ZnodeAccountGlobalAttributeValue.AccountId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeAccountGlobalAttributeValue.AccountGlobalAttributeValueId",
+      "to": "dbo.ZnodeAccountGlobalAttributeValueLocale.AccountGlobalAttributeValueId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeAccountGlobalAttributeValue.GlobalAttributeId",
+      "to": "dbo.ZnodeGlobalAttribute.GlobalAttributeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGlobalAttribute.GlobalEntityId",
+      "to": "dbo.ZnodeGlobalEntity.GlobalEntityId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGlobalAttribute.GlobalAttributeId",
+      "to": "dbo.ZnodeGlobalAttributeGroupMapper.GlobalAttributeId",
+      "kind": "left"
+    },
+    {
+      "from": "dbo.ZnodeGlobalAttribute.GlobalAttributeId",
+      "to": "dbo.ZnodeGlobalAttributeLocale.GlobalAttributeId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "accountId": "dbo.ZnodeAccount.AccountId",
+    "accountName": "dbo.ZnodeAccount.Name",
+    "accountCode": "dbo.ZnodeAccount.AccountCode",
+    "parentAccountId": "dbo.ZnodeAccount.ParentAccountId",
+    "salesRepUserId": "dbo.ZnodeAccount.SalesRepId",
+    "isActive": "dbo.ZnodeAccount.IsActive",
+    "store": "dbo.ZnodePortal.StoreCode",
+    "portalId": "dbo.ZnodePortal.PortalId",
+    "attributeCode": "dbo.ZnodeGlobalAttribute.AttributeCode",
+    "attributeValue": "dbo.ZnodeAccountGlobalAttributeValueLocale.AttributeValue",
+    "globalAttributeId": "dbo.ZnodeGlobalAttribute.GlobalAttributeId",
+    "accountCount": "COUNT(DISTINCT dbo.ZnodeAccount.AccountId)"
+  },
+  "scope": {
+    "store": "dbo.ZnodePortal.StoreCode"
+  },
+  "maskedColumns": [
+    "dbo.ZnodeAccount.ExternalId"
+  ],
+  "schemaFingerprint": "sha256:465932cd071f45bccb73cbb02a309cf7eadd66c96620c1a6faf8cb9d4cc01ef9",
+  "scannedAt": "2026-11-19T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

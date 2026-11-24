@@ -2,7 +2,7 @@
   "schemaVersion" : 1,
   "key" : "PROMOTION_AMOUNT_OFF_PRODUCT",
   "spec" : {
-    "file" : "specs/znode-core-api-v1.json",
+    "file" : "specs/multifront-v1.json",
     "operations" : [ "POST /Promotion/Create", "POST /Promotion/Delete" ]
   },
   "create" : {
@@ -87,11 +87,11 @@
     "path" : "/Promotion/Delete",
     "bodyTemplate" : "payloads/PROMOTION_AMOUNT_OFF_PRODUCT.teardown.json"
   },
-  "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-04T14:30:00Z",
+  "specFingerprint" : "sha256:b763756bf7236be09ffb32bf8826564c8055b4b8b7ec6bd46a46510971a9c593",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
   "createdAt" : "2026-11-04T00:00:00Z",
-  "lastValidated" : "2026-11-04T06:52:07Z",
-  "verifiedHash" : "sha256:9c070705168173cb2d5012f0f8b2bae02c305f962013f5e01d54f4ccaf41dc25"
+  "lastValidated" : "2026-11-20T12:51:49Z",
+  "verifiedHash" : "sha256:9154a0506fa8a4d39d059421028dd9ea38723078aa1236c5e75c8cc2a5f43127"
 }

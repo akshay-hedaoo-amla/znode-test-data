@@ -2,7 +2,7 @@
   "schemaVersion" : 1,
   "key" : "COUPON_PERCENT_OFF_CATEGORY",
   "spec" : {
-    "file" : "specs/znode-core-api-v1.json",
+    "file" : "specs/multifront-v1.json",
     "operations" : [ "POST /Promotion/Create", "POST /Promotion/Delete" ]
   },
   "create" : {
@@ -81,10 +81,11 @@
     "path" : "/Promotion/Delete",
     "bodyTemplate" : "payloads/COUPON_PERCENT_OFF_CATEGORY.teardown.json"
   },
-  "specFingerprint" : "sha256:80c23ba40e7af712abb11586b0c868c817e6ded2a5b4f0d6ededbbff67fdb3dc",
-  "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-29T14:30:00Z",
+  "specFingerprint" : "sha256:b763756bf7236be09ffb32bf8826564c8055b4b8b7ec6bd46a46510971a9c593",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
   "createdAt" : "2026-10-29T00:00:00Z",
-  "lastValidated" : "2026-10-29T10:48:58Z"
+  "lastValidated" : "2026-11-20T12:51:14Z",
+  "verifiedHash" : "sha256:18381bd31ab049e8f7a15cfd7abf6843254eb57e11234c2ee3d09e5be911585e"
 }

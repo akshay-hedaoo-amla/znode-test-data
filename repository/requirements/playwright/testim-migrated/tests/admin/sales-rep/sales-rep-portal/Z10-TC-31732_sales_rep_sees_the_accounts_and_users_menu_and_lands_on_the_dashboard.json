@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-portal.spec.ts > Admin - Sales Rep > Z10-TC-31732 sales rep sees the accounts and users menu and lands on the dashboard",
+  "scenario": {
+    "summary": "A sales rep signs in to the admin panel, lands on the Dashboard and sees Accounts & Users (Accounts first, Users second) and OMS (Orders, Quotes, Returns, Pending Orders, Pending Payments, Vouchers); no Customers menu.",
+    "steps": [
+      "Sign in to the admin panel as the sales rep (@rep.userName, @rep.password).",
+      "Check the page shown after sign-in.",
+      "Read the main navigation menu."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "After sign-in the Dashboard is displayed",
+      "The menu has Accounts & Users with Accounts as the first and Users as the second item",
+      "No menu is labelled Customers",
+      "OMS shows Orders, Quotes, Returns, Pending Orders, Pending Payments, Vouchers"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31732 (AIO export).",
+      "FSD section 10 (navigation structure and rules: Customers renamed to Accounts & Users, Accounts first, Users second) and section 11 (Dashboard displayed immediately after login).",
+      "Analysis section 2 and user answer 1 (Dashboard is the landing page, not a menu item).",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (Phase 1 analysis answer 2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "Overlaps Z10-TC-23096 (Phase 1 menu test, updated to the Phase 2 menu); kept separate as its own AIO case."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31732"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

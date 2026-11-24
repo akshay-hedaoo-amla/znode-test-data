@@ -16,10 +16,10 @@
   "identity" : "storeCode",
   "schemaFingerprint" : "sha256:c3a452bdd4e672b7fac2e1314b30908b476bd389b232960a411c061b3dbab926",
   "vocabularyFingerprint" : "sha256:066ab9ae91b2fe250696c1c90fada209b88b8b73c7223f2ce9be172e7237efed",
-  "status": "approved",
-  "approvedBy": "akshay-hedaoo-amla",
-  "approvedAt": "2026-11-12T05:39:00Z",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-12T05:39:00Z",
   "createdAt" : "2026-11-11T00:00:00Z",
-  "lastValidated" : "2026-11-12T05:46:06Z",
+  "lastValidated" : "2026-11-23T07:22:29Z",
   "verifiedHash" : "sha256:1b3e16c888300e5258d6121819d56713a5b7f53f30a6ba271c561a38677d4450"
 }

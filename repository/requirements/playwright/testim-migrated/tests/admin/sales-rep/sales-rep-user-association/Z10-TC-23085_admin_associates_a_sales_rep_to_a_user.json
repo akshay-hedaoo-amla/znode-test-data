@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23085 admin associates a sales rep to a user",
+  "scenario": {
+    "summary": "The admin opens Manage User for a user of store A, opens the Sales Rep popup with the search icon, selects a sales rep of store A, saves and closes, and the sales rep's name shows in the Sales Rep field.",
+    "steps": [
+      "Go to Accounts and Users > Users; search the user (@user.userName) and click Manage.",
+      "Click the search icon next to Sales Rep; in the popup select the sales rep (@rep.fullName).",
+      "Click Save and Close; re-open Manage User."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The user is assigned to the sales rep (both are deleted at teardown)."
+    ],
+    "assertions": [
+      "The Sales Rep field shows @rep.fullName after saving",
+      "Popup helper text 'Showing list of Sales Reps associated with the selected store only.'"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23085 (AIO export).",
+      "FSD 'Assign a Sales Rep to a User' (search icon, popup columns Full Name, Username, Email ID, helper message).",
+      "DOUBT: the helper text differs between the FSD ('Showing list of Sales Reps associated with the selected store only.') and test case 23090 ('The system will display Sales Reps associated with the selected store only.'); read it from the page.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23085"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

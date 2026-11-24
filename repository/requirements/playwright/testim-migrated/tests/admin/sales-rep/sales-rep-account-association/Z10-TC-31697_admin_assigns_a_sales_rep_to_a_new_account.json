@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-association.spec.ts > Admin - Sales Rep > Z10-TC-31697 admin assigns a sales rep to a new account",
+  "scenario": {
+    "summary": "The admin creates a new account on store A, selects the store's sales rep in the Sales Rep lookup and saves; Manage Account shows the account with that sales rep.",
+    "steps": [
+      "Go to Accounts and Users > Accounts > Add Account.",
+      "Fill the required account details (account name and code made up by the test); select store A (@storeA.name).",
+      "Click the Sales Rep search icon, search @rep.fullName and select it; save the account.",
+      "Open Manage Account of the new account."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "Creates an account on store A with Sales Rep @rep (created by the test; the test deletes it at the end)."
+    ],
+    "assertions": [
+      "The account is saved (success message, read from the page)",
+      "Manage Account shows Sales Rep @rep.fullName"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31697 (AIO export).",
+      "FSD section 2 (Add Account: Sales Rep search lookup) and section 3 (the Sales Rep field on Manage Account).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "The new account is a state change of the test (analysis section 3), not a need.",
+      "DOUBT: the save message text is not fixed by the FSD; read it from the page.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31697"
+  ],
+  "sources": [
+    {
+      "value": "data-message",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-account-association.spec.ts:109",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T07:38:32Z"
+}

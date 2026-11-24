@@ -1,0 +1,16 @@
+{
+  "GiftCardId": 0,
+  "PortalId": "{portalId}",
+  "UserId": "{owner?}",
+  "Name": "{runIdTag}{uniqueSuffix}",
+  "CardNumber": "{runIdTag}{uniqueSuffix}",
+  "Amount": "{amount}",
+  "RemainingAmount": "{amount}",
+  "StartDate": "{startDate}",
+  "ExpirationDate": "{expirationDate}",
+  "IsActive": "{isActive}",
+  "IsReferralCommission": false,
+  "RestrictToCustomerAccount": "{restrictToCustomerAccount}",
+  "SendMail": "{sendMail}",
+  "AccountCode": "{accountCode}"
+}

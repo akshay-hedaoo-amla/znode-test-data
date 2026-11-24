@@ -1,0 +1,1656 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Znode Shipping System API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/shippingmanager/v1/shipping-gateway/estimates": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "Get shipping estimates.",
+        "description": "The API endpoint is used to get the shipping estimates.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in recommendation address response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shippingmanager/v1/shipping-gateway/calculate": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "Calculates shipping estimate rates.",
+        "description": "The API endpoint is used to calculate the shipping estimate rates.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in recommendation address response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shippingmanager/v1/shipping-gateway/address/validate": {
+      "post": {
+        "tags": [
+          "ShippingGateway"
+        ],
+        "summary": "Validates and suggests addresses using plugin.",
+        "description": "The API endpoint is used to validate addresses and get recommended addresses from Plugin .",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in address validation response model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "System.Net.HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Znode.Libraries.Abstract.Plugin.Common.ErrorDetails": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel": {
+        "type": "object",
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "productAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.ProductAttributeModel"
+            },
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "width": {
+            "type": "number",
+            "format": "double"
+          },
+          "length": {
+            "type": "number",
+            "format": "double"
+          },
+          "finalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "packagingType": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFreeShipping": {
+            "type": "boolean"
+          },
+          "shippingRuleTypeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shipSeparately": {
+            "type": "boolean"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel": {
+        "type": "object",
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            },
+            "nullable": true
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            },
+            "nullable": true
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            },
+            "nullable": true
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            },
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartRequestModel": {
+        "type": "object",
+        "properties": {
+          "shippingBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "shipSeparatelyItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "shipTogetherItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemRequestModel"
+            },
+            "nullable": true
+          },
+          "portalShippingModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel"
+          },
+          "isValidShippingSetting": {
+            "type": "boolean"
+          },
+          "shippingOriginAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingDestinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingBillingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "orderLevelShipping": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingHandlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "cartNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accountId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartResponseModel": {
+        "type": "object",
+        "properties": {
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingDetailModel"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartItemResponseModel"
+            },
+            "nullable": true
+          },
+          "isValidShippingSetting": {
+            "type": "boolean"
+          },
+          "responseCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderLevelShipping": {
+            "type": "number",
+            "format": "double"
+          },
+          "approximateArrival": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingHandlingCharge": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "childrenFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationSetFieldModel"
+            },
+            "nullable": true
+          },
+          "childrenCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationSetFieldModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCart": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag"
+          },
+          "isValidShippingSetting": {
+            "type": "boolean"
+          },
+          "shippingOriginAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "shippingDestinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "shipTogetherItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "shipSeparatelyItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel"
+          },
+          "portalShippingModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cartNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accountId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem": {
+        "type": "object",
+        "properties": {
+          "groupProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "addonsProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "bundleProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "configurableProductCartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCartItem"
+            },
+            "nullable": true
+          },
+          "productAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.ProductAttributeModel"
+            },
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "width": {
+            "type": "number",
+            "format": "double"
+          },
+          "length": {
+            "type": "number",
+            "format": "double"
+          },
+          "finalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "packagingType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFreeShipping": {
+            "type": "boolean"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginPortalShippingModel": {
+        "type": "object",
+        "properties": {
+          "packageWeightLimit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "portalUnitModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingPortalUnitModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingAddressModel": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accountId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "maxLength": 300,
+            "type": "string",
+            "nullable": true
+          },
+          "countryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "warehouseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCommercial": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingBag": {
+        "type": "object",
+        "properties": {
+          "handlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "handlingBasedOn": {
+            "type": "string",
+            "nullable": true
+          },
+          "calculateShippingPerLineItem": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingDetailModel": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingHandlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "estimateDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "responseMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingPortalUnitModel": {
+        "type": "object",
+        "properties": {
+          "weightUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "dimensionUnit": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingRuleModel": {
+        "type": "object",
+        "properties": {
+          "shippingRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingRuleTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "lowerLimit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "upperLimit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "baseCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "perItemCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingRuleTypeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingRuleTypeCodeLocale": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.ProductAttributeModel": {
+        "type": "object",
+        "properties": {
+          "attributeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributeValue": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Shipping.ShippingCalculateResponse": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail"
+          },
+          "pluginCalculateShippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartResponseModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.Address": {
+        "type": "object",
+        "properties": {
+          "addressId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true
+          },
+          "address3": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.AddressValidation": {
+        "type": "object",
+        "properties": {
+          "addressId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true
+          },
+          "address3": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "cityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "recommendedAddresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.Address"
+            },
+            "nullable": true
+          },
+          "isAddressValid": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.Shipping": {
+        "type": "object",
+        "properties": {
+          "shippingId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingCountryCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingBag": {
+        "type": "object",
+        "properties": {
+          "handlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "handlingBasedOn": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingType": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "calculateShippingPerLineItem": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingCalculatedRate": {
+        "type": "object",
+        "properties": {
+          "shipping": {
+            "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.Shipping"
+          },
+          "shippingCalculateResponse": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.ShippingCalculateResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationRequest": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originalAddresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.Address"
+            },
+            "nullable": true
+          },
+          "includeRecommendedAddress": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerAddressValidationResponse": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressValidationResult": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.AddressValidation"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateRequest": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "customShippingRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingRuleModel"
+            },
+            "nullable": true
+          },
+          "shippingBagList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingBag"
+            },
+            "nullable": true
+          },
+          "shippingPluginConfigurationList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration"
+            },
+            "nullable": true
+          },
+          "shippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginCalculateShippingCartRequestModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerCalculateResponse": {
+        "type": "object",
+        "properties": {
+          "shippingCalculatedRates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingCalculatedRate"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerEstimateRatesResponse": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ZnodeErrorDetail"
+          },
+          "shippingEstimateRate": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginShippingGetEstimateRateModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingManagerEstimatesRequest": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingBagList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingBag"
+            },
+            "nullable": true
+          },
+          "shippingPluginConfigurationList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration"
+            },
+            "nullable": true
+          },
+          "shippingCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginGetEstimateRateShippingCart"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Shipping.Manager.Api.Models.ShippingPluginConfiguration": {
+        "type": "object",
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Shipping.PluginConfigurationModel"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Enter your bearer token in the format: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

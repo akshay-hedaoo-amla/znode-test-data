@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23072 admin creates a sales rep for all stores",
+  "scenario": {
+    "summary": "The admin creates a new sales rep from the Sales Rep listing with only the mandatory fields and All Stores checked, saves and closes, and finds the new sales rep at the top of the listing, assigned to all stores.",
+    "steps": [
+      "On the Sales Rep listing page click Add New.",
+      "Check All Stores; enter a unique username, a valid email, first name and last name (made up by the test, run-ID tagged).",
+      "Click Save and Close."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "A new sales rep (All Stores) is created by the test in the UI; the test deletes it at the end (no collection owns it)."
+    ],
+    "assertions": [
+      "Redirected to the Sales Rep listing page",
+      "The new sales rep is listed first",
+      "The new sales rep is assigned to All Stores"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23072 (AIO export).",
+      "FSD 'Create a Sales Rep' (Add Sales Rep page: All Stores checkbox, Login Information).",
+      "No data need: the sales rep is created by the test (analysis row 23072).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-23072"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

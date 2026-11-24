@@ -1,0 +1,18 @@
+{
+  "EntityValueId": "{accountId}",
+  "EntityType": "{entityType}",
+  "Attributes": [
+    {
+      "GlobalAttributeId": "{inheritanceAttributeId}",
+      "AttributeCode": "{inheritanceAttributeCode}",
+      "AttributeValue": "{enableSalesRepInheritance?}",
+      "LocaleId": "{localeId}"
+    },
+    {
+      "GlobalAttributeId": "{applyAllAttributeId}",
+      "AttributeCode": "{applyAllAttributeCode}",
+      "AttributeValue": "{applySalesRepChangesToAllUsers?}",
+      "LocaleId": "{localeId}"
+    }
+  ]
+}

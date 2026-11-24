@@ -1,0 +1,12 @@
+{
+  "StatusCode": "{returnStatusCode}",
+  "Note": "{runIdTag}{uniqueSuffix}",
+  "ReturnLineItems": [
+    {
+      "LineItemId": "{lineItemId}",
+      "Quantity": "{quantity}",
+      "ReasonCode": "{reasonCode}",
+      "ReasonForReturn": "{runIdTag}{uniqueSuffix}"
+    }
+  ]
+}

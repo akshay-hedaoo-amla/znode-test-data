@@ -1,0 +1,7 @@
+{
+  "ClassNumber": "{cartNumber}",
+  "ShippingDetails": {
+    "AddressId": "{shippingAddressId}",
+    "ShippingId": "{shippingId}"
+  }
+}

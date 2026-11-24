@@ -1,0 +1,56 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ADDRESS_OF_USER",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /Customer/CreateCustomerAddress", "DELETE /WebStoreAccount/DeleteAddress/{addressId}/{userId}" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/Customer/CreateCustomerAddress",
+    "payloadTemplate" : "payloads/ADDRESS_OF_USER.create.json",
+    "inputsFromDb" : { },
+    "constants" : {
+      "firstName" : "Tda",
+      "cityName" : "Columbus",
+      "stateCode" : "OH",
+      "stateName" : "Ohio",
+      "postalCode" : "43215",
+      "countryName" : "US",
+      "phoneNumber" : "5555550100",
+      "isDefault" : true,
+      "isActive" : true
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "field" : "/DisplayName",
+      "format" : "TDA-{runId}-",
+      "property" : "displayName"
+    },
+    "idPointer" : "/Address/AddressId",
+    "outputs" : {
+      "addressId" : {
+        "from" : "response",
+        "pointer" : "/Address/AddressId"
+      },
+      "displayName" : {
+        "from" : "payload",
+        "pointer" : "/DisplayName"
+      }
+    }
+  },
+  "teardown" : {
+    "removedWithOwner" : true
+  },
+  "specFingerprint" : "sha256:3a3f5642fc0ae29dae6deaa9275dd6212fe469acaea77317adaf5803b43c496c",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T13:00:01Z",
+  "createdAt" : "2026-11-20T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:56:17Z",
+  "verifiedHash" : "sha256:6a096ff8a54414e6aaa5d80a8b8525af475b9dd835d51842024e62191375ade5"
+}

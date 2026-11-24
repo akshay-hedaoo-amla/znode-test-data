@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-signed-in.spec.ts > Admin - Sales Rep > Z10-TC-23079 disabled sales rep cannot sign in and enabled sales rep can",
+  "scenario": {
+    "summary": "The admin disables a sales rep's account; the sales rep cannot sign in to admin or webstore. The admin enables it again; the sales rep signs in to both.",
+    "steps": [
+      "Open the sales rep's (@rep.userName) management page; click Disable Account; Save and Close.",
+      "Sign in as the sales rep (@rep.userName, @rep.password) on the admin URL and on the webstore: both refused with the OOB message.",
+      "Re-open the management page; click Enable Account; Save and Close.",
+      "Sign in as the sales rep on admin and webstore: both succeed."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The sales rep is disabled, then enabled again (deleted at teardown)."
+    ],
+    "assertions": [
+      "Disabled: admin and webstore sign-in refused with the OOB message",
+      "Enabled: admin and webstore sign-in succeed"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23079 (AIO export).",
+      "FSD 'Manage an Existing Sales Rep': enabled and unlocked can sign in to admin and webstore; disabled or locked cannot.",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (analysis answer 2).",
+      "The OOB refusal message is not fixed by the FSD (read from the page).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "The enabled rep signs in to the webstore of its own store (storeA.webstoreDomain), not the suite's default WEB_BASE_URL, which points to another environment (user decision 2026-11-19)."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23079"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:28:10Z"
+}

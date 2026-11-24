@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "key": "RETURN_OF_ORDER",
+  "entity": "return_created",
+  "type": "return_of_order",
+  "constraints": {
+    "orderNumber": "{order}",
+    "ownerUserId": "{owner}",
+    "statusCode": "submitted"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Return (RMA) request created for an order the test created (ORDER_OF_USER_REORDERABLE), on a store that allows returns, so it shows in the Returns lists. Deleted at teardown. Story Z10-38546, test Z10-TC-31722.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code of the order (ZnodePortal.StoreCode); the store must allow returns"
+    },
+    "order": {
+      "type": "string",
+      "description": "Order number of the order to return: link it to the test's created order (@order.orderNumber)"
+    },
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId of the order's user (@user.userId)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

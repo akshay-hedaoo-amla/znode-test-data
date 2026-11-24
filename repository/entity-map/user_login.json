@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "entity": "user_login",
+  "tables": [
+    "dbo.AspNetUsers",
+    "dbo.AspNetZnodeUser",
+    "dbo.ZnodeUser",
+    "dbo.ZnodeUserProfile",
+    "dbo.ZnodeUserPortal",
+    "dbo.AspNetUserRoles"
+  ],
+  "joins": [
+    {
+      "from": "dbo.ZnodeUser.AspNetUserId",
+      "to": "dbo.AspNetUsers.Id",
+      "kind": "inner"
+    },
+    {
+      "from": "dbo.AspNetUsers.UserName",
+      "to": "dbo.AspNetZnodeUser.AspNetZnodeUserId",
+      "kind": "left"
+    }
+  ],
+  "properties": {
+    "userId": "dbo.ZnodeUser.UserId",
+    "aspNetUserId": "dbo.AspNetUsers.Id",
+    "loginPortalId": "dbo.AspNetZnodeUser.PortalId",
+    "emailConfirmed": "dbo.AspNetUsers.EmailConfirmed",
+    "lockoutEnabled": "dbo.AspNetUsers.LockoutEnabled",
+    "lockoutEnd": "dbo.AspNetUsers.LockoutEnd",
+    "passwordChangedDate": "dbo.AspNetUsers.PasswordChangedDate"
+  },
+  "scope": {},
+  "maskedColumns": [
+    "dbo.AspNetUsers.Email",
+    "dbo.AspNetUsers.NormalizedEmail",
+    "dbo.AspNetUsers.PasswordHash",
+    "dbo.AspNetUsers.SecurityStamp",
+    "dbo.AspNetUsers.ConcurrencyStamp",
+    "dbo.AspNetUsers.PhoneNumber",
+    "dbo.AspNetZnodeUser.UserName",
+    "dbo.ZnodeUser.UserName",
+    "dbo.ZnodeUser.Email",
+    "dbo.ZnodeUser.FirstName",
+    "dbo.ZnodeUser.LastName",
+    "dbo.ZnodeUser.MiddleName",
+    "dbo.ZnodeUser.PhoneNumber",
+    "dbo.ZnodeUser.CustomerPaymentGUID",
+    "dbo.ZnodeUser.ExternalId",
+    "dbo.ZnodeUser.Custom1",
+    "dbo.ZnodeUser.Custom2",
+    "dbo.ZnodeUser.Custom3",
+    "dbo.ZnodeUser.Custom4",
+    "dbo.ZnodeUser.Custom5"
+  ],
+  "schemaFingerprint": "sha256:e7a3b3ce8477b0a2bb216aecab9e6c9aee97904b491fb5371602f5d9f1a53001",
+  "scannedAt": "2026-11-18T00:00:00Z",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

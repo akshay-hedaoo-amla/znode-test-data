@@ -1,0 +1,92 @@
+{
+  "schemaVersion" : 1,
+  "key" : "SALES_REP_OF_STORE",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /User/CreateAdminUserAccount", "POST /User/DeleteUserAccount" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/User/CreateAdminUserAccount",
+    "payloadTemplate" : "payloads/SALES_REP_OF_STORE.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "domainName" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "domainName",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "roleName" : "Sales Rep",
+      "roleId" : "9BD6B4CD-EBE8-4F59-8136-93E8EF3AC969",
+      "firstName" : "Tda",
+      "isActive" : true,
+      "isAdminUser" : true,
+      "isWebStoreUser" : false,
+      "isGuestUser" : false,
+      "isLock" : false
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "password" : {
+        "kind" : "password",
+        "secret" : true
+      }
+    },
+    "runIdTag" : {
+      "field" : "/UserName",
+      "format" : "TDA-{runId}-",
+      "property" : "userName"
+    },
+    "idPointer" : "/User/UserId",
+    "outputs" : {
+      "userId" : {
+        "from" : "response",
+        "pointer" : "/User/UserId"
+      },
+      "userName" : {
+        "from" : "payload",
+        "pointer" : "/UserName"
+      },
+      "fullName" : {
+        "from" : "response",
+        "pointer" : "/User/FullName"
+      },
+      "email" : {
+        "from" : "payload",
+        "pointer" : "/Email"
+      },
+      "password" : {
+        "from" : "payload",
+        "pointer" : "/User/Password",
+        "secret" : true
+      }
+    },
+    "headers" : {
+      "Znode-DomainName" : "{domainName}"
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/User/DeleteUserAccount",
+    "bodyTemplate" : "payloads/SALES_REP_OF_STORE.teardown.json"
+  },
+  "specFingerprint" : "sha256:096aad46ae66cc2ee7c21f37570a39bc0b020f31f311f811ce4a33f1324bd0d3",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T08:41:27Z",
+  "createdAt" : "2026-11-18T00:00:00Z",
+  "lastValidated" : "2026-11-23T07:53:25Z",
+  "verifiedHash" : "sha256:b574d7ccdada5366518aba89d6e6060c27e98d1ca58bfc73ac7c411b97f207b2"
+}

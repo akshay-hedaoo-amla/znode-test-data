@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "GLOBAL_USER_CREATION_ENABLED",
+  "sql" : "SELECT TOP 1 g.FeatureValues AS enabled FROM dbo.ZnodeGlobalSetting g WHERE g.FeatureName = @featureName ORDER BY g.ZNodeGlobalSettingId",
+  "params" : [ "featureName" ],
+  "constants" : {
+    "featureName" : "AllowGlobalUserCreation"
+  },
+  "outputs" : [ "enabled" ],
+  "identity" : "enabled",
+  "schemaFingerprint" : "sha256:a04709c5eab179d98796ca1924aca4141bea497b1e0469fe2767aca855cf8e46",
+  "vocabularyFingerprint" : "sha256:c09d1a42d4304d9f7cf60cfe68ff16a91401245974302c83ba1e984d0a23e5e2",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-19T06:32:26Z",
+  "createdAt" : "2026-11-19T00:00:00Z",
+  "lastValidated" : "2026-11-23T07:53:52Z",
+  "verifiedHash" : "sha256:a9d7e60693b080727e12bb0936a7be0518423de34a06febadea9f6295923cf0e"
+}

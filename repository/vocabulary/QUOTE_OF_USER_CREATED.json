@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "key": "QUOTE_OF_USER_CREATED",
+  "entity": "quote_created",
+  "type": "created_for_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "statusCode": "submitted"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Quote request (webstore Request a Quote) created for a user the test created, on the store, so it shows in that user's and its sales rep's quote lists. Deleted at teardown. Story Z10-38546, test Z10-TC-31722.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the quote is requested on (ZnodePortal.StoreCode)"
+    },
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId of the user who requests the quote: link it to a created user of the test (@user.userId); the user needs ADDRESS_OF_USER first"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

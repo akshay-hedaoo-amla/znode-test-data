@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-association.spec.ts > Admin - Sales Rep > Z10-TC-31696 sales rep popup on add account lists only reps of the selected store",
+  "scenario": {
+    "summary": "On Add Account, with store A (which has a sales rep) selected the Sales Rep lookup lists store A's sales rep; with a store that has no sales reps selected it lists none.",
+    "steps": [
+      "Go to Accounts and Users > Accounts > Add Account.",
+      "Select store A (@storeA.name) in Store Name; click the Sales Rep search icon; search the popup for @rep.fullName; close the popup.",
+      "Select the store without sales reps (@storeNoReps.name) in Store Name; click the Sales Rep search icon; read the popup list."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "None (the account is not saved)."
+    ],
+    "assertions": [
+      "Store A: @rep.fullName is listed in the popup",
+      "Store without sales reps: the popup lists no sales rep (No records found.)"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31696 (AIO export): precondition (a store with sales reps, a store without), steps 1-8 and expected result.",
+      "FSD section 2 (Add Account: the Sales Rep lookup displays only Sales Reps associated with the selected Store) and section 3 (popup).",
+      "Store without sales reps: STORE_WITHOUT_SALES_REPS (pending), no store param (any such store); its name is the value the test selects.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "Lookup disabled without a store and its validation message are cases Z10-TC-31694 and Z10-TC-31695, not part of this case.",
+      "storeNoReps excludes store A (exceptPortalId = @storeA.portalId): store A gets its rep at run time, so it cannot be the store without reps."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "STORE_WITHOUT_SALES_REPS",
+      "alias": "storeNoReps",
+      "params": {
+        "exceptPortalId": "@storeA.portalId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31696"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-account-association.spec.ts:74",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-account-association.spec.ts:81",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-23T07:37:41Z"
+}

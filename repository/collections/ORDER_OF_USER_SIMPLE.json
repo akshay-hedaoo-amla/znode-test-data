@@ -1,0 +1,167 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ORDER_OF_USER_SIMPLE",
+  "spec" : {
+    "file" : "specs/commerceportal.json",
+    "operations" : [ "POST /commerceapi/v1/carts/items", "PUT /commerceapi/v1/{classType}/update-all-details", "PUT /commerceapi/v1/payments", "PUT /commerceapi/v1/{classType}/{classNumber}/finalize-details", "POST /commerceapi/v1/{classType}/{classNumber}/orders", "DELETE /commerceapi/v1/{classType}/bulk" ]
+  },
+  "create" : {
+    "steps" : [ {
+      "name" : "addToCart",
+      "method" : "POST",
+      "path" : "/commerceapi/v1/carts/items",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_SIMPLE.addToCart.json",
+      "captures" : {
+        "cartNumber" : "/CartNumber"
+      },
+      "undo" : {
+        "method" : "DELETE",
+        "path" : "/commerceapi/v1/{cartClass}/bulk?classNumbers={cartNumber}"
+      }
+    }, {
+      "name" : "setShipping",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/{cartClass}/update-all-details",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_SIMPLE.setShipping.json"
+    }, {
+      "name" : "setPayment",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/payments",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_SIMPLE.setPayment.json"
+    }, {
+      "name" : "finalize",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/finalize-details"
+    }, {
+      "name" : "placeOrder",
+      "method" : "POST",
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/orders",
+      "payloadTemplate" : "payloads/ORDER_OF_USER_SIMPLE.placeOrder.json",
+      "captures" : {
+        "orderNumber" : "/OrderNumber"
+      }
+    } ],
+    "id" : "{orderNumber}",
+    "inputsFromDb" : {
+      "sku" : {
+        "key" : "PRODUCT_SIMPLE_IN_STOCK",
+        "output" : "sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : 1
+        }
+      },
+      "productName" : {
+        "key" : "PRODUCT_SIMPLE_IN_STOCK",
+        "output" : "name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : 1
+        }
+      },
+      "catalogCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "catalogCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "localeCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "localeCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "shippingId" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "shippingId",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "billingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "billingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "shippingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "shippingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "configurationSetCode" : {
+        "key" : "PAYMENT_CONFIGURATION_SET_COD_ON_STORE",
+        "output" : "configurationSetCode",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "cartClass" : "Carts",
+      "publishState" : "Production",
+      "paymentSubTypeCode" : "COD",
+      "quantity" : 1,
+      "orderClass" : "Orders"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "step" : "placeOrder",
+      "field" : "/PaymentDetails/PurchaseOrderNumber",
+      "format" : "TDA-{runId}-",
+      "property" : "purchaseOrderNumber"
+    },
+    "outputs" : {
+      "orderNumber" : {
+        "from" : "value",
+        "name" : "orderNumber"
+      },
+      "sku" : {
+        "from" : "value",
+        "name" : "sku"
+      },
+      "productName" : {
+        "from" : "value",
+        "name" : "productName"
+      },
+      "quantity" : {
+        "from" : "value",
+        "name" : "quantity"
+      },
+      "orderStatus" : {
+        "from" : "response",
+        "step" : "placeOrder",
+        "pointer" : "/OrderStatusCode"
+      }
+    },
+    "headers" : {
+      "Znode-PortalCode" : "{store}",
+      "Znode-LocaleCode" : "{localeCode}",
+      "Znode-PublishState" : "{publishState}",
+      "Znode-UserId" : "{owner}"
+    }
+  },
+  "teardown" : {
+    "method" : "DELETE",
+    "path" : "/commerceapi/v1/{orderClass}/bulk?classNumbers={id}"
+  },
+  "specFingerprint" : "sha256:06463a7edf13bac97b78ad08eb3e781a9c1b47fa74647695dda1c9ff49f2dc1e",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T08:46:57Z",
+  "createdAt" : "2026-11-23T00:00:00Z",
+  "lastValidated" : "2026-11-23T08:46:25Z",
+  "verifiedHash" : "sha256:a624cf6e927d1f6748110dbf087eb2ad51ce7d6ab859a6ea0ae47a315da55c95"
+}

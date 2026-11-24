@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "key": "ADDRESS_OF_USER",
+  "entity": "address_of_user",
+  "type": "default_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "isDefaultBilling": "true",
+    "isDefaultShipping": "true",
+    "isActive": "true"
+  },
+  "scope": {},
+  "usage": "consumable",
+  "description": "Default billing and shipping address created for a user the test created (owner), so ADDRESS_DEFAULT_IDS_OF_USER and the order collection find it. List it before the order. Story Z10-38546, test Z10-TC-31722.",
+  "declaredParams": {
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId the address belongs to: link it to a created user of the test (@user.userId)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

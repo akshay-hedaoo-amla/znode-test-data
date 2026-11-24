@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-signed-in.spec.ts > Admin - Sales Rep > Z10-TC-23106 sales rep users list shows only assigned users",
+  "scenario": {
+    "summary": "A sales rep with one assigned user signs in to admin, opens Customers > Users and sees the assigned user but not a user of the same store who is not assigned to it.",
+    "steps": [
+      "Sign in to the admin panel as the sales rep (@rep.userName, @rep.password).",
+      "Open Customers > Users.",
+      "Search the list for the assigned user (@assigned.userName) and the other user (@other.userName)."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "@assigned.userName is listed",
+      "@other.userName is not listed (No records found. when searched)"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 2 and answers in section 6.",
+      "Test case Z10-TC-23106 (AIO export).",
+      "FSD 'Store Assignment Rules' and the Sales Rep login sections: a sales rep sees only its assigned users.",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (analysis answer 2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_ASSIGNED_TO_SALES_REP",
+      "alias": "assigned",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@rep.userId"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "other",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23106"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-signed-in.spec.ts:164",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T07:38:32Z"
+}

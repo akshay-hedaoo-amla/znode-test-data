@@ -2,7 +2,7 @@
   "schemaVersion" : 1,
   "key" : "BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE",
   "spec" : {
-    "file" : "specs/znode-core-api-v1.json",
+    "file" : "specs/multifront-v1.json",
     "operations" : [ "POST /BlogNews/CreateBlogNews", "POST /BlogNews/PublishBlogNews", "POST /BlogNews/DeleteBlogNews" ]
   },
   "create" : {
@@ -93,11 +93,11 @@
     "path" : "/BlogNews/DeleteBlogNews",
     "bodyTemplate" : "payloads/BLOG_NEWS_FUTURE_ACTIVATION_OF_STORE.teardown.json"
   },
-  "specFingerprint" : "sha256:484d3f0ebfd9f347684f4c4dd1b25992217dbf728348e3d7bfd1e77547874d06",
-  "status": "approved",
-  "approvedBy":"Akshay Hedaoo",
-  "approvedAt": "2026-11-10T14:30:00Z",
+  "specFingerprint" : "sha256:b873861360335f5052985e177563aa9d034b4f45594931a5189eb236f83473cb",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:37Z",
   "createdAt" : "2026-11-10T00:00:00Z",
-  "lastValidated" : "2026-11-10T09:49:05Z",
-  "verifiedHash" : "sha256:0e9799f52010d73a3bec59d400b53fb65f70cee2ee1ace9be441667c7f023016"
+  "lastValidated" : "2026-11-20T12:50:35Z",
+  "verifiedHash" : "sha256:f0c5027ef65f72125999356847f3f44ffeb50a0e5116dfc0f4918815aebcb691"
 }

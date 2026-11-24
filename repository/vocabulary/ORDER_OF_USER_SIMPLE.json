@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "key": "ORDER_OF_USER_SIMPLE",
+  "entity": "order",
+  "type": "simple_of_user",
+  "constraints": {
+    "ownerUserId": "{owner}",
+    "lineProductType": "simple",
+    "orderStateCode": "submitted"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Placed order (COD) of one simple in-stock product for a user the test created, on the store, so it shows in that user's and its sales rep's order lists. The user needs ADDRESS_OF_USER first. Deleted at teardown. Test Z10-TC-31722.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the order is placed on (ZnodePortal.StoreCode)"
+    },
+    "owner": {
+      "type": "integer",
+      "description": "ZnodeUser.UserId of the user who places the order: link it to a created user of the test (@user.userId)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-23T08:46:01Z"
+}

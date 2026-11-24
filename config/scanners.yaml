@@ -215,6 +215,9 @@ migrated:
     - src/test/java/testClasses/webstore/myAccount/OrderTemplateTest.java
     - src/test/java/testClasses/webstore/myAccount/ReturnOrderForGuestUserTest.java
     - src/test/java/testClasses/webstore/myAccount/ReturnOrderForRetailUserTest.java
+    # Phase 6 wave 2, webstore/orderReceipt
+    - src/test/java/testClasses/webstore/orderReceipt/OrderPlaceTests.java
+    - src/test/java/testClasses/webstore/orderReceipt/OrderReceiptTest.java
 
 # Files whose tests keep their JSON test data and get resolved values swapped in at run time (requirement strategy
 # swap; the framework's loadData and tdaSwap fixture are wired once). check-hardcoded covers them too.
@@ -242,3 +245,11 @@ swapped:
     - testim-migrated/tests/webstore/my-account/edit-profile-validate-functionality.spec.ts
     - testim-migrated/tests/webstore/my-account/order-template-validate-functionality.spec.ts
     - testim-migrated/tests/webstore/my-account/review-history-validate-functionality.spec.ts
+
+# New tests from a story are on keys from the start (tda 0.19.0 keysRequired). Pilot: only the new sales rep folder,
+# so no legacy list is needed yet; widen to testim-migrated/tests/** with `tda legacy-list playwright <repo>` later.
+keysRequired:
+  playwright:
+    paths:
+      - testim-migrated/tests/admin/sales-rep/**
+    legacy: []

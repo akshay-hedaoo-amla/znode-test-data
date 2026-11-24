@@ -1,0 +1,6361 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Znode Custom API",
+    "version": "v1"
+  },
+  "paths": {
+    "/GetCallbackPayloads/{callbackActionName}": {
+      "get": {
+        "tags": [
+          "Callback"
+        ],
+        "parameters": [
+          {
+            "name": "callbackActionName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GetAllCallbackPayloads": {
+      "get": {
+        "tags": [
+          "Callback"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SaveCallbackPayloads": {
+      "post": {
+        "tags": [
+          "Callback"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DeleteCallbackPayload/{callbackId}": {
+      "delete": {
+        "tags": [
+          "Callback"
+        ],
+        "parameters": [
+          {
+            "name": "callbackId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trigger-executions/by-callback-action/{callbackAction}": {
+      "get": {
+        "tags": [
+          "Callback"
+        ],
+        "parameters": [
+          {
+            "name": "callbackAction",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchange-libraries/data-exchange-libraries": {
+      "get": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.DataExchangeListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.DataExchangeListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.DataExchangeListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AddSelectedExchangeModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AddSelectedExchangeModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AddSelectedExchangeModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AddSelectedExchangeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/data-exchange-list": {
+      "get": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StandardDataExchangeListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StandardDataExchangeListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StandardDataExchangeListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/data-exchanges/erpId={erpId}": {
+      "delete": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/data-exchanges": {
+      "delete": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/generic-logs": {
+      "get": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorLogListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorLogListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorLogListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/generic-logs/{logId}": {
+      "get": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "parameters": [
+          {
+            "name": "logId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessingLogDetailListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessingLogDetailListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessingLogDetailListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/data-exchanges/copy-exchanges": {
+      "post": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.CopyDataExchangeResponseModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.CopyDataExchangeResponseModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.CopyDataExchangeResponseModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.CopyDataExchangeResponseModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/validate-exchange-code/{exchangeCode}": {
+      "get": {
+        "tags": [
+          "DataExchangeLibrary"
+        ],
+        "parameters": [
+          {
+            "name": "exchangeCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/email-notification-configurations/{portalId}": {
+      "get": {
+        "tags": [
+          "EmailNotification"
+        ],
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/available-exchanges": {
+      "get": {
+        "tags": [
+          "EmailNotification"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AvailableExchangeModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AvailableExchangeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Model.AvailableExchangeModel"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/email-notification-configurations": {
+      "post": {
+        "tags": [
+          "EmailNotification"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/execute-erp-operation": {
+      "post": {
+        "tags": [
+          "ERPProcessor"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseExchangeCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": { }
+            },
+            "application/json": {
+              "schema": { }
+            },
+            "text/json": {
+              "schema": { }
+            },
+            "application/*+json": {
+              "schema": { }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/dataexchanges/erp-task-scheduler/trigger/{erpId}": {
+      "get": {
+        "tags": [
+          "ERPTaskScheduler"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/erp-task-scheduler/enable-disable": {
+      "post": {
+        "tags": [
+          "ERPTaskScheduler"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/custom-data-exchange/input-handler": {
+      "post": {
+        "tags": [
+          "Handler"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/custom-data-exchange/output-handler": {
+      "post": {
+        "tags": [
+          "Handler"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HandlerRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/custom-data-exchange/processor-filename/{erpId}": {
+      "get": {
+        "tags": [
+          "Handler"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StringResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/custom-data-exchange/{erpExchangeCode}/update-processor-log/{logId}": {
+      "put": {
+        "tags": [
+          "Handler"
+        ],
+        "parameters": [
+          {
+            "name": "erpExchangeCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "logId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.UpdateProcessorLogRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.UpdateProcessorLogRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.UpdateProcessorLogRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.UpdateProcessorLogRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/data-exchanges/{id}": {
+      "get": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/base-definitions/{erpId}": {
+      "get": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/base-definitions": {
+      "post": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/configuration-changes/{id}": {
+      "get": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ConfigurationChangeLogListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ConfigurationChangeLogListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ConfigurationChangeLogListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/test-connection/mode={mode}": {
+      "post": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/validate-scheduler-name/{schedulerName}": {
+      "get": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "schedulerName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/base-definitions/{id}": {
+      "put": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/exchanges/processor-file-code": {
+      "post": {
+        "tags": [
+          "ManageDataExchang"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorFileDetailModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{id}": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges": {
+      "post": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseDefinitionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{id}/is-multi-step": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{erpBaseDefinitionId}/transmission-steps": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/transmission-steps/{stepId}": {
+      "put": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "stepId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "stepId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{erpBaseDefinitionId}/reorder-steps": {
+      "post": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/transmission-steps/{stepId}/validate": {
+      "post": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "stepId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{erpBaseDefinitionId}/step-outputs": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{erpBaseDefinitionId}/trigger-execution": {
+      "post": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TriggerExecutionModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TriggerExecutionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TriggerExecutionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TriggerExecutionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/event-assignments": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "eventModule",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/multi-step-exchanges/{erpBaseDefinitionId}/trigger-execution/delete": {
+      "get": {
+        "tags": [
+          "MultiStepDataExchange"
+        ],
+        "parameters": [
+          {
+            "name": "erpBaseDefinitionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dataexchanges/real-time-exchanges": {
+      "post": {
+        "tags": [
+          "RealTimeData"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": { }
+            },
+            "application/json": {
+              "schema": { }
+            },
+            "text/json": {
+              "schema": { }
+            },
+            "application/*+json": {
+              "schema": { }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bulk-data-testing/{csvFileName}": {
+      "get": {
+        "tags": [
+          "RealTimeData"
+        ],
+        "parameters": [
+          {
+            "name": "csvFileName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/dataexchanges/scheduler-list": {
+      "get": {
+        "tags": [
+          "Scheduler"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/delete-scheduler/{schedulerId}": {
+      "delete": {
+        "tags": [
+          "Scheduler"
+        ],
+        "parameters": [
+          {
+            "name": "schedulerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/get-scheduler-details/{schedulerId}": {
+      "get": {
+        "tags": [
+          "Scheduler"
+        ],
+        "parameters": [
+          {
+            "name": "schedulerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/add-scheduler": {
+      "post": {
+        "tags": [
+          "Scheduler"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/active-scheduler-list": {
+      "get": {
+        "tags": [
+          "Scheduler"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationListModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "GetWeatherForecast",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Engine.Api.WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Engine.Api.WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.Engine.Api.WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/yaml/download-sample-file": {
+      "post": {
+        "tags": [
+          "YAMLAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/yaml/details": {
+      "post": {
+        "tags": [
+          "YAMLAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.YAMLSaveRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.YAMLSaveRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.YAMLSaveRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Libraries.Data.Models.YAMLSaveRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/yaml/details/erpId={erpId}": {
+      "get": {
+        "tags": [
+          "YAMLAPI"
+        ],
+        "parameters": [
+          {
+            "name": "erpId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/types": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ImportTypeModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ImportTypeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ImportTypeModel"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/templates/{importType}": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "parameters": [
+          {
+            "name": "importType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportTemplateModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportTemplateModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportTemplateModel"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/families": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/catalogs": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/countries": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/stores": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/promotion-types": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/template-mappings/{templateId}": {
+      "get": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "parameters": [
+          {
+            "name": "templateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/validate": {
+      "post": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataexchanges/znode-import/execute": {
+      "post": {
+        "tags": [
+          "ZnodeImportMultiStep"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.API.Controllers.ZnodeImportExecutionRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.API.Controllers.ZnodeImportExecutionRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.API.Controllers.ZnodeImportExecutionRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.CommerceConnector.API.Controllers.ZnodeImportExecutionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Newtonsoft.Json.Linq.JToken": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+        }
+      },
+      "System.Net.HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Znode.CommerceConnector.API.Controllers.ZnodeImportExecutionRequest": {
+        "type": "object",
+        "properties": {
+          "erpId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "logId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "config": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel"
+          },
+          "previousStepOutput": {
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.AddSelectedExchangeModel": {
+        "type": "object",
+        "properties": {
+          "selectedIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "mediaConfiguration": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+          },
+          "selectedExchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.AvailableExchangeModel": {
+        "type": "object",
+        "properties": {
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.BaseDefinitionModel": {
+        "type": "object",
+        "properties": {
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dataExchangeLibraryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataDestination": {
+            "type": "string",
+            "nullable": true
+          },
+          "originalExchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "triggerOrigin": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "access": {
+            "type": "string",
+            "nullable": true
+          },
+          "library": {
+            "type": "string",
+            "nullable": true
+          },
+          "collection": {
+            "type": "string",
+            "nullable": true
+          },
+          "configurationChangeJsonData": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCustomProcessingRequired": {
+            "type": "boolean"
+          },
+          "processorFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "methodName": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enableRetry": {
+            "type": "boolean"
+          },
+          "maxRetryAttempts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "retryDelayBaseSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enablePipelining": {
+            "type": "boolean"
+          },
+          "transmissionConfigurations": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.TransmissionConfigurationModel"
+          },
+          "statusActivationModel": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StatusActivationModel"
+          },
+          "transmissionSteps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ERPTransmissionStepModel"
+            },
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isMultiStep": {
+            "type": "boolean"
+          },
+          "globalMapperRequestBodyTemplate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.BaseResponse": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.BlobTransmissionConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "blobStorageConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "transmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "bucketName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "secretKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "configurationURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "blobFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "blobFolderPath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ConfigurationChangeLogListModel": {
+        "type": "object",
+        "properties": {
+          "configurationChangeLogList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ConfigurationChangeLogModel"
+            },
+            "nullable": true
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ConfigurationChangeLogModel": {
+        "type": "object",
+        "properties": {
+          "configurationLogID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fieldName": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "newValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "changeDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.CopyDataExchangeResponseModel": {
+        "type": "object",
+        "properties": {
+          "oldErpId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "newExchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "newExchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaConfiguration": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.DataExchangeListModel": {
+        "type": "object",
+        "properties": {
+          "dataModelList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.DataExchangeModel"
+            },
+            "nullable": true
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.DataExchangeModel": {
+        "type": "object",
+        "properties": {
+          "dataExchangeLibraryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "library": {
+            "type": "string",
+            "nullable": true
+          },
+          "collection": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "access": {
+            "type": "string",
+            "nullable": true
+          },
+          "selected": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ERPTransmissionStepModel": {
+        "type": "object",
+        "properties": {
+          "erpTransmissionStepId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stepOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stepName": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "transmissionMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "transmissionConfiguration": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StepTransmissionConfigurationModel"
+          },
+          "mappingConfiguration": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StepMappingConfigurationModel"
+          },
+          "requestBodyConfiguration": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StepRequestBodyConfigurationModel"
+          },
+          "znodeImportConfiguration": {
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "continueOnError": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "stepCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "dependsOnStepCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "conditionField": {
+            "type": "string",
+            "nullable": true
+          },
+          "conditionOperator": {
+            "type": "string",
+            "nullable": true
+          },
+          "conditionValue": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.EmailNotificationMapperListModel": {
+        "type": "object",
+        "properties": {
+          "mappedEmailNotifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.EmailNotificationMapperModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.EmailNotificationMapperModel": {
+        "type": "object",
+        "properties": {
+          "erpDataExchangeStatusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isEmailActive": {
+            "type": "boolean"
+          },
+          "warningNotifications": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorNotifications": {
+            "type": "string",
+            "nullable": true
+          },
+          "informationNotifications": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAddMode": {
+            "type": "boolean"
+          },
+          "isDeleteMode": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.HandlerRequestModel": {
+        "type": "object",
+        "properties": {
+          "erpExchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "erpExchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "webHeaderCollection": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "parsedInputData": {
+            "type": "string",
+            "nullable": true
+          },
+          "inputModel": {
+            "nullable": true
+          },
+          "requestBody": {
+            "nullable": true
+          },
+          "logId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.HttpsTransmissionConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "apiConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "httpAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "endpoint": {
+            "type": "string",
+            "nullable": true
+          },
+          "authenticationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "grantType": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessTokenUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientSecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "scope": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationOfCredentials": {
+            "type": "string",
+            "nullable": true
+          },
+          "transmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "apiUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "queryParams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.KeyValueModel"
+            },
+            "nullable": true
+          },
+          "headerParams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.KeyValueModel"
+            },
+            "nullable": true
+          },
+          "customAuthHeaderParams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.KeyValueModel"
+            },
+            "nullable": true
+          },
+          "paginationParams": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.PaginationParamsModel"
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiRequestType": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiRequestBody": {
+            "type": "string",
+            "nullable": true
+          },
+          "isIterative": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportModel": {
+        "type": "object",
+        "properties": {
+          "importType": {
+            "type": "string",
+            "nullable": true
+          },
+          "importData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "localeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "touchPointName": {
+            "type": "string",
+            "nullable": true
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "importConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "transmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "znodeAPIGatewayURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "znodeAPIKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateType": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importHeadId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "familyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateList": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTemplateListModel"
+          },
+          "importTypeList": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTypeListModel"
+          },
+          "templateMappingList": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTemplateMappingListModel"
+          },
+          "familyList": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportProductFamilyListModel"
+          },
+          "importTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "localeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "templateId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "familyId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isPartialPage": {
+            "type": "boolean"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isAccountAddress": {
+            "type": "boolean"
+          },
+          "isAutoPublish": {
+            "type": "boolean"
+          },
+          "catalogId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "promotionTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "catalogCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "promotionTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportProductFamilyListModel": {
+        "type": "object",
+        "properties": {
+          "familyList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportProductFamilyModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportProductFamilyModel": {
+        "type": "object",
+        "properties": {
+          "pimAttributeFamilyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "familyCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTemplateListModel": {
+        "type": "object",
+        "properties": {
+          "templateList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTemplateModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTemplateMappingListModel": {
+        "type": "object",
+        "properties": {
+          "mappings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTemplateMappingModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTemplateMappingModel": {
+        "type": "object",
+        "properties": {
+          "importTemplateMappingId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "importTemplateId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sourceColumnName": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetColumnName": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isAllowNull": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTemplateModel": {
+        "type": "object",
+        "properties": {
+          "importTemplateId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importHeadId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTypeListModel": {
+        "type": "object",
+        "properties": {
+          "importTypeList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportTypeModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ImportTypeModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "importHeadId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.KeyValueModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.MediaConfigurationModel": {
+        "required": [
+          "server"
+        ],
+        "type": "object",
+        "properties": {
+          "mediaConfigurationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mediaServerMasterId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "server": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "networkUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "secretKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "bucketName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "cdnUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbnailFolderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaServer": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaServerModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.MediaServerModel": {
+        "type": "object",
+        "properties": {
+          "serverName": {
+            "type": "string",
+            "nullable": true
+          },
+          "partialViewName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaServerMasterId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOtherServer": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.PaginationParamsModel": {
+        "type": "object",
+        "properties": {
+          "sizeParams": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.KeyValueModel"
+          },
+          "indexParams": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.KeyValueModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ProcessingLogDetailListModel": {
+        "type": "object",
+        "properties": {
+          "processingLogDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessingLogDetailsModel"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ProcessingLogDetailsModel": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "importDataExchangeLogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importDataExchangeProcessLogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "importLogMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "successRecordCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedRecordcount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalProcessedRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dataExchangeProcessLogType": {
+            "type": "string",
+            "nullable": true
+          },
+          "processStartedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "processCompletedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "statusName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ProcessorFileDetailModel": {
+        "type": "object",
+        "properties": {
+          "processorFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCustomProcessingRequired": {
+            "type": "boolean"
+          },
+          "library": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ProcessorLogListModel": {
+        "type": "object",
+        "properties": {
+          "processorLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ProcessorLogModel"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ProcessorLogModel": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "importDataExchangeProcessLogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "processStartedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "processCompletedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "statusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "importName": {
+            "type": "string",
+            "nullable": true
+          },
+          "successRecordCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedRecordcount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalProcessedRecords": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.SchedulerConfigurationListModel": {
+        "type": "object",
+        "properties": {
+          "schedulerList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SchedulerConfigurationModel"
+            },
+            "nullable": true
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.SchedulerConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "erpBaseDefinitionSchedulerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schedulerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "schedulerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "schedulerFrequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cronExpression": {
+            "type": "string",
+            "nullable": true
+          },
+          "processorFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "hangfireJobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isInstantJob": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "lastRunTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "exeParameters": {
+            "type": "string",
+            "nullable": true
+          },
+          "schedulerCallFor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.SftpTransmissionConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "sftpConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "transmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "serverAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "folderPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "filename": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionAfterRetrieval": {
+            "type": "string",
+            "nullable": true
+          },
+          "portNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StandardDataExchangeListModel": {
+        "type": "object",
+        "properties": {
+          "dataModelList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Model.StandardDataExchangeModel"
+            },
+            "nullable": true
+          },
+          "totalRows": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StandardDataExchangeModel": {
+        "type": "object",
+        "properties": {
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataDestination": {
+            "type": "string",
+            "nullable": true
+          },
+          "triggerOrigin": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true
+          },
+          "access": {
+            "type": "string",
+            "nullable": true
+          },
+          "library": {
+            "type": "string",
+            "nullable": true
+          },
+          "collection": {
+            "type": "string",
+            "nullable": true
+          },
+          "scheduler": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "processorFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastRunTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "integrationType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StatusActivationModel": {
+        "type": "object",
+        "properties": {
+          "statusId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "informationNotification": {
+            "type": "string",
+            "nullable": true
+          },
+          "warningNotification": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorNotification": {
+            "type": "string",
+            "nullable": true
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StepMappingConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "stepMappingConfigurationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpTransmissionStepId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mappingYAML": {
+            "type": "string",
+            "nullable": true
+          },
+          "mappingDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StepRequestBodyConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "stepRequestBodyConfigurationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpTransmissionStepId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestBodyTemplate": {
+            "type": "string",
+            "nullable": true
+          },
+          "headersConfiguration": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+            },
+            "nullable": true
+          },
+          "authenticationConfiguration": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requestBodyTemplateInput": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StepTransmissionConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "stepTransmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpTransmissionStepId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "configurationData": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+            },
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transmissionMode": {
+            "nullable": true
+          },
+          "endpoint": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.StringResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.TransmissionConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "transmissionConfigurationId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "transmissionMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationTransmissionMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "httpsConfig": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HttpsTransmissionConfigurationModel"
+          },
+          "sftpConfig": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SftpTransmissionConfigurationModel"
+          },
+          "blobConfig": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BlobTransmissionConfigurationModel"
+          },
+          "sftpConfigDestination": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.SftpTransmissionConfigurationModel"
+          },
+          "httpsConfigDestination": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.HttpsTransmissionConfigurationModel"
+          },
+          "blobConfigDestination": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.BlobTransmissionConfigurationModel"
+          },
+          "importModel": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.ImportModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.TriggerExecutionModel": {
+        "required": [
+          "triggerExecutionType"
+        ],
+        "type": "object",
+        "properties": {
+          "triggerExecutionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "erpBaseDefinitionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isTriggerEnabled": {
+            "type": "boolean"
+          },
+          "triggerExecutionType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "returnPayloadResponse": {
+            "type": "boolean"
+          },
+          "mapEventModule": {
+            "type": "string",
+            "nullable": true
+          },
+          "mapEventName": {
+            "type": "string",
+            "nullable": true
+          },
+          "callbackAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.TrueFalseResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.UpdateProcessorLogRequestModel": {
+        "type": "object",
+        "properties": {
+          "successRecordCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedRecordCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "logMessage": {
+            "maxLength": 512,
+            "type": "string",
+            "nullable": true
+          },
+          "logType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Model.ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Processor.ImportTypeModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "requiredField": {
+            "type": "string",
+            "nullable": true
+          },
+          "requiresFamilyCode": {
+            "type": "boolean"
+          },
+          "requiresCatalogCode": {
+            "type": "boolean"
+          },
+          "requiresCountryCode": {
+            "type": "boolean"
+          },
+          "requiresStoreCode": {
+            "type": "boolean"
+          },
+          "requiresPromotionType": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Processor.TemplateColumnMapping": {
+        "type": "object",
+        "properties": {
+          "mappingId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "templateId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sourceColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationColumn": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isRequired": {
+            "type": "boolean"
+          },
+          "defaultValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "transformFormula": {
+            "type": "string",
+            "nullable": true
+          },
+          "isMatchingColumn": {
+            "type": "boolean"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxLength": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validationRegex": {
+            "type": "string",
+            "nullable": true
+          },
+          "validationMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Processor.ZnodeImportConfigurationViewModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "transmissionStepId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importType": {
+            "type": "string",
+            "nullable": true
+          },
+          "templateId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "familyId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "familyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "catalogCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "promotionTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "promotionTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "localeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "touchPointName": {
+            "type": "string",
+            "nullable": true
+          },
+          "znodeAPIGatewayURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "znodeAPIKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "columnMappings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "templateMappings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.TemplateColumnMapping"
+            },
+            "nullable": true
+          },
+          "updateExistingRecords": {
+            "type": "boolean"
+          },
+          "batchSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "continueOnError": {
+            "type": "boolean"
+          },
+          "additionalMetadata": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.CommerceConnector.Processor.ZnodeImportTemplateModel": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "templateName": {
+            "type": "string",
+            "nullable": true
+          },
+          "importType": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "columnMappings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.CommerceConnector.Processor.TemplateColumnMapping"
+            },
+            "nullable": true
+          },
+          "updateExistingRecords": {
+            "type": "boolean"
+          },
+          "familyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "catalogCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultLocale": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Engine.Api.WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Data.Models.YAMLSaveRequestModel": {
+        "type": "object",
+        "properties": {
+          "erpId": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataExchangeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileContent": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaConfigurationModel": {
+            "$ref": "#/components/schemas/Znode.CommerceConnector.Model.MediaConfigurationModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Data.Models.ZnodeCallbackRequestResponse": {
+        "required": [
+          "callbackActionName",
+          "createdBy",
+          "createdDate",
+          "modifiedBy",
+          "modifiedDate"
+        ],
+        "type": "object",
+        "properties": {
+          "callbackRequestResponseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "callbackActionName": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string"
+          },
+          "sampleRequestPayload": {
+            "type": "string",
+            "nullable": true
+          },
+          "sampleResponsePayload": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Enter your bearer token in the format: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

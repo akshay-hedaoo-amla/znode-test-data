@@ -1,20 +1,22 @@
 {
   "schemaVersion" : 1,
   "key" : "STORE_WEBSTORE_ACTIVE",
-  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId FROM dbo.ZnodePortal p LEFT JOIN dbo.ZnodeDomain d ON d.PortalId = p.PortalId WHERE d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND p.StoreCode = @store AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode, p.StoreName HAVING COUNT(DISTINCT d.DomainId) >= @minWebstoreDomains ORDER BY p.PortalId",
-  "params" : [ "applicationType", "domainActive", "store", "minWebstoreDomains", "preferred" ],
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId, MIN(d.DomainName) AS domainName, MIN(CASE WHEN d.DomainName NOT LIKE @builderDomainPattern THEN d.DomainName END) AS webstoreDomain FROM dbo.ZnodePortal p LEFT JOIN dbo.ZnodeDomain d ON d.PortalId = p.PortalId WHERE d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND (@store IS NULL OR p.StoreCode = @store) AND (@exceptPortalId IS NULL OR p.PortalId <> @exceptPortalId) AND (@preferred IS NULL OR p.StoreCode = @preferred) GROUP BY p.PortalId, p.StoreCode, p.StoreName HAVING COUNT(DISTINCT d.DomainId) >= @minWebstoreDomains ORDER BY p.PortalId",
+  "params" : [ "applicationType", "domainActive", "store", "exceptPortalId", "minWebstoreDomains", "preferred", "builderDomainPattern" ],
   "constants" : {
     "applicationType" : "WebStore",
     "domainActive" : "1",
-    "minWebstoreDomains" : "1"
+    "minWebstoreDomains" : "1",
+    "builderDomainPattern" : "pagebuilder%"
   },
-  "outputs" : [ "storeCode", "name", "portalId" ],
+  "outputs" : [ "storeCode", "name", "portalId", "domainName", "webstoreDomain" ],
   "identity" : "storeCode",
   "schemaFingerprint" : "sha256:3f707012cb1b858446a48eca5815068dec7d380804b35b635d1a2c257b274798",
+  "vocabularyFingerprint" : "sha256:3149d0a4347929ef21f4232c26592febc32e646c6f69f0c5e7b0e764cd336acb",
   "status" : "approved",
-  "approvedBy" : "Akshay Hedaoo",
-  "approvedAt" : "2026-10-23T14:30:00Z",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-19T06:32:26Z",
   "createdAt" : "2026-10-22T00:00:00Z",
-  "lastValidated" : "2026-11-01T15:11:06Z",
-  "verifiedHash" : "sha256:4ea1d5ed65ab6349202e3f7a68c1e69d91ed97fb5d7758ac3f4ce85d5d2ac252"
+  "lastValidated" : "2026-11-19T06:26:56Z",
+  "verifiedHash" : "sha256:10b1424962e4a0ff0f05a232359ceca11ff6d3f3f61ea478a3a34b1956e6cc0e"
 }

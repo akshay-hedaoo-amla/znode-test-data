@@ -1,0 +1,10 @@
+{
+  "CompanyAccount": {
+    "Name": "{runIdTag}{uniqueSuffix}",
+    "AccountCode": "Tda{uniqueSuffix}",
+    "ParentAccountId": "{parent}",
+    "PortalId": "{portalId}",
+    "SalesRepId": "{rep?}",
+    "LocaleId": "{localeId}"
+  }
+}

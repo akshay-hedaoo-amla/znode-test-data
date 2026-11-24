@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-sync.spec.ts > Admin - Sales Rep > Z10-TC-31709 user of a parent account gets the account sales rep",
+  "scenario": {
+    "summary": "A parent account with a sales rep and a user directly under it with no user-level sales rep; in Accounts and Users > Users the user's effective sales rep is the account's sales rep.",
+    "steps": [
+      "Go to Accounts and Users > Users; search the user (@user.userName) and open Manage User.",
+      "Read the user's Sales Rep."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "The user's Sales Rep is @rep.fullName"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31709 (AIO export).",
+      "FSD section 7 (Users under a Parent Account inherit the Parent Account Sales Rep) and section 8 (precedence).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "ACCOUNT_OF_STORE, CHILD_ACCOUNT_OF_ACCOUNT and USER_OF_ACCOUNT are new consumable keys (analysis section 4, pending approval; collections still to build through the account and customer APIs).",
+      "DOUBT: where the effective Sales Rep is shown (users grid column or Manage User field) is not fixed by the case; read it from the page.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "account",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@rep.userId"
+      }
+    },
+    {
+      "key": "USER_OF_ACCOUNT",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware",
+        "account": "@account.accountId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31709"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "key": "USER_WEBSTORE_ALL_STORES",
+  "entity": "user",
+  "type": "registered_all_stores",
+  "constraints": {
+    "userType": "registered",
+    "isActive": "true",
+    "allStores": "true"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Active registered webstore customer created for All Stores (store scope All Stores), who can sign in on any store. Created per test, deleted at teardown. KB: Managing Users. Story Z10-28590.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code of the user's default store (ZnodePortal.StoreCode); the create call needs a store even for an All Stores user"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

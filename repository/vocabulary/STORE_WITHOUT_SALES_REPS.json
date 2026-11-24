@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "key": "STORE_WITHOUT_SALES_REPS",
+  "entity": "store",
+  "type": "webstore_without_sales_reps",
+  "constraints": {
+    "webstoreDomains": ">= 1",
+    "activeSalesReps": "= 0"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "read-only",
+  "description": "Active webstore store whose Sales Rep lookup lists no sales rep: no unlocked Sales Rep linked to the store or to All Stores (unlocked = AspNetUsers.LockoutEnd IS NULL, as the admin lists it).",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "optional": true,
+      "description": "Store code the tests run on (ZnodePortal.StoreCode). Left out: any store"
+    },
+    "exceptPortalId": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodePortal.PortalId the store must NOT be (link it to the test's other store, e.g. @storeA.portalId). Left out: no exclusion"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-23T07:37:41Z"
+}

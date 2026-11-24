@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "key": "GLOBAL_USER_CREATION_ENABLED",
+  "entity": "global_settings",
+  "type": "global_user_creation",
+  "scope": {},
+  "usage": "read-only",
+  "description": "The environment's global setting AllowGlobalUserCreation (output enabled: True or False). A test that needs an All Stores user reads it and skips with the reason when it is False (user decision 2026-11-19).",
+  "declaredParams": {},
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:32:16Z",
+  "constraints": {
+    "globalSetting": "allow_global_user_creation"
+  }
+}

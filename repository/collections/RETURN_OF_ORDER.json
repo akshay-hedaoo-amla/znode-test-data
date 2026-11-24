@@ -1,0 +1,98 @@
+{
+  "schemaVersion" : 1,
+  "key" : "RETURN_OF_ORDER",
+  "spec" : {
+    "file" : "specs/commerceportal.json",
+    "operations" : [ "POST /commerceapi/v1/returns/{orderNumber}", "DELETE /commerceapi/v1/{classType}/bulk" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/commerceapi/v1/returns/{order}",
+    "payloadTemplate" : "payloads/RETURN_OF_ORDER.create.json",
+    "inputsFromDb" : {
+      "returnStore" : {
+        "key" : "STORE_WEBSTORE_RETURNS_ENABLED",
+        "output" : "storeCode",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "lineItemId" : {
+        "key" : "ORDER_LINE_ITEM_OF_ORDER",
+        "output" : "lineItemId",
+        "params" : {
+          "order" : "{order}"
+        }
+      },
+      "lineSku" : {
+        "key" : "ORDER_LINE_ITEM_OF_ORDER",
+        "output" : "sku",
+        "params" : {
+          "order" : "{order}"
+        }
+      },
+      "localeCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "localeCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      }
+    },
+    "constants" : {
+      "returnClass" : "Returns",
+      "returnStatusCode" : "SUBMITTED",
+      "reasonCode" : "NOTASEXPECTED",
+      "quantity" : 1,
+      "publishState" : "Production"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "field" : "/Note",
+      "format" : "TDA-{runId}-",
+      "property" : "returnNote"
+    },
+    "idPointer" : "/ClassNumber",
+    "outputs" : {
+      "status" : {
+        "from" : "value",
+        "name" : "returnStatusCode"
+      },
+      "sku" : {
+        "from" : "value",
+        "name" : "lineSku"
+      },
+      "quantity" : {
+        "from" : "value",
+        "name" : "quantity"
+      },
+      "reasonCode" : {
+        "from" : "value",
+        "name" : "reasonCode"
+      }
+    },
+    "headers" : {
+      "Znode-PortalCode" : "{returnStore}",
+      "Znode-LocaleCode" : "{localeCode}",
+      "Znode-PublishState" : "{publishState}",
+      "Znode-UserId" : "{owner}"
+    }
+  },
+  "teardown" : {
+    "notRemovable" : true,
+    "owner" : "owner",
+    "reason" : "atstage never deletes a submitted return (only NOTSUBMITTED returns are deletable, and atstage has no such state); user decision 2026-11-23: keep returns every run"
+  },
+  "specFingerprint" : "sha256:f957ff4523412bdc0156905b9b4eb02bf4b2bd882c08c85dd76557ef564e52ca",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T10:43:20Z",
+  "createdAt" : "2026-11-20T00:00:00Z",
+  "lastValidated" : "2026-11-23T09:16:04Z",
+  "verifiedHash" : "sha256:76879cfe951016f5c2dbfa441ccabd17682335dbf42c409df8fde797c35194b4"
+}

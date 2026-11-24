@@ -4,7 +4,8 @@
   "entity": "store",
   "type": "webstore",
   "constraints": {
-    "webstoreDomains": ">= 1"
+    "webstoreDomains": ">= 1",
+    "portalId": "!= {exceptPortalId}"
   },
   "scope": {
     "store": "{store}"
@@ -14,10 +15,16 @@
   "declaredParams": {
     "store": {
       "type": "string",
-      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store"
+      "optional": true,
+      "description": "Store code the tests run on (ZnodePortal.StoreCode); the resolved store must be this store. Left out: any store"
+    },
+    "exceptPortalId": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodePortal.PortalId the store must NOT be (a second active store): link it to the first store (@storeA.portalId). Left out: no exclusion"
     }
   },
   "status": "approved",
-  "approvedBy": "Akshay Hedaoo",
-  "approvedAt": "2026-10-22T14:30:00Z"
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
 }

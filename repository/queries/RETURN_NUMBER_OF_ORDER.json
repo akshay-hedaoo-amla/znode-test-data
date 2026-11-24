@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "RETURN_NUMBER_OF_ORDER",
+  "sql" : "SELECT TOP 10 o.ClassNumber AS returnNumber, os.OrderStateName AS returnStatus, o.OldClassNumber AS orderNumber FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeCPOrderClass oc ON oc.CPOrderClassId = o.ClassId LEFT JOIN dbo.ZnodeOmsOrderState os ON os.OmsOrderStateId = o.OmsOrderStateId WHERE oc.ClassCode = @orderClass AND (@order IS NULL OR o.OldClassNumber = @order) AND (@preferred IS NULL OR o.ClassNumber = @preferred) ORDER BY o.CreatedDate DESC, o.ClassNumber DESC",
+  "params" : [ "order", "preferred", "orderClass" ],
+  "constants" : {
+    "orderClass" : "Returns"
+  },
+  "outputs" : [ "returnNumber", "returnStatus", "orderNumber" ],
+  "identity" : "returnNumber",
+  "schemaFingerprint" : "sha256:9b2d2b7ab84822d04972400e3fa98db3fd4fa92c8f30363fa8c25162028505f3",
+  "vocabularyFingerprint" : "sha256:2c296a96c45764ca4e1a6454cb4dda2ce3db2bbc2a74a6384994c1db026b8031",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T10:43:20Z",
+  "createdAt" : "2026-11-23T00:00:00Z",
+  "lastValidated" : "2026-11-23T10:42:22Z",
+  "verifiedHash" : "sha256:0101d80110b892cd38b960df2f0ef460b36ae9561581d58bed5904a8562df8d6"
+}

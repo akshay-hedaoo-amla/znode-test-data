@@ -1,0 +1,22 @@
+{
+  "schemaVersion" : 1,
+  "key" : "STORE_WITHOUT_SALES_REPS",
+  "sql" : "SELECT TOP 10 p.StoreCode AS storeCode, p.StoreName AS name, p.PortalId AS portalId FROM dbo.ZnodePortal p WHERE EXISTS (SELECT d.DomainId FROM dbo.ZnodeDomain d WHERE d.PortalId = p.PortalId AND d.ApplicationType = @applicationType AND d.IsActive = @domainActive AND d.DomainName NOT LIKE @builderDomainPattern) AND NOT EXISTS (SELECT up.UserPortalId FROM dbo.ZnodeUserPortal up INNER JOIN dbo.ZnodeUser u ON u.UserId = up.UserId INNER JOIN dbo.AspNetUsers au ON au.Id = u.AspNetUserId INNER JOIN dbo.AspNetUserRoles ur ON ur.UserId = au.Id INNER JOIN dbo.AspNetRoles r ON r.Id = ur.RoleId WHERE r.Name = @roleName AND au.LockoutEnd IS NULL AND (up.PortalId = p.PortalId OR up.PortalId IS NULL)) AND (@store IS NULL OR p.StoreCode = @store) AND (@exceptPortalId IS NULL OR p.PortalId <> @exceptPortalId) AND (@preferred IS NULL OR p.StoreCode = @preferred) ORDER BY p.PortalId",
+  "params" : [ "applicationType", "domainActive", "builderDomainPattern", "roleName", "store", "exceptPortalId", "preferred" ],
+  "constants" : {
+    "applicationType" : "WebStore",
+    "domainActive" : "1",
+    "builderDomainPattern" : "pagebuilder%",
+    "roleName" : "Sales Rep"
+  },
+  "outputs" : [ "storeCode", "name", "portalId" ],
+  "identity" : "storeCode",
+  "schemaFingerprint" : "sha256:1cd66425d2080d9f90e08990319b10935c54c0eb06a5d87c9a83a7a178561124",
+  "vocabularyFingerprint" : "sha256:3b269c73ddae8c67a19b119976a61e2fc2c3ce22c63b7b260d4cc38fc54f5156",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T07:39:03Z",
+  "createdAt" : "2026-11-20T00:00:00Z",
+  "lastValidated" : "2026-11-23T07:38:11Z",
+  "verifiedHash" : "sha256:44f9f387ff896fabac1c31913f855dd6bfe9a85547f533a10758becfb3da5053"
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion" : 1,
+  "key" : "CHILD_ACCOUNT_OF_ACCOUNT",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /Account/Create", "POST /Account/Delete" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/Account/Create",
+    "payloadTemplate" : "payloads/CHILD_ACCOUNT_OF_ACCOUNT.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "domainName" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "domainName",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "localeId" : 1
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "field" : "/CompanyAccount/Name",
+      "format" : "TDA-{runId}-",
+      "property" : "accountName"
+    },
+    "idPointer" : "/CompanyDetails/CompanyAccount/AccountId",
+    "outputs" : {
+      "accountId" : {
+        "from" : "response",
+        "pointer" : "/CompanyDetails/CompanyAccount/AccountId"
+      },
+      "accountName" : {
+        "from" : "payload",
+        "pointer" : "/CompanyAccount/Name"
+      },
+      "accountCode" : {
+        "from" : "payload",
+        "pointer" : "/CompanyAccount/AccountCode"
+      },
+      "salesRepUserId" : {
+        "from" : "response",
+        "pointer" : "/CompanyDetails/CompanyAccount/SalesRepId"
+      }
+    },
+    "headers" : {
+      "Znode-DomainName" : "{domainName}"
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/Account/Delete",
+    "bodyTemplate" : "payloads/CHILD_ACCOUNT_OF_ACCOUNT.teardown.json"
+  },
+  "specFingerprint" : "sha256:1ab49471167066cd92aee2c302e4d336ef3490dafab63390f00cb218fec9d87e",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T13:00:01Z",
+  "createdAt" : "2026-11-19T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:56:39Z",
+  "verifiedHash" : "sha256:35639f90cd1022589304c208e47a7583f224e74c23ec07d6c932d78e71efd402"
+}

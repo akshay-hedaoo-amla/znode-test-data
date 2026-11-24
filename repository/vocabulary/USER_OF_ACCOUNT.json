@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "key": "USER_OF_ACCOUNT",
+  "entity": "user",
+  "type": "of_account",
+  "constraints": {
+    "userType": "registered",
+    "isActive": "true",
+    "accountId": "{account}",
+    "salesRepUserId": "{rep}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Active registered customer created directly under the given account of the store, with a password set at creation. Outputs: userId, userName, fullName, email, password (secret). Created per test, deleted at teardown after its account is unlinked. Story Z10-38546.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code of the account (ZnodePortal.StoreCode)"
+    },
+    "account": {
+      "type": "integer",
+      "description": "AccountId the user belongs to directly: link it to the test's account (@account.accountId)"
+    },
+    "rep": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of a user-level Sales Rep set after the account link (override, @repB.userId). Left out: the user takes the account's Sales Rep"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

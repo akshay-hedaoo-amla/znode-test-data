@@ -1,0 +1,19 @@
+{
+  "schemaVersion" : 1,
+  "key" : "ORDER_LINE_ITEM_OF_ORDER",
+  "sql" : "SELECT TOP 10 ol.OrderProductId AS lineItemId, ol.SKU AS sku, ol.Quantity AS quantity, os.OrderStateName AS orderLineItemStatus FROM dbo.ZnodeOrder o INNER JOIN dbo.ZnodeOrderProduct ol ON ol.OrderId = o.OrderId LEFT JOIN dbo.ZnodeOmsOrderState os ON os.OmsOrderStateId = ol.OmsOrderStateId WHERE (@order IS NULL OR o.ClassNumber = @order) AND ol.IsAddOn = @notAddOn AND (@sku IS NULL OR ol.SKU = @sku) AND (@preferred IS NULL OR ol.OrderProductId = @preferred) ORDER BY ol.ProductSequence, ol.SKU",
+  "params" : [ "order", "sku", "preferred", "notAddOn" ],
+  "constants" : {
+    "notAddOn" : "0"
+  },
+  "outputs" : [ "lineItemId", "sku", "quantity", "orderLineItemStatus" ],
+  "identity" : "lineItemId",
+  "schemaFingerprint" : "sha256:1641ab5c497ab567e15a3de62f7b08516dd91457a28afb62237873772f648348",
+  "vocabularyFingerprint" : "sha256:11dce0c03ed32cb43b79b1d53710fe79c461188af38558e96b01e47323927c39",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T13:02:49Z",
+  "createdAt" : "2026-11-20T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:58:50Z",
+  "verifiedHash" : "sha256:12b824c81695b19a0036889c7c0abc249d1b80e89de31ba75be567dcbf751867"
+}

@@ -1,0 +1,1788 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Znode Enterprise SSO API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/sso/audit-logs": {
+      "get": {
+        "tags": [
+          "SsoAuditLogs"
+        ],
+        "summary": "Get the SSO audit logs.",
+        "description": "The API endpoint is used to get the SSO audit trail (sign-in events and configuration changes) as a paged list, filtered by provider, event types, status, user email, correlation id and date range. The page index is raised to at least 1 and the page size is limited to the allowed maximum.",
+        "parameters": [
+          {
+            "name": "SsoProviderId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "EventTypes",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SsoAuditEventType"
+              }
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SsoAuditStatus"
+            }
+          },
+          {
+            "name": "UserEmail",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "CorrelationId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "FromUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "ToUtc",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "PageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in PagedResponse<SsoAuditEventDto> model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoAuditEventDtoPagedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The query string contains invalid values. The response body contains the validation errors.)"
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/authentication/login-experience": {
+      "get": {
+        "tags": [
+          "SsoAuthentication"
+        ],
+        "summary": "Get the login experience of the Znode Admin login page.",
+        "description": "The API endpoint is used to get the active Admin-scope SSO providers, sorted by display name, that are shown as sign-in buttons, and whether the local login form is hidden. Local login is hidden only when Enforce SSO is on and at least one provider is active.",
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoLoginExperienceDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoLoginExperienceDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/authentication/events": {
+      "post": {
+        "tags": [
+          "SsoAuthentication"
+        ],
+        "summary": "Record an SSO sign-in event.",
+        "description": "The API endpoint is used to write a sign-in lifecycle event to the SSO audit log. Only ChallengeIssued, LoginSucceeded, LoginFailed, LogoutInitiated and LogoutCompleted are accepted; LoginSucceeded also updates the last successful login time of the provider.",
+        "requestBody": {
+          "description": "model with the sign-in event",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoLoginEventRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoLoginEventRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoLoginEventRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)"
+          },
+          "400": {
+            "description": "Bad Request(The event type is not a sign-in event, or the request contain invalid Data. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/authentication/user-activity": {
+      "post": {
+        "tags": [
+          "SsoAuthentication"
+        ],
+        "summary": "Writes an SSO login, failed login or logout to the Znode User Activity Log (Reports API / Power BI).",
+        "description": "The API endpoint is used to write an SSO login, failed login or logout to the Znode User Activity Log. EventName is the mandatory input; when EventDateTime is not sent the current UTC time is used.",
+        "requestBody": {
+          "description": "model with the user activity",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoUserActivityLogRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoUserActivityLogRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoUserActivityLogRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)"
+          },
+          "400": {
+            "description": "Bad Request(EventName is missing, or the request contain invalid Data. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity(The user activity could not be saved. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/providers": {
+      "get": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Get the list of SSO providers.",
+        "description": "The API endpoint is used to get all SSO provider configurations of the Admin scope, whatever their status. Each item contains the OIDC or SAML 2.0 settings of the provider; the client secret and its reference are never returned, only HasClientSecret.",
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in List of SsoProviderDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SsoProviderDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Create an SSO provider.",
+        "description": "The API endpoint is used to create a new Admin-scope SSO provider configuration. The request is validated, default scopes are applied and a URL-safe provider key is generated from DisplayName. An OpenID Connect provider needs a client secret: the plain ClientSecret is protected with the SSO key ring and only its reference is stored.",
+        "requestBody": {
+          "description": "model with the SSO provider configuration",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created(Indicates that the request is successfully executed and the response body return the data in SsoProviderDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoProviderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The provider configuration is invalid. The response body contains the validation errors in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/providers/{id}": {
+      "get": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Get an SSO provider by ID.",
+        "description": "The API endpoint is used to get a single SSO provider configuration by its ID, whatever its status.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "SSO provider ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoProviderDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoProviderDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found(The SSO provider does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Update an SSO provider.",
+        "description": "The API endpoint is used to update an existing SSO provider configuration with the full configuration sent. Provider key, protocol, provider type and scope cannot be changed, and Enforce SSO is turned off when the last active provider is deactivated. A new plain ClientSecret is protected and replaces the stored one; without it the stored client secret is kept.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "SSO provider ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the SSO provider configuration",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoProviderDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoProviderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The provider configuration is invalid. The response body contains the validation errors in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found(The SSO provider does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Delete an SSO provider.",
+        "description": "The API endpoint is used to permanently delete an SSO provider configuration and the external-login links stored for its provider key. Active providers can be deleted too; deleting the last active provider turns Enforce SSO off.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "SSO provider ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)"
+          },
+          "404": {
+            "description": "Not Found(The SSO provider does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/providers/{id}/status": {
+      "put": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Change the status of an SSO provider.",
+        "description": "The API endpoint is used to activate or deactivate an SSO provider. The stored configuration is validated before activation, setting the current status returns the unchanged provider, and deactivating the last active provider turns Enforce SSO off.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "SSO provider ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the new status",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSsoProviderStatusRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSsoProviderStatusRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSsoProviderStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoProviderDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoProviderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The stored configuration is invalid and the provider cannot be activated, or the request contain invalid Data. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found(The SSO provider does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/providers/{id}/test-connection": {
+      "post": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Test the connection of a saved SSO provider.",
+        "description": "The API endpoint is used to test the connection to the identity provider with the stored configuration of the provider. The protocol settings are validated first, for OpenID Connect the Client ID and the stored client secret are checked at the token endpoint, and the test result is written to the audit log.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "SSO provider ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoConnectionTestResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoConnectionTestResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found(The SSO provider does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The stored protocol settings of the provider are invalid. The response body contains the validation errors in SsoErrorResponse model.)"
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/providers/test-connection": {
+      "post": {
+        "tags": [
+          "SsoProviders"
+        ],
+        "summary": "Test the connection of an unsaved SSO provider.",
+        "description": "The API endpoint is used to test an SSO provider configuration before it is saved. Only the protocol settings are validated, nothing is stored and the test result is written to the audit log. For OpenID Connect the Client ID and the entered ClientSecret are checked at the token endpoint; when providerId is sent and no secret is entered, the stored client secret of that provider is used.",
+        "parameters": [
+          {
+            "name": "providerId",
+            "in": "query",
+            "description": "Provider being edited, whose stored client secret is used when no new one is entered.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the SSO provider configuration",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSsoProviderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoConnectionTestResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoConnectionTestResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(The protocol settings are invalid. The response body contains the validation errors in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found(The provider sent as providerId does not exist. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/settings": {
+      "get": {
+        "tags": [
+          "SsoSettings"
+        ],
+        "summary": "Get the global SSO settings.",
+        "description": "The API endpoint is used to get the global (Admin scope) SSO settings, Enforce SSO and Auto-link users by email. Default values are returned when no settings are saved yet.",
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoSettingsDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoSettingsDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SsoSettings"
+        ],
+        "summary": "Save the global SSO settings.",
+        "description": "The API endpoint is used to save the global (Admin scope) SSO settings and write the change to the audit log. EnforceSso can be turned on only when at least one SSO provider is active.",
+        "requestBody": {
+          "description": "model with the SSO settings",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoSettingsDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoSettingsDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SsoSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK(Indicates that the request is successfully executed and the response body return the data in SsoSettingsDto model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoSettingsDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(EnforceSso is on but no SSO provider is active, or the request contain invalid Data. The response body contains the error in SsoErrorResponse model.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SsoErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized(The gateway credential (Authorization: Basic) is missing or invalid.)"
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)"
+          }
+        }
+      }
+    },
+    "/api/sso/v1/authentication/{providerKey}/sign-in": {
+      "post": {
+        "tags": [
+          "SsoSignIn"
+        ],
+        "summary": "Start an SSO sign-in.",
+        "description": "The API endpoint is used to build the redirect to the identity provider of an active provider and the protected sign-in state the host keeps in a browser-bound cookie until the callback. A provider that is unknown, inactive or cannot be reached returns status 200 with Succeeded set to false and the reason to show on the login page.",
+        "parameters": [
+          {
+            "name": "providerKey",
+            "in": "path",
+            "description": "Key of the SSO provider.",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the public origin of the host and the local return URL",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignInRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignInRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignInRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Indicates that the request is successfully executed and the response body contains the data in StartSsoSignInResponse model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartSsoSignInResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "PublicOrigin or ReturnUrl is not valid. The response body contains the error in ZnodeErrorDetail model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The gateway credential (Authorization: Basic) is missing or invalid."
+          },
+          "500": {
+            "description": "Indicates that an error occurred on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sso/v1/authentication/{providerKey}/sign-in/complete": {
+      "post": {
+        "tags": [
+          "SsoSignIn"
+        ],
+        "summary": "Complete an SSO sign-in.",
+        "description": "The API endpoint is used to validate the identity provider callback (OpenID Connect code, state and error, or the SAML response) against the sign-in state, and to resolve the Znode admin user. A rejected response or an unmatched user returns status 200 with Succeeded set to false and the reason to show on the login page.",
+        "parameters": [
+          {
+            "name": "providerKey",
+            "in": "path",
+            "description": "Key of the SSO provider the callback came from.",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the sign-in state and the values the identity provider sent",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteSsoSignInRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteSsoSignInRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteSsoSignInRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Indicates that the request is successfully executed and the response body contains the data in CompleteSsoSignInResponse model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompleteSsoSignInResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "SignInState is missing or the request contains invalid data. The response body contains the error in ZnodeErrorDetail model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The gateway credential (Authorization: Basic) is missing or invalid."
+          },
+          "500": {
+            "description": "Indicates that an error occurred on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sso/v1/authentication/{providerKey}/sign-out": {
+      "post": {
+        "tags": [
+          "SsoSignIn"
+        ],
+        "summary": "Start the single logout of the identity provider.",
+        "description": "The API endpoint is used after the host has ended its own session. It returns the single logout URL of the identity provider, or a null RedirectUrl when only a local sign-out is possible (no end-session or SLO endpoint, or no SAML session details).",
+        "parameters": [
+          {
+            "name": "providerKey",
+            "in": "path",
+            "description": "Key of the SSO provider the session signed in with.",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 0,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "model with the public origin of the host and the logout state kept at sign-in",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignOutRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignOutRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSsoSignOutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Indicates that the request is successfully executed and the response body contains the data in StartSsoSignOutResponse model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartSsoSignOutResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "PublicOrigin is not valid. The response body contains the error in ZnodeErrorDetail model.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The gateway credential (Authorization: Basic) is missing or invalid."
+          },
+          "500": {
+            "description": "Indicates that an error occurred on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CompleteSsoSignInRequest": {
+        "required": [
+          "signInState"
+        ],
+        "type": "object",
+        "properties": {
+          "signInState": {
+            "maxLength": 8192,
+            "minLength": 0,
+            "type": "string"
+          },
+          "code": {
+            "maxLength": 4096,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "error": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "errorDescription": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "samlResponse": {
+            "maxLength": 524288,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompleteSsoSignInResponse": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "returnUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/SsoUserResolutionOutcome"
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "rejectedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoutState": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "OidcSettingsDto": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientSecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasClientSecret": {
+            "type": "boolean"
+          },
+          "metadataAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "scopes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Saml2SettingsDto": {
+        "type": "object",
+        "properties": {
+          "idpEntityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "idpSsoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "idpSloUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "idpSigningCertificate": {
+            "type": "string",
+            "nullable": true
+          },
+          "spEntityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "acsPath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SaveSsoProviderRequest": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerType": {
+            "$ref": "#/components/schemas/SsoProviderType"
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/SsoProtocol"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SsoProviderStatus"
+          },
+          "oidc": {
+            "$ref": "#/components/schemas/OidcSettingsDto"
+          },
+          "saml2": {
+            "$ref": "#/components/schemas/Saml2SettingsDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetSsoProviderStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/SsoProviderStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoAuditEventDto": {
+        "type": "object",
+        "properties": {
+          "ssoAuditLogId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "timestampUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ssoProviderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "providerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/SsoAuditEventType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SsoAuditStatus"
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoAuditEventDtoPagedResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SsoAuditEventDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoAuditEventType": {
+        "enum": [
+          "ChallengeIssued",
+          "LoginSucceeded",
+          "LoginFailed",
+          "UserLinked",
+          "LogoutInitiated",
+          "LogoutCompleted",
+          "ProviderCreated",
+          "ProviderUpdated",
+          "ProviderDeleted",
+          "ProviderActivated",
+          "ProviderDeactivated",
+          "ConnectionTested",
+          "SettingsChanged"
+        ],
+        "type": "string"
+      },
+      "SsoAuditStatus": {
+        "enum": [
+          "Info",
+          "Success",
+          "Failure"
+        ],
+        "type": "string"
+      },
+      "SsoConnectionTestResponse": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SsoFieldError"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoFieldError": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoLoginEventRequest": {
+        "type": "object",
+        "properties": {
+          "providerKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/SsoAuditEventType"
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoLoginExperienceDto": {
+        "type": "object",
+        "properties": {
+          "localLoginDisabled": {
+            "type": "boolean"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SsoLoginOptionDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoLoginOptionDto": {
+        "type": "object",
+        "properties": {
+          "providerKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerType": {
+            "$ref": "#/components/schemas/SsoProviderType"
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/SsoProtocol"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoProtocol": {
+        "enum": [
+          "OpenIdConnect",
+          "Saml2"
+        ],
+        "type": "string"
+      },
+      "SsoProviderDto": {
+        "type": "object",
+        "properties": {
+          "ssoProviderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "providerKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerType": {
+            "$ref": "#/components/schemas/SsoProviderType"
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/SsoProtocol"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SsoProviderStatus"
+          },
+          "lastSuccessfulLoginUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "oidc": {
+            "$ref": "#/components/schemas/OidcSettingsDto"
+          },
+          "saml2": {
+            "$ref": "#/components/schemas/Saml2SettingsDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoProviderStatus": {
+        "enum": [
+          "Active",
+          "Inactive"
+        ],
+        "type": "string"
+      },
+      "SsoProviderType": {
+        "enum": [
+          "Custom",
+          "EntraId",
+          "Okta",
+          "PingIdentity",
+          "Adfs"
+        ],
+        "type": "string"
+      },
+      "SsoSettingsDto": {
+        "type": "object",
+        "properties": {
+          "autoLinkUsersByEmail": {
+            "type": "boolean"
+          },
+          "enforceSso": {
+            "type": "boolean"
+          },
+          "modifiedDateUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoUserActivityLogRequest": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "roleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "storeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "applicationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "activityStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "activityError": {
+            "type": "string",
+            "nullable": true
+          },
+          "referrerUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "device": {
+            "type": "string",
+            "nullable": true
+          },
+          "browser": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityType": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SsoUserResolutionOutcome": {
+        "enum": [
+          "Linked",
+          "AutoLinked",
+          "UserNotFound",
+          "UserNotAllowed",
+          "InvalidIdentity"
+        ],
+        "type": "string"
+      },
+      "StartSsoSignInRequest": {
+        "required": [
+          "publicOrigin"
+        ],
+        "type": "object",
+        "properties": {
+          "publicOrigin": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string"
+          },
+          "returnUrl": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartSsoSignInResponse": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "redirectUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "signInState": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartSsoSignOutRequest": {
+        "required": [
+          "publicOrigin"
+        ],
+        "type": "object",
+        "properties": {
+          "publicOrigin": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string"
+          },
+          "logoutState": {
+            "maxLength": 8192,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartSsoSignOutResponse": {
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "redirectUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "GatewayCredential": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "security": [
+    {
+      "GatewayCredential": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "SsoAuditLogs"
+    },
+    {
+      "name": "SsoAuthentication"
+    },
+    {
+      "name": "SsoProviders"
+    },
+    {
+      "name": "SsoSettings"
+    },
+    {
+      "name": "SsoSignIn"
+    }
+  ]
+}

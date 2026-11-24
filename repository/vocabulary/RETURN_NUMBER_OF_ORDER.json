@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "key": "RETURN_NUMBER_OF_ORDER",
+  "entity": "order",
+  "type": "return_number_of_order",
+  "constraints": {
+    "orderNumber": "{order}"
+  },
+  "scope": {},
+  "usage": "read-only",
+  "description": "Number and status of a return (RMA) created for the given order (a ZnodeOrder row of class Returns whose OldClassNumber is the source order), newest first. The create response carries no return number.",
+  "declaredParams": {
+    "order": {
+      "type": "string",
+      "optional": true,
+      "description": "Number of the source order (ZnodeOrder.ClassNumber of the order that was returned): link it to the test's created order (@order.orderNumber). Left out: any return"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-23T09:17:53Z"
+}

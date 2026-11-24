@@ -1,0 +1,184 @@
+{
+  "schemaVersion" : 1,
+  "key" : "QUOTE_OF_USER_CREATED",
+  "spec" : {
+    "file" : "specs/commerceportal.json",
+    "operations" : [ "POST /commerceapi/v1/carts/items", "PUT /commerceapi/v1/{classType}/update-all-details", "PUT /commerceapi/v1/payments", "PUT /commerceapi/v1/{classType}/{classNumber}/finalize-details", "POST /commerceapi/v1/{classType}/empty-class", "PUT /commerceapi/v1/{classType}/{classNumber}/convert/{targetClassType}", "DELETE /commerceapi/v1/{classType}/bulk" ]
+  },
+  "create" : {
+    "steps" : [ {
+      "name" : "addToCart",
+      "method" : "POST",
+      "path" : "/commerceapi/v1/carts/items",
+      "payloadTemplate" : "payloads/QUOTE_OF_USER_CREATED.addToCart.json",
+      "captures" : {
+        "cartNumber" : "/CartNumber"
+      },
+      "undo" : {
+        "method" : "DELETE",
+        "path" : "/commerceapi/v1/{cartClass}/bulk?classNumbers={cartNumber}"
+      }
+    }, {
+      "name" : "setShipping",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/{cartClass}/update-all-details",
+      "payloadTemplate" : "payloads/QUOTE_OF_USER_CREATED.setShipping.json"
+    }, {
+      "name" : "setBilling",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/payments",
+      "payloadTemplate" : "payloads/QUOTE_OF_USER_CREATED.setBilling.json"
+    }, {
+      "name" : "finalize",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/finalize-details"
+    }, {
+      "name" : "createQuote",
+      "method" : "POST",
+      "path" : "/commerceapi/v1/{quoteClass}/empty-class",
+      "payloadTemplate" : "payloads/QUOTE_OF_USER_CREATED.createQuote.json",
+      "captures" : {
+        "quoteNumber" : "/ClassNumber"
+      },
+      "undo" : {
+        "method" : "DELETE",
+        "path" : "/commerceapi/v1/{quoteClass}/bulk?classNumbers={quoteNumber}"
+      }
+    }, {
+      "name" : "requestQuote",
+      "method" : "PUT",
+      "path" : "/commerceapi/v1/{cartClass}/{cartNumber}/convert/{quoteClass}",
+      "payloadTemplate" : "payloads/QUOTE_OF_USER_CREATED.requestQuote.json"
+    } ],
+    "id" : "{quoteNumber}",
+    "inputsFromDb" : {
+      "quoteStore" : {
+        "key" : "STORE_WEBSTORE_QUOTE_REQUESTS_ENABLED",
+        "output" : "storeCode",
+        "params" : {
+          "store" : "{store}"
+        }
+      },
+      "sku" : {
+        "key" : "PRODUCT_SIMPLE_IN_STOCK",
+        "output" : "sku",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : 1
+        }
+      },
+      "productName" : {
+        "key" : "PRODUCT_SIMPLE_IN_STOCK",
+        "output" : "name",
+        "params" : {
+          "store" : "{store}",
+          "quantityUsed" : 1
+        }
+      },
+      "catalogCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "catalogCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "localeCode" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "localeCode",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "shippingId" : {
+        "key" : "STORE_CHECKOUT_CONTEXT",
+        "output" : "shippingId",
+        "params" : {
+          "store" : "{store}",
+          "shippingCode" : "FLAT"
+        }
+      },
+      "billingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "billingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "shippingAddressId" : {
+        "key" : "ADDRESS_DEFAULT_IDS_OF_USER",
+        "output" : "shippingAddressId",
+        "params" : {
+          "owner" : "{owner}"
+        }
+      },
+      "configurationSetCode" : {
+        "key" : "PAYMENT_CONFIGURATION_SET_COD_ON_STORE",
+        "output" : "configurationSetCode",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "cartClass" : "Carts",
+      "quoteClass" : "Quotes",
+      "publishState" : "Production",
+      "paymentSubTypeCode" : "COD",
+      "quantity" : 1,
+      "origin" : "Webstore"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      }
+    },
+    "runIdTag" : {
+      "step" : "requestQuote",
+      "field" : "/AdditionalInstructions/Name",
+      "format" : "TDA-{runId}-",
+      "property" : "jobName"
+    },
+    "outputs" : {
+      "quoteNumber" : {
+        "from" : "value",
+        "name" : "quoteNumber"
+      },
+      "sku" : {
+        "from" : "value",
+        "name" : "sku"
+      },
+      "productName" : {
+        "from" : "value",
+        "name" : "productName"
+      },
+      "quantity" : {
+        "from" : "value",
+        "name" : "quantity"
+      },
+      "jobName" : {
+        "from" : "payload",
+        "step" : "requestQuote",
+        "pointer" : "/AdditionalInstructions/Name"
+      }
+    },
+    "headers" : {
+      "Znode-PortalCode" : "{quoteStore}",
+      "Znode-LocaleCode" : "{localeCode}",
+      "Znode-PublishState" : "{publishState}",
+      "Znode-UserId" : "{owner}"
+    }
+  },
+  "teardown" : {
+    "method" : "DELETE",
+    "path" : "/commerceapi/v1/{quoteClass}/bulk?classNumbers={id}"
+  },
+  "specFingerprint" : "sha256:8c4588319ade38753c292a87f5d6467c26db5481df382b2d0da4f6b13159c08b",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-23T07:39:03Z",
+  "createdAt" : "2026-11-20T00:00:00Z",
+  "lastValidated" : "2026-11-23T07:38:22Z",
+  "verifiedHash" : "sha256:c9c66dfc45349970ae4d0003746e19b64e5f19f7649f7b8fc1db4c20de0e0fae"
+}

@@ -1,0 +1,4698 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Znode Custom Table API",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/custom-tables": {
+      "get": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Retrieve the custom table list.",
+        "description": "The API endpoint is used to retrieve the custom tables list. It is intended to be a flexible endpoint that allows for filtering, sorting, and pagination of the results.",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "A collection of filters to apply when retrieving the custom table list.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Znode.Libraries.Abstract.Helper.FilterTuple"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting determines whether the records are to be sorted in ascending or descending order based on the tablekey.",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in CustomTableDetailListResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Creates new Custom Table.",
+        "requestBody": {
+          "description": "The model containing the custom table data.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableDetailRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableDetailRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableDetailRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableDetailRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created (Indicates that the request is successfully executed and the response body return the data in CustomTableDetailResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: An error occurred on the server.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-tables/{tableKey}": {
+      "put": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Updates a CustomTable.",
+        "description": "This API allows the modification of the table key and table name for a specific CustonTable in the database.\nBased on the provided tableID, the API updates the corresponding tableKey and table name.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "CustomTable details model",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableRequestModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created (Indicates that the request is successfully executed and the response body return the data in CustomTableDetailResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: An error occurred on the server.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Retrieves the details of a specific table based on the provided table key.",
+        "description": "This API is used to fetch table details dynamically using the unique table key.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-tables/{tableKeys}": {
+      "delete": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Deletes Custom Table.",
+        "description": "This API endpoint Deletes the associated Custom Table.",
+        "parameters": [
+          {
+            "name": "tableKeys",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][A-Za-z0-9]*(?:,[A-Za-z][A-Za-z0-9]*)*$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in ProfilesListResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-tables/bulk-delete": {
+      "post": {
+        "tags": [
+          "CustomTable"
+        ],
+        "summary": "Deletes Custom Tables based on request model.",
+        "requestBody": {
+          "description": "Delete custom table request model.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body contains the requested data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request(Indicates that the request model is invalid.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Multi-Status",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-tables/{tableKey}/record-exists": {
+      "get": {
+        "tags": [
+          "CustomTable"
+        ],
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/records": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Retrieve the custom table data list.",
+        "description": "The API endpoint is used to retrieve the custom table data list. It is intended to be a flexible endpoint that allows for filtering, sorting, and pagination of the results.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "A collection of filters to apply when retrieving the custom table list.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Znode.Libraries.Abstract.Helper.FilterTuple"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting determines whether the records are to be sorted in ascending or descending order based on the tablekey.",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "When the record count is high, utilizing pagination enables the retrieval of a specific range of records.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of items to be displayed per page in paginated within paginated results.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/{rowId}": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "gets a Custom Table Data based on the provided rowId.",
+        "description": "This API allows get a Custom Table Data using it's rowId",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "description": "Unique Table data row id.",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Deletes a Custom Table Data based on the provided rowId.",
+        "description": "This API allows deletion a Custom Table Data using it's rowId",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "description": "Unique Table data row id.",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data": {
+      "post": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Creates Custom Table Date.",
+        "requestBody": {
+          "description": "The custom table field data model.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableCreateFieldDataModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableCreateFieldDataModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableCreateFieldDataModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableCreateFieldDataModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created (Indicates that the request is successfully executed and the response body return the data in CustomTableBulkResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Updates a Custom Table Data.",
+        "requestBody": {
+          "description": "Custom Table Data Model",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableUpdateFieldDataModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableUpdateFieldDataModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableUpdateFieldDataModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableUpdateFieldDataModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/table-template": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Get Custom Table Template.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique TableKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/export": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Get Custom Table Data List For Export",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique TableKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ExportResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ExportResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ExportResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableName}/download": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Download the exported Custom Table Data List.",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "description": "Unique TableKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableStringResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableStringResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableStringResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/import": {
+      "post": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Get Import Custom Table Data.",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ImportCustomTableModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Retrieves a list of custom table data based on the specified parameters.",
+        "description": "This endpoint allows you to filter, sort, and paginate the custom table data.\nEnsure that the tableKey does not contain spaces or special characters and has a maximum length of 100.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter collection for data retrieval",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Znode.Libraries.Abstract.Helper.FilterTuple"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort collection for ordering data",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The index of the page to retrieve",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The size of the page to retrieve",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDataResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: An error occurred on the server.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Deletes custom table data based on the provided table key and filters.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "The key identifying the custom table to delete data from.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The collection of filters used to identify the data to delete.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Znode.Libraries.Abstract.Helper.FilterTuple"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Indicates that the request is successfully executed and the response body contains the result.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Indicates that the request is successfully executed, but no data was deleted.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Indicates that the resource or table to delete was not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Indicates that an error occurred on the server while processing the request.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/{columnName}/{columnValue}/bulk": {
+      "delete": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Deletes multiple records in bulk",
+        "description": "This API endpoint Deletes the list of associated Custom Table Data.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "columnName",
+            "in": "path",
+            "description": ">Unique table column Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "columnValue",
+            "in": "path",
+            "description": "Table column value",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in ProfilesListResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkDeleteResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkDeleteResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkDeleteResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content(Indicates that the request is successfully executed, but the response body does not contain any data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/{rowIds}/bulk": {
+      "delete": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Delete multiple records from a custom table based on the given tableKey and rowIds",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowIds",
+            "in": "path",
+            "description": "Unique RowId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/bulk-insert": {
+      "post": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Insert bulk records in custom table dynamically.",
+        "description": "Ensure that the tableKey does not contain spaces or special characters and has a maximum length of 100.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The body containing an array of custom table fields and values in JSON format. Each object in the array represents a row with key-value pairs where the keys are the column names and values are the data for that column.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "application/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "text/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "application/*+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created (Indicates that the request is successfully executed and the response body return the data in CustomTableBulkResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Indicates that the request was successfully executed, but the response contains multiple status codes or error details for different items in the body.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/insert": {
+      "post": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Insert record in custom table dynamically.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The body containing an array of custom table fields and values in JSON format. Each object in the array represents a row with key-value pairs where the keys are the column names and values are the data for that column.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                }
+              ]
+            },
+            "application/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                }
+              ]
+            },
+            "text/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                }
+              ]
+            },
+            "application/*+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created (Indicates that the request is successfully executed and the response body return the data in CustomTableBulkResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/bulk-update": {
+      "put": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Updates a record in the custom table. This method is applicable only for tables that contain a unique column.",
+        "description": "Ensure that the each object contains a unique column",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters).",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The body containing an array of custom table fields and values in JSON format. Each object in the array represents a row with key-value pairs where the keys are the column names and values are the data for that column.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "application/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "text/json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            },
+            "application/*+json": {
+              "schema": { },
+              "example": [
+                {
+                  "CustomTableColumn1": "Value1",
+                  "CustomTableColumn2": "Value2"
+                },
+                {
+                  "CustomTableColumn1": "Value3",
+                  "CustomTableColumn2": "Value4"
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Indicates that the request was successfully executed, but the response contains multiple status codes or error details for different items in the body.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (The request contain invalid Data.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error (Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/rows/{rowId}": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Get custom table row data.",
+        "description": "Ensure that the tableKey does not contain spaces or special characters and has a maximum length of 100.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "path",
+            "description": "Unique Table data row id.",
+            "required": true,
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested custom table data row.",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: An error occurred on the server.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: This status code indicates that the server cannot find the requested resource.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-data/{tableKey}/unique/{uniqueValues}": {
+      "get": {
+        "tags": [
+          "CustomTableData"
+        ],
+        "summary": "Get custom table data based on unique column values.",
+        "description": "This endpoint allows you to get the customtable row data based on unique column values.\nMultiple row data can be retrive by passing comma separated values in the Unique Values.\nEnsure that the tableKey does not contain spaces or special characters and has a maximum length of 100.",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "uniqueValues",
+            "in": "path",
+            "description": "Unique values present in the unique column",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: The request was successfully executed and the response contains the requested custom table data row.",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content: The request was successfully executed, but no data is returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: An error occurred on the server.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: The request contains invalid data.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-fields/{tableKey}": {
+      "get": {
+        "tags": [
+          "CustomTableField"
+        ],
+        "summary": "Get Custom Table Field List",
+        "parameters": [
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique TableKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filte",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Znode.Libraries.Abstract.Helper.FilterTuple"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "PageIndex",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "PageSize",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-fields": {
+      "post": {
+        "tags": [
+          "CustomTableField"
+        ],
+        "summary": "Create a Custom Table Fields",
+        "requestBody": {
+          "description": "Model To create the CustomTableFields",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableFieldRequest"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableFieldRequest"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableFieldRequest"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CreateCustomTableFieldRequest"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CustomTableField"
+        ],
+        "summary": "Edit a Custom Table Fields",
+        "requestBody": {
+          "description": "Model To update the CustomTableFields.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableFieldRequest"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableFieldRequest"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableFieldRequest"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.EditCustomTableFieldRequest"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/custom-table-fields/{fieldCode}/{tableKey}": {
+      "delete": {
+        "tags": [
+          "CustomTableField"
+        ],
+        "summary": "Delete a Custom Table Fields.",
+        "description": "This API endpoint Deletes the associated Custom Table.",
+        "parameters": [
+          {
+            "name": "fieldCode",
+            "in": "path",
+            "description": "Unique FieldCode",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "tableKey",
+            "in": "path",
+            "description": "Unique Table Key (maximum 100 characters, no spaces or special characters)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success(Indicates that the request is successfully executed and the response body return the data in ProfilesListResponse model.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.TrueFalseResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This status code indicates that the server cannot find the requested resource.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error(Indicates that an error occurred on the server.)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Newtonsoft.Json.Linq.JToken": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+        }
+      },
+      "System.Net.HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Znode.Engine.CustomTable.Model.CreateCustomTableDetailRequestModel": {
+        "required": [
+          "tableKey",
+          "tableName"
+        ],
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tableKey": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+            "type": "string",
+            "description": "The TableKey to create the Custom Table.\nTrims leading and trailing whitespace before validation."
+          },
+          "tableName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:\\s+[A-Za-z0-9_-]+)*$",
+            "type": "string",
+            "description": "Display Table Name."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Create Custom Table Detail Request Model"
+      },
+      "Znode.Engine.CustomTable.Model.CreateCustomTableFieldRequest": {
+        "required": [
+          "displayOrder",
+          "fieldCode",
+          "fieldName",
+          "fieldType"
+        ],
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fieldType": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Data type for Table Field."
+          },
+          "fieldCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9]*$",
+            "type": "string",
+            "description": "Column Name For Table."
+          },
+          "fieldName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Display  Field Name."
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Display Order for table field.",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "Table Key for Custom table Name.",
+            "nullable": true
+          },
+          "isUniqueConstraint": {
+            "type": "boolean"
+          },
+          "fieldLength": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Create Custom Table Field Request"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableBulkDataModel": {
+        "type": "object",
+        "properties": {
+          "uniqueColumnValue": {
+            "type": "string",
+            "description": "The value of the unique column. If any table does not contain unique column, then it will return row number instead.",
+            "nullable": true
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "description": "The status of the operation."
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Error message if anything fails during execution.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableBulkDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkDataModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableBulkResponse": {
+        "type": "object",
+        "properties": {
+          "customTableBulkDataModels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableBulkDataModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableCreateFieldDataModel": {
+        "type": "object",
+        "properties": {
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          },
+          "customTableFieldDataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldModel"
+            },
+            "description": "Custom Table Field Data List.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableDataListResponse": {
+        "type": "object",
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodePaginationDetail"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Error Detail contain error messages.",
+            "format": "int32"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+            },
+            "description": "Custom Table Data List",
+            "nullable": true
+          },
+          "customTableFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldModel"
+            },
+            "description": "Custom Table Fields List",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Data List Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Newtonsoft.Json.Linq.JToken"
+            },
+            "description": "Custom Table Data List",
+            "nullable": true
+          },
+          "paginationDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodePaginationDetail"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Data List Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableDetailListResponse": {
+        "type": "object",
+        "properties": {
+          "paginationDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodePaginationDetail"
+          },
+          "customTableDetailList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailModel"
+            },
+            "description": "Custom Table Detail List",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Detail List Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableDetailModel": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "Data type for custom table field.",
+            "nullable": true
+          },
+          "tableName": {
+            "type": "string",
+            "description": "Display Name for custom table.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Detail Model"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableDetailResponse": {
+        "type": "object",
+        "properties": {
+          "customTableDetailModel": {
+            "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableDetailModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Detail Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableFieldDataModel": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Field Id for custom table field.",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          },
+          "customTableFieldDataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldModel"
+            },
+            "description": "Custom Table Field Data List.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Field Data Model"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableFieldDataResponse": {
+        "type": "object",
+        "properties": {
+          "customTableFieldData": {
+            "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldDataModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Field Data Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableFieldListResponse": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          },
+          "customTableFieldsList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldModel"
+            },
+            "description": "Custom Table Fields List",
+            "nullable": true
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Field List Response"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableFieldModel": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          },
+          "fieldId": {
+            "type": "integer",
+            "description": "Field Id for custom table field.",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          },
+          "fieldType": {
+            "type": "string",
+            "description": "Data type for custom table field.",
+            "nullable": true
+          },
+          "fieldCode": {
+            "type": "string",
+            "description": "Field Code for custom table field.",
+            "nullable": true
+          },
+          "fieldName": {
+            "type": "string",
+            "description": "Display Field Name for custom table.",
+            "nullable": true
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Display Order for custom table fields.",
+            "format": "int32"
+          },
+          "fieldValue": {
+            "description": "Field Value for custom table field.",
+            "nullable": true
+          },
+          "isUniqueConstraint": {
+            "type": "boolean",
+            "description": "Set is unique for a column"
+          },
+          "fieldLength": {
+            "type": "string",
+            "description": "Set length of column",
+            "nullable": true
+          },
+          "fieldValidationMessages": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Custom Table Field Model"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableStringResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "string",
+            "description": "Export Downloded CSV file.",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "StringResponse"
+      },
+      "Znode.Engine.CustomTable.Model.CustomTableUpdateFieldDataModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Field Id for custom table field.",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          },
+          "customTableFieldDataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.CustomTableFieldModel"
+            },
+            "description": "Custom Table Field Data List.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Update request Model."
+      },
+      "Znode.Engine.CustomTable.Model.DeleteCustomTableListResponse": {
+        "type": "object",
+        "properties": {
+          "deleteCustomTableResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DeleteCustomTableResponse"
+            },
+            "description": "Per table key delete results.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Delete Custom Tables Response"
+      },
+      "Znode.Engine.CustomTable.Model.DeleteCustomTableRequest": {
+        "required": [
+          "tableKeys"
+        ],
+        "type": "object",
+        "properties": {
+          "tableKeys": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of table keys to delete."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Delete Custom Table Request Model"
+      },
+      "Znode.Engine.CustomTable.Model.DeleteCustomTableResponse": {
+        "type": "object",
+        "properties": {
+          "tableKey": {
+            "type": "string",
+            "description": "Table key.",
+            "nullable": true
+          },
+          "successMessage": {
+            "type": "string",
+            "description": "Success message if delete successful.",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Error message if delete failed.",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Indicates operation has error for this key."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Delete custom table result for a single table key."
+      },
+      "Znode.Engine.CustomTable.Model.DownloadModel": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "templateData": {
+            "type": "array",
+            "items": { },
+            "description": "TemplateData",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Download Model for CustomTable Import Template."
+      },
+      "Znode.Engine.CustomTable.Model.EditCustomTableFieldRequest": {
+        "required": [
+          "displayOrder",
+          "fieldCode",
+          "fieldId",
+          "fieldName",
+          "fieldType"
+        ],
+        "type": "object",
+        "properties": {
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fieldId": {
+            "type": "integer",
+            "description": "Field Id for custom table field.",
+            "format": "int32"
+          },
+          "fieldType": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Data type for custom table field."
+          },
+          "fieldCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9]*$",
+            "type": "string",
+            "description": "Field Code for custom table Name."
+          },
+          "fieldName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Display Name for custom table Field."
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Display Order for custom table fields.",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "The tableKey to create the Custom Table",
+            "nullable": true
+          },
+          "isUniqueConstraint": {
+            "type": "boolean",
+            "description": "IsUniqueConstraint to check unique column in the Custom Table"
+          },
+          "fieldLength": {
+            "type": "string",
+            "description": "Length of column in the Custom Table",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Edit Custom Table Field Request"
+      },
+      "Znode.Engine.CustomTable.Model.EditCustomTableRequestModel": {
+        "required": [
+          "tableId",
+          "tableName"
+        ],
+        "type": "object",
+        "properties": {
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tableId": {
+            "type": "integer",
+            "description": "Table Id for custom table.",
+            "format": "int32"
+          },
+          "tableName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:\\s+[A-Za-z0-9_-]+)*$",
+            "type": "string",
+            "description": "Display Name for custom table."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Edit Custom Table Request Model"
+      },
+      "Znode.Engine.CustomTable.Model.ExportModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message details for export.",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean",
+            "description": "Error Status."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Export Model"
+      },
+      "Znode.Engine.CustomTable.Model.ExportResponse": {
+        "type": "object",
+        "properties": {
+          "exportMessageModel": {
+            "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.ExportModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Export Response"
+      },
+      "Znode.Engine.CustomTable.Model.ImportCustomTableModel": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tableKey": {
+            "type": "string",
+            "description": "TableKey",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "description": "FileName",
+            "nullable": true
+          },
+          "importType": {
+            "type": "string",
+            "description": "ImportType",
+            "nullable": true
+          },
+          "importData": {
+            "type": "string",
+            "description": "ImportData",
+            "format": "byte",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "description": "User Id",
+            "format": "int32"
+          },
+          "touchPointName": {
+            "type": "string",
+            "description": "TouchPointName",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Import Custom Table Model"
+      },
+      "Znode.Engine.CustomTable.Model.ImportCustomTableResponse": {
+        "type": "object",
+        "properties": {
+          "downloadModel": {
+            "$ref": "#/components/schemas/Znode.Engine.CustomTable.Model.DownloadModel"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Import Custom Table Response"
+      },
+      "Znode.Engine.CustomTable.Model.TrueFalseResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "IsSuccess"
+          }
+        },
+        "additionalProperties": false,
+        "description": "True False Response"
+      },
+      "Znode.Libraries.Abstract.Helper.FilterTuple": {
+        "type": "object",
+        "properties": {
+          "item1": {
+            "type": "string",
+            "nullable": true
+          },
+          "item2": {
+            "type": "string",
+            "nullable": true
+          },
+          "item3": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterName": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterOperator": {
+            "type": "string",
+            "nullable": true
+          },
+          "filterValue": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Models.ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Models.ZnodePaginationDetail": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "totalResults": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Enter your bearer token in the format: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

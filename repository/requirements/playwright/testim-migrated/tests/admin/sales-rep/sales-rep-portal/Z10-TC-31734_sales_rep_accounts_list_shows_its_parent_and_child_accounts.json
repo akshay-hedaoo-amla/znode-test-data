@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-portal.spec.ts > Admin - Sales Rep > Z10-TC-31734 sales rep accounts list shows its parent and child accounts",
+  "scenario": {
+    "summary": "The rep is the effective sales rep of parent A, of child A (inherited from parent A) and of child B (own rep, overriding parent B's rep); signed in, its Accounts page lists parent A, child A and child B, not parent B.",
+    "steps": [
+      "Sign in to the admin panel as the sales rep (@rep.userName, @rep.password).",
+      "Open Accounts and Users > Accounts.",
+      "Search the list for @parentA.accountName, @childA.accountName, @childB.accountName and @parentB.accountName."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "@parentA.accountName, @childA.accountName and @childB.accountName are listed",
+      "@parentB.accountName is not listed (No records found. when searched)"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31734 (AIO export).",
+      "FSD section 12 (Accounts page: all accounts, parent and child, where the rep is the effective Sales Rep), section 5 Scenarios 1 and 2 (inheritance; child assignment overrides).",
+      "The sales rep signs in on the suite's admin URL with the password the SALES_REP_OF_STORE collection sets through the API (Phase 1 analysis answer 2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "ACCOUNT_OF_STORE, CHILD_ACCOUNT_OF_ACCOUNT and USER_OF_ACCOUNT are new consumable keys (analysis section 4, pending approval; collections still to build through the account and customer APIs).",
+      "Child A inherited: CHILD_ACCOUNT_OF_ACCOUNT under parent A (Enable Sales Rep Inheritance Yes) with rep = @parentA.salesRepUserId; this mirrors what the admin UI sends when inheritance is Yes (atstage's account API does not apply inheritance itself on this build).",
+      "Child B overridden: under parent B (other rep @repOther) with its own rep = @rep.userId. Parent B not listed is an extra negative check backed by FSD section 12."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repOther",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "parentA",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@rep.userId",
+        "enableSalesRepInheritance": true
+      }
+    },
+    {
+      "key": "CHILD_ACCOUNT_OF_ACCOUNT",
+      "alias": "childA",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parent": "@parentA.accountId",
+        "rep": "@parentA.salesRepUserId"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "parentB",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@repOther.userId"
+      }
+    },
+    {
+      "key": "CHILD_ACCOUNT_OF_ACCOUNT",
+      "alias": "childB",
+      "params": {
+        "store": "MaxwellsHardware",
+        "parent": "@parentB.accountId",
+        "rep": "@rep.userId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31734"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-portal.spec.ts:80",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-20T12:54:33Z"
+}

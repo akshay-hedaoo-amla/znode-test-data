@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "key": "ACCOUNT_OF_STORE",
+  "entity": "account",
+  "type": "of_store",
+  "constraints": {
+    "salesRepUserId": "{rep}",
+    "enableSalesRepInheritance": "{enableSalesRepInheritance}",
+    "applySalesRepChangesToAllUsers": "{applySalesRepChangesToAllUsers}"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Parent account of the store, created through the account API with the store context, optionally with a Sales Rep and the two Sales Rep flags. Outputs: accountId, accountName, accountCode, salesRepUserId. Created per test, deleted at teardown. Story Z10-38546.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the account belongs to (ZnodePortal.StoreCode)"
+    },
+    "rep": {
+      "type": "integer",
+      "optional": true,
+      "description": "ZnodeUser.UserId of the account's Sales Rep: link it to the test's sales rep (@rep.userId), a rep of the same store. Left out: no Sales Rep"
+    },
+    "enableSalesRepInheritance": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Additional attribute Enable Sales Rep Inheritance (child accounts created later inherit the rep). Left out: the default, No"
+    },
+    "applySalesRepChangesToAllUsers": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Additional attribute Apply Sales Rep Changes to All Users (rep changes also overwrite user overrides). Left out: the default, No"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}

@@ -6,7 +6,7 @@ apiDocs: apidocs.znode.com
 
 # collection-builder: which spec and operations to use.
 apiChoices: |
-  Prefer the Core API v2 (specs/znode-core-api-v2.json). Use the legacy v1 (specs/znode-core-api-v1.json) only where
+  Prefer the Core API v2 (specs/customer-v2.json). Use the legacy v1 (specs/multifront-v1.json) only where
   v2 cannot create and delete the record. Decided 2026-10-22: promotions (POST /Promotion/Create, POST /Promotion/Delete)
   and customer users (POST /User/CreateCustomerAccount, POST /User/DeleteUserAccount) use v1. v1 deletes take the IDs in
   the body (ParameterModel.Ids): teardown.bodyTemplate { "Ids": "{id}" }.
@@ -20,3 +20,32 @@ migration:
   formatting: "Tda.money(amount) storefront money \"$1,050.00\"; Tda.count(quantity) \"25.000000\" -> \"25\"; Tda.text(storedHtml) visible text, compared with Tda.visible(page text) in page-object *Text methods"
   scan: "TDA_HOME=D:/znode-test-data mvn -q -pl tools exec:java -Dexec.args=\"scan --force <src/test/java/... files>\" (run in this data repository)"
   compile: 'mvn -q test-compile in D:/Sample Framework/znode10-integration-ui-automation-1/Integration'
+# tda run <suite>: normal and fallback mode in parallel (0.18.0). The fallback run uses the git worktree below, which
+# tda owns: it is reset to the checkout's HEAD and given its uncommitted files before every run.
+runs:
+  workdir: "D:/Sample Framework/znode10-integration-ui-automation-1/Integration"
+  command: "mvn test -DsuiteXmlFile={suite} -Denvironment=atstage"
+  reports: "target/surefire-reports"
+  fallbackWorktree: "D:/Sample Framework/sel-fallback"
+  env:
+    PATH: "C:/Program Files/JetBrains/IntelliJ IDEA 2025.2.4/plugins/maven/lib/maven3/bin;${PATH}"
+
+# New tests from a story (/new-test, story-analyst + test-author; tda 0.19.0). Pilot: Z10-28590 sales reps (admin).
+newTests:
+  inputs: "Atlassian connector (site amla.atlassian.net) for the Jira story and its subtasks; the FSD (SharePoint) and the AIO test case export as files in work/stories/<KEY>/input/"
+  environment: "atstage (admin and webstore of the Maxwell's stores)"
+  userKey: "USER_WEBSTORE_REGISTERED (created per test, random secret password, deleted at teardown)"
+  repository: "D:/Sample Framework/znode10-playwright-automation-integration, branch tda/<story-key>-<slug> cut from tda/phase4-pilots"
+  specRoot: "testim-migrated/tests/admin/<area>/ (pilot: testim-migrated/tests/admin/sales-rep/)"
+  helper: "testData.value(alias, output), testData.get(alias) from the tda fixture (testim-migrated/src/fixtures/webstore.ts wires tdaTestData; the admin fixture admin.ts needs the same wiring once)"
+  fixtures: "testim-migrated/src/fixtures/admin.ts (admin specs, saved admin session from testim-migrated/tests/admin.setup.ts); webstore.ts for webstore steps"
+  pageObjects: "testim-migrated/src/pages/admin/<area>/ (AdminBasePage in admin-base-page.ts)"
+  formatting: "storefront money \"$1,050.00\" (src/utils/price.ts parsePrice)"
+  locators: "admin: ids and data-test-selector attributes; read them from the running page (trace, DOM), never from the FSD"
+  linking: "AIO case key in the test title, e.g. 'Z10-TC-23072 admin creates a sales rep for all stores'"
+  scan: "npm run scan:playwright -- --force <spec files> (in this data repository)"
+  compile: "npx tsc --noEmit and npx eslint <files> (in the Playwright repository)"
+  assertions: "expect.soft for every verification; a hard expect only where a later step cannot run without it; every precondition checked with the collection outputs before the first step; no assertion the manual test case does not ask for"
+  video: "a browser context the test opens itself (browser.newContext, e.g. a signed-in sales rep) records video into testInfo.outputDir; on failure its video and a screenshot are attached with testInfo.attach"
+  logging: "log every step and every input with testim-migrated/src/utils/logger.ts (log.nav / log.fill(field, value, locator) / log.action / log.check / log.info, awaited); at test start log.info the AIO key and the resolved values per alias; secret outputs (passwords) are logged as ***, never the value"
+  run: "TDA_HOME=D:/znode-test-data npx playwright test <spec> --project testim-admin (playwright.config.ts; depends on testim-admin-setup) in the Playwright repository"

@@ -1,0 +1,80 @@
+{
+  "schemaVersion" : 1,
+  "key" : "USER_WEBSTORE_ALL_STORES",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /User/CreateCustomerAccount", "POST /User/DeleteUserAccount" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/User/CreateCustomerAccount",
+    "payloadTemplate" : "payloads/USER_WEBSTORE_ALL_STORES.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "isActive" : true,
+      "isWebStoreUser" : true,
+      "isGuestUser" : false,
+      "isLock" : false,
+      "allStoresPortalId" : "0",
+      "firstName" : "Tda"
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "password" : {
+        "kind" : "password",
+        "secret" : true
+      }
+    },
+    "runIdTag" : {
+      "field" : "/UserName",
+      "format" : "TDA-{runId}-",
+      "property" : "userName"
+    },
+    "idPointer" : "/User/UserId",
+    "outputs" : {
+      "userId" : {
+        "from" : "response",
+        "pointer" : "/User/UserId"
+      },
+      "userName" : {
+        "from" : "payload",
+        "pointer" : "/UserName"
+      },
+      "fullName" : {
+        "from" : "response",
+        "pointer" : "/User/FullName"
+      },
+      "email" : {
+        "from" : "payload",
+        "pointer" : "/Email"
+      },
+      "password" : {
+        "from" : "payload",
+        "pointer" : "/User/Password",
+        "secret" : true
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/User/DeleteUserAccount",
+    "bodyTemplate" : "payloads/USER_WEBSTORE_ALL_STORES.teardown.json"
+  },
+  "specFingerprint" : "sha256:57f2382eb43298f40c436da468f69fcbb313c55a3e359514810794870527a982",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
+  "createdAt" : "2026-11-18T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:52:31Z",
+  "verifiedHash" : "sha256:e74cfd5a0cba84bd641a19b54ed7c50bbaf805f8c095b98629f563d182d4e0eb"
+}

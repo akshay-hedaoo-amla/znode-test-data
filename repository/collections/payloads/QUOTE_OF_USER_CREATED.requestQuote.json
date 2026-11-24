@@ -1,0 +1,9 @@
+{
+  "TargetClassNumber": "{quoteNumber}",
+  "AdditionalInstructions": {
+    "Name": "{runIdTag}{uniqueSuffix}",
+    "Information": "{runIdTag}{uniqueSuffix}"
+  },
+  "Origin": "{origin}",
+  "SkipSentEmail": true
+}

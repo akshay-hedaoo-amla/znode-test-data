@@ -1,0 +1,2068 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Znode Tax System API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/taxmanager/v1/tax-gateway/calculate": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Calculate  Taxes.",
+        "requestBody": {
+          "description": "calculateRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/taxmanager/v1/tax-gateway/cancelorder": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Cancel order.",
+        "requestBody": {
+          "description": "cancleRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/taxmanager/v1/tax-gateway/submit": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Commit tax to the portal.",
+        "requestBody": {
+          "description": "commitTaxRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/taxmanager/v1/tax-gateway/presubmitorderprocess": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Pre submit order process.",
+        "requestBody": {
+          "description": "preSubmitOrderProcessRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/taxmanager/v1/tax-gateway/returnorderlineitem": {
+      "post": {
+        "tags": [
+          "TaxGateway"
+        ],
+        "summary": "Return order line item.",
+        "requestBody": {
+          "description": "returnOrderLineItemRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Common.ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "System.Net.HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Znode.Libraries.Abstract.Models.ZnodeErrorDetail": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Common.ErrorDetails": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasError": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Tax.ShippingTaxModel": {
+        "type": "object",
+        "properties": {
+          "mappingId": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeOfMapping": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxRate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.CustomModel": {
+        "type": "object",
+        "properties": {
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom3": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom4": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom5": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginCalculateTaxRequestModel": {
+        "required": [
+          "cartItems",
+          "currencyCode",
+          "currentDate",
+          "destinationAddress",
+          "isPricesInclusiveOfTaxes",
+          "isQuoteOrder",
+          "originAddress",
+          "portalId",
+          "taxExempt"
+        ],
+        "type": "object",
+        "properties": {
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "currentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel"
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "isCalculateTaxOnShipping": {
+            "type": "boolean"
+          },
+          "isHandlingChargeTaxable": {
+            "type": "boolean"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "handlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingDiscount": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxcost": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "isQuoteOrder": {
+            "type": "boolean"
+          },
+          "isPricesInclusiveOfTaxes": {
+            "type": "boolean"
+          },
+          "isCalculateTaxAfterDiscount": {
+            "type": "boolean"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isTaxExempt": {
+            "type": "boolean"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderState": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "classNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "customTaxCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginCommitTaxRequestModel": {
+        "required": [
+          "cartItems",
+          "currencyCode",
+          "currentDate",
+          "destinationAddress",
+          "isPricesInclusiveOfTaxes",
+          "isQuoteOrder",
+          "orderDateTime",
+          "originAddress",
+          "portalId"
+        ],
+        "type": "object",
+        "properties": {
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderState": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel"
+          },
+          "portalId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "isCalculateTaxOnShipping": {
+            "type": "boolean"
+          },
+          "isHandlingChargeTaxable": {
+            "type": "boolean"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "handlingCharge": {
+            "type": "number",
+            "format": "double"
+          },
+          "shippingDiscount": {
+            "type": "number",
+            "format": "double"
+          },
+          "isQuoteOrder": {
+            "type": "boolean"
+          },
+          "isPricesInclusiveOfTaxes": {
+            "type": "boolean"
+          },
+          "isCalculateTaxAfterDiscount": {
+            "type": "boolean"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isTaxExempt": {
+            "type": "boolean"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "childrenFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationSetFieldModel"
+            },
+            "nullable": true
+          },
+          "childrenCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationSetFieldModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel": {
+        "required": [
+          "city",
+          "country",
+          "line1",
+          "postalCode",
+          "stateName"
+        ],
+        "type": "object",
+        "properties": {
+          "line1": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line2": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "region": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "country": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "countryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateName": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxBag": {
+        "type": "object",
+        "properties": {
+          "taxClassId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "format": "double"
+          },
+          "destinationStateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationCountryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "countyFIPS": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingTaxInd": {
+            "type": "boolean"
+          },
+          "inclusiveInd": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "associatedTaxRuleIds": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customModel": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.CustomModel"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel"
+            },
+            "nullable": true
+          },
+          "itemCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxIncluded": {
+            "type": "boolean"
+          },
+          "shippingCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "orderLineItemStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "reasonForReturn": {
+            "type": "string",
+            "nullable": true
+          },
+          "perQuantityShippingDiscount": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxClassId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "lineItemDiscount": {
+            "type": "number",
+            "format": "double"
+          },
+          "extendedPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "returnCartItemPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "promotionalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "isShippingReturn": {
+            "type": "boolean"
+          },
+          "orderProductId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isTaxCalculated": {
+            "type": "boolean"
+          },
+          "configurableProductList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            },
+            "nullable": true
+          },
+          "groupedProductList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            },
+            "nullable": true
+          },
+          "addonsProductList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            },
+            "nullable": true
+          },
+          "bundleProductCollection": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails"
+            },
+            "nullable": true
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxRate": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel"
+            },
+            "nullable": true
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItemDetails": {
+        "type": "object",
+        "properties": {
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "format": "double"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel"
+            },
+            "nullable": true
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "selectedQuantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxClassId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxCalculated": {
+            "type": "boolean"
+          },
+          "taxRate": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel": {
+        "type": "object",
+        "properties": {
+          "omsOrderTaxSummaryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "omsOrderDetailsId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "omsQuoteTaxSummaryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "omsQuoteId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tax": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxName": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxTypeName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel": {
+        "type": "object",
+        "properties": {
+          "orderProductId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxOverrideAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel": {
+        "type": "object",
+        "properties": {
+          "customerCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "profile": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxOrderAttributeModel": {
+        "type": "object",
+        "properties": {
+          "omsOrderLineItemsId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attributeCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributeValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributeValueCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Libraries.Abstract.Plugin.Taxes.TaxRateModel": {
+        "type": "object",
+        "properties": {
+          "rate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCalculateRequest": {
+        "required": [
+          "pluginConfigurationSet",
+          "pluginGlobalConfigurations",
+          "pluginTaxCart"
+        ],
+        "type": "object",
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "taxBag": {
+            "$ref": "#/components/schemas/Znode.Tax.Manager.Api.Models.ZnodeTaxBag"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "isValidAddress": {
+            "type": "boolean"
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pluginTaxCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginCalculateTaxRequestModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCalculateResponse": {
+        "type": "object",
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            },
+            "nullable": true
+          },
+          "taxMessageList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            },
+            "nullable": true
+          },
+          "customTaxCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "shippingTaxDetails": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Tax.ShippingTaxModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderRequest": {
+        "required": [
+          "cartItems",
+          "orderNumber",
+          "pluginConfigurationSet",
+          "pluginGlobalConfigurations",
+          "taxOverrideAmountList",
+          "taxType"
+        ],
+        "type": "object",
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "orderNumber": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "taxOverrideAmountList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "businessIdentificationNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCancelOrderResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Models.ZnodeErrorDetail"
+          },
+          "taxSummaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            },
+            "nullable": true
+          },
+          "taxMessageList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            },
+            "nullable": true
+          },
+          "customTaxCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxRequest": {
+        "required": [
+          "isTaxCostUpdated",
+          "pluginConfigurationSet",
+          "pluginGlobalConfigurations",
+          "pluginTaxCart",
+          "pluginUrl",
+          "taxType"
+        ],
+        "type": "object",
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "pluginTaxCart": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginCommitTaxRequestModel"
+          },
+          "isTaxCostUpdated": {
+            "type": "boolean"
+          },
+          "pluginUrl": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "taxType": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerCommitTaxResponse": {
+        "type": "object",
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            },
+            "nullable": true
+          },
+          "taxMessageList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            },
+            "nullable": true
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "customTaxCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          },
+          "isTaxCostUpdated": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessRequest": {
+        "required": [
+          "billingAddress",
+          "taxRate"
+        ],
+        "type": "object",
+        "properties": {
+          "billingAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerPreSubmitOrderProcessResponse": {
+        "type": "object",
+        "properties": {
+          "addErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemRequest": {
+        "required": [
+          "orderNumber",
+          "pluginConfigurationSet",
+          "pluginGlobalConfigurations",
+          "pluginTaxReturnItemList",
+          "returnNumber",
+          "taxOverrideAmountList"
+        ],
+        "type": "object",
+        "properties": {
+          "pluginGlobalConfigurations": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "pluginConfigurationSet": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginConfigurationModel"
+          },
+          "orderNumber": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "returnNumber": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "pluginTaxReturnItemList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            }
+          },
+          "taxOverrideAmountList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxAmountOverrideModel"
+            }
+          },
+          "isSellerImporterOfRecord": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "businessIdentificationNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxBag": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxBag"
+          },
+          "currentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "destinationAddress": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxAddressModel"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxType": {
+            "type": "string",
+            "nullable": true
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxExempt": {
+            "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.TaxExemptModel"
+          },
+          "isTaxExempt": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.TaxManagerReturnOrderLineItemResponse": {
+        "type": "object",
+        "properties": {
+          "taxSummaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxSummaryModel"
+            },
+            "nullable": true
+          },
+          "taxMessageList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "importDuty": {
+            "type": "number",
+            "format": "double"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Znode.Libraries.Abstract.Plugin.Taxes.PluginTaxCartItem"
+            },
+            "nullable": true
+          },
+          "customTaxCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "taxOnShipping": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Znode.Tax.Manager.Api.Models.ZnodeTaxBag": {
+        "type": "object",
+        "properties": {
+          "taxClassId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "salesTax": {
+            "type": "number",
+            "format": "double"
+          },
+          "gst": {
+            "type": "number",
+            "format": "double"
+          },
+          "hst": {
+            "type": "number",
+            "format": "double"
+          },
+          "pst": {
+            "type": "number",
+            "format": "double"
+          },
+          "vat": {
+            "type": "number",
+            "format": "double"
+          },
+          "destinationStateCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationCountryCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "countyFIPS": {
+            "type": "string",
+            "nullable": true
+          },
+          "shippingTaxInd": {
+            "type": "boolean"
+          },
+          "inclusiveInd": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "custom1": {
+            "type": "string",
+            "nullable": true
+          },
+          "associatedTaxRuleIds": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxRuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pluginUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxType": {
+            "type": "string",
+            "nullable": true
+          },
+          "pluginDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Enter your bearer token in the format: Bearer {your_token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

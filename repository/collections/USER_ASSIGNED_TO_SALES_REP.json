@@ -1,0 +1,79 @@
+{
+  "schemaVersion" : 1,
+  "key" : "USER_ASSIGNED_TO_SALES_REP",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /User/CreateCustomerAccount", "POST /User/DeleteUserAccount" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/User/CreateCustomerAccount",
+    "payloadTemplate" : "payloads/USER_ASSIGNED_TO_SALES_REP.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "firstName" : "Tda",
+      "isActive" : true,
+      "isWebStoreUser" : true,
+      "isGuestUser" : false,
+      "isLock" : false
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "password" : {
+        "kind" : "password",
+        "secret" : true
+      }
+    },
+    "runIdTag" : {
+      "field" : "/UserName",
+      "format" : "TDA-{runId}-",
+      "property" : "userName"
+    },
+    "idPointer" : "/User/UserId",
+    "outputs" : {
+      "userId" : {
+        "from" : "response",
+        "pointer" : "/User/UserId"
+      },
+      "userName" : {
+        "from" : "payload",
+        "pointer" : "/UserName"
+      },
+      "fullName" : {
+        "from" : "response",
+        "pointer" : "/User/FullName"
+      },
+      "email" : {
+        "from" : "payload",
+        "pointer" : "/Email"
+      },
+      "password" : {
+        "from" : "payload",
+        "pointer" : "/User/Password",
+        "secret" : true
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/User/DeleteUserAccount",
+    "bodyTemplate" : "payloads/USER_ASSIGNED_TO_SALES_REP.teardown.json"
+  },
+  "specFingerprint" : "sha256:57f2382eb43298f40c436da468f69fcbb313c55a3e359514810794870527a982",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
+  "createdAt" : "2026-11-18T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:52:18Z",
+  "verifiedHash" : "sha256:5b38630531887b353ad1a069512e8e778506ebd0dbe6bfc8c32302fb73063066"
+}

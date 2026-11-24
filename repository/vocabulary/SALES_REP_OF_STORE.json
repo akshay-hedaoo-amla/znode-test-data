@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "key": "SALES_REP_OF_STORE",
+  "entity": "user",
+  "type": "sales_rep",
+  "constraints": {
+    "roleName": "sales_rep",
+    "isActive": "true",
+    "isLock": "false"
+  },
+  "scope": {
+    "store": "{store}"
+  },
+  "usage": "consumable",
+  "description": "Enabled, unlocked admin-panel user with the Sales Rep role, assigned to the store, with a password set at creation so it can sign in to admin and webstore. Created per test, deleted at teardown. Story Z10-28590.",
+  "declaredParams": {
+    "store": {
+      "type": "string",
+      "description": "Store code the sales rep is assigned to (ZnodePortal.StoreCode)"
+    }
+  },
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-18T12:33:21Z"
+}

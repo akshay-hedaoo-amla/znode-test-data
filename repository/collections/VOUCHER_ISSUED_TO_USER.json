@@ -1,0 +1,80 @@
+{
+  "schemaVersion" : 1,
+  "key" : "VOUCHER_ISSUED_TO_USER",
+  "spec" : {
+    "file" : "specs/multifront-v1.json",
+    "operations" : [ "POST /GiftCard/Create", "POST /GiftCard/Delete" ]
+  },
+  "create" : {
+    "method" : "POST",
+    "path" : "/GiftCard/Create",
+    "payloadTemplate" : "payloads/VOUCHER_ISSUED_TO_USER.create.json",
+    "inputsFromDb" : {
+      "portalId" : {
+        "key" : "STORE_WEBSTORE_ACTIVE",
+        "output" : "portalId",
+        "params" : {
+          "store" : "{store}"
+        }
+      }
+    },
+    "constants" : {
+      "amount" : 100,
+      "isActive" : true,
+      "restrictToCustomerAccount" : true,
+      "sendMail" : false,
+      "accountCode" : ""
+    },
+    "generated" : {
+      "uniqueSuffix" : {
+        "kind" : "uniqueSuffix"
+      },
+      "startDate" : {
+        "kind" : "dateTime",
+        "offset" : "-P1D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      },
+      "expirationDate" : {
+        "kind" : "dateTime",
+        "offset" : "P30D",
+        "format" : "yyyy-MM-dd'T'00:00:00"
+      }
+    },
+    "runIdTag" : {
+      "field" : "/Name",
+      "format" : "TDA-{runId}-",
+      "property" : "name"
+    },
+    "idPointer" : "/GiftCard/GiftCardId",
+    "outputs" : {
+      "voucherId" : {
+        "from" : "response",
+        "pointer" : "/GiftCard/GiftCardId"
+      },
+      "name" : {
+        "from" : "payload",
+        "pointer" : "/Name"
+      },
+      "code" : {
+        "from" : "payload",
+        "pointer" : "/CardNumber"
+      },
+      "amount" : {
+        "from" : "payload",
+        "pointer" : "/Amount"
+      }
+    }
+  },
+  "teardown" : {
+    "method" : "POST",
+    "path" : "/GiftCard/Delete",
+    "bodyTemplate" : "payloads/VOUCHER_ISSUED_TO_USER.teardown.json"
+  },
+  "specFingerprint" : "sha256:8726fc601583ba1e1b48a7ed61caba4f377440ae3ff1621c1bf37f4c095e8fd3",
+  "status" : "approved",
+  "approvedBy" : "akshay-hedaoo-amla",
+  "approvedAt" : "2026-11-20T12:55:12Z",
+  "createdAt" : "2026-11-18T00:00:00Z",
+  "lastValidated" : "2026-11-20T12:52:45Z",
+  "verifiedHash" : "sha256:fe78e578a5a6616130b6354f6b0aca82f564b1a86a83c75c645a3027201af3e8"
+}

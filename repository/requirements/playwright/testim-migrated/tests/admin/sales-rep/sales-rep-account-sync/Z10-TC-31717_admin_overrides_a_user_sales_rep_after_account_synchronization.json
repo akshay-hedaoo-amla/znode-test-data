@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-account-sync.spec.ts > Admin - Sales Rep > Z10-TC-31717 admin overrides a user sales rep after account synchronization",
+  "scenario": {
+    "summary": "An account with sales rep A and a user under it synchronized to rep A; the admin assigns sales rep B to the user on Manage User and saves; the user's sales rep is rep B.",
+    "steps": [
+      "Go to Accounts and Users > Users; search the user (@user.userName) and open Manage User.",
+      "Check the Sales Rep is @repA.fullName; click the Sales Rep search icon, search @repB.fullName and select it; save.",
+      "Reopen Manage User of the user; read the Sales Rep."
+    ],
+    "entitiesTouched": [
+      "account",
+      "user"
+    ],
+    "stateChanges": [
+      "Changes the user's Sales Rep from @repA to @repB (the user is deleted at teardown)."
+    ],
+    "assertions": [
+      "Before the change the user's Sales Rep is @repA.fullName",
+      "After saving, the user's Sales Rep is @repB.fullName"
+    ],
+    "evidence": [
+      "Story Z10-38546 (SalesRep - Phase 2, account association), data-needs analysis work/stories/Z10-38546/analysis.md sections 3-4 and answers in section 6.",
+      "Test case Z10-TC-31717 (AIO export).",
+      "FSD section 7 (Important Point: the account's rep overwrites the user's on association; administrators can then override it on Manage User) and section 8 (user rep > account rep).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A), as in the Phase 1 tests.",
+      "ACCOUNT_OF_STORE, CHILD_ACCOUNT_OF_ACCOUNT and USER_OF_ACCOUNT are new consumable keys (analysis section 4, pending approval; collections still to build through the account and customer APIs).",
+      "Sales reps A and B are both reps of store A (the user's store), so B is in the Manage User popup (Phase 1 store rule).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repB",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "ACCOUNT_OF_STORE",
+      "alias": "account",
+      "params": {
+        "store": "MaxwellsHardware",
+        "rep": "@repA.userId"
+      }
+    },
+    {
+      "key": "USER_OF_ACCOUNT",
+      "alias": "user",
+      "params": {
+        "store": "MaxwellsHardware",
+        "account": "@account.accountId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-31717"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-19T06:08:06Z"
+}
