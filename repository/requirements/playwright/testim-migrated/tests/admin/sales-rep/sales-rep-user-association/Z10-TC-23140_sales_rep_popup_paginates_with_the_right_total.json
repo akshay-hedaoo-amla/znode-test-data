@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23140 sales rep popup paginates with the right total",
+  "scenario": {
+    "summary": "On Manage User of a store A user, with more store A sales reps than one popup page holds, the popup shows the right total and 'showing 1-10 of N' / '1-20 of N' by page size.",
+    "steps": [
+      "Accounts & Users > Users; open the store A user (@user.userName) with Manage.",
+      "Click the search icon next to Sales Rep.",
+      "Observe the pager and the total; change the page size (10, 20, 100)."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None (the users and sales reps are created and deleted by their collections)."
+    ],
+    "assertions": [
+      "The total number of sales reps is right (the rows over all pages)",
+      "The pager shows 'showing 1-10 of N' at 10 per page and '1-20 of N' (or 1-N) at 20 per page"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23140 (AIO export).",
+      "FSD: pagination and total count in the Sales Rep popup.",
+      "More reps than a page: 11 store A sales reps (rep1..rep11), as 23071; other tests of the run may add store A reps, so the total is checked against the rows the popup lists at the largest page size.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep1",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep2",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep3",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep4",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep5",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep6",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep7",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep8",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep9",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep10",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep11",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23140"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:48:43Z"
+}

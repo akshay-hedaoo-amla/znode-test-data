@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23091 admin removes the sales rep from a user with the brush icon",
+  "scenario": {
+    "summary": "For a user with a sales rep, the admin clicks the brush icon next to Sales Rep and saves; the association is removed and the field is blank.",
+    "steps": [
+      "Accounts & Users > Users; open the user with a sales rep (@assigned.userName) with Manage.",
+      "Click the brush icon next to Sales Rep.",
+      "Click Save and Close; re-open the user."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The user's sales rep is removed (both deleted at teardown)."
+    ],
+    "assertions": [
+      "The sales rep association is removed: the Sales Rep field is blank on Manage User"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23091 (AIO export).",
+      "Precondition: USER_ASSIGNED_TO_SALES_REP with rep = @rep.userId, checked on the Sales Rep field before the first step.",
+      "atstage 10.14.7.0: the brush icon is 'Clear Sales Rep Name' (btnClearSalesRepName).",
+      "Manage User requires first and last name and the created user has none: the test fills names it makes up (created-by-test) before Save and Close, as 23085.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "USER_ASSIGNED_TO_SALES_REP",
+      "alias": "assigned",
+      "params": {
+        "store": "@storeA.storeCode",
+        "rep": "@rep.userId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23091"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:48:43Z"
+}

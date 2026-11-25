@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23088 sales rep assigned to an all-stores user applies to the default store only",
+  "scenario": {
+    "summary": "For a user with All Stores access and store A as the selected store, the admin assigns a store A sales rep; the assignment applies to store A only, not to another store.",
+    "steps": [
+      "Accounts & Users > Users; open the All Stores user (@user.userId) with Manage.",
+      "Ensure store A (@storeA.name) is selected in the Store Name dropdown.",
+      "Click the search icon next to Sales Rep; select the store A sales rep (@rep.fullName).",
+      "Click Save and Close.",
+      "Re-open the user: with store A the Sales Rep shows the rep; with store B (@storeB.name) it does not."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "The user's store A sales rep is set (both deleted at teardown)."
+    ],
+    "assertions": [
+      "The selected sales rep is associated with the user for store A",
+      "The assignment does not apply to store B"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23088 (AIO export).",
+      "FSD 'Store Assignment Rules for Sales Rep'.",
+      "An All Stores user can only be created when AllowGlobalUserCreation is on: GLOBAL_USER_CREATION_ENABLED is checked first and the test is skipped when it is not True (as 23089; user decision 2026-11-25, analysis 9.3). On atstage the setting is off, so the test skips.",
+      "Manage User requires first and last name and the created user has none: the test fills names it makes up (created-by-test) before Save and Close, as 23085.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "GLOBAL_USER_CREATION_ENABLED",
+      "alias": "globalUsers"
+    },
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_ALL_STORES",
+      "alias": "user",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeB",
+      "params": {
+        "exceptPortalId": "@storeA.portalId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23088"
+  ],
+  "sources": [
+    {
+      "value": "option:checked",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:208",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:48:43Z"
+}

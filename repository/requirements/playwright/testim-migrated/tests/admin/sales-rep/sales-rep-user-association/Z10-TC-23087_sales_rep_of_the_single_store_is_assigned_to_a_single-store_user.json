@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23087 sales rep of the single store is assigned to a single-store user",
+  "scenario": {
+    "summary": "For a user of store A only, Manage User offers only store A in Store Name, the Sales Rep popup lists only store A's sales reps, and the selected store A sales rep is saved for the user.",
+    "steps": [
+      "Accounts & Users > Users; open the user (@user.userName) of store A with Manage.",
+      "Observe the Store Name dropdown.",
+      "Click the search icon next to Sales Rep.",
+      "Select the sales rep of store A (@rep.fullName).",
+      "Click Save and Close; re-open the user."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "The user's sales rep is set to the store A sales rep (both deleted at teardown)."
+    ],
+    "assertions": [
+      "Only store A is in the Store Name dropdown",
+      "Only store A's sales reps are listed in the popup (the store B sales rep is not)",
+      "The selected sales rep is saved for the user with store A"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23087 (AIO export).",
+      "FSD 'Store Assignment Rules for Sales Rep': a sales rep is available for user assignment only in its stores.",
+      "Manage User requires first and last name and the created user has none: the test fills names it makes up (created-by-test) before Save and Close, as 23085.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeB",
+      "params": {
+        "exceptPortalId": "@storeA.portalId"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "repB",
+      "params": {
+        "store": "@storeB.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23087"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:168",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "option:checked",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:182",
+      "kind": "literal",
+      "keyPath": "locator",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:48:43Z"
+}

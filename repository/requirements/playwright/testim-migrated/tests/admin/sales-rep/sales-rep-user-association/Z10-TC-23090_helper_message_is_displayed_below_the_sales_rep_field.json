@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23090 helper message is displayed below the sales rep field",
+  "scenario": {
+    "summary": "On Manage User the helper text 'The system will display Sales Reps associated with the selected store only.' is displayed below the Sales Rep field.",
+    "steps": [
+      "Accounts & Users > Users; open a user (@user.userName) with Manage.",
+      "Locate the Sales Rep field."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "The helper text 'The system will display Sales Reps associated with the selected store only.' is displayed below the Sales Rep field"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23090 (AIO export): the helper text is its expected text.",
+      "atstage 10.14.7.0 (probe 2026-11-25): the field has only a help-circle tooltip with another wording ('Only Sales Rep associated with the selected Store under the store dropdown are available for association.'); the test checks the case's text as written, a failure is a product finding (analysis 9.2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23090"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:48:43Z"
+}

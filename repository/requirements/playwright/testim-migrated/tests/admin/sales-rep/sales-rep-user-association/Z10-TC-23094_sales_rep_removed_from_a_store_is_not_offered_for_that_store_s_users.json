@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts > Admin - Sales Rep > Z10-TC-23094 sales rep removed from a store is not offered for that store's users",
+  "scenario": {
+    "summary": "The admin replaces store A with store B in a sales rep's stores and saves; on a store A user's Manage User the Sales Rep popup no longer lists that sales rep.",
+    "steps": [
+      "Open the sales rep's (@rep.userId) Manage page; remove store A (@storeA.name) and select store B (@storeB.name), since Stores is required; Save and Close.",
+      "Accounts & Users > Users; open the store A user (@user.userName) with Manage.",
+      "Click the search icon next to Sales Rep."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "The sales rep's store A assignment is removed (both deleted at teardown)."
+    ],
+    "assertions": [
+      "The sales rep removed from store A is not in the popup for store A"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 9 (group B remainder) and answers in sections 6 and 9.3.",
+      "Test case Z10-TC-23094 (AIO export).",
+      "FSD 'Store Assignment Rules for Sales Rep': store changes are reflected immediately in the popup.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A). Store B: STORE_WEBSTORE_ACTIVE with exceptPortalId = @storeA.portalId (any other active webstore).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "Deviation (user decision 2026-11-25): the case leaves Stores empty, but atstage 10.14.7.0 refuses that save ('Please select at least one Store.', no request sent; run tda-playwright-1795603752492), so the test replaces store A with store B (STORE_WEBSTORE_ACTIVE exceptPortalId = @storeA.portalId), as 23084."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "USER_WEBSTORE_REGISTERED",
+      "alias": "user",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeB",
+      "params": {
+        "exceptPortalId": "@storeA.portalId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23094"
+  ],
+  "sources": [
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-user-association.spec.ts:312",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T11:05:41Z"
+}
