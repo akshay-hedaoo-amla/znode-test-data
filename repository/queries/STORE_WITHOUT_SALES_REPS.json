@@ -11,12 +11,12 @@
   },
   "outputs" : [ "storeCode", "name", "portalId" ],
   "identity" : "storeCode",
-  "schemaFingerprint" : "sha256:1cd66425d2080d9f90e08990319b10935c54c0eb06a5d87c9a83a7a178561124",
+  "schemaFingerprint" : "sha256:2e425e2776860080457ebd2a0fc49e7a5db23863ad1f0620192acaedae62150b",
   "vocabularyFingerprint" : "sha256:3b269c73ddae8c67a19b119976a61e2fc2c3ce22c63b7b260d4cc38fc54f5156",
   "status" : "approved",
   "approvedBy" : "akshay-hedaoo-amla",
   "approvedAt" : "2026-11-23T07:39:03Z",
   "createdAt" : "2026-11-20T00:00:00Z",
-  "lastValidated" : "2026-11-23T07:38:11Z",
+  "lastValidated" : "2026-11-25T08:41:49Z",
   "verifiedHash" : "sha256:44f9f387ff896fabac1c31913f855dd6bfe9a85547f533a10758becfb3da5053"
 }
