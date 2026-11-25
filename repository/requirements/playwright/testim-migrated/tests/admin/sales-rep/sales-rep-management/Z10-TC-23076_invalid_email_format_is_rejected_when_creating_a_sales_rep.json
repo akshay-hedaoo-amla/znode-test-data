@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23076 invalid email format is rejected when creating a sales rep",
+  "scenario": {
+    "summary": "On Add Sales Rep the admin fills every mandatory field validly except Email Address, which gets an invalid format; Save shows an invalid-email message and the sales rep is not saved.",
+    "steps": [
+      "On the Sales Rep listing click Add New.",
+      "Enter valid mandatory fields: store (@storeA.name), username, first name, last name (made up by the test).",
+      "Enter an invalid Email Address ('test@', then 'test.com').",
+      "Click Save."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "None (saving is prevented)."
+    ],
+    "assertions": [
+      "An error message for the invalid email format is displayed at Email Address, for each invalid value",
+      "Saving is prevented: no sales rep with that username exists"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23076 (AIO export): invalid examples 'test@' and 'test.com'.",
+      "FSD 'Create a Sales Rep': email format validation.",
+      "The message text is fixed by neither the case nor the FSD: the OOB text is read from the page and logged.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23076"
+  ],
+  "sources": [
+    {
+      "value": "valEmailAddress",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:345",
+      "kind": "literal",
+      "keyPath": "validationMessage",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    },
+    {
+      "value": "0",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:355",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

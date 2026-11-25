@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23073 missing mandatory fields are rejected when creating a sales rep",
+  "scenario": {
+    "summary": "On Add Sales Rep the admin leaves All Stores unchecked with no store selected, leaves every field blank and clicks Save and Close; the required messages are shown in red against Stores, Username, First Name and Last Name and nothing is saved.",
+    "steps": [
+      "On the Sales Rep listing click Add New.",
+      "Leave All Stores unchecked and select no store (deviation from the case's 'check All Stores', user decision 2026-11-25).",
+      "Check all fields are blank.",
+      "Click Save and Close."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None (saving is prevented)."
+    ],
+    "assertions": [
+      "'Please select at least one Store.', 'Username is required.', 'First Name is required.' and 'Last Name is required.' are displayed against their fields in red",
+      "Saving is prevented (the admin stays on Add Sales Rep)"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23073 (AIO export): the four messages are its expected texts.",
+      "FSD 'Create a Sales Rep': required-field validation as in the user module.",
+      "No data need: the form is left blank.",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need.",
+      "Deviation (user decision 2026-11-25): the case checks All Stores, but on atstage 10.14.7.0 All Stores counts as a selected store and no Stores message is shown (run 2026-11-25, Username/First/Last messages only). The test leaves All Stores unchecked so the case's four expected messages apply."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [],
+  "linkedCases": [
+    "Z10-TC-23073"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T10:07:28Z"
+}

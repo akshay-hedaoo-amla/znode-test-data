@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23078 admin opens a sales rep's management page with general and login information",
+  "scenario": {
+    "summary": "The admin finds an existing sales rep on the listing, clicks its Manage action and sees the Manage Sales Rep page on the General Settings tab with General Information and Login Information.",
+    "steps": [
+      "On the Sales Rep listing find the sales rep (@rep.userName).",
+      "Click its Manage action."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None."
+    ],
+    "assertions": [
+      "The selected sales rep's management page opens",
+      "The General Settings tab is shown with the General Information and Login Information sections"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23078 (AIO export).",
+      "FSD 'Manage an Existing Sales Rep': General Information and Login Information.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23078"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

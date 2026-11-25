@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23071 sales rep listing shows its columns and the OOB grid features work",
+  "scenario": {
+    "summary": "On the Sales Rep listing the admin checks the columns, sorts a column, filters, pages through more than one page and hides and shows a column.",
+    "steps": [
+      "Open the Sales Rep listing; observe the columns.",
+      "Sort by Username ascending and descending.",
+      "Filter the listing by one sales rep's username (@rep1.userName).",
+      "With page size 10 and at least 11 sales reps, go to page 2 and back; change the page size.",
+      "Hide a column from the Columns menu and show it again."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The column visibility of the admin's listing is changed and restored by the test; the 11 sales reps are created and deleted by their collection."
+    ],
+    "assertions": [
+      "The columns Username, Full Name, Email ID, Phone Number, Created Date and Action (Manage) are displayed",
+      "Sorting orders the rows by the column",
+      "Filtering by a username shows only that sales rep",
+      "Pagination moves between pages and the page size changes the number of rows shown",
+      "A hidden column disappears from the grid and comes back when shown again"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23071 (AIO export).",
+      "FSD 'Create a Sales Rep' and 'Manage an Existing Sales Rep': sorting, filtering, pagination and column customization stay OOB.",
+      "Pagination: the smallest page size is 10 and atstage has 2 sales reps, so 11 sales reps are created (rep1..rep11, user decision 2026-11-25, analysis 8.3).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep1",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep2",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep3",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep4",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep5",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep6",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep7",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep8",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep9",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep10",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep11",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23071"
+  ],
+  "sources": [
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:192",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:200",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "2",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:203",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:207",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    },
+    {
+      "value": "1",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:211",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "expected-output"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

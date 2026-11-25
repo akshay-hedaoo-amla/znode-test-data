@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23070 admin navigates to the sales rep listing page",
+  "scenario": {
+    "summary": "From the main navigation menu the admin opens Accounts & Users > Sales Rep and sees the Sales Rep listing with its columns, the Manage action on a row and the OOB System View, Tools and Columns menus.",
+    "steps": [
+      "Open the main navigation menu.",
+      "Open 'Accounts & Users' and click the Sales Rep entry.",
+      "Find the sales rep's (@rep.userName) row."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "None (the sales rep is created and deleted by its collection)."
+    ],
+    "assertions": [
+      "The Sales Rep listing page is displayed with the columns Username, Full Name, Email ID, Phone Number, Created Date and the Action column with Manage",
+      "The System View, Tools and Columns menus are displayed"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23070 (AIO export).",
+      "FSD 'Create a Sales Rep': listing columns and OOB features (system views, tools, column customization).",
+      "The sales rep (SALES_REP_OF_STORE) only makes sure the listing has a row whose Manage action can be checked.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23070"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

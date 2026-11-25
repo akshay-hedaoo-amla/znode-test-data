@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23081 edited sales rep username is shown in the listing and used to sign in",
+  "scenario": {
+    "summary": "The admin changes the username of a sales rep assigned to a user; the new username is shown on the listing, the sales rep signs in with it, and the assigned user still shows the sales rep.",
+    "steps": [
+      "Open the sales rep's (@rep.userId) Manage page; click Edit next to Username.",
+      "Enter a new unique username (made up by the test from @rep.userName, run-ID tag kept); click Save; click Save and Close.",
+      "Find the new username on the Sales Rep listing.",
+      "Sign in as the sales rep with the new username and @rep.password.",
+      "Open the assigned user's (@assigned.userId) Manage User page; read its Sales Rep."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The sales rep's username is changed (the sales rep and the user are deleted at teardown by id)."
+    ],
+    "assertions": [
+      "The new username is saved and displayed on the Sales Rep listing",
+      "The sales rep signs in with the new username",
+      "The assigned user still shows the sales rep"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23081 (AIO export).",
+      "FSD 'Manage an Existing Sales Rep': a changed username is shown everywhere the sales rep is used.",
+      "Precondition 'assigned to at least one user': USER_ASSIGNED_TO_SALES_REP with rep = @rep.userId, checked on the user's Manage User Sales Rep field before the first step.",
+      "Step 8 ('if applicable'): Manage User shows the rep in its Sales Rep field; the test checks it still shows the renamed rep (assumption, analysis 8.2).",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    },
+    {
+      "key": "USER_ASSIGNED_TO_SALES_REP",
+      "alias": "assigned",
+      "params": {
+        "store": "@storeA.storeCode",
+        "rep": "@rep.userId"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23081"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

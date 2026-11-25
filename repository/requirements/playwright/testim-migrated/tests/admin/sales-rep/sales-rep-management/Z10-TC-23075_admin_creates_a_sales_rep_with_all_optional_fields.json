@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts > Admin - Sales Rep > Z10-TC-23075 admin creates a sales rep with all optional fields",
+  "scenario": {
+    "summary": "The admin creates a sales rep with the mandatory fields, External ID / Code, Phone Number, an image and a specific store, saves and closes, and every value is saved.",
+    "steps": [
+      "On the Sales Rep listing click Add New.",
+      "Enter the mandatory fields: store (@storeA.name), username, email, first name, last name (made up by the test).",
+      "Enter External ID / Code and Phone Number (made up by the test).",
+      "Pick an image in the Image (DAM) picker.",
+      "Click Save and Close; re-open the sales rep's Manage page."
+    ],
+    "entitiesTouched": [
+      "user",
+      "store"
+    ],
+    "stateChanges": [
+      "A new sales rep is created by the test in the UI; the test deletes it at the end (no collection owns it)."
+    ],
+    "assertions": [
+      "The sales rep is created (listed)",
+      "Store, username, email, first and last name, External ID / Code, Phone Number and the image are saved"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23075 (AIO export).",
+      "FSD 'Create a Sales Rep': Login Information fields (External ID / Code, Phone Number, Image).",
+      "Image: an existing image picked in the DAM picker, the first one it shows (user decision 2026-11-25). PARTIALLY AUTOMATED: the case's 'Upload an Image' clause (a new file upload) is not covered.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "medium"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23075"
+  ],
+  "sources": [
+    {
+      "value": "src",
+      "location": "testim-migrated/tests/admin/sales-rep/sales-rep-management.spec.ts:316",
+      "kind": "literal",
+      "keyPath": "expected",
+      "sensitive": false,
+      "profiled": false,
+      "role": "config"
+    }
+  ],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}

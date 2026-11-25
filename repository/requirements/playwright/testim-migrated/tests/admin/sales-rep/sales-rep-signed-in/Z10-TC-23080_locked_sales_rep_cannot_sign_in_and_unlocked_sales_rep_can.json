@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "framework": "playwright",
+  "testId": "testim-migrated/tests/admin/sales-rep/sales-rep-signed-in.spec.ts > Admin - Sales Rep > Z10-TC-23080 locked sales rep cannot sign in and unlocked sales rep can",
+  "scenario": {
+    "summary": "The admin locks a sales rep from the listing; the sales rep cannot sign in to admin or webstore. The admin unlocks it on its Manage page and saves; the sales rep signs in to both.",
+    "steps": [
+      "On the Sales Rep listing find the sales rep (@rep.userName); click Lock; click Ok.",
+      "Sign in as the sales rep (@rep.userName, @rep.password) on the admin URL and on the webstore of its store.",
+      "Re-open the sales rep's Manage page; click Unlock (enable); Save and Close.",
+      "Sign in as the sales rep on admin and webstore."
+    ],
+    "entitiesTouched": [
+      "user"
+    ],
+    "stateChanges": [
+      "The sales rep is locked, then unlocked (deleted at teardown)."
+    ],
+    "assertions": [
+      "Locked: admin and webstore sign-in are refused",
+      "Unlocked: admin and webstore sign-in succeed"
+    ],
+    "evidence": [
+      "Story Z10-28590 (Stabilize Sales Rep Workflow), data-needs analysis work/stories/Z10-28590/analysis.md section 8 (group A remainder) and answers in sections 6 and 8.3.",
+      "Test case Z10-TC-23080 (AIO export).",
+      "FSD 'Manage an Existing Sales Rep': disabled or locked cannot sign in; enabled and unlocked can.",
+      "atstage 10.14.7.0: Lock is a row action of the listing; the Manage page offers Enable (unlock) (analysis section 8).",
+      "The sales rep signs in on the suite's admin URL and on its own store's webstore (storeA.webstoreDomain), as 23079.",
+      "Store MaxwellsHardware: the store the migrated suites run on (store A).",
+      "Admin session: the suite's saved admin session (admin.setup.ts), a credential, not a need."
+    ],
+    "confidence": "high"
+  },
+  "requires": [
+    {
+      "key": "STORE_WEBSTORE_ACTIVE",
+      "alias": "storeA",
+      "params": {
+        "store": "MaxwellsHardware"
+      }
+    },
+    {
+      "key": "SALES_REP_OF_STORE",
+      "alias": "rep",
+      "params": {
+        "store": "@storeA.storeCode"
+      }
+    }
+  ],
+  "linkedCases": [
+    "Z10-TC-23080"
+  ],
+  "sources": [],
+  "strategy": "migrate",
+  "status": "approved",
+  "approvedBy": "akshay-hedaoo-amla",
+  "approvedAt": "2026-11-25T09:39:07Z"
+}
