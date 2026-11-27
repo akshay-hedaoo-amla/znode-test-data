@@ -7,6 +7,6 @@
     "scan:playwright": "tda-playwright scan"
   },
   "devDependencies": {
-    "@mrrsoft/tda-playwright-adapter": "0.21.0"
+    "@mrrsoft/tda-playwright-adapter": "0.22.0"
   }
 }
